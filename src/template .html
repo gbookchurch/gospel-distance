@@ -55,7 +55,12 @@ p { margin: 0; }
 .intro .lede { color: var(--muted); max-width: 34em; }
 .ticker { display: flex; gap: 28px; flex-wrap: wrap; padding-block: 16px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .ticker div { display: grid; }
-.ticker b { font-family: var(--mono); font-size: 28px; font-weight: 500; }
+.ticker b { font-family: var(--mono); font-size: 28px; font-weight: 500; color: var(--lamp); }
+@media (prefers-reduced-motion: no-preference) {
+  .ticker b { animation: hue 8s linear infinite; }
+  .ticker div:nth-child(2) b { animation-delay: -4s; }
+  @keyframes hue { 0%, 100% { color: #d4472b; } 25% { color: #d9751a; } 50% { color: #c7980e; } 75% { color: #3e8a55; } }
+}
 .ticker span { font-size: 13px; color: var(--muted); }
 .controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
 button, select {
@@ -201,8 +206,11 @@ a.btn:hover { border-color: var(--ink); }
 .ranking summary { cursor: pointer; font-weight: 700; padding-block: 12px; min-height: 48px; }
 .ranking summary:focus-visible { outline: 2px solid var(--lamp); outline-offset: 2px; }
 .ranklist { list-style: none; margin: 8px 0 0; padding: 0; display: grid; }
-.ranklist li { display: grid; grid-template-columns: 2.4em 1fr auto; gap: 4px 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
-.ranklist li.tw { background: var(--surface); outline: 1px solid var(--line); padding-inline: 8px; border-radius: 6px; }
+.ranklist li { display: grid; grid-template-columns: 2.4em 1fr auto; gap: 4px 12px; padding: 12px 10px; border-radius: 6px; }
+.ranklist li:nth-child(odd) { background: rgba(0, 0, 0, 0.045); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ranklist li:nth-child(odd) { background: rgba(255, 255, 255, 0.05); } }
+:root[data-theme="dark"] .ranklist li:nth-child(odd) { background: rgba(255, 255, 255, 0.05); }
+.ranklist li.tw { background: var(--surface) !important; outline: 2px solid var(--lamp); padding-inline: 8px; border-radius: 6px; }
 .ranklist .r { font-family: var(--mono); color: var(--muted); font-size: 14px; padding-top: 2px; }
 .ranklist .n { font-weight: 700; min-width: 0; }
 .ranklist .v { font-family: var(--mono); font-size: 13px; color: var(--muted); text-align: right; }
@@ -226,7 +234,7 @@ a.btn:hover { border-color: var(--ink); }
 
 /* 首頁主視覺：手機全寬，電腦最寬 960px */
 body { overflow-x: clip; }
-.hero { display: block; width: min(960px, 100vw); max-width: none; height: auto; aspect-ratio: 1800 / 600; margin-inline: calc((100% - min(960px, 100vw)) / 2); margin-block: -8px -4px; }
+.hero { display: block; width: min(960px, 100vw); max-width: none; height: auto; aspect-ratio: 1800 / 600; margin-inline: calc((100% - min(960px, 100vw)) / 2); margin-block: 4px; }
 
 /* 首頁動機 */
 .intro .lede { display: grid; gap: 6px; color: var(--ink); font-size: 17px; }
@@ -242,25 +250,25 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
 .tomethod { color: var(--lamp); }
 
 /* 資料來源與模擬方法 */
-.method { display: grid; gap: 12px; border-top: 1px solid var(--line); padding-top: 20px; }
-.method h2 { font-size: 24px; }
+.method { display: grid; gap: 8px; border-top: 1px solid var(--line); padding-top: 20px; }
+.method h2 { font-size: 20px; }
 .method > p { max-width: 38em; }
 .method details { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
-.method summary { cursor: pointer; font-weight: 700; padding: 14px 16px; min-height: 48px; }
+.method summary { cursor: pointer; font-weight: 700; font-size: 15px; padding: 11px 14px; min-height: 44px; }
 .method summary:focus-visible { outline: 2px solid var(--lamp); outline-offset: 2px; }
-.mbody { padding: 0 16px 16px; display: grid; gap: 10px; font-size: 15px; }
-.mbody ol, .mbody ul { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; }
+.mbody { padding: 0 14px 14px; display: grid; gap: 8px; font-size: 14px; line-height: 1.65; }
+.mbody ol, .mbody ul { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
 .mbody a { color: var(--lamp); }
 .sources { list-style: none; padding-left: 0 !important; }
-.sources li { display: grid; gap: 2px; padding-bottom: 10px; border-bottom: 1px dashed var(--line); font-weight: 700; }
-.sources li span { font-weight: 400; color: var(--ink); font-size: 14px; }
+.sources li { display: grid; gap: 1px; padding-bottom: 8px; border-bottom: 1px dashed var(--line); font-weight: 700; }
+.sources li span { font-weight: 400; color: var(--ink); font-size: 13px; }
 .sources li .use { color: var(--muted); }
 
 /* 首頁後半段：四個區塊用由淺到深的灰色色帶分開 */
 /* 科普和資料來源用同一個較深的灰，追思館回到首頁底色，企劃用《教會小本本》的墨綠 */
-:root { --b1: #cdcdcd; --b2: var(--bg); --b3: var(--b1); --b4: #29493a; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --b1: #2e2e2e; --b4: #233f32; } }
-:root[data-theme="dark"] { --b1: #2e2e2e; --b4: #233f32; }
+:root { --b1: #e2e8e3; --b2: var(--bg); --b3: #cdcdcd; --b4: #2e443a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --b1: #29302b; --b3: #2e2e2e; --b4: #273b32; } }
+:root[data-theme="dark"] { --b1: #29302b; --b3: #2e2e2e; --b4: #273b32; }
 .more { display: grid; gap: 0; margin-top: 8px; }
 .band { padding-block: 32px; box-shadow: 0 0 0 100vmax var(--band); clip-path: inset(0 -100vmax); background: var(--band); }
 .band.b1 { --band: var(--b1); } .band.b2 { --band: var(--b2); } .band.b3 { --band: var(--b3); } .band.b4 { --band: var(--b4); }
@@ -304,7 +312,6 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
 <main>
   <section class="intro" id="intro">
     <p class="brand"><span class="dot" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>《教會小本本》</b>Podcast 特別企劃</span></p>
-    <img class="hero" src="/*HERO*/" width="1800" height="600" alt="從嬰兒到老人走過一段人生的路，翻過山與河，通往遠方發光的十字架" fetchpriority="high" decoding="async">
     <h1>你會在幾歲，第一次<em>聽見耶穌的名字</em>？</h1>
     <div class="lede">
       <p>如果人生能重新開始，你會出生在哪個國家？你有沒有機會認識耶穌？</p>
@@ -325,6 +332,7 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
       <div><b class="num" id="bornCount">0</b><span>打開這頁之後，世界上出生的嬰兒</span></div>
       <div><b class="num" id="neverCount">0</b><span>可能一生沒有機會接觸福音的人</span></div>
     </div>
+    <img class="hero" src="/*HERO*/" width="1800" height="600" alt="從嬰兒到老人走過一段人生的路，翻過山與河，通往遠方發光的十字架" fetchpriority="high" decoding="async">
     <p class="fine">遊戲裡會出現迫害、拘留，甚至因信仰失去生命的事件，不描寫畫面。人生經歷都是依模型產生的，不是真實人物的紀錄。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
   </section>
 
@@ -352,8 +360,15 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
   <section class="method band b3" id="method">
     <p class="eyebrow">資料來源與模擬方法</p>
     <h2>這些數字怎麼算出來的？</h2>
-    <p>本遊戲參考人口、宗教、族群、聖經翻譯及宗教迫害等公開資料，建立福音接觸機會的模擬模型。遊戲中的出生背景、人生事件、接觸福音的年齡及個人經歷，均依模型規則產生。其中部分機率參數屬於設計假設，並非直接觀測到的統計結果。本遊戲旨在幫助玩家理解不同地區的信仰環境差異，模擬結果不代表對特定個人命運的預測。</p>
-    <p class="fine">本遊戲整合不同年份的公開統計資料及模型假設，並非單一年度的全球人口調查。</p>
+    <p class="fine">整合不同年份的公開資料和模型假設，模擬結果不代表對任何人命運的預測。點開下面各項看細節。</p>
+
+    <details id="mAbout">
+      <summary>關於這個模擬</summary>
+      <div class="mbody">
+        <p>本遊戲參考人口、宗教、族群、聖經翻譯及宗教迫害等公開資料，建立福音接觸機會的模擬模型。遊戲中的出生背景、人生事件、接觸福音的年齡及個人經歷，均依模型規則產生。其中部分機率參數屬於設計假設，並非直接觀測到的統計結果。本遊戲旨在幫助玩家理解不同地區的信仰環境差異，模擬結果不代表對特定個人命運的預測。</p>
+        <p>本遊戲整合不同年份的公開統計資料及模型假設，並非單一年度的全球人口調查。</p>
+      </div>
+    </details>
 
     <details id="mDefine">
       <summary>遊戲裡的「聽見福音」是什麼意思</summary>
@@ -1270,6 +1285,7 @@ function finish(martyred) {
     <fieldset class="feel" id="feel">
       <legend>這一生，你最有感觸的是哪一刻？</legend>
       ${FEELINGS.map((f, i) => `<label><input type="radio" name="feel" value="${i}"> <span></span></label>`).join('')}
+      <p class="fine" id="feelNote">選一個，會記進你的追思館，複製分享文字時也會一起帶上。</p>
     </fieldset>
     </section>
     <section class="band b2">
@@ -1281,7 +1297,7 @@ function finish(martyred) {
       <div class="challenge"><span class="lbl">在${c.name}，接觸福音的挑戰是</span><p></p></div>
     </div>
     </section>
-    <section class="band b1">
+    <section class="band b3">
     <div class="share" id="share">
       <p class="eyebrow">分享卡</p>
       <p class="hint" id="shareStatus">正在畫你的分享卡…</p>
@@ -1336,6 +1352,7 @@ function finish(martyred) {
     feeling = FEELINGS[+inp.value];
     const ls = loadLives(); if (ls.length) { ls[ls.length - 1].feeling = feeling; saveLives(ls); }
     $('copyBtn').textContent = '複製分享文字';
+    $('feelNote').textContent = `已記下：「${feeling}」。這句話會出現在追思館，複製分享文字時也會一起帶上。`;
   });
   drawStrip();
   makeShareCard(end, martyred);
