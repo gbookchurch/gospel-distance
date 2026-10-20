@@ -662,13 +662,13 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
     <details id="mAbout">
       <summary>關於這個模擬</summary>
       <div class="mbody">
-        <p>本遊戲參考人口、宗教、族群、聖經翻譯及基督徒處境艱難程度等公開資料，建立福音接觸機會的模擬模型。遊戲中的出生背景、人生事件、接觸福音的年齡及個人經歷，均依模型規則產生。其中部分機率參數屬於設計假設，並非直接觀測到的統計結果。本遊戲旨在幫助玩家理解不同地區的信仰環境差異，模擬結果不代表對特定個人命運的預測。</p>
+        <p>本遊戲參考人口、宗教、族群、聖經翻譯及基督徒受迫害程度等公開資料，建立福音接觸機會的模擬模型。遊戲中的出生背景、人生事件、接觸福音的年齡及個人經歷，均依模型規則產生。其中部分機率參數屬於設計假設，並非直接觀測到的統計結果。本遊戲旨在幫助玩家理解不同地區的信仰環境差異，模擬結果不代表對特定個人命運的預測。</p>
         <p>本遊戲整合不同年份的公開統計資料及模型假設，並非單一年度的全球人口調查。</p>
       </div>
     </details>
 
     <details id="mDefine">
-      <summary>遊戲裡的「聽見福音」是什麼意思</summary>
+      <summary>遊戲中的「接觸福音」怎麼定義？</summary>
       <div class="mbody">
         <p>「聽見耶穌的名字」是比較好記的說法，但遊戲實際計算的，是<b>第一次有機會比較清楚地接觸到福音</b>，例如有人向你說明、讀到聖經、看了福音影片，而不只是知道「耶穌」這個名字。</p>
         <p>有三個概念要分開：</p>
@@ -711,7 +711,7 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
             <span>各國分性別的出生時平均餘命，2023 年估計，經由 <a href="https://en.wikipedia.org/wiki/List_of_countries_by_life_expectancy" target="_blank" rel="noopener">Wikipedia 彙整表</a>引用。</span>
             <span class="use">用途：決定模擬人生的長度（方法見下方）。</span></li>
           <li><a href="https://opendoorsanalytical.org/wp-content/uploads/2026/01/WWL-2026-Table-of-Scores-and-Ranks-50-points-v.2.pdf" target="_blank" rel="noopener">Open Doors World Watch List 2026</a>
-            <span>各國對基督徒處境的排名與六大面向分數（私人、家庭、社區、國家、教會、暴力），本遊戲稱為「基督徒處境艱難程度」。統計期間為 2024 年 10 月到 2025 年 9 月。53 國中有 38 國有分數。</span>
+            <span>各國對基督徒處境的排名與六大面向分數（私人、家庭、社區、國家、教會、暴力），本遊戲稱為「基督徒受迫害程度」。統計期間為 2024 年 10 月到 2025 年 9 月。53 國中有 38 國有分數。</span>
             <span class="use">用途：推導信仰壓力事件、殉道和接觸福音受限程度的機率。這些分數是評分，不是機率；把分數換算成機率的方式是本遊戲的設計假設。</span></li>
           <li><a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a>
             <span>世界地圖輪廓，經由 world-atlas 套件（1:110m 比例尺）使用。</span>
@@ -728,11 +728,11 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
           <li><b>族群：</b>在國家裡依族群人口加權抽籤。佔全國人口不到 0.1% 的族群合併成「其他小族群」。</li>
           <li><b>父母的宗教：</b>國家整體用 Pew 的宗教組成，再依族群的基督徒比例（Joshua Project）調整高低。基督徒家庭再依國家整體的宗派比例，分成天主教、基督新教或東正教，這只影響畫面上的文字，不改變接觸福音的機率。</li>
           <li><b>壽命：</b>以該國該性別的平均餘命為中心，加上標準差 14 歲的隨機變化，限制在 1 到 102 歲之間。平均餘命不是每個人的實際壽命，這只是簡化的做法，不是逐年生命表。</li>
-          <li><b>每年接觸福音的機會：</b>依族群的福音派與基督徒比例、母語聖經狀態、處境艱難程度分數中「國家」和「教會」兩項，以及年齡，算出每年的機率。南亞多數族群沒有公開福音派比例，改用基督徒比例推估。</li>
+          <li><b>每年接觸福音的機會：</b>依族群的福音派與基督徒比例、母語聖經狀態、受迫害程度分數中「國家」和「教會」兩項，以及年齡，算出每年的機率。南亞多數族群沒有公開福音派比例，改用基督徒比例推估。</li>
           <li><b>回應：</b>8 歲以後接觸到福音時由玩家選擇；同一秒出生的另外四個人由模型依機率選擇。</li>
-          <li><b>信主之後：</b>依處境艱難程度六大面向分數和族群的基督徒比例，產生信仰壓力、成長、殉道等事件。族群本身多為基督徒時，沒有教會、被家人反對這類事件會少很多；族群過半是基督徒時，國家、教會和暴力層面的事件也會大幅減少，因為那些壓力多半落在改信的人和教會領袖身上。從小在基督徒家庭長大的人，不會遇到家人反對、法律上無法更改宗教身分這類只有改信者才會遇到的事；「法律上無法更改宗教身分」也只會出現在穆斯林佔多數的國家；如果族群過半是基督徒，也不會被鄰居排擠。</li>
+          <li><b>信主之後：</b>依受迫害程度六大面向分數和族群的基督徒比例，產生信仰壓力、成長、殉道等事件。族群本身多為基督徒時，沒有教會、被家人反對這類事件會少很多；族群過半是基督徒時，國家、教會和暴力層面的事件也會大幅減少，因為那些壓力多半落在改信的人和教會領袖身上。從小在基督徒家庭長大的人，不會遇到家人反對、法律上無法更改宗教身分這類只有改信者才會遇到的事；「法律上無法更改宗教身分」也只會出現在穆斯林佔多數的國家；如果族群過半是基督徒，也不會被鄰居排擠。</li>
           <li><b>信仰的十字路口：</b>遇到懷疑、受傷、信仰壓力等事件時，玩家可以選擇留下、離開教會或放下信仰，之後也可能回來。</li>
-          <li><b>生活片段：</b>人生紀錄裡的宗教日常、人生里程碑和「擦肩而過」是情境文字，依年齡和家裡的宗教隨機出現，不是統計資料，也不影響任何機率。擦肩而過不算接觸到福音。接觸福音時的選項描述、選完的後續、再次相遇的回想、代價提示，以及信徒言行帶來的爭議，也都是情境文字：代價提示依各國處境艱難程度分數挑選，其他依情境隨機抽出，都不改變機率。</li>
+          <li><b>生活片段：</b>人生紀錄裡的宗教日常、人生里程碑和「擦肩而過」是情境文字，依年齡和家裡的宗教隨機出現，不是統計資料，也不影響任何機率。擦肩而過不算接觸到福音。接觸福音時的選項描述、選完的後續、再次相遇的回想、代價提示，以及信徒言行帶來的爭議，也都是情境文字：代價提示依各國受迫害程度分數挑選，其他依情境隨機抽出，都不改變機率。</li>
           <li><b>接觸福音的管道：</b>同學、營會、廣播、衛星電視等 20 種管道，依國家、族群和年齡加權抽出。</li>
           <li><b>模擬排行：</b>每國用同一套規則跑 6,000 段人生（蒙地卡羅模擬），依「一生沒接觸到福音的比例」由高到低排名；比例相同時，接觸到的人中位年齡較大的排前面。</li>
         </ol>
@@ -745,7 +745,7 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
         <p>以下參數沒有直接的統計來源，是為了讓模擬能運作而設定的，可能高估或低估：</p>
         <ul>
           <li>身邊信徒比例換算成「每年接觸到福音」的機率</li>
-          <li>處境艱難程度分數換算成信仰壓力事件和殉道的機率</li>
+          <li>受迫害程度分數換算成信仰壓力事件和殉道的機率</li>
           <li>信主後成長事件、離開教會、放下信仰和回來的機率</li>
           <li>20 種接觸管道的權重</li>
           <li>每個國家的「挑戰說明」文字，依資料撰寫，部分使用一般背景知識</li>
@@ -758,7 +758,7 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
       <summary>資料年份與已知限制</summary>
       <div class="mbody">
         <ul>
-          <li>各資料年份不同：出生數主要是 2026 年推估，但台灣、南韓是 2025 年實際數字；宗教組成是 2020 年；平均壽命是 2023 年；處境艱難程度評分統計期間為 2024 年 10 月到 2025 年 9 月；族群資料於 2026 年 10 月下載。</li>
+          <li>各資料年份不同：出生數主要是 2026 年推估，但台灣、南韓是 2025 年實際數字；宗教組成是 2020 年；平均壽命是 2023 年；受迫害程度評分統計期間為 2024 年 10 月到 2025 年 9 月；族群資料於 2026 年 10 月下載。</li>
           <li>北韓出生數的 Wikipedia 表格標為 2026 年，實際上是依世界銀行 2024 年報告推算的推估值。</li>
           <li>Pew 和 Joshua Project 對基督徒比例的估計可能差很多，尤其是有地下教會的國家，例如中國、伊朗。</li>
           <li>Joshua Project 提醒，族群的基督徒與福音派比例多為推估值，不建議拿來計算絕對人數。本遊戲只把它們當作相對的機率依據。</li>
@@ -851,7 +851,7 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
     <div class="controls"><button class="primary" id="lfAgain">再活一次</button><button id="lfHome">回首頁</button><button id="lfMem">看賽道上的每個人</button></div>
     <div class="show">
       <p class="brand"><span class="dot" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>《教會小本本》</b>Podcast 特別企劃</span></p>
-      <p>聽聽《教會小本本》，一起聊聊那些值得重新思考的信仰問題。玩完之後有什麼想說的，也歡迎分享給我們。</p>
+      <p>聽聽《教會小本本》，一起聊聊教會裡不太好說、卻很值得聊的信仰問題。玩完之後有什麼想說的，也歡迎分享給我們。</p>
       <a class="cta" href="https://portaly.cc/gbookchurch" target="_blank" rel="noopener">收聽《教會小本本》</a>
     </div>
     <p class="fine">這段人生是依公開資料和模型規則產生的，其中部分機率是設計假設。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
@@ -923,7 +923,7 @@ const CHOICE_DESC = {
 const AFTER = {
   respond: { free: ['那天回家的路上，你覺得心裡很安靜。', '你傳了一則訊息給帶你認識耶穌的人：「我想多了解。」'], hard: ['你沒有告訴任何人，只在心裡默默禱告。', '你把一句經文抄在小紙條上，藏在口袋裡。'], cfam: ['你第一次自己禱告，不是跟著大人念。'] },
   wait: { all: ['那天晚上，你把聽到的話又想了一遍。', '你決定下次遇到時，再多問一點。'], net: ['你上網查了一下，看了幾篇又關掉了。'], hard: ['你很想問問別人，可是不知道可以問誰。'] },
-  decline: { all: ['你很快就把這件事放下了。', '你禮貌地點點頭，沒有再多說什麼。', '後來有人再提起，你轉開了話題。'] },
+  decline: { all: ['你沒有再多想這件事，繼續過原本的生活。', '你禮貌地點點頭，沒有再多說什麼。', '後來有人再提起，你轉開了話題。'] },
 };
 function afterLine(c, x) {
   let pool;
@@ -936,16 +936,16 @@ const CALLBACK = {
   classmate: '你想起那年邀你去青少年聚會的同學。', friend: '當年跟你說起耶穌的那個人，前幾天又問你最近好不好。',
   coworker: '當年跟你說起耶穌的那個人，前幾天又問你最近好不好。', partner: '當年跟你說起耶穌的那個人，前幾天又問你最近好不好。',
   camp: '營會最後一晚的那首歌，你一直沒忘。', christmas: '你想起很多年前那場聖誕晚會。', english: '英文班的老師寫給你的那張卡片，你還留著。',
-  hospital: '那個在病床邊為你禱告的人，你一直記得他的樣子。', radio: '你又轉到了那個深夜廣播頻道。', satellite: '那個講耶穌的節目，你偶爾還會偷偷轉到。',
+  hospital: '那個在病床邊為你禱告的人，你一直記得他的樣子。', radio: '深夜轉收音機時，你又聽到了那個介紹耶穌的節目。', satellite: '那個講耶穌的節目，你偶爾還會偷偷轉到。',
   internet: '你又滑到一段講耶穌的影片，這次你看完了。', film: '你想起小時候在村子裡看過的那部電影。', bible: '那本小小的聖經，你一直藏在身邊。',
   dream: '那個穿白衣的人，你又夢見了一次。', relative: '那位信了耶穌的親戚，這些年過得並不容易，卻還是很平靜。',
 };
 const CALLBACK_DEFAULT = '這不是你第一次聽到耶穌的名字了。';
 // 代價：依 WWL 2026 各面向分數（滿分約 16.7）挑句子
 const COST = {
-  family: ['跟隨耶穌可能讓家人跟你斷絕關係。', '家人可能會逼你放棄，甚至把你趕出家門。', '你的婚姻、孩子的教養，都可能因為這個決定被家族干涉。'],
+  family: ['跟隨耶穌可能讓家人跟你斷絕關係。', '家人可能會逼你放棄，甚至把你趕出家門。', '你將來的婚事、孩子怎麼養，都可能因為這個決定被家族干涉。'],
   private: ['你可能得把信仰完全藏起來，連家人都不能知道。', '一本聖經、一則訊息，都可能讓你被發現。', '你可能很久都找不到一個可以一起禱告的人。'],
-  community: ['改信的人常會失去工作，或被鄰居排擠。', '整個村子可能都會知道，從此用不同的眼光看你。', '你的孩子在學校可能會因此被針對。'],
+  community: ['改信的人常會失去工作，或被鄰居排擠。', '整個村子可能都會知道，從此用不同的眼光看你。', '你的家人也可能因此被鄰居指指點點。'],
   national: ['信仰可能讓你被警方盯上。', '法律上，你可能沒辦法改變自己的宗教身分。', '你可能會被傳喚、拘留，甚至得離開自己的國家。'],
   church: ['很難找到可以公開聚會的地方。', '你們的聚會可能隨時會被關閉。'],
   violence: ['有些基督徒因為信仰遭到攻擊。', '你的村子、你的教會，都可能成為武裝團體的目標。', '有人曾經為了這個信仰失去了生命。'],
@@ -1049,12 +1049,12 @@ function reflectionQuestion(a) {
       believer: '5 歲，這段人生裡你已經聽過耶穌的故事。在真實的人生裡，你第一次聽見耶穌的名字，又是在什麼時候呢？',
     },
     15: {
-      unheard: '15 歲，這段人生裡你還沒有機會接觸福音。在台灣，有些人是在這個年紀第一次認真思考信仰。你覺得一個人身處什麼樣的環境，比較會開始思考這些事？',
+      unheard: '15 歲，這段人生裡你還沒有機會接觸福音。在台灣，有些人是在這個年紀第一次認真思考信仰。你覺得人通常是在什麼情況下，開始想信仰這件事？',
       heard: '15 歲，你接觸過福音，但還沒有做決定。你覺得是什麼讓一個人遲遲沒有做決定？',
-      believer: persecuted ? `15 歲就跟隨耶穌，在${c.name}可能要付出代價。你 15 歲的時候，曾經為了自己相信的事付出過什麼嗎？` : '15 歲，你在一個能自由選擇信仰的地方長大。你覺得這樣的環境，會讓人更認真看待信仰，還是更容易把它放在一邊？',
+      believer: persecuted ? `15 歲就跟隨耶穌，在${c.name}可能要付出代價。你 15 歲的時候，曾經為了自己相信的事付出過什麼嗎？` : '15 歲，你在一個能自由選擇信仰的地方長大。你覺得想信就能信，會讓人更認真，還是更容易隨便看待？',
     },
     30: {
-      unheard: persecuted ? '30 歲了，你還沒有機會接觸福音。你身邊會不會其實有基督徒，只是不能說？你覺得環境會讓人藏起哪些真正相信的事？' : '30 歲了，你身邊的人大多不是基督徒。你曾經想過，有些人可能一輩子都不會遇見某種宗教或思想嗎？',
+      unheard: persecuted ? '30 歲了，你還沒有機會接觸福音。你身邊會不會其實有基督徒，只是不能說？如果信什麼都得藏起來，你覺得自己藏得住嗎？' : '30 歲了，你身邊的人大多不是基督徒。你曾經想過，有些人可能一輩子都不會遇見某種宗教或思想嗎？',
       heard: '30 歲，你還在觀望。如果有人想再跟你談一次信仰，你覺得怎樣的方式比較能讓人聽得進去？',
       believer: `${years ? `信主 ${years} 年了` : '今年你決定跟隨耶穌'}。在你的人生裡，誰對你相信的事影響最大？`,
     },
@@ -1192,7 +1192,7 @@ function epitaph(end, martyred) {
   const returned = journey.some(j => j.kind === 'return_faith' || j.kind === 'return_church');
   const L = [`你活了 ${end} 年。`];
   if (o === 'never') {
-    L.push('這一生，你經歷了不同的人與事，有過期待，也可能遇過難以預料的轉折。');
+    L.push('你在這裡長大、變老，過著跟身邊的人差不多的日子。');
     L.push('在這段模擬人生裡，直到生命最後一天，你都沒有機會清楚認識基督教的福音。');
   } else if (o === 'heard') {
     L.push(`你在 ${firstAge} 歲第一次接觸到福音${channel && channel.age === firstAge ? `，透過${channel.short}` : ''}。`);
@@ -1215,7 +1215,7 @@ function epitaph(end, martyred) {
       if (st.done && st.done.baptized) parts.push('受了洗');
       if (st.done && st.done.found_church) parts.push('找到了一起聚會的人');
       if (parts.length) L.push(`這一路上，你${parts.join('，也')}。`);
-      L.push(c.wwl.rank ? `在${c.name}，信仰還是要付上代價，但這一生你沒有遇到太大的逼迫。` : '在一個能自由選擇信仰的環境裡，你有更多空間思考，這份信仰對自己究竟有什麼意義。');
+      L.push(c.wwl.rank ? `在${c.name}，信仰還是要付上代價，但這一生你沒有遇到太大的逼迫。` : '在一個可以自由選擇信仰的地方，信不信、怎麼信，大多是你自己決定的。');
     }
     if (returned) L.push('你曾經離開，後來又回來了。');
   }
@@ -1224,11 +1224,11 @@ function epitaph(end, martyred) {
 function endQuestion(martyred) {
   const o = lifeOutcome(martyred), c = me.country;
   return {
-    never: '如果出生地就能影響一個人認識宗教的機會，你覺得這會怎麼影響一個人看待世界？',
+    never: '換作是你生在這裡，你覺得自己會有機會認識耶穌嗎？',
     heard: me.parentReligion === 'christian' ? '在基督徒家庭長大，最後沒有選擇這份信仰。你覺得家庭的信仰，會怎麼影響一個人自己的選擇？' : '如果你出生在另一種宗教文化裡，你會如何理解基督教？',
     persecuted: '如果堅持自己相信的事，可能讓你失去重要的人，你會怎麼選擇？',
     martyred: '如果堅持自己相信的事，可能要付出很大的代價，你會怎麼選擇？',
-    believer: c.wwl.rank ? '同一個國家裡，有人因為信仰付出很大的代價。你怎麼看待一段相對平順的信仰路？' : '在能自由選擇信仰的地方，你覺得信仰會因此更容易扎根，還是更容易被放在一邊？',
+    believer: c.wwl.rank ? '同一個國家裡，有人因為信仰付出很大的代價。你怎麼看待一段相對平順的信仰路？' : '在想信就能信的地方，你覺得信仰比較容易長大，還是比較容易被忙碌的生活擠掉？',
     left: '你身邊有沒有人曾經改變過自己的信仰或想法？你知道是什麼讓他改變嗎？',
     dechurched: '信仰一定要在教會裡才算數嗎？你怎麼看？',
   }[o];
@@ -1247,7 +1247,7 @@ function headline(end, martyred) { return cardLine(end, martyred); }
 function shareText(end, martyred) {
   return `${cardLine(end, martyred)}\n我生在${me.country.name}，${me.group.name}，活了 ${end} 歲。${feeling ? `\n這一生最有感觸的是：${feeling}。` : ''}\n如果換成你，你會出生在哪裡？來玩${SHOW_NAME}的「福音距離」：https://${SITE_URL}/`;
 }
-const FEELINGS = ['原來出生地會帶來這麼大的差異', '有些人可能一輩子都沒機會聽見福音', '我開始重新思考自己的信仰環境', '我想知道更多不同國家的故事'];
+const FEELINGS = ['原來出生地會帶來這麼大的差異', '有些人可能一輩子都沒機會聽見福音', '我想到自己是在什麼樣的信仰環境長大', '我想知道更多不同國家的故事'];
 
 function fallbackCopy(txt, done) {
   const ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly', '');
@@ -1506,13 +1506,13 @@ const CHANNELS = [
   { id: 'friend', short: '朋友', text: '一個好朋友跟你分享，為什麼他相信耶穌。', w: x => x.age >= 15 ? 2 * x.open * (x.c + 0.15) : 0 },
   { id: 'coworker', short: '同事', text: '公司裡一個同事，在你最低潮的時候跟你說起耶穌。', w: x => x.age >= 22 && x.age <= 65 ? 2 * x.open * (x.c + 0.15) : 0 },
   { id: 'camp', short: '營會', text: '你被朋友拉去參加營會，在最後一晚的分享裡聽見了福音。', w: x => x.age >= 10 && x.age <= 25 ? 2 * x.open * (x.c + 0.12) * (x.eastAsia ? 2 : 1) : 0 },
-  { id: 'christmas', short: '聖誕晚會', text: '聖誕節時去了附近教會的晚會，你聽到了耶穌誕生的意義。', w: x => x.open * (!x.muslim && x.c < 0.2 && x.open > 0.9 ? 0.7 : 0.2) },
+  { id: 'christmas', short: '聖誕晚會', text: '聖誕節你去了附近教會的晚會，聽他們講耶穌為什麼降生。', w: x => x.open * (!x.muslim && x.c < 0.2 && x.open > 0.9 ? 0.7 : 0.2) },
   { id: 'english', short: '英文班', text: '你去上教會開的免費英文班，下課後老師跟你聊起了耶穌。', w: x => x.eastAsia && x.c < 0.3 && x.age >= 12 && x.age <= 35 ? 0.45 * x.open : 0 },
   { id: 'street', short: '街頭佈道', text: '市場裡有人在發福音單張，你停下來聽了一會兒。', w: x => x.open * (x.c + 0.1) },
   { id: 'school', short: '教會學校', text: '你讀的是教會辦的學校，在早會裡聽見了福音。', w: x => x.age >= 6 && x.age <= 18 && x.c > 0.05 ? x.open : 0 },
   { id: 'hospital', short: '醫院', text: '你生病住院，醫院的院牧來到床邊為你禱告，跟你說起耶穌。', w: x => 0.5 * x.open },
   { id: 'film', short: '耶穌電影', text: '一群人來村子裡放映耶穌的電影，用你的母語講述祂的一生。', w: x => (x.bibleFull ? 0.3 : 1.5) * (0.4 + 0.6 * x.open) },
-  { id: 'radio', short: '廣播', text: '你在深夜轉到一個廣播頻道，聽到有人用你的語言講耶穌。', w: x => 2 * (1 - x.open) + 0.3 },
+  { id: 'radio', short: '廣播', text: '深夜轉著收音機時，你聽見有人用你的語言介紹耶穌。', w: x => 2 * (1 - x.open) + 0.3 },
   { id: 'satellite', short: '衛星電視', text: '你在家裡偷偷看衛星電視，轉到一個講耶穌的節目。', w: x => x.muslim ? 2 * (1 - x.open) + 0.2 : 0 },
   { id: 'internet', short: '網路影片', text: '你在網路上滑到一段影片，有人在講耶穌是誰。', w: x => x.age >= 12 && x.age <= 55 && !x.noInternet ? 0.6 + 1.2 * (1 - x.open) : 0 },
   { id: 'dream', short: '一個夢', text: '你夢見一個穿白衣的人，醒來後一直記得這個夢。後來有人跟你談起耶穌，你開始好奇祂是誰。', w: x => x.muslim ? 1.2 * (1 - x.c) : 0 },
@@ -1603,8 +1603,8 @@ function fillBirthCard() {
   xn.push(`${c.jp.people_groups_total} 個族群裡，有 ${c.jp.unreached_groups} 個被列為未得之民，約佔人口的 ${pct(c.jp.unreached_population_pct)}。`);
   if (c.wwl.rank) {
     const top2 = Object.entries(c.wwl.spheres).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => SPHERE_ZH[k]);
-    xn.push(`基督徒處境艱難程度全球第 ${c.wwl.rank} 名${c.wwl.rank > 50 ? '（觀察名單）' : ''}，壓力最大的是${top2.join('和')}層面。`);
-  } else xn.push('不在基督徒處境艱難程度的評分名單上。');
+    xn.push(`基督徒受迫害程度全球第 ${c.wwl.rank} 名${c.wwl.rank > 50 ? '（觀察名單）' : ''}，壓力最大的是${top2.join('和')}層面。`);
+  } else xn.push('不在基督徒受迫害程度的評分名單上。');
   $('xnFacts').innerHTML = xn.map(() => '<li></li>').join('');
   [...$('xnFacts').children].forEach((li, i) => li.textContent = xn[i]);
   $('challengeLbl').textContent = `在${c.name}，接觸福音的挑戰是`;
@@ -1616,7 +1616,7 @@ function fillBirthCard() {
     ['最多人信的宗教', tw, c, x => RELNAME[topReligion(x)[0]]],
     ['基督徒比例', tw, c, x => pct(x.religion_pct.christian)],
     ['基督新教比例', tw, c, x => protPct(x)],
-    ['基督徒處境艱難程度', tw, c, x => x.wwl.rank ? `第 ${x.wwl.rank} 名` : '不在名單'],
+    ['基督徒受迫害程度', tw, c, x => x.wwl.rank ? `第 ${x.wwl.rank} 名` : '不在名單'],
     ['平均壽命', tw, c, x => `${((x.life_expectancy.m + x.life_expectancy.f) / 2).toFixed(1)} 歲`],
     ['一生沒接觸到福音（模擬）', tw, c, x => `${x.difficulty.never_pct}%`],
   ];
@@ -1660,10 +1660,10 @@ function setStatus() {
 // ── 生活片段：情境文字，不是統計資料，也不影響任何機率
 // 宗教日常依家裡的宗教；人生里程碑不分國家；擦肩而過只在還沒接觸福音時出現，不算接觸到福音
 const SCENES = {
-  muslim: [[3, 7, '清晨，你被遠處清真寺的喚拜聲叫醒。'], [6, 10, '你開始跟著家人學念《古蘭經》。'], [8, 12, '這是你第一次跟著大人守齋戒月，撐到傍晚開齋的那一刻特別難忘。'], [4, 15, '開齋節，你穿上新衣服，跟著家人去親戚家拜訪。'], [10, 40, '宰牲節，家裡把肉分給鄰居和需要的人。'], [16, 70, '每週五中午，你跟著大家去清真寺聚禮。'], [30, 60, '你開始教自己的孩子做禮拜。'], [40, 80, '你一直存錢，希望有一天能去麥加朝覲。']],
-  hindu: [[3, 8, '家裡的小神龕每天都點著燈，你學著雙手合十。'], [5, 15, '排燈節的晚上，整條街都點滿了油燈。'], [6, 18, '灑紅節，你和朋友把彩色粉末撒得滿身都是。'], [10, 40, '你跟著家人去廟裡，排隊獻上花和供品。'], [20, 40, '你的婚禮依照家族的傳統，在聖火前完成儀式。'], [40, 80, '你一直想走一趟聖地朝聖。']],
+  muslim: [[3, 7, '清晨，你被遠處清真寺的喚拜聲叫醒。'], [6, 10, '你開始跟著家人學念《古蘭經》。'], [8, 12, '這是你第一次跟著大人守齋戒月，撐到傍晚開齋的那一刻特別難忘。'], [4, 15, '開齋節，你穿上新衣服，跟著家人去親戚家拜訪。'], [10, 40, '宰牲節，家裡把肉分給鄰居和需要的人。'], [16, 70, '每週五中午，你跟著大家去清真寺聚禮。'], [30, 60, '你開始教自己的孩子做禮拜。', 'child'], [40, 80, '你一直存錢，希望有一天能去麥加朝覲。']],
+  hindu: [[3, 8, '家裡的小神龕每天都點著燈，你學著雙手合十。'], [5, 15, '排燈節的晚上，整條街都點滿了油燈。'], [6, 18, '灑紅節，你和朋友把彩色粉末撒得滿身都是。'], [10, 40, '你跟著家人去廟裡，排隊獻上花和供品。'], [20, 40, '你的婚禮依照家族的傳統，在聖火前完成儀式。', 'partner'], [40, 80, '你一直想走一趟聖地朝聖。']],
   buddhist: [[3, 8, '你跟著長輩到寺院，學著把花供在佛前。'], [6, 15, '新年的時候，家人帶你去寺裡祈福。'], [10, 25, '你在寺院住了一段時間，學著打坐和誦經。'], [20, 60, '家裡有人過世，你們請僧人來誦經。'], [30, 70, '每個月有幾天，你會去寺裡聽經、布施。'], [50, 80, '你常在清晨靜坐，覺得心比較安定。']],
-  other: [[3, 8, '家裡有一個祭拜祖先的地方，逢年過節都要準備供品。'], [5, 15, '過年過節，全家族聚在一起祭祖。'], [6, 20, '你生病的時候，家人帶你去求神，也去看醫生。'], [10, 30, '地方的傳統祭典到了，整個社區都熱鬧起來。'], [30, 70, '你接下照顧家族祭祀的責任。'], [40, 80, '長輩過世，你照著傳統的方式送他最後一程。']],
+  other: [[3, 8, '家裡有一個祭拜祖先的地方，逢年過節都要準備供品。', 'ea'], [5, 15, '過年過節，全家族聚在一起祭祖。', 'ea'], [30, 70, '你接下照顧家族祭祀的責任。', 'ea'], [3, 10, '家裡的長輩照著祖先傳下來的方式祈求平安，你在旁邊跟著學。', 'nea'], [30, 70, '家族的儀式開始由你負責準備。', 'nea'], [6, 20, '你生病的時候，家人帶你去看醫生，也去求了神明。'], [10, 30, '地方的傳統祭典到了，整個社區都熱鬧起來。'], [40, 80, '長輩過世，你照著傳統的方式送他最後一程。']],
   unaffiliated: [[8, 15, '同學問你信什麼，你想了想，說「沒有吧」。'], [12, 20, '你在課堂上讀到世界各大宗教，覺得那離自己很遠。'], [20, 50, '工作很忙，你很少想到信仰的事。'], [25, 80, '參加一場喪禮後，你第一次認真想：人死了會去哪裡？'], [50, 80, '年紀漸長，你開始想，這一生到底在追求什麼。']],
   jewish: [[4, 12, '每週五傍晚，家人點起安息日的蠟燭。'], [12, 13, '你舉行了成年禮，第一次在會眾面前讀經。'], [5, 60, '逾越節的晚餐上，家人一起講述出埃及的故事。']],
   christian: [[4, 10, '聖誕節，你在教會的表演裡演一隻小羊。', 'all'], [7, 10, '你在教堂領了第一次聖餐。', 'catholic'], [12, 16, '你領了堅振。', 'catholic'], [6, 12, '暑假，你參加了教會的兒童營。', 'protestant'], [5, 15, '復活節前夕，你跟著家人在教堂守夜，等著午夜的鐘聲。', 'orthodox'], [5, 20, '你在聖像前點了一根蠟燭。', 'orthodox'], [8, 18, '週日早上，全家一起去教會。', 'all']],
@@ -1690,10 +1690,6 @@ let scenePlan = {}, sceneUsed = new Set(), importantAt = new Set(), nearCount = 
 function planScenes(p) {
   const plan = {}, life = p.lifespan, r = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
   const put = (a, text, kind) => { while (plan[a] && a < life) a++; if (a <= life && !plan[a]) plan[a] = { text, kind }; };
-  // 宗教日常：從家裡宗教的句子抽 3 到 4 句
-  const fam = ['catholic', 'protestant', 'orthodox', 'christian'].includes(p.parentLabel) ? 'christian' : p.parentLabel;
-  const pool = (SCENES[fam] || []).filter(s => !s[3] || s[3] === 'all' || s[3] === p.parentLabel).filter(s => s[0] <= life);
-  pool.sort(() => Math.random() - 0.5).slice(0, r(3, 4)).forEach(s => put(r(s[0], Math.min(s[1], life)), s[2], fam === 'christian' ? 'cfaith' : 'faith'));
   // 人生里程碑：依設計假設的比例出現；孩子、孫子要接在前一件之後
   let partner = null, child = null;
   for (const [a, b, text, prob, req] of MILESTONES) {
@@ -1706,6 +1702,18 @@ function planScenes(p) {
     if (req === 'partner') partner = at; if (req === 'child') child = at;
     put(at, text, req ? 'chain' : 'life');
   }
+  // 宗教日常：從家裡宗教的句子抽 3 到 4 句；民間信仰分東亞與其他地區，需要孩子或伴侶的句子要接在那件事之後
+  const fam = ['catholic', 'protestant', 'orthodox', 'christian'].includes(p.parentLabel) ? 'christian' : p.parentLabel;
+  const ea = EAST_ASIA.includes(p.country.id) && !['ID', 'PH', 'MM', 'TH'].includes(p.country.id);
+  const ok = s => !s[3] || s[3] === 'all' || s[3] === p.parentLabel || (s[3] === 'ea' && ea) || (s[3] === 'nea' && !ea) || (s[3] === 'child' && child !== null) || (s[3] === 'partner' && partner !== null);
+  const pool = (SCENES[fam] || []).filter(ok).filter(s => s[0] <= life);
+  pool.sort(() => Math.random() - 0.5).slice(0, r(3, 4)).forEach(s => {
+    let lo = s[0];
+    if (s[3] === 'child') lo = Math.max(lo, child + 6);
+    if (s[3] === 'partner') lo = Math.max(lo, partner);
+    const hi = Math.min(s[1] < lo ? lo + 3 : s[1], life);
+    if (lo <= hi) put(r(lo, hi), s[2], fam === 'christian' ? 'cfaith' : 'faith');
+  });
   // 一生最多 9 件預排的片段，擦肩而過另外最多 3 次；伴侶、孩子、孫子這條線不拆開
   const ages = Object.keys(plan).map(Number).filter(a => plan[a].kind !== 'chain');
   while (Object.keys(plan).length > 9 && ages.length) delete plan[ages.splice(Math.floor(Math.random() * ages.length), 1)[0]];
@@ -1744,7 +1752,7 @@ function start() {
     ['全國基督新教', protPct(c)],
     ['未得之民族群', g.unreached === true ? '是' : g.unreached === false ? '否' : '不明', g.unreached === true],
     ['平均壽命', `${c.life_expectancy[me.sex]} 歲`],
-    ['基督徒處境艱難程度（WWL 2026）', c.wwl.rank ? `第 ${c.wwl.rank} 名` : '不在評分名單上'],
+    ['基督徒受迫害程度（WWL 2026）', c.wwl.rank ? `第 ${c.wwl.rank} 名` : '不在評分名單上'],
   ];
   $('facts').innerHTML = facts.map(([k, v, bad]) => `<div><dt>${k}</dt><dd class="${bad ? 'flag-none' : ''}"></dd></div>`).join('');
   [...$('facts').querySelectorAll('dd')].forEach((dd, i) => dd.textContent = facts[i][1]);
@@ -2040,7 +2048,7 @@ function finish(martyred) {
     <div class="controls"><button class="primary" id="againBtn">再活一次</button><button id="homeBtn">回首頁</button><button id="memBtn">看賽道上的每個人</button></div>
     <div class="show">
       <p class="brand"><span class="dot" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>${SHOW_NAME}</b>Podcast 特別企劃</span></p>
-      <p>聽聽${SHOW_NAME}，一起聊聊那些值得重新思考的信仰問題。玩完之後有什麼想說的，也歡迎分享給我們。</p>
+      <p>聽聽${SHOW_NAME}，一起聊聊教會裡不太好說、卻很值得聊的信仰問題。玩完之後有什麼想說的，也歡迎分享給我們。</p>
       <a class="cta" href="${SHOW_URL}" target="_blank" rel="noopener">收聽${SHOW_NAME}</a>
     </div>
     <p class="fine">這段人生是依公開資料和模型規則產生的，其中部分機率是設計假設。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
