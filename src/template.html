@@ -74,6 +74,36 @@ button:hover { border-color: var(--ink); }
 label { font-size: 14px; color: var(--muted); display: flex; gap: 8px; align-items: center; }
 .fine { font-size: 13px; color: var(--muted); }
 
+/* 出生登記卡 */
+.cert { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.cert-head { background: var(--b4); color: #f4f4f4; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; padding: 16px 20px; }
+.cert-head h2 { font-size: 24px; color: #f4f4f4; }
+.cert-no { font-family: var(--mono); font-size: 13px; color: #d5ddd8; letter-spacing: .04em; }
+.cert-body { padding: 20px; display: grid; gap: 20px; }
+.cert-lede { font-size: 17px; line-height: 1.85; }
+.odds { background: var(--b1); border-radius: 8px; padding: 14px 16px; font-size: 15px; }
+.odds b { color: var(--lamp); font-family: var(--mono); font-weight: 500; }
+.faith-box { display: grid; gap: 10px; border-top: 1px dashed var(--line); padding-top: 18px; }
+.faith-box h3 { font-size: 18px; }
+.relbar { display: flex; height: 22px; border-radius: 6px; overflow: hidden; background: var(--line); }
+.relbar span { display: block; height: 100%; min-width: 0; }
+.rellegend { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 6px 14px; font-size: 14px; }
+.rellegend li { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.rellegend i { width: 12px; height: 12px; border-radius: 3px; flex: none; }
+.rellegend b { font-family: var(--mono); font-weight: 500; margin-left: auto; }
+.xnfacts { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; font-size: 15px; }
+.cmptable { display: grid; font-size: 14px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.cmptable > div { display: grid; grid-template-columns: minmax(7em, 1.3fr) 1fr 1fr; gap: 8px; padding: 9px 12px; }
+.cmptable > div:nth-child(even) { background: var(--bg); }
+.cmptable > div span { min-width: 0; overflow-wrap: anywhere; }
+.cmptable > div span:not(:first-child) { text-align: right; font-family: var(--mono); }
+.cmptable .h span { font-family: var(--body) !important; font-weight: 700; color: var(--muted); }
+.cmptable > div span:last-child { font-weight: 700; }
+.sameSec { list-style: none; margin: 0; padding: 0; display: grid; }
+.sameSec li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+.sameSec li span:last-child { color: var(--muted); text-align: right; }
+.cert-go { justify-content: flex-end; }
+
 /* 出生卡 */
 .birth { display: grid; gap: 16px; }
 .birth h2 { font-size: clamp(24px, 5.5vw, 32px); }
@@ -234,7 +264,22 @@ a.btn:hover { border-color: var(--ink); }
 
 /* 首頁主視覺：手機全寬，電腦最寬 960px */
 body { overflow-x: clip; }
-.hero { display: block; width: min(960px, 100vw); max-width: none; height: auto; aspect-ratio: 1800 / 600; margin-inline: calc((100% - min(960px, 100vw)) / 2); margin-block: 4px; }
+/* 背景插圖靠右，左側漸淡，文字區保持乾淨；手機上更淡 */
+.intro { position: relative; isolation: isolate; }
+.intro::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  top: -48px; bottom: -24px; left: calc(50% - 50vw); width: 100vw;
+  background: url('/*HERO*/') no-repeat right center / contain;
+  -webkit-mask-image: linear-gradient(to right, transparent 22%, #000 62%);
+          mask-image: linear-gradient(to right, transparent 22%, #000 62%);
+  opacity: .8;
+}
+@media (max-width: 760px) {
+  .intro::before { background-position: right -40vw top 150px; background-size: 150vw auto; opacity: .4;
+    -webkit-mask-image: none; mask-image: none; }
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .intro::before { opacity: .3; } }
+:root[data-theme="dark"] .intro::before { opacity: .3; }
 
 /* 首頁動機 */
 .intro .lede { display: grid; gap: 6px; color: var(--ink); font-size: 17px; }
@@ -332,7 +377,6 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
       <div><b class="num" id="bornCount">0</b><span>打開這頁之後，世界上出生的嬰兒</span></div>
       <div><b class="num" id="neverCount">0</b><span>可能一生沒有機會接觸福音的人</span></div>
     </div>
-    <img class="hero" src="/*HERO*/" width="1800" height="600" alt="從嬰兒到老人走過一段人生的路，翻過山與河，通往遠方發光的十字架" fetchpriority="high" decoding="async">
     <p class="fine">遊戲裡會出現迫害、拘留，甚至因信仰失去生命的事件，不描寫畫面。人生經歷都是依模型產生的，不是真實人物的紀錄。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
   </section>
 
@@ -347,7 +391,7 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
   </section>
 
   <section class="memorial band b2" id="memorial" hidden>
-    <p class="eyebrow">我的追思館</p>
+    <p class="eyebrow">賽道上的每個人</p>
     <h2>你曾經活過的每一段人生</h2>
     <p class="memstats" id="memStats"></p>
     <p class="fine">點兩段人生的「比較」，可以把它們並排來看。</p>
@@ -483,11 +527,42 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
   </div>
 
   <section class="birth" id="birth" hidden>
-    <p class="eyebrow">你出生了</p>
-    <h2 id="birthTitle"></h2>
-    <figure class="map"><svg id="mapSvg" viewBox="0 0 1000 420" role="img" aria-label="出生地在世界地圖上的位置"></svg><figcaption id="mapCap"></figcaption></figure>
-    <dl class="facts" id="facts"></dl>
-    <div class="challenge"><span class="lbl" id="challengeLbl"></span><p id="challengeText"></p></div>
+    <article class="cert">
+      <header class="cert-head"><h2>關於我的人生</h2><span class="cert-no" id="certNo"></span></header>
+      <div class="cert-body">
+        <p class="cert-lede" id="birthStory"></p>
+        <dl class="facts" id="facts"></dl>
+        <figure class="map"><svg id="mapSvg" viewBox="0 0 1000 420" role="img" aria-label="出生地在世界地圖上的位置"></svg><figcaption id="mapCap"></figcaption></figure>
+        <p class="odds" id="birthOdds"></p>
+
+        <section class="faith-box">
+          <h3 id="relTitle"></h3>
+          <div class="relbar" id="relBar" role="img"></div>
+          <ul class="rellegend" id="relLegend"></ul>
+          <p class="fine">宗教組成：Pew Research Center，2020 年估計。</p>
+        </section>
+
+        <section class="faith-box">
+          <h3 id="xnTitle"></h3>
+          <ul class="xnfacts" id="xnFacts"></ul>
+          <div class="challenge"><span class="lbl" id="challengeLbl"></span><p id="challengeText"></p></div>
+        </section>
+
+        <section class="faith-box">
+          <h3 id="cmpTitle"></h3>
+          <div class="cmptable" id="cmpTable"></div>
+          <p class="fine">「一生沒接觸到福音」是模型模擬的比例，不是實際統計。</p>
+        </section>
+
+        <section class="faith-box">
+          <h3>同一秒，在地球某處出生的人</h3>
+          <ul class="sameSec" id="sameSec"></ul>
+          <p class="fine">這些人的一生，也會依照同樣的規則走到最後，結束時會和你一起呈現。</p>
+        </section>
+
+        <div class="controls cert-go"><button class="primary go" id="liveBtn">開始這一生</button></div>
+      </div>
+    </article>
   </section>
 
   <div class="agebar" id="agebar" hidden>
@@ -1072,6 +1147,72 @@ function drawMap(id) {
   $('mapCap').textContent = id === 'TW' ? '你出生在台灣。' : `你出生在${name}，灰點是台灣。`;
 }
 
+// ── 出生登記：只放手上有資料的項目
+const REL_COLOR = { christian: '#e8741a', muslim: '#3e8a55', hindu: '#c7980e', buddhist: '#9b8462', unaffiliated: '#9a9a9a', jewish: '#4a6fa5', other: '#a86f97' };
+const REL_PHRASE = { christian: '是基督徒家庭', muslim: '信伊斯蘭教', hindu: '信印度教', buddhist: '信佛教', unaffiliated: '沒有特定的宗教信仰', jewish: '信猶太教', other: '有民間信仰或其他宗教' };
+const SPHERE_ZH = { private: '私人生活', family: '家庭', community: '社區', national: '國家', church: '教會生活', violence: '暴力' };
+const shareTxt = (label, v) => v < 0.1 ? `${label}不到 0.1%` : `${label}約佔 ${pct(v)}`;
+const RELNAME = { christian: '基督教', muslim: '伊斯蘭教', hindu: '印度教', buddhist: '佛教', unaffiliated: '無宗教', jewish: '猶太教', other: '民間信仰或其他' };
+const pct = v => v >= 99 && v < 100 ? v.toFixed(1) + '%' : v >= 10 ? Math.round(v) + '%' : v >= 1 ? v.toFixed(1) + '%' : v >= 0.1 ? v.toFixed(2) + '%' : '不到 0.1%';
+function topReligion(c) { return Object.entries(c.religion_pct).sort((a, b) => b[1] - a[1])[0]; }
+function fillBirthCard() {
+  const c = me.country, g = me.group, tw = DATA.countries.find(x => x.id === 'TW');
+  const d = new Date();
+  $('certNo').textContent = `No. ${c.id}-${d.getFullYear()}-${String(Math.floor(Math.random() * 1e7)).padStart(7, '0')}`;
+  $('birthStory').textContent = `${d.getFullYear()} 年 ${d.getMonth() + 1} 月，你出生在${c.name}（${c.continent}），是個${me.sex === 'm' ? '男孩' : '女孩'}。你的家人是${g.name.startsWith('其他') ? '當地的少數族群' : g.name}${g.language_name ? `，說${g.language_name}` : ''}，家裡${REL_PHRASE[me.parentLabel]}。`;
+  // 在 53 國中的位置
+  const all = DATA.countries.reduce((s, x) => s + x.births_per_year, 0);
+  const share = c.births_per_year / all * 100;
+  $('birthOdds').innerHTML = `在這 53 國每年出生的嬰兒裡，有 <b>${share.toFixed(share < 1 ? 2 : 1)}%</b> 在${c.name}出生，一年大約 ${Math.round(c.births_per_year / 1e4).toLocaleString()} 萬人，每 <b>${Math.round(all / c.births_per_year).toLocaleString()}</b> 個嬰兒就有 1 個。`;
+  // 當地宗教
+  const [topK, topV] = topReligion(c);
+  $('relTitle').textContent = `${c.name}的宗教：最多人${topK === 'unaffiliated' ? '沒有宗教信仰' : topK === 'other' ? '信民間信仰或其他宗教' : '信' + RELNAME[topK]}（${pct(topV)}）`;
+  const rels = Object.entries(c.religion_pct).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+  $('relBar').innerHTML = rels.map(([k, v]) => `<span style="width:${v}%;background:${REL_COLOR[k]}"></span>`).join('');
+  $('relBar').setAttribute('aria-label', rels.map(([k, v]) => `${RELNAME[k]} ${pct(v)}`).join('，'));
+  $('relLegend').innerHTML = rels.filter(([, v]) => v >= 0.1).map(([k, v]) => `<li><i style="background:${REL_COLOR[k]}"></i><span>${RELNAME[k]}</span><b>${pct(v)}</b></li>`).join('');
+  // 基督教在當地
+  $('xnTitle').textContent = `基督教在${c.name}`;
+  const xn = [];
+  const pewC = c.religion_pct.christian, jpC = c.christian_pct;
+  xn.push(`${shareTxt('基督徒', pewC)}（Pew）${Math.abs(jpC - pewC) > Math.max(2, pewC * 0.5) ? `；Joshua Project 估計約 ${pct(jpC)}，差距可能來自沒有登記的地下教會或統計方式不同` : ''}。`);
+  xn.push(c.evangelical_pct != null && !c.evangelical_pct_note ? `${shareTxt('福音派', c.evangelical_pct)}。` : '福音派比例：多數族群沒有公開資料。');
+  xn.push(`${c.jp.people_groups_total} 個族群裡，有 ${c.jp.unreached_groups} 個被列為未得之民，約佔人口的 ${pct(c.jp.unreached_population_pct)}。`);
+  if (c.wwl.rank) {
+    const top2 = Object.entries(c.wwl.spheres).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => SPHERE_ZH[k]);
+    xn.push(`基督徒受迫害評分全球第 ${c.wwl.rank} 名${c.wwl.rank > 50 ? '（觀察名單）' : ''}，壓力最大的是${top2.join('和')}層面。`);
+  } else xn.push('不在基督徒受迫害評分的名單上。');
+  $('xnFacts').innerHTML = xn.map(() => '<li></li>').join('');
+  [...$('xnFacts').children].forEach((li, i) => li.textContent = xn[i]);
+  $('challengeLbl').textContent = `在${c.name}，接觸福音的挑戰是`;
+  $('challengeText').textContent = c.challenge;
+  // 和台灣對照
+  $('cmpTitle').textContent = c.id === 'TW' ? '你出生在台灣' : `如果同一天出生：台灣和${c.name}`;
+  const rows = [
+    ['', '台灣', c.name],
+    ['最多人信的宗教', tw, c, x => RELNAME[topReligion(x)[0]]],
+    ['基督徒比例', tw, c, x => pct(x.religion_pct.christian)],
+    ['福音派比例', tw, c, x => x.evangelical_pct != null && !x.evangelical_pct_note ? pct(x.evangelical_pct) : '不公開'],
+    ['迫害評分排名', tw, c, x => x.wwl.rank ? `第 ${x.wwl.rank} 名` : '不在名單'],
+    ['平均壽命', tw, c, x => `${((x.life_expectancy.m + x.life_expectancy.f) / 2).toFixed(1)} 歲`],
+    ['一生沒接觸到福音（模擬）', tw, c, x => `${x.difficulty.never_pct}%`],
+  ];
+  $('cmpTable').innerHTML = rows.map((r, i) => `<div class="${i === 0 ? 'h' : ''}"><span></span><span></span><span></span></div>`).join('');
+  [...$('cmpTable').children].forEach((row, i) => {
+    const s = row.querySelectorAll('span'), r = rows[i];
+    if (i === 0) { s[0].textContent = ''; s[1].textContent = '台灣'; s[2].textContent = c.name; }
+    else { s[0].textContent = r[0]; s[1].textContent = r[3](r[1]); s[2].textContent = r[3](r[2]); }
+  });
+  if (c.id === 'TW') $('cmpTable').closest('.faith-box').hidden = true; else $('cmpTable').closest('.faith-box').hidden = false;
+  // 同一秒出生的人
+  $('sameSec').innerHTML = others.map(() => '<li><span></span><span></span></li>').join('');
+  [...$('sameSec').children].forEach((li, i) => {
+    const o = others[i].p;
+    li.children[0].textContent = o.country.name;
+    li.children[1].textContent = `${o.group.name}・${o.sex === 'm' ? '男' : '女'}`;
+  });
+}
+
 // 玩家這一生
 let stats = { persecution: 0, growth: 0 };
 let me, timer = null, paused = false, age = 0, phase = 'unheard', firstAge = null, faithAge = null, st = {}, hearCount = 0, others = [];
@@ -1105,24 +1246,30 @@ function start() {
   $('log').innerHTML = ''; $('choiceSlot').innerHTML = ''; $('end').hidden = true;
   for (const id of ['intro', 'show', 'ranking', 'method', 'memorial']) $(id).hidden = true; setPaused(false); $('birth').hidden = false; $('agebar').hidden = false;
   const c = me.country, g = me.group;
-  $('birthTitle').textContent = `你是${c.name}的一個${me.sex === 'm' ? '男' : '女'}嬰`;
   const facts = [
     ['族群', g.name],
     ['母語', g.language_name || '多種語言'],
     ['母語聖經', BIBLE[g.bible_status ?? 'null'], ['none', 'started'].includes(g.bible_status)],
-    ['父母的宗教', RELIGION[me.parentLabel]],
-    ['族群中的福音派', g.evangelical_pct != null && !c.evangelical_pct_note ? `${g.evangelical_pct.toFixed(2)}%` : '資料不公開'],
+    ['家裡的宗教', RELIGION[me.parentLabel]],
+    ['族群中的福音派', g.evangelical_pct != null && !c.evangelical_pct_note ? pct(g.evangelical_pct) : '資料不公開'],
+    ['未得之民族群', g.unreached === true ? '是' : g.unreached === false ? '否' : '不明', g.unreached === true],
+    ['平均壽命', `${c.life_expectancy[me.sex]} 歲`],
     ['迫害排名（WWL 2026）', c.wwl.rank ? `第 ${c.wwl.rank} 名` : '不在評分名單上'],
   ];
   $('facts').innerHTML = facts.map(([k, v, bad]) => `<div><dt>${k}</dt><dd class="${bad ? 'flag-none' : ''}"></dd></div>`).join('');
   [...$('facts').querySelectorAll('dd')].forEach((dd, i) => dd.textContent = facts[i][1]);
   drawMap(c.id);
-  $('challengeLbl').textContent = `在${c.name}，接觸福音的挑戰是`;
-  $('challengeText').textContent = c.challenge;
+  fillBirthCard();
   if (g.unreached) addLog(0, '你出生的族群被列為未得之民：信徒少到無法靠自己把福音傳給整個族群。', 'milestone');
   addLog(0, '你出生了。', 'milestone');
   setStatus(); $('age').textContent = 0;
+  // 先讀完出生登記，按「開始這一生」才開始
+  $('agebar').hidden = true; $('liveBtn').hidden = false;
   $('birth').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function beginLife() {
+  $('liveBtn').hidden = true; $('agebar').hidden = false;
+  $('agebar').scrollIntoView({ behavior: 'smooth', block: 'start' });
   run();
 }
 
@@ -1235,6 +1382,7 @@ for (const id of ['speed', 'speed2']) {
   };
 }
 $('birthBtn').onclick = start;
+$('liveBtn').onclick = beginLife;
 try { $('gentle').checked = localStorage.getItem(GENTLE_KEY) === '1'; } catch (e) {}
 $('gentle').onchange = () => { try { localStorage.setItem(GENTLE_KEY, $('gentle').checked ? '1' : '0'); } catch (e) {} };
 // 任何「這些數字怎麼算出來的？」連結：回到首頁、打開說明
@@ -1285,7 +1433,7 @@ function finish(martyred) {
     <fieldset class="feel" id="feel">
       <legend>這一生，你最有感觸的是哪一刻？</legend>
       ${FEELINGS.map((f, i) => `<label><input type="radio" name="feel" value="${i}"> <span></span></label>`).join('')}
-      <p class="fine" id="feelNote">選一個，會記進你的追思館，複製分享文字時也會一起帶上。</p>
+      <p class="fine" id="feelNote">選一個，會記進「賽道上的每個人」，複製分享文字時也會一起帶上。</p>
     </fieldset>
     </section>
     <section class="band b2">
@@ -1322,7 +1470,7 @@ function finish(martyred) {
     </div>
     </section>
     <section class="band b4 endfoot">
-    <div class="controls"><button class="primary" id="againBtn">再活一次</button><button id="homeBtn">回首頁</button><button id="memBtn">看追思館</button></div>
+    <div class="controls"><button class="primary" id="againBtn">再活一次</button><button id="homeBtn">回首頁</button><button id="memBtn">看賽道上的每個人</button></div>
     <div class="show">
       <p class="brand"><span class="dot" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>${SHOW_NAME}</b>Podcast 特別企劃</span></p>
       <p>聽聽${SHOW_NAME}，一起聊聊那些值得重新思考的信仰問題。玩完之後有什麼想說的，也歡迎分享給我們。</p>
@@ -1352,7 +1500,7 @@ function finish(martyred) {
     feeling = FEELINGS[+inp.value];
     const ls = loadLives(); if (ls.length) { ls[ls.length - 1].feeling = feeling; saveLives(ls); }
     $('copyBtn').textContent = '複製分享文字';
-    $('feelNote').textContent = `已記下：「${feeling}」。這句話會出現在追思館，複製分享文字時也會一起帶上。`;
+    $('feelNote').textContent = `已記下：「${feeling}」。這句話會出現在「賽道上的每個人」，複製分享文字時也會一起帶上。`;
   });
   drawStrip();
   makeShareCard(end, martyred);
