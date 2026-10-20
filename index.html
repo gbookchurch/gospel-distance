@@ -468,6 +468,95 @@ main:has(> #lifefoot[hidden]):has(> #birth:not([hidden])):has(> #end[hidden]) + 
   .lifearea .agebar { margin-inline: -18px; padding-inline: 18px 60px; }
   .cert-lede { font-size: 16.5px; }
 }
+
+/* ═══ 遊戲介面：數位人生傳記風格 ═══
+   色彩用途：中性灰為底；鼠尾草綠是介面狀態；低飽和金標記接觸福音等人生節點；磚紅標記信仰壓力與死亡。
+   信仰選擇的選項一律中性，不用顏色暗示對錯。 */
+:root { --sage: #62786f; --sage-soft: #e7ecea; --gold: #8f6f36; --gold-line: #b59a6a; --gold-soft: #f3eee4; --brick: #96594c; --brick-line: #a46e61; --brick-soft: #f4ebe8; }
+
+/* 出生卡：國名是主角 */
+.who { display: grid; gap: 2px; }
+.who-meta { font-size: 13px; color: var(--muted); letter-spacing: .06em; }
+.who-country { font-family: var(--display); font-size: clamp(30px, 8vw, 40px); font-weight: 900; line-height: 1.2; overflow-wrap: anywhere; }
+.cert-lede { font-size: 16px; color: var(--ink); }
+
+/* 年齡列：大數字、人生階段、細進度條；固定高度，避免數字或文字變動時畫面跳動 */
+.lifearea .agebar { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 4px 14px; padding-bottom: 14px; }
+.lifearea .age { font-size: 40px; font-variant-numeric: tabular-nums; min-width: 2.6ch; }
+.age span { display: inline-block; min-width: 2ch; text-align: right; }
+.agemeta { display: grid; gap: 0; min-width: 0; }
+.stage { font-size: 13px; color: var(--sage); font-weight: 700; letter-spacing: .08em; }
+.lifearea .status { font-size: 14px; line-height: 1.5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lifeprog { grid-column: 1 / -1; height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.lifeprog i { display: block; height: 100%; width: 0; background: var(--sage); transition: width .3s linear; }
+@media (max-width: 480px) {
+  .lifearea .agebar { grid-template-columns: auto 1fr; }
+  .lifearea .agebar .controls { grid-column: 1 / -1; }
+  .lifearea .status { white-space: normal; min-height: 3em; }
+}
+
+/* 人生紀錄：時間軸。平凡年份一行帶過，重要事件用同一種卡片，只靠細色條和底色區分 */
+.lifearea .log { position: relative; gap: 6px; }
+.lifearea .log li { grid-template-columns: 3em 1fr; gap: 12px; padding: 0; border: 0; align-items: start; }
+.lifearea .log .a { padding-top: 11px; }
+.lifearea .log .t { padding: 10px 14px; border-radius: 12px; background: var(--bg); border-left: 3px solid var(--line); color: var(--ink); font-size: 15.5px; line-height: 1.75; }
+.lifearea .log li.milestone .a { padding-top: 3px; }
+.lifearea .log li.milestone .t { background: none; border-left: 0; padding: 2px 0; color: var(--muted); font-size: 14px; }
+.lifearea .log li.gospel .t { background: var(--gold-soft); border-left-color: var(--gold-line); color: #6f5428; font-family: var(--body); font-size: 16px; font-weight: 500; }
+.lifearea .log li.persecution .t { border-left-color: var(--brick-line); }
+.lifearea .log li.growth .t { border-left-color: var(--sage); color: var(--ink); }
+.lifearea .log li.persecution .t { color: var(--ink); }
+.lifearea .status .lit { color: var(--gold); }
+.lifearea .log li.reflection .t { background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--line); font-style: normal; }
+.lifearea .log li:last-child { border-bottom: 0; }
+.lifearea .log .help { margin-top: 6px; }
+
+/* 選擇與反思：同一種卡片，選項等寬、整塊可點，顏色中性 */
+.lifearea .choice, .lifearea .reflect { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; gap: 14px; box-shadow: 0 1px 0 rgba(0,0,0,.03); }
+.lifearea .choice { border-top: 3px solid var(--gold-line); }
+.lifearea .choice h3 { font-size: 20px; line-height: 1.45; }
+.lifearea .choice .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.lifearea .choice .opts button { min-height: 72px; padding: 14px 16px; border-radius: 12px; background: var(--bg); border: 1px solid var(--line); align-content: start; transition: border-color .15s, background .15s; }
+.lifearea .choice .opts button:hover { border-color: var(--sage); background: var(--sage-soft); }
+.lifearea .choice .opts button:focus-visible { outline: 2px solid var(--sage); outline-offset: 2px; }
+.lifearea .choice .opts button:active { transform: translateY(1px); }
+@media (max-width: 480px) { .lifearea .choice .opts { grid-template-columns: 1fr; } .lifearea .choice .opts button { min-height: 60px; } }
+@media (prefers-reduced-motion: no-preference) {
+  .lifearea .choice, .lifearea .reflect { animation: rise .35s ease-out; }
+}
+
+/* 結果頁：先是終章，再是摘要、分享，最後才是延伸資料 */
+.finale { gap: 18px !important; }
+.finale-place { font-size: 15px; color: var(--muted); letter-spacing: .04em; }
+.finale .epitaph p:first-child { font-size: clamp(30px, 8vw, 40px); }
+.finale .ponder { margin-top: 4px; }
+.endcta { gap: 12px; }
+.endcta .btn, .endcta button { min-height: 48px; }
+a.btn.primary { background: var(--btn); color: #fff; border-color: var(--btn); font-weight: 700; padding: 12px 28px; text-decoration: none; }
+.recap { gap: 16px !important; }
+.explore { gap: 10px !important; }
+.xdr { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.xdr > summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 18px; min-height: 52px; font-weight: 700; }
+.xdr > summary::-webkit-details-marker { display: none; }
+.xdr > summary::after { content: ""; flex: none; width: 9px; height: 9px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: translateY(-3px) rotate(45deg); transition: transform .2s; }
+.xdr[open] > summary::after { transform: translateY(2px) rotate(-135deg); }
+.xdr > :not(summary) { margin: 0 18px 18px; }
+.xdr .reflect { background: var(--bg); }
+.end .events li.gospel .t { color: var(--gold); }
+.end .events li.persecution .t { color: var(--brick); }
+.end .events li.growth .t { color: var(--sage); }
+.other .r.never { color: var(--brick); }
+.other .r.heard { color: var(--gold); }
+@media (max-width: 800px) { .endtop { padding-right: 52px; } }
+@media (max-width: 480px) { .xdr > summary { padding: 14px 16px; } .xdr > :not(summary) { margin: 0 16px 16px; } }
+
+/* 資訊列：標籤在左、內容在右，不會留下空白格 */
+.end .summary, .cert .facts { display: block; background: none; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.end .summary div, .cert .facts div { display: grid; grid-template-columns: 8.5em 1fr; gap: 12px; align-items: baseline; padding: 11px 16px; background: var(--surface); border-top: 1px solid var(--line); }
+.end .summary div:first-child, .cert .facts div:first-child { border-top: 0; }
+.end .summary dt, .cert .facts dt { font-size: 13px; letter-spacing: .02em; }
+.end .summary dd, .cert .facts dd { font-size: 15px; }
+@media (max-width: 480px) { .end .summary div, .cert .facts div { grid-template-columns: 7em 1fr; padding: 10px 14px; } }
 </style>
 
 </head>
@@ -658,11 +747,12 @@ main:has(> #lifefoot[hidden]):has(> #birth:not([hidden])):has(> #end[hidden]) + 
     <article class="cert">
       <header class="cert-head"><h2>關於我的人生</h2><span class="cert-no" id="certNo"></span></header>
       <div class="cert-body">
+        <div class="who"><p class="who-meta" id="whoMeta"></p><p class="who-country" id="whoCountry"></p></div>
         <p class="cert-lede" id="birthStory"></p>
         <div class="lifearea" id="lifearea">
         <div class="agebar" id="agebar" hidden>
           <div class="age"><span id="age">0</span><small>歲</small></div>
-          <div class="status" id="status"></div>
+          <div class="agemeta"><span class="stage" id="stage">嬰兒期</span><div class="status" id="status"></div></div>
           <div class="controls">
             <button id="pauseBtn" aria-pressed="false">⏸ 暫停</button>
             <label for="speed2" class="sr">速度</label>
@@ -672,6 +762,7 @@ main:has(> #lifefoot[hidden]):has(> #birth:not([hidden])):has(> #end[hidden]) + 
               <option value="120">快</option>
             </select>
           </div>
+          <div class="lifeprog" aria-hidden="true"><i id="lifeProg"></i></div>
         </div>
 
         <div id="choiceSlot" aria-live="polite"></div>
@@ -1506,7 +1597,7 @@ function crossChoose(c) {
   const all = [...CROSS_OPTIONS.believer, ...CROSS_OPTIONS.dechurched];
   const desc = all.find(o => o[0] === c)[2];
   if (c === 'dechurch') { phase = 'dechurched'; journey.push({ age, kind: 'dechurch' }); addLog(age, desc, 'milestone'); highlights.push({ age, text: '離開了教會，但心裡還信。', cls: 'milestone' }); }
-  else if (c === 'leave') { phase = 'left'; journey.push({ age, kind: 'leave' }); addLog(age, desc, 'persecution'); highlights.push({ age, text: '放下了信仰。', cls: 'milestone' }); }
+  else if (c === 'leave') { phase = 'left'; journey.push({ age, kind: 'leave' }); addLog(age, desc, 'decision'); highlights.push({ age, text: '放下了信仰。', cls: 'milestone' }); }
   else if (c === 'return_church') { phase = 'believer'; journey.push({ age, kind: 'return_church' }); addLog(age, desc, 'growth'); highlights.push({ age, text: '回到了教會。', cls: 'growth' }); }
   else addLog(age, desc, 'milestone');
   setStatus();
@@ -1586,6 +1677,8 @@ function fillBirthCard() {
   const c = me.country, g = me.group, tw = DATA.countries.find(x => x.id === 'TW');
   const d = new Date();
   $('certNo').textContent = `No. ${c.id}-${d.getFullYear()}-${String(Math.floor(Math.random() * 1e7)).padStart(7, '0')}`;
+  $('whoCountry').textContent = c.name;
+  $('whoMeta').textContent = '你出生在';
   $('birthStory').textContent = `${d.getFullYear()} 年 ${d.getMonth() + 1} 月，你出生在${c.name}（${c.continent}），是個${me.sex === 'm' ? '男孩' : '女孩'}。你的家人是${g.name.startsWith('其他') ? '當地的少數族群' : g.name}${g.language_name ? `，說${g.language_name}` : ''}，家裡${REL_PHRASE[me.parentLabel]}。`;
   // 在 53 國中的位置
   const all = DATA.countries.reduce((s, x) => s + x.births_per_year, 0);
@@ -1688,7 +1781,7 @@ function start() {
   fillBirthCard();
   if (g.unreached) addLog(0, '你出生的族群被 Joshua Project 列為未得之民，意思是族群裡的基督徒很少，還不足以靠自己把福音傳遍整個族群。', 'milestone');
   addLog(0, '你出生了。', 'milestone');
-  setStatus(); $('age').textContent = 0;
+  setStatus(); showAge(0);
   // 先讀完出生登記，按「開始這一生」才開始
   $('agebar').hidden = true; $('liveBtn').hidden = false;
   $('birth').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1710,10 +1803,19 @@ function showHome() {
 }
 function stop() { clearInterval(timer); timer = null; music.to(music.DUCK, 1.2); }
 
+// 年齡列的人生階段與進度條：進度以 100 歲為滿格，不透露這一生的實際長度
+function lifeStage(a) {
+  return a < 3 ? '嬰兒期' : a < 12 ? '童年' : a < 18 ? '青少年' : a < 30 ? '青年' : a < 50 ? '壯年' : a < 65 ? '中年' : '老年';
+}
+function showAge(a) {
+  $('age').textContent = a;
+  $('stage').textContent = lifeStage(a);
+  $('lifeProg').style.width = `${Math.min(100, a)}%`;
+}
 function tick() {
   age++;
-  $('age').textContent = age;
   if (age > me.lifespan) return finish(false);
+  showAge(age);
   if (age % 10 === 0 && phase !== 'believer') addLog(age, `你 ${age} 歲了。`, 'milestone');
 
   if (phase === 'unheard' || phase === 'wait' || phase === 'decline' || phase === 'left') {
@@ -1875,7 +1977,7 @@ document.addEventListener('click', e => {
 resetClear(); renderMemorial(); renderRanking(); renderDenoms();
 
 function finish(martyred) {
-  $('lifefoot').hidden = true;
+  $('lifefoot').hidden = true; $('agebar').hidden = true;
   stop(); music.fadeOut(martyred ? 2.5 : 5); $('choiceSlot').innerHTML = '';
   const end = Math.min(age, me.lifespan);
   const lives = loadLives();
@@ -1900,33 +2002,25 @@ function finish(martyred) {
     return `<div class="other"><span class="c"></span><span class="g"></span><span class="r ${r[0]}">${r[1]}</span><span class="fine">活了 ${o.p.lifespan} 歲</span></div>`;
   }).join('');
   $('end').innerHTML = `
-    <section class="band b2">
-    <div class="endtop"><p class="eyebrow">人生模擬結果</p><button class="back" id="homeTop">← 回首頁</button></div>
-    <h2></h2>
+    <section class="band b2 finale">
+    <div class="endtop"><p class="eyebrow">人生終章</p><button class="back" id="homeTop">← 回首頁</button></div>
+    <p class="finale-place"></p>
     <div class="epitaph" id="epitaph"></div>
+    <div class="ponder"><p class="eyebrow">想一想</p><p class="q" id="endQ"></p></div>
+    <div class="controls endcta"><a class="btn primary" href="#share" id="toShare">分享這段人生</a><button id="againTop">再活一次</button></div>
+    </section>
+    <section class="band b2 recap">
+    <p class="eyebrow">這一生的摘要</p>
     <dl class="summary" id="summary">${rows.map(() => '<div><dt></dt><dd></dd></div>').join('')}</dl>
     <p class="fine">母語聖經指的是你母語的聖經翻譯狀態，是成長環境的一部分，不代表你讀過。</p>
-    ${hl.length ? `<div class="events"><p class="eyebrow">這一生的重要時刻</p><ol id="hlList">${hl.map(() => '<li><span class="a"></span><span class="t"></span></li>').join('')}</ol>${highlights.length > 6 ? `<p class="fine">還有 ${highlights.length - 6} 件事，記在上方的人生紀錄裡。</p>` : ''}</div>` : ''}
-    </section>
-    <section class="band b1">
-    <div class="ponder"><p class="eyebrow">想一想</p><p class="q" id="endQ"></p></div>
     <fieldset class="feel" id="feel">
       <legend>這一生，你最有感觸的是哪一刻？</legend>
       ${FEELINGS.map((f, i) => `<label><input type="radio" name="feel" value="${i}"> <span></span></label>`).join('')}
       <p class="fine" id="feelNote">選一個，會記進「賽道上的每個人」，複製分享文字時也會一起帶上。</p>
     </fieldset>
     </section>
-    <section class="band b2">
-    <div class="diff">
-      <p class="lead">在 53 國福音接觸機會模擬裡，${c.name}排第 <b>${c.difficulty.rank}</b> 名</p>
-      <div class="strip" id="strip" role="img" aria-label="53 國一生沒接觸到福音的模擬比例，由少到多"></div>
-      <div class="strip-axis"><span>接觸機會最少</span><span>最多</span></div>
-      <p class="fine">${diffCompare()} 排名是模型模擬結果，不是實際統計。<a href="#method" class="tomethod">看模擬方法</a></p>
-      <div class="challenge"><span class="lbl">在${c.name}，接觸福音的挑戰是</span><p></p></div>
-    </div>
-    </section>
-    <section class="band b3">
-    <div class="share" id="share">
+    <section class="band b3" id="share">
+    <div class="share">
       <p class="eyebrow">分享卡</p>
       <p class="hint" id="shareStatus">正在畫你的分享卡…</p>
       <img id="shareImg" alt="這一生的模擬結果分享卡" hidden>
@@ -1938,16 +2032,30 @@ function finish(martyred) {
       <p class="hint">如果下載沒有反應（例如在 LINE 或 Instagram 裡開啟），手機請長按圖片儲存，或改用瀏覽器開啟這個網頁。</p>
     </div>
     </section>
-    <section class="band b2">
-    <div><p class="eyebrow">和你同一秒出生的另外四個人</p></div>
+    <section class="band b2 explore">
+    <p class="eyebrow">再多看一點</p>
+    ${hl.length ? `<details class="xdr"><summary>這一生的重要時刻</summary><div class="events"><ol id="hlList">${hl.map(() => '<li><span class="a"></span><span class="t"></span></li>').join('')}</ol>${highlights.length > 6 ? `<p class="fine">還有 ${highlights.length - 6} 件事，記在上方的人生紀錄裡。</p>` : ''}</div></details>` : ''}
+    <details class="xdr"><summary>53 國福音接觸機會模擬排行</summary>
+    <div class="diff">
+      <p class="lead">在 53 國福音接觸機會模擬裡，${c.name}排第 <b>${c.difficulty.rank}</b> 名</p>
+      <div class="strip" id="strip" role="img" aria-label="53 國一生沒接觸到福音的模擬比例，由少到多"></div>
+      <div class="strip-axis"><span>接觸機會最少</span><span>最多</span></div>
+      <p class="fine">${diffCompare()} 排名是模型模擬結果，不是實際統計。<a href="#method" class="tomethod">看模擬方法</a></p>
+      <div class="challenge"><span class="lbl">在${c.name}，接觸福音的挑戰是</span><p></p></div>
+    </div>
+    </details>
+    <details class="xdr"><summary>和你同一秒出生的另外四個人</summary>
     <div class="others">${cards}</div>
     <p class="note">如果你在台灣的基督徒家庭長大，「從小就接觸福音」其實是很少見的出生條件：在這 53 國的出生數裡，大約每 ${twOdds().toLocaleString()} 個嬰兒才有一個生在台灣。</p>
+    </details>
+    <details class="xdr"><summary>留給這個人的話</summary>
     ${words.length ? `<div><p class="eyebrow">你在這一生留下的話</p></div><ul class="words">${words.map(() => `<li><span class="a"></span><span><q></q><span></span></span></li>`).join('')}</ul>` : ''}
     <div class="reflect">
       <label class="q" for="lastWord">最後，你想對這個人說一句話嗎？</label>
       <textarea id="lastWord" maxlength="200" placeholder="寫給${c.name}的這個人"></textarea>
       <div class="controls"><button id="lastWordBtn">留下這句話</button></div>
     </div>
+    </details>
     </section>
     <section class="band b4 endfoot">
     <div class="controls"><button class="primary" id="againBtn">再活一次</button><button id="homeBtn">回首頁</button><button id="memBtn">看賽道上的每個人</button></div>
@@ -1959,7 +2067,7 @@ function finish(martyred) {
     <p class="fine">這段人生是依公開資料和模型規則產生的，其中部分機率是設計假設。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
     </section>`;
   const E = $('end');
-  E.querySelector('h2').textContent = `${c.name}，${g.name}`;
+  E.querySelector('.finale-place').textContent = `${c.name}・${g.name}`;
   $('epitaph').innerHTML = epitaph(end, martyred).map(() => '<p></p>').join('');
   [...$('epitaph').children].forEach((p, i) => p.textContent = epitaph(end, martyred)[i]);
   [...$('summary').children].forEach((div, i) => { div.querySelector('dt').textContent = rows[i][0]; div.querySelector('dd').textContent = rows[i][1]; });
@@ -2004,7 +2112,8 @@ function finish(martyred) {
     box.querySelector('.q').textContent = v;
   };
   E.hidden = false;
-  $('againBtn').onclick = start;
+  $('againBtn').onclick = $('againTop').onclick = start;
+  $('toShare').onclick = e => { e.preventDefault(); $('share').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
   $('memBtn').onclick = () => { showHome(); $('memorial').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
   $('homeBtn').onclick = $('homeTop').onclick = () => { showHome(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
   E.scrollIntoView({ behavior: 'smooth', block: 'start' });
