@@ -145,6 +145,8 @@ label { font-size: 14px; color: var(--muted); display: flex; gap: 8px; align-ite
 
 /* 年齡 */
 .agebar { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; position: sticky; top: env(safe-area-inset-top, 0px); background: var(--bg); padding-block: 12px; z-index: 5; border-bottom: 1px solid var(--line); }
+/* 窄螢幕上，右上角的音樂按鈕會蓋到固定的年齡列，讓出位置 */
+@media (max-width: 800px) { .agebar { padding-right: 48px; } }
 .age { font-family: var(--mono); font-size: 44px; line-height: 1; font-weight: 500; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 #pauseBtn { min-width: 6.5em; }
@@ -365,8 +367,9 @@ button.go { font-size: 18px; padding: 14px 34px; border-radius: 6px; }
 .end { display: grid; gap: 0; }
 .end > .band { display: grid; gap: 20px; }
 .end > .band.endfoot { padding-bottom: 36px; }
+.lifefoot { display: grid; gap: 20px; padding-bottom: 36px; margin-top: 16px; }
 /* 頁尾：版權與使用許可，接在最後一塊墨綠底色下面 */
-.site-foot { max-width: 680px; margin: 0 auto; padding-block: 0 48px; font-size: 13px; line-height: 1.8; }
+.site-foot { max-width: 680px; margin: -1px auto 0; padding-block: 0 48px; font-size: 13px; line-height: 1.8; }
 .site-foot .sticker { display: block; margin-bottom: 28px; border-radius: 12px; overflow: hidden; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); transition: transform .2s; }
 .site-foot .sticker img { display: block; width: 100%; height: auto; }
 @media (hover: hover) { .site-foot .sticker:hover { transform: translateY(-2px); } }
@@ -378,8 +381,8 @@ button.go { font-size: 18px; padding: 14px 34px; border-radius: 6px; }
 .musicbtn[aria-pressed="false"] .off { display: inline; }
 .site-foot .in { border-top: 1px solid rgba(255, 255, 255, 0.18); padding-top: 20px; display: grid; gap: 2px; }
 .site-foot b { font-weight: 700; }
-main:has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot { margin-top: 48px; padding-top: 32px; }
-main:has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot .in { border-top: 0; padding-top: 0; }
+main:has(> #lifefoot[hidden]):has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot { margin-top: 48px; padding-top: 32px; }
+main:has(> #lifefoot[hidden]):has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot .in { border-top: 0; padding-top: 0; }
 .band.b4 .show { border-top: 0; padding-top: 0; }
 .band.b4 button:not(.primary) { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.35); color: var(--ink); }
 .band.b4 a { color: var(--lamp); }
@@ -644,6 +647,16 @@ main:has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot .in { border-t
 
   <div id="choiceSlot" aria-live="polite"></div>
   <ol class="log" id="log" reversed aria-label="人生紀錄，最新的在最上面"></ol>
+
+  <section class="band b4 endfoot lifefoot" id="lifefoot" hidden>
+    <div class="controls"><button class="primary" id="lfAgain">再活一次</button><button id="lfHome">回首頁</button><button id="lfMem">看賽道上的每個人</button></div>
+    <div class="show">
+      <p class="brand"><span class="dot" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>《教會小本本》</b>Podcast 特別企劃</span></p>
+      <p>聽聽《教會小本本》，一起聊聊那些值得重新思考的信仰問題。玩完之後有什麼想說的，也歡迎分享給我們。</p>
+      <a class="cta" href="https://portaly.cc/gbookchurch" target="_blank" rel="noopener">收聽《教會小本本》</a>
+    </div>
+    <p class="fine">這段人生是依公開資料和模型規則產生的，其中部分機率是設計假設。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
+  </section>
 
   <section class="end" id="end" hidden></section>
 </main>
@@ -1590,12 +1603,12 @@ function setStatus() {
 }
 
 function start() {
-  music.play();
+  stop(); music.play();
   me = makePerson();
   others = Array.from({ length: 4 }, simulateNPC);
   channel = null; journey = []; highlights = []; feeling = null; lastCross = -99; stats = { persecution: 0, growth: 0 }; words = []; pendingReflect = null; age = 0; phase = 'unheard'; firstAge = null; faithAge = null; st = {}; hearCount = 0; paused = false;
   $('log').innerHTML = ''; $('choiceSlot').innerHTML = ''; $('end').hidden = true;
-  for (const id of ['intro', 'show', 'ranking', 'method', 'memorial']) $(id).hidden = true; setPaused(false); $('birth').hidden = false; $('agebar').hidden = false;
+  for (const id of ['intro', 'show', 'ranking', 'method', 'memorial']) $(id).hidden = true; setPaused(false); $('birth').hidden = false; $('agebar').hidden = false; $('lifefoot').hidden = false;
   const c = me.country, g = me.group;
   const facts = [
     ['族群', g.name],
@@ -1628,7 +1641,7 @@ function beginLife() {
 function run() { clearInterval(timer); timer = setInterval(tick, +$('speed').value); music.to(music.BASE, 1.5); }
 function showHome() {
   stop(); music.fadeOut(1.5);
-  for (const id of ['birth', 'agebar', 'end']) $(id).hidden = true;
+  for (const id of ['birth', 'agebar', 'end', 'lifefoot']) $(id).hidden = true;
   $('log').innerHTML = ''; $('choiceSlot').innerHTML = '';
   for (const id of ['intro', 'ranking', 'method', 'show']) $(id).hidden = false;
   renderMemorial();
@@ -1783,6 +1796,10 @@ const music = (() => {
 })();
 $('birthBtn').onclick = start;
 $('liveBtn').onclick = beginLife;
+// 人生進行中，頁面最下方也能重新開始、回首頁或看紀錄
+$('lfAgain').onclick = () => { start(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+$('lfHome').onclick = () => { showHome(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+$('lfMem').onclick = () => { showHome(); $('memorial').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
 try { $('gentle').checked = localStorage.getItem(GENTLE_KEY) === '1'; } catch (e) {}
 $('gentle').onchange = () => { try { localStorage.setItem(GENTLE_KEY, $('gentle').checked ? '1' : '0'); } catch (e) {} };
 // 任何「這些數字怎麼算出來的？」連結：回到首頁、打開說明
@@ -1796,6 +1813,7 @@ document.addEventListener('click', e => {
 resetClear(); renderMemorial(); renderRanking(); renderDenoms();
 
 function finish(martyred) {
+  $('lifefoot').hidden = true;
   stop(); music.fadeOut(martyred ? 2.5 : 5); $('choiceSlot').innerHTML = '';
   const end = Math.min(age, me.lifespan);
   const lives = loadLives();
