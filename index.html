@@ -18,7 +18,8 @@
 <meta name="twitter:title" content="福音距離｜你會在幾歲，第一次聽見耶穌的名字？">
 <meta name="twitter:description" content="依 53 國公開資料建立的人生模擬，《教會小本本》Podcast 特別企劃。">
 <meta name="twitter:image" content="https://gbookchurch.github.io/gospel-distance/og.png">
-<meta name="theme-color" content="#ededed">
+<meta name="theme-color" content="#f2f2f2">
+<meta name="color-scheme" content="only light">
 <style>
 :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 body { margin: 0; font-size: 14px; font-family: system-ui, sans-serif; }
@@ -27,6 +28,7 @@ img { max-width: 100%; }
 </style>
 <title>福音距離</title>
 
+<meta name="color-scheme" content="only light">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -34,7 +36,8 @@ img { max-width: 100%; }
 /* 版面概念：一盞燈照亮的一生。配色取自《教會小本本》：橙色是福音的光，橘紅是代價，綠是成長，黃是標示。 */
 /* 版面概念：一盞燈照亮的一生。底色是不帶色彩的灰，只有福音的橙色、代價的橘紅、成長的綠會亮起來。 */
 :root {
-  --bg: #ededed;
+  --bg: #f2f2f2;
+  color-scheme: only light;
   --surface: #f8f8f8;
   --ink: #222222;
   --muted: #666666;
@@ -49,18 +52,6 @@ img { max-width: 100%; }
   --display: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
   --body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #1e1e1e; --surface: #2a2a2a; --ink: #eeeeee; --muted: #a3a3a3; --line: #3c3c3c;
-    --lamp: #f59b3c; --btn: #e8741a; --lamp-soft: #303030; --sun: #f6c845; --grave: #f27a5e; --grave-soft: #303030; --hope: #6cc48a;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #1e1e1e; --surface: #2a2a2a; --ink: #eeeeee; --muted: #a3a3a3; --line: #3c3c3c;
-  --lamp: #f59b3c; --btn: #e8741a; --lamp-soft: #303030; --sun: #f6c845; --grave: #f27a5e; --grave-soft: #303030; --hope: #6cc48a;
-  color-scheme: dark;
 }
 * { box-sizing: border-box; }
 body {
@@ -274,8 +265,6 @@ a.btn:hover { border-color: var(--ink); }
 .ranklist { list-style: none; margin: 8px 0 0; padding: 0; display: grid; }
 .ranklist li { display: grid; grid-template-columns: 2.4em 1fr auto; gap: 4px 12px; padding: 12px 10px; border-radius: 6px; }
 .ranklist li:nth-child(odd) { background: rgba(0, 0, 0, 0.045); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .ranklist li:nth-child(odd) { background: rgba(255, 255, 255, 0.05); } }
-:root[data-theme="dark"] .ranklist li:nth-child(odd) { background: rgba(255, 255, 255, 0.05); }
 .ranklist li.tw { background: var(--surface) !important; outline: 2px solid var(--lamp); padding-inline: 8px; border-radius: 6px; }
 .ranklist .r { font-family: var(--mono); color: var(--muted); font-size: 14px; padding-top: 2px; }
 .ranklist .n { font-weight: 700; min-width: 0; }
@@ -314,8 +303,6 @@ body { overflow-x: clip; }
   .intro::before { background-position: right -40vw top 150px; background-size: 150vw auto; opacity: .4;
     -webkit-mask-image: none; mask-image: none; }
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .intro::before { opacity: .3; } }
-:root[data-theme="dark"] .intro::before { opacity: .3; }
 
 /* 首頁動機 */
 .intro .lede { display: grid; gap: 6px; color: var(--ink); font-size: 17px; }
@@ -348,8 +335,6 @@ button.go { font-size: 18px; padding: 14px 34px; border-radius: 6px; }
 /* 首頁後半段：四個區塊用由淺到深的灰色色帶分開 */
 /* 科普和資料來源用同一個較深的灰，追思館回到首頁底色，企劃用《教會小本本》的墨綠 */
 :root { --b1: #e2e8e3; --b2: var(--bg); --b3: #cdcdcd; --b4: #2e443a; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --b1: #29302b; --b3: #2e2e2e; --b4: #273b32; } }
-:root[data-theme="dark"] { --b1: #29302b; --b3: #2e2e2e; --b4: #273b32; }
 .more { display: grid; gap: 0; margin-top: 8px; }
 .band { padding-block: 32px; box-shadow: 0 0 0 100vmax var(--band); clip-path: inset(0 -100vmax); background: var(--band); }
 .band.b1 { --band: var(--b1); } .band.b2 { --band: var(--b2); } .band.b3 { --band: var(--b3); } .band.b4 { --band: var(--b4); }
