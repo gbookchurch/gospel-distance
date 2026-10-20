@@ -479,6 +479,7 @@ function simulateNPC() {
       const f = state === 'unheard' ? 1 : REHEAR_FACTOR[state];
       if (Math.random() < yearlyHearProb(p, a) * f) {
         if (first === null) first = a;
+        if (a < CHOICE_MIN_AGE) { state = 'wait'; continue; }
         const ch = npcChoice(p, groupE(p));
         if (ch === 'respond') { state = 'believer'; faith = a; } else state = ch;
       }
@@ -760,7 +761,11 @@ function tick() {
 
   if (phase === 'unheard' || phase === 'wait' || phase === 'decline') {
     const f = phase === 'unheard' ? 1 : REHEAR_FACTOR[phase];
-    if (Math.random() < yearlyHearProb(me, age) * f) { if (PAUSES.includes(age)) pendingReflect = age; return hear(); }
+    if (Math.random() < yearlyHearProb(me, age) * f) {
+      if (age < CHOICE_MIN_AGE) return earlyHear();
+      if (PAUSES.includes(age)) pendingReflect = age;
+      return hear();
+    }
   } else if (phase === 'believer') {
     for (const ev of believerYear(me, age, st)) {
       const cls = ev.id === 'martyred' || PERSECUTION_EVENTS.includes(ev) ? 'persecution' : GROWTH_EVENTS.includes(ev) ? 'growth' : 'milestone';
@@ -772,12 +777,27 @@ function tick() {
   if (PAUSES.includes(age)) reflect(age);
 }
 
+// 8 歲以前聽見福音：只記下來，還不到能自己做決定的年紀
+const CHOICE_MIN_AGE = 8;
+function earlyHear() {
+  if (firstAge === null) {
+    firstAge = age;
+    addLog(age, me.parentReligion === 'christian' ? '爸媽帶你去教會，你在主日學第一次聽見了耶穌的故事。' : '你在很小的時候，第一次聽見了耶穌的名字。', 'gospel');
+  }
+  phase = 'wait';
+  setStatus();
+  if (PAUSES.includes(age)) reflect(age);
+}
+
 function hear() {
   stop(); hearCount++;
-  if (firstAge === null) firstAge = age;
-  const first = hearCount === 1;
-  const how = me.parentReligion === 'christian' ? '爸媽帶你去教會，你在主日學聽見了耶穌的故事。'
-    : first ? '有人第一次對你講起耶穌，說祂是為你而來的。' : '你又一次聽見了關於耶穌的事。';
+  const first = firstAge === null;
+  if (first) firstAge = age;
+  const firstChoice = hearCount === 1;
+  const how = me.parentReligion === 'christian'
+    ? (firstChoice ? '從小在教會聽的那些故事，這一次你開始認真想：這跟我有什麼關係？' : '你又一次在教會裡聽見福音。')
+    : first ? '有人第一次對你講起耶穌，說祂是為你而來的。'
+    : firstChoice ? '小時候聽過的那個名字，這一次有人認真地跟你講起祂。' : '你又一次聽見了關於耶穌的事。';
   addLog(age, how, 'gospel');
   setStatus();
   const box = document.createElement('div'); box.className = 'choice';
