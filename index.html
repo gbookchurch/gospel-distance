@@ -101,8 +101,8 @@ label { font-size: 14px; color: var(--muted); display: flex; gap: 8px; align-ite
 .fine { font-size: 13px; color: var(--muted); }
 
 /* 出生登記卡 */
-.cert { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
-.cert-head { background: var(--b4); color: #f4f4f4; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; padding: 16px 20px; }
+.cert { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+.cert-head { border-radius: 9px 9px 0 0; background: var(--b4); color: #f4f4f4; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; padding: 16px 20px; }
 .cert-head h2 { font-size: 24px; color: #f4f4f4; }
 .cert-no { font-family: var(--mono); font-size: 13px; color: #d5ddd8; letter-spacing: .04em; }
 .cert-body { padding: 20px; display: grid; gap: 20px; }
@@ -146,7 +146,12 @@ label { font-size: 14px; color: var(--muted); display: flex; gap: 8px; align-ite
 /* 年齡 */
 .agebar { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; position: sticky; top: env(safe-area-inset-top, 0px); background: var(--bg); padding-block: 12px; z-index: 5; border-bottom: 1px solid var(--line); }
 /* 窄螢幕上，右上角的音樂按鈕會蓋到固定的年齡列，讓出位置 */
-@media (max-width: 800px) { .agebar { padding-right: 48px; } }
+/* 人生進行區放在出生卡裡、開頭那段文字下面；年齡列貼齊卡片左右 */
+.lifearea { display: grid; gap: 20px; }
+.lifearea .agebar { background: var(--surface); margin-inline: -20px; padding-inline: 20px; }
+.lifearea .reflect { background: var(--bg); }
+.lifearea .log li:last-child { border-bottom: 0; }
+@media (max-width: 800px) { .lifearea .agebar { padding-right: 60px; } }
 .age { font-family: var(--mono); font-size: 44px; line-height: 1; font-weight: 500; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 #pauseBtn { min-width: 6.5em; }
@@ -408,6 +413,61 @@ main:has(> #lifefoot[hidden]):has(> #birth:not([hidden])):has(> #end[hidden]) + 
   @keyframes rise { from { opacity: .2; transform: translateY(4px); } to { opacity: 1; transform: none; } }
   @keyframes glow { from { box-shadow: 0 0 0 0 var(--lamp); } to { box-shadow: 0 0 0 14px transparent; } }
 }
+
+/* ── 關於我的人生：字級與間距整理
+   標題用襯線體，其他一律黑體；字級分四層：22 標題、17 敘事、15.5 內文、13 說明 */
+.cert-head { padding: 18px 22px; }
+.cert-head h2 { font-size: 22px; letter-spacing: .04em; }
+.cert-body { padding: 22px; gap: 18px; }
+.cert-lede { font-size: 17px; line-height: 1.9; color: var(--ink); }
+.lifearea { gap: 16px; }
+.lifearea .agebar { margin-inline: -22px; padding: 10px 22px; align-items: center; gap: 8px 14px; }
+.lifearea .age { font-size: 36px; }
+.lifearea .age small { font-size: 14px; }
+.lifearea .status { font-size: 14px; flex: 1 1 8em; }
+.lifearea .agebar .controls { gap: 8px; }
+.lifearea .agebar button { font-size: 14px; padding: 8px 14px; min-height: 40px; }
+.lifearea .agebar select { font-size: 14px; padding: 8px 34px 8px 12px; min-height: 40px; min-width: 72px; background-position: right 12px center; }
+#pauseBtn { min-width: 5.5em; }
+.lifearea .choice, .lifearea .reflect { padding: 18px; gap: 12px; }
+.lifearea .choice h3 { font-size: 20px; }
+.lifearea .choice > p { font-size: 15px; color: var(--muted); }
+.lifearea .choice .opts button { padding: 12px 14px; gap: 4px; }
+.lifearea .choice .opts b { font-size: 16px; }
+.lifearea .choice .opts small { font-size: 13px; line-height: 1.55; }
+.lifearea .reflect .eyebrow { font-size: 12px; }
+.lifearea .reflect .q { font-size: 18px; line-height: 1.65; }
+.lifearea .reflect textarea { font-size: 15px; min-height: 68px; }
+.lifearea .log li { grid-template-columns: 3em 1fr; gap: 12px; padding: 11px 0; }
+.lifearea .log .a { font-size: 13px; padding-top: 3px; }
+.lifearea .log .t { font-size: 15.5px; line-height: 1.7; }
+.lifearea .log li.milestone .t { font-size: 14px; }
+.lifearea .log li.gospel .t { font-family: var(--body); font-size: 16.5px; }
+.lifearea .log li.reflection .t q { font-size: 13px; margin-bottom: 2px; }
+.lifearea .log .help { font-size: 12.5px; }
+.cert .drawer { gap: 14px; padding-top: 0; }
+.cert .drawer > summary { min-height: 52px; padding-block: 8px; }
+.cert .drawer > summary h3 { font-family: var(--body); font-size: 16px; font-weight: 700; line-height: 1.45; }
+.cert .drawer[open] { padding-bottom: 8px; }
+.cert .drawer:not([open]) { gap: 0; }
+.cert .drawer + .drawer { margin-top: -18px; }
+.cert .drawer[open] { gap: 10px; }
+@media (max-width: 480px) { .lifearea .status { font-size: 13px; line-height: 1.5; } }
+@media (max-width: 800px) { .lifearea .agebar { padding-right: 60px; } }
+.cert .facts div { align-content: start; }
+.cert .facts dt { font-size: 12px; }
+.cert .facts dd { font-size: 15px; }
+.cert .odds { font-size: 14.5px; line-height: 1.7; }
+.cert .rellegend { font-size: 13.5px; }
+.cert .xnfacts { font-size: 15px; line-height: 1.7; gap: 4px; }
+.cert .challenge p { font-size: 15px; }
+.cert .cmptable { font-size: 14px; }
+.cert .fine { font-size: 12.5px; }
+@media (max-width: 480px) {
+  .cert-body { padding: 18px; }
+  .lifearea .agebar { margin-inline: -18px; padding-inline: 18px 60px; }
+  .cert-lede { font-size: 16.5px; }
+}
 </style>
 
 </head>
@@ -599,6 +659,24 @@ main:has(> #lifefoot[hidden]):has(> #birth:not([hidden])):has(> #end[hidden]) + 
       <header class="cert-head"><h2>關於我的人生</h2><span class="cert-no" id="certNo"></span></header>
       <div class="cert-body">
         <p class="cert-lede" id="birthStory"></p>
+        <div class="lifearea" id="lifearea">
+        <div class="agebar" id="agebar" hidden>
+          <div class="age"><span id="age">0</span><small>歲</small></div>
+          <div class="status" id="status"></div>
+          <div class="controls">
+            <button id="pauseBtn" aria-pressed="false">⏸ 暫停</button>
+            <label for="speed2" class="sr">速度</label>
+            <select id="speed2" aria-label="速度">
+              <option value="900">慢</option>
+              <option value="380" selected>中</option>
+              <option value="120">快</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="choiceSlot" aria-live="polite"></div>
+        <ol class="log" id="log" reversed aria-label="人生紀錄，最新的在最上面"></ol>
+        </div>
         <details class="faith-box drawer">
           <summary><h3>出生資料與地圖</h3></summary>
           <dl class="facts" id="facts"></dl>
@@ -631,22 +709,6 @@ main:has(> #lifefoot[hidden]):has(> #birth:not([hidden])):has(> #end[hidden]) + 
     </article>
   </section>
 
-  <div class="agebar" id="agebar" hidden>
-    <div class="age"><span id="age">0</span><small>歲</small></div>
-    <div class="status" id="status"></div>
-    <div class="controls">
-      <button id="pauseBtn" aria-pressed="false">⏸ 暫停</button>
-      <label for="speed2" class="sr">速度</label>
-      <select id="speed2" aria-label="速度">
-        <option value="900">慢</option>
-        <option value="380" selected>中</option>
-        <option value="120">快</option>
-      </select>
-    </div>
-  </div>
-
-  <div id="choiceSlot" aria-live="polite"></div>
-  <ol class="log" id="log" reversed aria-label="人生紀錄，最新的在最上面"></ol>
 
   <section class="band b4 endfoot lifefoot" id="lifefoot" hidden>
     <div class="controls"><button class="primary" id="lfAgain">再活一次</button><button id="lfHome">回首頁</button><button id="lfMem">看賽道上的每個人</button></div>
