@@ -405,7 +405,7 @@ main:has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot .in { border-t
     <p class="eyebrow">福音距離科普</p>
     <details>
       <summary>53 國福音接觸機會模擬排行</summary>
-      <p class="fine">這是模型模擬的結果，不是全球公認的實際排名。每個國家用同一套規則跑 6,000 段人生，算出「一生沒有接觸到福音的比例」和「接觸到的人中位年齡」。排名 1 代表在這個模型裡接觸機會最少。結果會隨模型參數和資料來源而變。<a href="#method" class="tomethod">看模擬方法</a></p>
+      <p class="fine">這是模型模擬的結果，不是全球公認的實際排名。每個國家用同一套規則跑 6,000 段人生，算出「一生沒有接觸到福音的比例」和「接觸到的人中位年齡」。排名依「一生沒有接觸到福音的比例」由高到低，比例相同時再看中位年齡。排名 1 代表在這個模型裡接觸機會最少。結果會隨模型參數和資料來源而變。<a href="#method" class="tomethod">看模擬方法</a></p>
       <ol class="ranklist" id="rankList"></ol>
     </details>
     <details>
@@ -436,7 +436,7 @@ main:has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot .in { border-t
     <details id="mAbout">
       <summary>關於這個模擬</summary>
       <div class="mbody">
-        <p>本遊戲參考人口、宗教、族群、聖經翻譯及改信基督教不友善度等公開資料，建立福音接觸機會的模擬模型。遊戲中的出生背景、人生事件、接觸福音的年齡及個人經歷，均依模型規則產生。其中部分機率參數屬於設計假設，並非直接觀測到的統計結果。本遊戲旨在幫助玩家理解不同地區的信仰環境差異，模擬結果不代表對特定個人命運的預測。</p>
+        <p>本遊戲參考人口、宗教、族群、聖經翻譯及基督徒處境艱難程度等公開資料，建立福音接觸機會的模擬模型。遊戲中的出生背景、人生事件、接觸福音的年齡及個人經歷，均依模型規則產生。其中部分機率參數屬於設計假設，並非直接觀測到的統計結果。本遊戲旨在幫助玩家理解不同地區的信仰環境差異，模擬結果不代表對特定個人命運的預測。</p>
         <p>本遊戲整合不同年份的公開統計資料及模型假設，並非單一年度的全球人口調查。</p>
       </div>
     </details>
@@ -485,7 +485,7 @@ main:has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot .in { border-t
             <span>各國分性別的出生時平均餘命，2023 年估計，經由 <a href="https://en.wikipedia.org/wiki/List_of_countries_by_life_expectancy" target="_blank" rel="noopener">Wikipedia 彙整表</a>引用。</span>
             <span class="use">用途：決定模擬人生的長度（方法見下方）。</span></li>
           <li><a href="https://opendoorsanalytical.org/wp-content/uploads/2026/01/WWL-2026-Table-of-Scores-and-Ranks-50-points-v.2.pdf" target="_blank" rel="noopener">Open Doors World Watch List 2026</a>
-            <span>各國對基督徒處境的排名與六大面向分數（私人、家庭、社區、國家、教會、暴力），本遊戲稱為「改信基督教的不友善度」。統計期間為 2024 年 10 月到 2025 年 9 月。53 國中有 38 國有分數。</span>
+            <span>各國對基督徒處境的排名與六大面向分數（私人、家庭、社區、國家、教會、暴力），本遊戲稱為「基督徒處境艱難程度」。統計期間為 2024 年 10 月到 2025 年 9 月。53 國中有 38 國有分數。</span>
             <span class="use">用途：推導信仰壓力事件、殉道和接觸福音受限程度的機率。這些分數是評分，不是機率；把分數換算成機率的方式是本遊戲的設計假設。</span></li>
           <li><a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a>
             <span>世界地圖輪廓，經由 world-atlas 套件（1:110m 比例尺）使用。</span>
@@ -502,12 +502,12 @@ main:has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot .in { border-t
           <li><b>族群：</b>在國家裡依族群人口加權抽籤。佔全國人口不到 0.1% 的族群合併成「其他小族群」。</li>
           <li><b>父母的宗教：</b>國家整體用 Pew 的宗教組成，再依族群的基督徒比例（Joshua Project）調整高低。基督徒家庭再依國家整體的宗派比例，分成天主教、基督新教或東正教，這只影響畫面上的文字，不改變接觸福音的機率。</li>
           <li><b>壽命：</b>以該國該性別的平均餘命為中心，加上標準差 14 歲的隨機變化，限制在 1 到 102 歲之間。平均餘命不是每個人的實際壽命，這只是簡化的做法，不是逐年生命表。</li>
-          <li><b>每年接觸福音的機會：</b>依族群的福音派與基督徒比例、母語聖經狀態、不友善度分數中「國家」和「教會」兩項，以及年齡，算出每年的機率。南亞多數族群沒有公開福音派比例，改用基督徒比例推估。</li>
+          <li><b>每年接觸福音的機會：</b>依族群的福音派與基督徒比例、母語聖經狀態、處境艱難程度分數中「國家」和「教會」兩項，以及年齡，算出每年的機率。南亞多數族群沒有公開福音派比例，改用基督徒比例推估。</li>
           <li><b>回應：</b>8 歲以後接觸到福音時由玩家選擇；同一秒出生的另外四個人由模型依機率選擇。</li>
-          <li><b>信主之後：</b>依不友善度六大面向分數和族群的基督徒比例，產生信仰壓力、成長、殉道等事件。族群本身多為基督徒時，沒有教會、被家人反對這類事件會少很多；族群過半是基督徒時，國家、教會和暴力層面的事件也會大幅減少，因為那些壓力多半落在改信的人和教會領袖身上。從小在基督徒家庭長大的人，不會遇到家人反對、證件登記原本宗教這類只有改信者才會遇到的事；如果族群過半是基督徒，也不會被鄰居排擠。</li>
+          <li><b>信主之後：</b>依處境艱難程度六大面向分數和族群的基督徒比例，產生信仰壓力、成長、殉道等事件。族群本身多為基督徒時，沒有教會、被家人反對這類事件會少很多；族群過半是基督徒時，國家、教會和暴力層面的事件也會大幅減少，因為那些壓力多半落在改信的人和教會領袖身上。從小在基督徒家庭長大的人，不會遇到家人反對、法律上無法更改宗教身分這類只有改信者才會遇到的事；「法律上無法更改宗教身分」也只會出現在穆斯林佔多數的國家；如果族群過半是基督徒，也不會被鄰居排擠。</li>
           <li><b>信仰的十字路口：</b>遇到懷疑、受傷、信仰壓力等事件時，玩家可以選擇留下、離開教會或放下信仰，之後也可能回來。</li>
           <li><b>接觸福音的管道：</b>同學、營會、廣播、衛星電視等 20 種管道，依國家、族群和年齡加權抽出。</li>
-          <li><b>模擬排行：</b>每國用同一套規則跑 6,000 段人生（蒙地卡羅模擬），難度分數 = 一生沒接觸到的比例 + 中位年齡 × 0.3。</li>
+          <li><b>模擬排行：</b>每國用同一套規則跑 6,000 段人生（蒙地卡羅模擬），依「一生沒接觸到福音的比例」由高到低排名；比例相同時，接觸到的人中位年齡較大的排前面。</li>
         </ol>
       </div>
     </details>
@@ -518,7 +518,7 @@ main:has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot .in { border-t
         <p>以下參數沒有直接的統計來源，是為了讓模擬能運作而設定的，可能高估或低估：</p>
         <ul>
           <li>身邊信徒比例換算成「每年接觸到福音」的機率</li>
-          <li>不友善度分數換算成信仰壓力事件和殉道的機率</li>
+          <li>處境艱難程度分數換算成信仰壓力事件和殉道的機率</li>
           <li>信主後成長事件、離開教會、放下信仰和回來的機率</li>
           <li>20 種接觸管道的權重</li>
           <li>每個國家的「挑戰說明」文字，依資料撰寫，部分使用一般背景知識</li>
@@ -531,7 +531,7 @@ main:has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot .in { border-t
       <summary>資料年份與已知限制</summary>
       <div class="mbody">
         <ul>
-          <li>各資料年份不同：出生數主要是 2026 年推估，但台灣、南韓是 2025 年實際數字；宗教組成是 2020 年；平均壽命是 2023 年；不友善度評分統計期間為 2024 年 10 月到 2025 年 9 月；族群資料於 2026 年 10 月下載。</li>
+          <li>各資料年份不同：出生數主要是 2026 年推估，但台灣、南韓是 2025 年實際數字；宗教組成是 2020 年；平均壽命是 2023 年；處境艱難程度評分統計期間為 2024 年 10 月到 2025 年 9 月；族群資料於 2026 年 10 月下載。</li>
           <li>北韓出生數的 Wikipedia 表格標為 2026 年，實際上是依世界銀行 2024 年報告推算的推估值。</li>
           <li>Pew 和 Joshua Project 對基督徒比例的估計可能差很多，尤其是有地下教會的國家，例如中國、伊朗。</li>
           <li>Joshua Project 提醒，族群的基督徒與福音派比例多為推估值，不建議拿來計算絕對人數。本遊戲只把它們當作相對的機率依據。</li>
@@ -561,24 +561,27 @@ main:has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot .in { border-t
       <header class="cert-head"><h2>關於我的人生</h2><span class="cert-no" id="certNo"></span></header>
       <div class="cert-body">
         <p class="cert-lede" id="birthStory"></p>
-        <dl class="facts" id="facts"></dl>
-        <figure class="map"><svg id="mapSvg" viewBox="0 0 1000 420" role="img" aria-label="出生地在世界地圖上的位置"></svg><figcaption id="mapCap"></figcaption></figure>
-        <p class="odds" id="birthOdds"></p>
+        <details class="faith-box drawer">
+          <summary><h3>出生資料與地圖</h3></summary>
+          <dl class="facts" id="facts"></dl>
+          <figure class="map"><svg id="mapSvg" viewBox="0 0 1000 420" role="img" aria-label="出生地在世界地圖上的位置"></svg><figcaption id="mapCap"></figcaption></figure>
+          <p class="odds" id="birthOdds"></p>
+        </details>
 
-        <section class="faith-box">
-          <h3 id="relTitle"></h3>
+        <details class="faith-box drawer">
+          <summary><h3 id="relTitle"></h3></summary>
           <div class="relbar" id="relBar" role="img"></div>
           <ul class="rellegend" id="relLegend"></ul>
           <p class="fine">宗教組成：Pew Research Center，2020 年估計。</p>
-        </section>
+        </details>
 
-        <details class="faith-box drawer" open>
+        <details class="faith-box drawer">
           <summary><h3 id="xnTitle"></h3></summary>
           <ul class="xnfacts" id="xnFacts"></ul>
           <div class="challenge"><span class="lbl" id="challengeLbl"></span><p id="challengeText"></p></div>
         </details>
 
-        <details class="faith-box drawer" open>
+        <details class="faith-box drawer">
           <summary><h3 id="cmpTitle"></h3></summary>
           <div class="cmptable" id="cmpTable"></div>
           <p class="fine">「一生沒接觸到福音」是模型模擬的比例，不是實際統計。</p>
@@ -1236,7 +1239,7 @@ function fillBirthCard() {
   $('relBar').setAttribute('aria-label', rels.map(([k, v]) => `${RELNAME[k]} ${pct(v)}`).join('，'));
   $('relLegend').innerHTML = rels.filter(([, v]) => v >= 0.1).map(([k, v]) => `<li><i style="background:${REL_COLOR[k]}"></i><span>${RELNAME[k]}</span><b>${pct(v)}</b></li>`).join('');
   // 基督教在當地
-  document.querySelectorAll('#birth .drawer').forEach(d => d.open = true);
+  document.querySelectorAll('#birth .drawer').forEach(d => d.open = false);
   $('xnTitle').textContent = `基督教在${c.name}`;
   const xn = [];
   const pewC = c.religion_pct.christian, jpC = c.christian_pct;
@@ -1249,8 +1252,8 @@ function fillBirthCard() {
   xn.push(`${c.jp.people_groups_total} 個族群裡，有 ${c.jp.unreached_groups} 個被列為未得之民，約佔人口的 ${pct(c.jp.unreached_population_pct)}。`);
   if (c.wwl.rank) {
     const top2 = Object.entries(c.wwl.spheres).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => SPHERE_ZH[k]);
-    xn.push(`改信基督教的不友善度全球第 ${c.wwl.rank} 名${c.wwl.rank > 50 ? '（觀察名單）' : ''}，壓力最大的是${top2.join('和')}層面。`);
-  } else xn.push('不在改信基督教不友善度的評分名單上。');
+    xn.push(`基督徒處境艱難程度全球第 ${c.wwl.rank} 名${c.wwl.rank > 50 ? '（觀察名單）' : ''}，壓力最大的是${top2.join('和')}層面。`);
+  } else xn.push('不在基督徒處境艱難程度的評分名單上。');
   $('xnFacts').innerHTML = xn.map(() => '<li></li>').join('');
   [...$('xnFacts').children].forEach((li, i) => li.textContent = xn[i]);
   $('challengeLbl').textContent = `在${c.name}，接觸福音的挑戰是`;
@@ -1262,7 +1265,7 @@ function fillBirthCard() {
     ['最多人信的宗教', tw, c, x => RELNAME[topReligion(x)[0]]],
     ['基督徒比例', tw, c, x => pct(x.religion_pct.christian)],
     ['基督新教比例', tw, c, x => protPct(x)],
-    ['改信基督教的不友善度', tw, c, x => x.wwl.rank ? `第 ${x.wwl.rank} 名` : '不在名單'],
+    ['基督徒處境艱難程度', tw, c, x => x.wwl.rank ? `第 ${x.wwl.rank} 名` : '不在名單'],
     ['平均壽命', tw, c, x => `${((x.life_expectancy.m + x.life_expectancy.f) / 2).toFixed(1)} 歲`],
     ['一生沒接觸到福音（模擬）', tw, c, x => `${x.difficulty.never_pct}%`],
   ];
@@ -1316,7 +1319,7 @@ function start() {
     ['全國基督新教', protPct(c)],
     ['未得之民族群', g.unreached === true ? '是' : g.unreached === false ? '否' : '不明', g.unreached === true],
     ['平均壽命', `${c.life_expectancy[me.sex]} 歲`],
-    ['改信基督教的不友善度（WWL 2026）', c.wwl.rank ? `第 ${c.wwl.rank} 名` : '不在評分名單上'],
+    ['基督徒處境艱難程度（WWL 2026）', c.wwl.rank ? `第 ${c.wwl.rank} 名` : '不在評分名單上'],
   ];
   $('facts').innerHTML = facts.map(([k, v, bad]) => `<div><dt>${k}</dt><dd class="${bad ? 'flag-none' : ''}"></dd></div>`).join('');
   [...$('facts').querySelectorAll('dd')].forEach((dd, i) => dd.textContent = facts[i][1]);
@@ -1402,7 +1405,7 @@ function hear() {
   if (first) firstAge = age;
   const firstChoice = hearCount === 1;
   const how = phase === 'left' ? '你又想起了耶穌。那些放下很久的事，好像又回到心裡。' : me.parentReligion === 'christian'
-    ? (firstChoice ? '從小在教會聽的那些故事，這一次你開始認真想：這跟我有什麼關係？' : age < 12 ? '爸媽帶你去教會，你又一次聽見福音。' : '你自己走進教會，又一次聽見福音。')
+    ? (firstChoice ? (first ? '你跟著家人去教會，這一次你開始認真想：耶穌跟我有什麼關係？' : '從小在教會聽的那些故事，這一次你開始認真想：這跟我有什麼關係？') : age < 12 ? '爸媽帶你去教會，你又一次聽見福音。' : '你自己走進教會，又一次聽見福音。')
     : (() => { const ch = pickChannel(me, age); if (!channel) channel = { age, short: ch.short }; return (first || !firstChoice) ? ch.text : '小時候聽過的那個名字，這一次又出現了。' + ch.text; })();
   addLog(age, how, 'gospel');
   if (first) highlights.push({ age, text: channel && channel.age === age ? `第一次接觸到福音，透過${channel.short}。` : '第一次接觸到福音。', cls: 'gospel' });
