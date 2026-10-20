@@ -285,7 +285,7 @@ body { overflow-x: clip; }
 .intro .lede { display: grid; gap: 6px; color: var(--ink); font-size: 17px; }
 .intro .lede p:last-child { color: var(--lamp); font-weight: 700; }
 .controls.start { gap: 16px; }
-button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
+button.go { font-size: 18px; padding: 14px 34px; border-radius: 6px; }
 @media (prefers-reduced-motion: no-preference) {
   button.go { animation: breathe 2.6s ease-in-out infinite; }
   @keyframes breathe { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--btn) 45%, transparent); } 50% { box-shadow: 0 0 0 10px transparent; } }
@@ -372,12 +372,12 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
         </select>
       </label>
     </div>
-    <label class="toggle" for="gentle"><input type="checkbox" id="gentle"> 以較溫和的方式呈現迫害與死亡事件</label>
+    <label class="toggle" for="gentle"><input type="checkbox" id="gentle"> 以較溫和的方式呈現信仰壓力與死亡事件</label>
     <div class="ticker" aria-live="off" aria-label="模擬計數器">
       <div><b class="num" id="bornCount">0</b><span>打開這頁之後，世界上出生的嬰兒</span></div>
       <div><b class="num" id="neverCount">0</b><span>可能一生沒有機會接觸福音的人</span></div>
     </div>
-    <p class="fine">遊戲裡會出現迫害、拘留，甚至因信仰失去生命的事件，不描寫畫面。人生經歷都是依模型產生的，不是真實人物的紀錄。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
+    <p class="fine">遊戲裡會出現因信仰被針對、拘留，甚至失去生命的事件，不描寫畫面。人生經歷都是依模型產生的，不是真實人物的紀錄。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
   </section>
 
   <div class="more">
@@ -409,7 +409,7 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
     <details id="mAbout">
       <summary>關於這個模擬</summary>
       <div class="mbody">
-        <p>本遊戲參考人口、宗教、族群、聖經翻譯及宗教迫害等公開資料，建立福音接觸機會的模擬模型。遊戲中的出生背景、人生事件、接觸福音的年齡及個人經歷，均依模型規則產生。其中部分機率參數屬於設計假設，並非直接觀測到的統計結果。本遊戲旨在幫助玩家理解不同地區的信仰環境差異，模擬結果不代表對特定個人命運的預測。</p>
+        <p>本遊戲參考人口、宗教、族群、聖經翻譯及改信基督教不友善度等公開資料，建立福音接觸機會的模擬模型。遊戲中的出生背景、人生事件、接觸福音的年齡及個人經歷，均依模型規則產生。其中部分機率參數屬於設計假設，並非直接觀測到的統計結果。本遊戲旨在幫助玩家理解不同地區的信仰環境差異，模擬結果不代表對特定個人命運的預測。</p>
         <p>本遊戲整合不同年份的公開統計資料及模型假設，並非單一年度的全球人口調查。</p>
       </div>
     </details>
@@ -455,8 +455,8 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
             <span>各國分性別的出生時平均餘命，2023 年估計，經由 <a href="https://en.wikipedia.org/wiki/List_of_countries_by_life_expectancy" target="_blank" rel="noopener">Wikipedia 彙整表</a>引用。</span>
             <span class="use">用途：決定模擬人生的長度（方法見下方）。</span></li>
           <li><a href="https://opendoorsanalytical.org/wp-content/uploads/2026/01/WWL-2026-Table-of-Scores-and-Ranks-50-points-v.2.pdf" target="_blank" rel="noopener">Open Doors World Watch List 2026</a>
-            <span>基督徒受迫害排名與六大面向分數（私人、家庭、社區、國家、教會、暴力）。統計期間為 2024 年 10 月到 2025 年 9 月。53 國中有 38 國有分數。</span>
-            <span class="use">用途：推導迫害事件、殉道和接觸福音受限程度的機率。這些分數是評分，不是機率；把分數換算成機率的方式是本遊戲的設計假設。</span></li>
+            <span>各國對基督徒處境的排名與六大面向分數（私人、家庭、社區、國家、教會、暴力），本遊戲稱為「改信基督教的不友善度」。統計期間為 2024 年 10 月到 2025 年 9 月。53 國中有 38 國有分數。</span>
+            <span class="use">用途：推導信仰壓力事件、殉道和接觸福音受限程度的機率。這些分數是評分，不是機率；把分數換算成機率的方式是本遊戲的設計假設。</span></li>
           <li><a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a>
             <span>世界地圖輪廓，經由 world-atlas 套件（1:110m 比例尺）使用。</span>
             <span class="use">用途：出生地地圖。</span></li>
@@ -472,10 +472,10 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
           <li><b>族群：</b>在國家裡依族群人口加權抽籤。佔全國人口不到 0.1% 的族群合併成「其他小族群」。</li>
           <li><b>父母的宗教：</b>國家整體用 Pew 的宗教組成，再依族群的基督徒比例（Joshua Project）調整高低。</li>
           <li><b>壽命：</b>以該國該性別的平均餘命為中心，加上標準差 14 歲的隨機變化，限制在 1 到 102 歲之間。平均餘命不是每個人的實際壽命，這只是簡化的做法，不是逐年生命表。</li>
-          <li><b>每年接觸福音的機會：</b>依族群的福音派與基督徒比例、母語聖經狀態、迫害分數中「國家」和「教會」兩項，以及年齡，算出每年的機率。南亞多數族群沒有公開福音派比例，改用基督徒比例推估。</li>
+          <li><b>每年接觸福音的機會：</b>依族群的福音派與基督徒比例、母語聖經狀態、不友善度分數中「國家」和「教會」兩項，以及年齡，算出每年的機率。南亞多數族群沒有公開福音派比例，改用基督徒比例推估。</li>
           <li><b>回應：</b>8 歲以後接觸到福音時由玩家選擇；同一秒出生的另外四個人由模型依機率選擇。</li>
-          <li><b>信主之後：</b>依迫害六大面向分數和族群的基督徒比例，產生迫害、成長、殉道等事件。族群本身多為基督徒時，沒有教會、被家人反對這類事件會少很多。</li>
-          <li><b>信仰的十字路口：</b>遇到懷疑、受傷、迫害等事件時，玩家可以選擇留下、離開教會或放下信仰，之後也可能回來。</li>
+          <li><b>信主之後：</b>依不友善度六大面向分數和族群的基督徒比例，產生信仰壓力、成長、殉道等事件。族群本身多為基督徒時，沒有教會、被家人反對這類事件會少很多。</li>
+          <li><b>信仰的十字路口：</b>遇到懷疑、受傷、信仰壓力等事件時，玩家可以選擇留下、離開教會或放下信仰，之後也可能回來。</li>
           <li><b>接觸福音的管道：</b>同學、營會、廣播、衛星電視等 20 種管道，依國家、族群和年齡加權抽出。</li>
           <li><b>模擬排行：</b>每國用同一套規則跑 6,000 段人生（蒙地卡羅模擬），難度分數 = 一生沒接觸到的比例 + 中位年齡 × 0.3。</li>
         </ol>
@@ -488,7 +488,7 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
         <p>以下參數沒有直接的統計來源，是為了讓模擬能運作而設定的，可能高估或低估：</p>
         <ul>
           <li>身邊信徒比例換算成「每年接觸到福音」的機率</li>
-          <li>迫害分數換算成迫害事件和殉道的機率</li>
+          <li>不友善度分數換算成信仰壓力事件和殉道的機率</li>
           <li>信主後成長事件、離開教會、放下信仰和回來的機率</li>
           <li>20 種接觸管道的權重</li>
           <li>每個國家的「挑戰說明」文字，依資料撰寫，部分使用一般背景知識</li>
@@ -501,7 +501,7 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
       <summary>資料年份與已知限制</summary>
       <div class="mbody">
         <ul>
-          <li>各資料年份不同：出生數主要是 2026 年推估，但台灣、南韓是 2025 年實際數字；宗教組成是 2020 年；平均壽命是 2023 年；迫害評分統計期間為 2024 年 10 月到 2025 年 9 月；族群資料於 2026 年 10 月下載。</li>
+          <li>各資料年份不同：出生數主要是 2026 年推估，但台灣、南韓是 2025 年實際數字；宗教組成是 2020 年；平均壽命是 2023 年；不友善度評分統計期間為 2024 年 10 月到 2025 年 9 月；族群資料於 2026 年 10 月下載。</li>
           <li>北韓出生數的 Wikipedia 表格標為 2026 年，實際上是依世界銀行 2024 年報告推算的推估值。</li>
           <li>Pew 和 Joshua Project 對基督徒比例的估計可能差很多，尤其是有地下教會的國家，例如中國、伊朗。</li>
           <li>Joshua Project 提醒，族群的基督徒與福音派比例多為推估值，不建議拿來計算絕對人數。本遊戲只把它們當作相對的機率依據。</li>
@@ -1180,8 +1180,8 @@ function fillBirthCard() {
   xn.push(`${c.jp.people_groups_total} 個族群裡，有 ${c.jp.unreached_groups} 個被列為未得之民，約佔人口的 ${pct(c.jp.unreached_population_pct)}。`);
   if (c.wwl.rank) {
     const top2 = Object.entries(c.wwl.spheres).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => SPHERE_ZH[k]);
-    xn.push(`基督徒受迫害評分全球第 ${c.wwl.rank} 名${c.wwl.rank > 50 ? '（觀察名單）' : ''}，壓力最大的是${top2.join('和')}層面。`);
-  } else xn.push('不在基督徒受迫害評分的名單上。');
+    xn.push(`改信基督教的不友善度全球第 ${c.wwl.rank} 名${c.wwl.rank > 50 ? '（觀察名單）' : ''}，壓力最大的是${top2.join('和')}層面。`);
+  } else xn.push('不在改信基督教不友善度的評分名單上。');
   $('xnFacts').innerHTML = xn.map(() => '<li></li>').join('');
   [...$('xnFacts').children].forEach((li, i) => li.textContent = xn[i]);
   $('challengeLbl').textContent = `在${c.name}，接觸福音的挑戰是`;
@@ -1193,7 +1193,7 @@ function fillBirthCard() {
     ['最多人信的宗教', tw, c, x => RELNAME[topReligion(x)[0]]],
     ['基督徒比例', tw, c, x => pct(x.religion_pct.christian)],
     ['福音派比例', tw, c, x => x.evangelical_pct != null && !x.evangelical_pct_note ? pct(x.evangelical_pct) : '不公開'],
-    ['迫害評分排名', tw, c, x => x.wwl.rank ? `第 ${x.wwl.rank} 名` : '不在名單'],
+    ['改信基督教的不友善度', tw, c, x => x.wwl.rank ? `第 ${x.wwl.rank} 名` : '不在名單'],
     ['平均壽命', tw, c, x => `${((x.life_expectancy.m + x.life_expectancy.f) / 2).toFixed(1)} 歲`],
     ['一生沒接觸到福音（模擬）', tw, c, x => `${x.difficulty.never_pct}%`],
   ];
@@ -1254,7 +1254,7 @@ function start() {
     ['族群中的福音派', g.evangelical_pct != null && !c.evangelical_pct_note ? pct(g.evangelical_pct) : '資料不公開'],
     ['未得之民族群', g.unreached === true ? '是' : g.unreached === false ? '否' : '不明', g.unreached === true],
     ['平均壽命', `${c.life_expectancy[me.sex]} 歲`],
-    ['迫害排名（WWL 2026）', c.wwl.rank ? `第 ${c.wwl.rank} 名` : '不在評分名單上'],
+    ['改信基督教的不友善度（WWL 2026）', c.wwl.rank ? `第 ${c.wwl.rank} 名` : '不在評分名單上'],
   ];
   $('facts').innerHTML = facts.map(([k, v, bad]) => `<div><dt>${k}</dt><dd class="${bad ? 'flag-none' : ''}"></dd></div>`).join('');
   [...$('facts').querySelectorAll('dd')].forEach((dd, i) => dd.textContent = facts[i][1]);
