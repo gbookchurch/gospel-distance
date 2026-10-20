@@ -727,6 +727,7 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
           <li><b>回應：</b>8 歲以後接觸到福音時由玩家選擇；同一秒出生的另外四個人由模型依機率選擇。</li>
           <li><b>信主之後：</b>依處境艱難程度六大面向分數和族群的基督徒比例，產生信仰壓力、成長、殉道等事件。族群本身多為基督徒時，沒有教會、被家人反對這類事件會少很多；族群過半是基督徒時，國家、教會和暴力層面的事件也會大幅減少，因為那些壓力多半落在改信的人和教會領袖身上。從小在基督徒家庭長大的人，不會遇到家人反對、法律上無法更改宗教身分這類只有改信者才會遇到的事；「法律上無法更改宗教身分」也只會出現在穆斯林佔多數的國家；如果族群過半是基督徒，也不會被鄰居排擠。</li>
           <li><b>信仰的十字路口：</b>遇到懷疑、受傷、信仰壓力等事件時，玩家可以選擇留下、離開教會或放下信仰，之後也可能回來。</li>
+          <li><b>生活片段：</b>人生紀錄裡的宗教日常、人生里程碑和「擦肩而過」是情境文字，依年齡和家裡的宗教隨機出現，不是統計資料，也不影響任何機率。擦肩而過不算接觸到福音。</li>
           <li><b>接觸福音的管道：</b>同學、營會、廣播、衛星電視等 20 種管道，依國家、族群和年齡加權抽出。</li>
           <li><b>模擬排行：</b>每國用同一套規則跑 6,000 段人生（蒙地卡羅模擬），依「一生沒接觸到福音的比例」由高到低排名；比例相同時，接觸到的人中位年齡較大的排前面。</li>
         </ol>
@@ -1539,7 +1540,8 @@ let me, timer = null, paused = false, age = 0, phase = 'unheard', firstAge = nul
 
 function addLog(a, text, cls = '', help = false) {
   const li = document.createElement('li');
-  if (cls) li.className = cls;
+  if (cls && cls !== 'milestone' && cls !== 'scene') importantAt.add(a);
+  if (cls) li.className = cls === 'scene' ? 'milestone scene' : cls;
   li.innerHTML = `<span class="a">${a} 歲</span><span class="t"></span>`;
   li.querySelector('.t').textContent = text;
   if (help) {
@@ -1559,10 +1561,78 @@ function setStatus() {
   else s.innerHTML = `<span class="lit">${firstAge} 歲第一次接觸福音</span>，還沒有回應`;
 }
 
+
+// ── 生活片段：情境文字，不是統計資料，也不影響任何機率
+// 宗教日常依家裡的宗教；人生里程碑不分國家；擦肩而過只在還沒接觸福音時出現，不算接觸到福音
+const SCENES = {
+  muslim: [[3, 7, '清晨，你被遠處清真寺的喚拜聲叫醒。'], [6, 10, '你開始跟著家人學念《古蘭經》。'], [8, 12, '這是你第一次跟著大人守齋戒月，撐到傍晚開齋的那一刻特別難忘。'], [4, 15, '開齋節，你穿上新衣服，跟著家人去親戚家拜訪。'], [10, 40, '宰牲節，家裡把肉分給鄰居和需要的人。'], [16, 70, '每週五中午，你跟著大家去清真寺聚禮。'], [30, 60, '你開始教自己的孩子做禮拜。'], [40, 80, '你一直存錢，希望有一天能去麥加朝覲。']],
+  hindu: [[3, 8, '家裡的小神龕每天都點著燈，你學著雙手合十。'], [5, 15, '排燈節的晚上，整條街都點滿了油燈。'], [6, 18, '灑紅節，你和朋友把彩色粉末撒得滿身都是。'], [10, 40, '你跟著家人去廟裡，排隊獻上花和供品。'], [20, 40, '你的婚禮依照家族的傳統，在聖火前完成儀式。'], [40, 80, '你一直想走一趟聖地朝聖。']],
+  buddhist: [[3, 8, '你跟著長輩到寺院，學著把花供在佛前。'], [6, 15, '新年的時候，家人帶你去寺裡祈福。'], [10, 25, '你在寺院住了一段時間，學著打坐和誦經。'], [20, 60, '家裡有人過世，你們請僧人來誦經。'], [30, 70, '每個月有幾天，你會去寺裡聽經、布施。'], [50, 80, '你常在清晨靜坐，覺得心比較安定。']],
+  other: [[3, 8, '家裡有一個祭拜祖先的地方，逢年過節都要準備供品。'], [5, 15, '過年過節，全家族聚在一起祭祖。'], [6, 20, '你生病的時候，家人帶你去求神，也去看醫生。'], [10, 30, '地方的傳統祭典到了，整個社區都熱鬧起來。'], [30, 70, '你接下照顧家族祭祀的責任。'], [40, 80, '長輩過世，你照著傳統的方式送他最後一程。']],
+  unaffiliated: [[8, 15, '同學問你信什麼，你想了想，說「沒有吧」。'], [12, 20, '你在課堂上讀到世界各大宗教，覺得那離自己很遠。'], [20, 50, '工作很忙，你很少想到信仰的事。'], [25, 80, '參加一場喪禮後，你第一次認真想：人死了會去哪裡？'], [50, 80, '年紀漸長，你開始想，這一生到底在追求什麼。']],
+  jewish: [[4, 12, '每週五傍晚，家人點起安息日的蠟燭。'], [12, 13, '你舉行了成年禮，第一次在會眾面前讀經。'], [5, 60, '逾越節的晚餐上，家人一起講述出埃及的故事。']],
+  christian: [[4, 10, '聖誕節，你在教會的表演裡演一隻小羊。', 'all'], [7, 10, '你在教堂領了第一次聖餐。', 'catholic'], [12, 16, '你領了堅振。', 'catholic'], [6, 12, '暑假，你參加了教會的兒童營。', 'protestant'], [5, 15, '復活節前夕，你跟著家人在教堂守夜，等著午夜的鐘聲。', 'orthodox'], [5, 20, '你在聖像前點了一根蠟燭。', 'orthodox'], [8, 18, '週日早上，全家一起去教會。', 'all']],
+};
+const MILESTONES = [
+  [1, 2, '你學會走路了。', 1], [2, 3, '你說出了第一句話。', 1], [6, 9, '你開始學認字。', 0.8], [10, 16, '你交到了一個很要好的朋友。', 0.7],
+  [14, 22, '你開始幫忙家裡的工作，或第一次自己賺錢。', 0.8], [17, 35, '你離開家，到另一個地方生活。', 0.4],
+  [18, 40, '你遇到了想共度一生的人。', 0.6, 'partner'], [20, 45, '你的第一個孩子出生了。', 0.7, 'child'],
+  [25, 65, '家裡經歷了一段很辛苦的日子。', 0.4], [35, 75, '你的父母相繼離世。', 0.6], [45, 80, '你第一次抱到孫子。', 0.6, 'grandchild'], [55, 80, '你把手上的工作交給年輕一輩。', 0.5],
+];
+// 擦肩而過：'open' = 管制很嚴的國家不出現（看得到教會、有人公開發東西）；'net' = 沒有網路的國家不出現
+const NEAR_MISS = [
+  [8, 60, '鄰村來了一個醫療團，聽說他們是基督徒，但你那天沒有去。'], [6, 60, '你在市場聽見有人唱一首陌生的歌，沒有停下腳步。'],
+  [8, 60, '你在路邊撿到一張傳單，上面的字不是你的語言，就隨手丟了。'], [10, 60, '你聽說城裡有一間教會，但從來不知道那裡在做什麼。', 'open'],
+  [12, 70, '收音機轉台的時候，你聽到一段講道，很快就轉走了。'], [10, 60, '你的鄰居搬走了，後來才聽說他們是基督徒。'],
+  [8, 30, '一個外國人來到你住的地方，說是來幫忙蓋學校的。', 'open'], [8, 18, '課本上提到「耶穌」兩個字，老師很快就翻過去了。'],
+  [10, 60, '你看到有人戴著十字架項鍊，以為那只是裝飾。'], [20, 60, '一位同事說他週日要去「聚會」，你沒有多問。'],
+  [8, 70, '你經過一間掛著十字架的房子，從來沒有走進去過。', 'open'], [15, 70, '有人送你一本書，你一直放在架上沒有打開。'],
+  [12, 40, '你在網路上滑過一段影片，標題寫著「耶穌是誰」，你滑了過去。', 'net'], [18, 60, '你在旅途中借住的人家，飯前會低頭禱告。'],
+  [10, 70, '你聽過一首歌的旋律，很多年後才知道那是詩歌。'], [15, 60, '有人說要給你一本用你母語寫的書，可是你們之後再也沒有見面。'],
+  [10, 60, '街上有人在發東西，你看人很多，就繞路走了。', 'open'], [30, 80, '醫院的牆上掛著一句話，你看了幾眼，沒有看懂。'],
+];
+let scenePlan = {}, sceneUsed = new Set(), importantAt = new Set(), nearCount = 0;
+function planScenes(p) {
+  const plan = {}, life = p.lifespan, r = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const put = (a, text, kind) => { while (plan[a] && a < life) a++; if (a <= life && !plan[a]) plan[a] = { text, kind }; };
+  // 宗教日常：從家裡宗教的句子抽 3 到 4 句
+  const fam = ['catholic', 'protestant', 'orthodox', 'christian'].includes(p.parentLabel) ? 'christian' : p.parentLabel;
+  const pool = (SCENES[fam] || []).filter(s => !s[3] || s[3] === 'all' || s[3] === p.parentLabel).filter(s => s[0] <= life);
+  pool.sort(() => Math.random() - 0.5).slice(0, r(3, 4)).forEach(s => put(r(s[0], Math.min(s[1], life)), s[2], fam === 'christian' ? 'cfaith' : 'faith'));
+  // 人生里程碑：依設計假設的比例出現；孩子、孫子要接在前一件之後
+  let partner = null, child = null;
+  for (const [a, b, text, prob, req] of MILESTONES) {
+    if (a > life || Math.random() >= prob) continue;
+    let lo = a;
+    if (req === 'child') { if (partner === null) continue; lo = Math.max(a, partner + 1); }
+    if (req === 'grandchild') { if (child === null) continue; lo = Math.max(a, child + 20); }
+    if (lo > Math.min(b, life)) continue;
+    const at = r(lo, Math.min(b, life));
+    if (req === 'partner') partner = at; if (req === 'child') child = at;
+    put(at, text, req ? 'chain' : 'life');
+  }
+  // 一生最多 9 件預排的片段，擦肩而過另外最多 3 次；伴侶、孩子、孫子這條線不拆開
+  const ages = Object.keys(plan).map(Number).filter(a => plan[a].kind !== 'chain');
+  while (Object.keys(plan).length > 9 && ages.length) delete plan[ages.splice(Math.floor(Math.random() * ages.length), 1)[0]];
+  return plan;
+}
+// 每年開始前，補上「前一年」的生活片段：那一年已經有重要事件就略過
+function showScene(a) {
+  if (importantAt.has(a)) return;
+  const s = scenePlan[a];
+  // 宗教日常只在還沒改信時出現（基督徒家庭的童年片段不受影響）
+  if (s && !(s.kind === 'faith' && ['believer', 'dechurched'].includes(phase))) { addLog(a, s.text, 'scene'); return; }
+  if (phase === 'unheard' && a >= 6 && nearCount < 3 && Math.random() < 0.07) {
+    const strict = restriction(me.country) < 0.4, noNet = me.country.id === 'KP';
+    const opts = NEAR_MISS.filter(n => a >= n[0] && a <= n[1] && !sceneUsed.has(n[2]) && !(strict && n[3] === 'open') && !(noNet && n[3] === 'net'));
+    if (opts.length) { const n = opts[Math.floor(Math.random() * opts.length)]; sceneUsed.add(n[2]); nearCount++; addLog(a, n[2], 'scene'); }
+  }
+}
 function start() {
   stop(); music.play();
   $('birth').classList.remove('living');
   me = makePerson();
+  scenePlan = planScenes(me); sceneUsed = new Set(); importantAt = new Set(); nearCount = 0;
   others = Array.from({ length: 4 }, simulateNPC);
   channel = null; journey = []; highlights = []; feeling = null; lastCross = -99; stats = { persecution: 0, growth: 0 }; words = []; pendingReflect = null; age = 0; phase = 'unheard'; firstAge = null; faithAge = null; st = {}; hearCount = 0; paused = false;
   $('log').innerHTML = ''; $('choiceSlot').innerHTML = ''; $('end').hidden = true;
@@ -1617,6 +1687,7 @@ function showAge(a) {
   $('lifeProg').style.width = `${Math.min(100, a)}%`;
 }
 function tick() {
+  showScene(age);
   age++;
   if (age > me.lifespan) return finish(false);
   showAge(age);
