@@ -226,7 +226,7 @@ a.btn:hover { border-color: var(--ink); }
 
 /* 首頁主視覺：手機全寬，電腦最寬 960px */
 body { overflow-x: clip; }
-.hero { display: block; width: min(960px, 100vw); max-width: none; height: auto; aspect-ratio: 3 / 1; margin-inline: calc((100% - min(960px, 100vw)) / 2); margin-block: -8px -4px; }
+.hero { display: block; width: min(960px, 100vw); max-width: none; height: auto; aspect-ratio: 1800 / 600; margin-inline: calc((100% - min(960px, 100vw)) / 2); margin-block: -8px -4px; }
 
 /* 首頁動機 */
 .intro .lede { display: grid; gap: 6px; color: var(--ink); font-size: 17px; }
@@ -258,9 +258,9 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
 
 /* 首頁後半段：四個區塊用由淺到深的灰色色帶分開 */
 /* 科普和資料來源用同一個較深的灰，追思館回到首頁底色，企劃用《教會小本本》的墨綠 */
-:root { --b1: #cdcdcd; --b2: var(--bg); --b3: var(--b1); --b4: #22503a; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --b1: #2e2e2e; --b4: #1d4532; } }
-:root[data-theme="dark"] { --b1: #2e2e2e; --b4: #1d4532; }
+:root { --b1: #cdcdcd; --b2: var(--bg); --b3: var(--b1); --b4: #29493a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --b1: #2e2e2e; --b4: #233f32; } }
+:root[data-theme="dark"] { --b1: #2e2e2e; --b4: #233f32; }
 .more { display: grid; gap: 0; margin-top: 8px; }
 .band { padding-block: 32px; box-shadow: 0 0 0 100vmax var(--band); clip-path: inset(0 -100vmax); background: var(--band); }
 .band.b1 { --band: var(--b1); } .band.b2 { --band: var(--b2); } .band.b3 { --band: var(--b3); } .band.b4 { --band: var(--b4); }
@@ -304,7 +304,7 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
 <main>
   <section class="intro" id="intro">
     <p class="brand"><span class="dot" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>《教會小本本》</b>Podcast 特別企劃</span></p>
-    <img class="hero" src="/*HERO*/" width="1800" height="600" alt="從嬰兒到老人走過一段人生的路，經過地球，通往遠方發光的十字架" fetchpriority="high" decoding="async">
+    <img class="hero" src="/*HERO*/" width="1800" height="600" alt="從嬰兒到老人走過一段人生的路，翻過山與河，通往遠方發光的十字架" fetchpriority="high" decoding="async">
     <h1>你會在幾歲，第一次<em>聽見耶穌的名字</em>？</h1>
     <div class="lede">
       <p>如果人生能重新開始，你會出生在哪個國家？你有沒有機會認識耶穌？</p>
