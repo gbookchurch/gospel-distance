@@ -343,6 +343,12 @@ button.go { font-size: 18px; padding: 14px 34px; border-radius: 6px; }
 .site-foot .sticker { display: block; margin-bottom: 28px; border-radius: 12px; overflow: hidden; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); transition: transform .2s; }
 .site-foot .sticker img { display: block; width: 100%; height: auto; }
 @media (hover: hover) { .site-foot .sticker:hover { transform: translateY(-2px); } }
+/* 背景音樂開關：固定在右上角 */
+.musicbtn { position: fixed; top: max(12px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right)); z-index: 50; width: 44px; height: 44px; padding: 0; border-radius: 50%; display: grid; place-items: center; background: rgba(248, 248, 248, 0.92); border: 1px solid var(--line); color: var(--ink); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); }
+.musicbtn .off { display: none; }
+.musicbtn[aria-pressed="false"] { color: var(--muted); }
+.musicbtn[aria-pressed="false"] .on { display: none; }
+.musicbtn[aria-pressed="false"] .off { display: inline; }
 .site-foot .in { border-top: 1px solid rgba(255, 255, 255, 0.18); padding-top: 20px; display: grid; gap: 2px; }
 .site-foot b { font-weight: 700; }
 main:has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot { margin-top: 48px; padding-top: 32px; }
@@ -612,6 +618,10 @@ main:has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot .in { border-t
 
   <section class="end" id="end" hidden></section>
 </main>
+<audio id="bgm" src="/*BGM*/" loop preload="none"></audio>
+<button class="musicbtn" id="musicBtn" type="button" aria-pressed="true" aria-label="背景音樂：開" title="背景音樂">
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path class="on" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path class="off" d="M15.5 9.5l5 5M20.5 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+</button>
 <footer class="site-foot band b4">
   <a class="sticker" href="https://store.line.me/stickershop/product/31241357/zh-Hant" target="_blank" rel="noopener noreferrer" aria-label="前往 LINE STORE 查看《教會小本本》LINE 貼圖">
     <img src="/*STICKER*/" width="1400" height="588" alt="《教會小本本》LINE 貼圖上架中，教會裡不好說的就用貼圖說" loading="lazy" decoding="async">
@@ -620,6 +630,7 @@ main:has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot .in { border-t
     <p><b>© 版權 &amp; 使用許可</b></p>
     <p>本網站採 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh_TW" target="_blank" rel="noopener license">CC BY-NC-SA 4.0</a> 許可</p>
     <p>可自由分享、改編，但需署名、非商業、相同方式共享</p>
+    <p>背景音樂：《教會小本本》原創演奏</p>
   </div>
 </footer>
 
@@ -1305,6 +1316,7 @@ function setStatus() {
 }
 
 function start() {
+  music.play();
   me = makePerson();
   others = Array.from({ length: 4 }, simulateNPC);
   channel = null; journey = []; highlights = []; feeling = null; lastCross = -99; stats = { persecution: 0, growth: 0 }; words = []; pendingReflect = null; age = 0; phase = 'unheard'; firstAge = null; faithAge = null; st = {}; hearCount = 0; paused = false;
@@ -1339,15 +1351,15 @@ function beginLife() {
   run();
 }
 
-function run() { clearInterval(timer); timer = setInterval(tick, +$('speed').value); }
+function run() { clearInterval(timer); timer = setInterval(tick, +$('speed').value); music.to(music.BASE, 1.5); }
 function showHome() {
-  stop();
+  stop(); music.fadeOut(1.5);
   for (const id of ['birth', 'agebar', 'end']) $(id).hidden = true;
   $('log').innerHTML = ''; $('choiceSlot').innerHTML = '';
   for (const id of ['intro', 'ranking', 'method', 'show']) $(id).hidden = false;
   renderMemorial();
 }
-function stop() { clearInterval(timer); timer = null; }
+function stop() { clearInterval(timer); timer = null; music.to(music.DUCK, 1.2); }
 
 function tick() {
   age++;
@@ -1447,6 +1459,54 @@ for (const id of ['speed', 'speed2']) {
     if (timer) run();
   };
 }
+// ── 背景音樂：按下「出生」才開始播，可以隨時關掉，選擇記在這個瀏覽器
+const music = (() => {
+  const KEY = 'gospel-distance-music';
+  const el = $('bgm'), btn = $('musicBtn');
+  let on = true, ctx = null, gain = null, want = false;
+  try { on = localStorage.getItem(KEY) !== 'off'; } catch (e) {}
+  function ensure() {
+    if (ctx || !(window.AudioContext || window.webkitAudioContext)) return;
+    try {
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      gain = ctx.createGain(); gain.gain.value = 0;
+      ctx.createMediaElementSource(el).connect(gain).connect(ctx.destination);
+    } catch (e) { ctx = null; gain = null; }
+  }
+  // iPhone 不能用 el.volume 調音量，所以用 Web Audio 的 gain 做淡入淡出
+  function ramp(v, sec) {
+    if (gain) { const t = ctx.currentTime; gain.gain.cancelScheduledValues(t); gain.gain.setValueAtTime(gain.gain.value, t); gain.gain.linearRampToValueAtTime(v, t + sec); }
+    else { try { el.volume = v; } catch (e) {} }
+  }
+  function sync() {
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.setAttribute('aria-label', on ? '背景音樂：開' : '背景音樂：關');
+  }
+  function safePlay() { try { const r = el.play(); if (r && r.catch) r.catch(() => {}); } catch (e) {} }
+  function resume() { ensure(); if (ctx && ctx.state === 'suspended') ctx.resume(); safePlay(); }
+  const api = {
+    BASE: 0.55, DUCK: 0.2,
+    play() { want = true; clearTimeout(api._t); if (on) { resume(); ramp(api.BASE, 2); } },
+    to(v, sec) { if (want && on) ramp(v, sec); },
+    fadeOut(sec) {
+      want = false; ramp(0, sec);
+      clearTimeout(api._t); api._t = setTimeout(() => { if (!want) el.pause(); }, sec * 1000 + 100);
+    },
+  };
+  btn.onclick = () => {
+    on = !on; sync();
+    try { localStorage.setItem(KEY, on ? 'on' : 'off'); } catch (e) {}
+    if (!on) { ramp(0, 0.4); setTimeout(() => { if (!on) el.pause(); }, 450); }
+    else if (want) { resume(); ramp(timer ? api.BASE : api.DUCK, 1); }
+  };
+  // 切到別的 App 或分頁時先停，回來再接著播
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) el.pause();
+    else if (want && on) safePlay();
+  });
+  sync();
+  return api;
+})();
 $('birthBtn').onclick = start;
 $('liveBtn').onclick = beginLife;
 try { $('gentle').checked = localStorage.getItem(GENTLE_KEY) === '1'; } catch (e) {}
@@ -1462,7 +1522,7 @@ document.addEventListener('click', e => {
 resetClear(); renderMemorial(); renderRanking(); renderDenoms();
 
 function finish(martyred) {
-  stop(); $('choiceSlot').innerHTML = '';
+  stop(); music.fadeOut(martyred ? 2.5 : 5); $('choiceSlot').innerHTML = '';
   const end = Math.min(age, me.lifespan);
   const lives = loadLives();
   const d = new Date();
