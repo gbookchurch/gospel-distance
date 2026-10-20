@@ -279,8 +279,20 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
 .sources li span { font-weight: 400; color: var(--ink); font-size: 14px; }
 .sources li .use { color: var(--muted); }
 
+/* 首頁後半段：四個區塊用由淺到深的灰色色帶分開 */
+:root { --b1: #e4e4e4; --b2: #dcdcdc; --b3: #d3d3d3; --b4: #c9c9c9; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --b1: #242424; --b2: #2a2a2a; --b3: #303030; --b4: #363636; } }
+:root[data-theme="dark"] { --b1: #242424; --b2: #2a2a2a; --b3: #303030; --b4: #363636; }
+.more { display: grid; gap: 0; margin-top: 8px; }
+.band { padding-block: 32px; box-shadow: 0 0 0 100vmax var(--band); clip-path: inset(0 -100vmax); background: var(--band); }
+.band.b1 { --band: var(--b1); } .band.b2 { --band: var(--b2); } .band.b3 { --band: var(--b3); } .band.b4 { --band: var(--b4); }
+.band.show { border-top: 0; padding-top: 32px; padding-bottom: 48px; }
+.band.method { border-top: 0; padding-top: 32px; }
+
 /* 結局 */
 .end { display: grid; gap: 20px; }
+.endtop { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.endtop .back { font-size: 14px; padding: 8px 14px; min-height: 40px; }
 .end h2 { font-size: clamp(26px, 6vw, 36px); }
 .end .big { font-family: var(--display); font-size: clamp(20px, 4.5vw, 26px); }
 .end .big b { color: var(--lamp); }
@@ -330,8 +342,8 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
     <p class="fine">遊戲裡會出現迫害、拘留，甚至因信仰失去生命的事件，不描寫畫面。人生經歷都是依模型產生的，不是真實人物的紀錄。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
   </section>
 
-
-  <section class="ranking" id="ranking">
+  <div class="more">
+  <section class="ranking band b1" id="ranking">
     <p class="eyebrow">福音距離科普</p>
     <details>
       <summary>53 國福音接觸機會模擬排行</summary>
@@ -340,7 +352,18 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
     </details>
   </section>
 
-  <section class="method" id="method">
+  <section class="memorial band b2" id="memorial" hidden>
+    <p class="eyebrow">我的追思館</p>
+    <h2>你曾經活過的每一段人生</h2>
+    <p class="memstats" id="memStats"></p>
+    <p class="fine">點兩段人生的「比較」，可以把它們並排來看。</p>
+    <div class="compare" id="memCompare" hidden></div>
+    <ul class="memlist" id="memList"></ul>
+    <div class="confirm" id="memClear"><button id="clearBtn">清除紀錄</button></div>
+    <p class="fine">紀錄只存在這個瀏覽器裡，不會上傳。清除瀏覽資料、換手機或用無痕模式時，紀錄不會保留。</p>
+  </section>
+
+  <section class="method band b3" id="method">
     <p class="eyebrow">資料來源與模擬方法</p>
     <h2>這些數字怎麼算出來的？</h2>
     <p>本遊戲參考人口、宗教、族群、聖經翻譯及宗教迫害等公開資料，建立福音接觸機會的模擬模型。遊戲中的出生背景、人生事件、接觸福音的年齡及個人經歷，均依模型規則產生。其中部分機率參數屬於設計假設，並非直接觀測到的統計結果。本遊戲旨在幫助玩家理解不同地區的信仰環境差異，模擬結果不代表對特定個人命運的預測。</p>
@@ -451,22 +474,12 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
     </details>
   </section>
 
-  <section class="memorial" id="memorial" hidden>
-    <p class="eyebrow">我的追思館</p>
-    <h2>你曾經活過的每一段人生</h2>
-    <p class="memstats" id="memStats"></p>
-    <p class="fine">點兩段人生的「比較」，可以把它們並排來看。</p>
-    <div class="compare" id="memCompare" hidden></div>
-    <ul class="memlist" id="memList"></ul>
-    <div class="confirm" id="memClear"><button id="clearBtn">清除紀錄</button></div>
-    <p class="fine">紀錄只存在這個瀏覽器裡，不會上傳。清除瀏覽資料、換手機或用無痕模式時，紀錄不會保留。</p>
-  </section>
-
-  <section class="show" id="show">
+  <section class="show band b4" id="show">
     <p class="eyebrow">關於這個企劃</p>
     <p>我們在節目裡常聊信仰怎麼在真實生活裡長出來。這個模擬想讓你換一個位置想：如果你不是生在台灣，你會在幾歲聽見福音？玩完之後，歡迎來節目跟我們分享你活過的那一生。</p>
     <a class="cta" href="https://portaly.cc/gbookchurch" target="_blank" rel="noopener">收聽《教會小本本》</a>
   </section>
+  </div>
 
   <section class="birth" id="birth" hidden>
     <p class="eyebrow">你出生了</p>
@@ -1485,7 +1498,7 @@ function finish(martyred) {
     return `<div class="other"><span class="c"></span><span class="g"></span><span class="r ${r[0]}">${r[1]}</span><span class="fine">活了 ${o.p.lifespan} 歲</span></div>`;
   }).join('');
   $('end').innerHTML = `
-    <p class="eyebrow">人生模擬結果</p>
+    <div class="endtop"><p class="eyebrow">人生模擬結果</p><button class="back" id="homeTop">← 回首頁</button></div>
     <h2></h2>
     <div class="epitaph" id="epitaph"></div>
     <dl class="summary" id="summary">${rows.map(() => '<div><dt></dt><dd></dd></div>').join('')}</dl>
@@ -1523,7 +1536,7 @@ function finish(martyred) {
       <textarea id="lastWord" maxlength="200" placeholder="寫給${c.name}的這個人"></textarea>
       <div class="controls"><button id="lastWordBtn">留下這句話</button></div>
     </div>
-    <div class="controls"><button class="primary" id="againBtn">再活一次</button><button id="memBtn">看追思館</button></div>
+    <div class="controls"><button class="primary" id="againBtn">再活一次</button><button id="homeBtn">回首頁</button><button id="memBtn">看追思館</button></div>
     <div class="show">
       <p class="brand"><span class="dot" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>${SHOW_NAME}</b>Podcast 特別企劃</span></p>
       <p>聽聽${SHOW_NAME}，一起聊聊那些值得重新思考的信仰問題。玩完之後有什麼想說的，也歡迎分享給我們。</p>
@@ -1577,6 +1590,7 @@ function finish(martyred) {
   E.hidden = false;
   $('againBtn').onclick = start;
   $('memBtn').onclick = () => { showHome(); $('memorial').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+  $('homeBtn').onclick = $('homeTop').onclick = () => { showHome(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
   E.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
