@@ -253,13 +253,17 @@ button.go { font-size: 18px; padding: 14px 30px; border-radius: 999px; }
 .sources li .use { color: var(--muted); }
 
 /* 首頁後半段：四個區塊用由淺到深的灰色色帶分開 */
-:root { --b1: #e4e4e4; --b2: #dcdcdc; --b3: #d3d3d3; --b4: #c9c9c9; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --b1: #242424; --b2: #2a2a2a; --b3: #303030; --b4: #363636; } }
-:root[data-theme="dark"] { --b1: #242424; --b2: #2a2a2a; --b3: #303030; --b4: #363636; }
+/* 科普和資料來源用同一個較深的灰，追思館回到首頁底色，企劃用《教會小本本》的墨綠 */
+:root { --b1: #cdcdcd; --b2: var(--bg); --b3: var(--b1); --b4: #22503a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --b1: #2e2e2e; --b4: #1d4532; } }
+:root[data-theme="dark"] { --b1: #2e2e2e; --b4: #1d4532; }
 .more { display: grid; gap: 0; margin-top: 8px; }
 .band { padding-block: 32px; box-shadow: 0 0 0 100vmax var(--band); clip-path: inset(0 -100vmax); background: var(--band); }
 .band.b1 { --band: var(--b1); } .band.b2 { --band: var(--b2); } .band.b3 { --band: var(--b3); } .band.b4 { --band: var(--b4); }
-.band.show { border-top: 0; padding-top: 32px; padding-bottom: 48px; }
+.band.show { border-top: 0; padding-top: 36px; padding-bottom: 104px; margin-bottom: -64px; }
+/* 墨綠底上的文字改成淺色 */
+.band.b4 { --ink: #f4f4f4; --muted: #cfdcd4; --lamp: #f5a04a; --lamp-soft: rgba(255, 255, 255, 0.1); color: var(--ink); }
+.band.b4 .cta { border-color: #f5a04a; }
 .band.method { border-top: 0; padding-top: 32px; }
 
 /* 結局 */
