@@ -620,46 +620,6 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
 .xdr > summary { min-height: 48px; padding: 12px 16px; font-weight: 600; font-size: 15.5px; }
 .xdr > :not(summary) { margin: 0 16px 16px; }
 @media (max-width: 380px) { .end .summary { grid-template-columns: 1fr; } }
-
-/* ═══ 象徵視覺：路徑為主、光為輔、文字為主角 ═══
-   所有背景都是低透明度的 SVG 與漸層，集中在這裡管理；手機上更淡。 */
-:root { --trail: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" fill="none" stroke="%2362786f" stroke-linecap="round"%3E%3Cpath d="M0 214 C110 190 210 206 320 186 S520 158 600 168" stroke-width="1.2" opacity=".55"/%3E%3Cpath d="M0 248 C150 228 260 240 390 222 S540 206 600 212" stroke-width="1.2" opacity=".4"/%3E%3Cpath d="M0 282 C170 268 300 276 430 262 S560 250 600 254" stroke-width="1" opacity=".3"/%3E%3Cpath d="M60 300 C150 276 170 250 268 240 S410 222 470 178" stroke-width="1.6" stroke-dasharray="1 7" opacity=".9"/%3E%3C/svg%3E'); --trail-end: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" fill="none" stroke="%2362786f" stroke-linecap="round"%3E%3Cpath d="M0 230 C140 214 260 226 380 204 S540 186 600 190" stroke-width="1.1" opacity=".45"/%3E%3Cpath d="M0 266 C170 252 300 262 430 246 S560 234 600 238" stroke-width="1" opacity=".3"/%3E%3Cpath d="M20 300 C140 284 200 262 300 246 S440 214 500 150" stroke-width="1.6" stroke-dasharray="1 7" opacity=".85"/%3E%3C/svg%3E'); --trail-end-met: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300" fill="none" stroke-linecap="round"%3E%3Cdefs%3E%3ClinearGradient id="v" x1="0" y1="112" x2="0" y2="188" gradientUnits="userSpaceOnUse"%3E%3Cstop offset="0" stop-color="%23c9a464" stop-opacity="0"/%3E%3Cstop offset=".4" stop-color="%23c9a464" stop-opacity=".9"/%3E%3Cstop offset="1" stop-color="%23c9a464" stop-opacity="0"/%3E%3C/linearGradient%3E%3ClinearGradient id="h" x1="478" y1="0" x2="522" y2="0" gradientUnits="userSpaceOnUse"%3E%3Cstop offset="0" stop-color="%23c9a464" stop-opacity="0"/%3E%3Cstop offset=".5" stop-color="%23c9a464" stop-opacity=".9"/%3E%3Cstop offset="1" stop-color="%23c9a464" stop-opacity="0"/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg stroke="%2362786f"%3E%3Cpath d="M0 230 C140 214 260 226 380 204 S540 186 600 190" stroke-width="1.1" opacity=".45"/%3E%3Cpath d="M0 266 C170 252 300 262 430 246 S560 234 600 238" stroke-width="1" opacity=".3"/%3E%3Cpath d="M20 300 C140 284 200 262 300 246 S440 214 500 150" stroke-width="1.6" stroke-dasharray="1 7" opacity=".85"/%3E%3C/g%3E%3Cpath d="M500 112 V188" stroke="url%28%23v%29" stroke-width="1.4"/%3E%3Cpath d="M478 136 H522" stroke="url%28%23h%29" stroke-width="1.4"/%3E%3C/svg%3E'); --paper: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="160" height="160"%3E%3Cfilter id="n"%3E%3CfeTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/%3E%3CfeColorMatrix values="0 0 0 0 .35  0 0 0 0 .33  0 0 0 0 .28  0 0 0 .06 0"/%3E%3C/filter%3E%3Crect width="160" height="160" filter="url%28%23n%29"/%3E%3C/svg%3E'); --dawn: rgba(233, 208, 160, .32); }
-
-/* 出生卡：像翻開故事書第一頁。右上方淡淡的地景、一條往遠方的路、一點晨光；左側文字區保持乾淨 */
-.cert { background-color: var(--surface); background-image: var(--paper); }
-.cert-body { position: relative; isolation: isolate; }
-.cert-body::before { content: ""; position: absolute; top: 0; right: 0; width: min(62%, 400px); height: 190px; z-index: -1; pointer-events: none;
-  background: radial-gradient(closest-side at 80% 30%, var(--dawn), transparent), var(--trail) no-repeat right 8px bottom 0 / 100% auto;
-  -webkit-mask-image: linear-gradient(to left, #000 55%, transparent); mask-image: linear-gradient(to left, #000 55%, transparent); opacity: .7; }
-
-/* 人生進行中：進度條是一條往前延伸的小路，前端有一點微光 */
-.lifeprog { height: 6px; background: none; overflow: visible; position: relative; }
-.lifeprog::before { content: ""; position: absolute; left: 0; right: 0; top: 2px; border-top: 2px dotted #c9cfcb; }
-.lifeprog i { position: relative; height: 2px; margin-top: 2px; background: #8ea198; border-radius: 2px; }
-.lifeprog i::after { content: ""; position: absolute; right: -4px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: #f3e4c4; box-shadow: 0 0 10px 3px var(--dawn); }
-/* 反思卡：一點極淡的光 */
-.lifearea .reflect { background-image: radial-gradient(circle at 92% 0%, rgba(233, 208, 160, .22), transparent 45%); }
-/* 接觸福音的節點：光稍微明顯一點，仍然克制 */
-.lifearea .log li.gospel .t { box-shadow: 0 6px 18px -10px rgba(201, 160, 90, .55); background-image: radial-gradient(circle at 100% 0%, rgba(240, 214, 160, .35), transparent 55%); }
-
-/* 人生終章：像書的最後一頁。路收束到遠方；接觸過福音的人生，遠方有一點極淡的光線交會 */
-.finale { position: relative; isolation: isolate; }
-.finale::before { content: ""; position: absolute; top: 0; right: 0; width: min(60%, 420px); height: 260px; z-index: -1; pointer-events: none;
-  background: radial-gradient(closest-side at 83% 50%, var(--dawn), transparent), var(--trail-end) no-repeat right bottom / 100% auto;
-  -webkit-mask-image: linear-gradient(to left, #000 50%, transparent); mask-image: linear-gradient(to left, #000 50%, transparent); opacity: .65; }
-.finale.unmet::before { background: radial-gradient(closest-side at 83% 50%, rgba(200, 200, 196, .25), transparent), var(--trail-end) no-repeat right bottom / 100% auto; opacity: .5; }
-.finale.met::before { background: radial-gradient(closest-side at 83% 50%, var(--dawn), transparent), var(--trail-end-met) no-repeat right bottom / 100% auto; }
-
-/* 人生摘要：紙張感與右下角淡淡的地形線 */
-.recap { position: relative; isolation: isolate; }
-.recap::before { content: ""; position: absolute; right: 0; bottom: 0; width: min(55%, 360px); height: 140px; z-index: -1; pointer-events: none; background: var(--trail) no-repeat right bottom / 100% auto; opacity: .22; }
-.end .summary div.key { background-image: var(--paper); }
-
-@media (max-width: 640px) {
-  .cert-body::before { width: 75%; height: 170px; opacity: .4; }
-  .finale::before { width: 80%; height: 200px; opacity: .4; }
-  .recap::before { opacity: .14; }
-}
 </style>
 
 </head>
@@ -1511,24 +1471,6 @@ async function makeShareCard(end, martyred) {
   x.fillStyle = glow; x.fillRect(0, 0, W, H);
   x.beginPath(); x.arc(W - 170, 230, heard ? 16 : 10, 0, Math.PI * 2);
   x.fillStyle = heard ? C.lamp : C.line; x.fill();
-  // 遠山輪廓與小路，都壓在很低的透明度，不搶文字
-  x.save(); x.lineCap = 'round';
-  x.strokeStyle = 'rgba(169,180,174,0.10)'; x.lineWidth = 2;
-  [[520, 488, 500, 470], [556, 530, 540, 516], [592, 572, 580, 560]].forEach(([a, b, cpy, d]) => {
-    x.beginPath(); x.moveTo(0, a); x.bezierCurveTo(W * 0.3, b, W * 0.55, cpy, W, d); x.stroke();
-  });
-  x.setLineDash([2, 14]); x.strokeStyle = heard ? 'rgba(245,190,110,0.30)' : 'rgba(169,180,174,0.22)'; x.lineWidth = 3;
-  x.beginPath(); x.moveTo(P - 20, 578); x.bezierCurveTo(W * 0.4, 560, W * 0.62, 520, W - 200, 478); x.stroke();
-  x.setLineDash([]);
-  if (heard) {
-    const lv = x.createLinearGradient(0, 230 - 70, 0, 230 + 70);
-    lv.addColorStop(0, 'rgba(246,215,160,0)'); lv.addColorStop(0.5, 'rgba(246,215,160,0.30)'); lv.addColorStop(1, 'rgba(246,215,160,0)');
-    x.fillStyle = lv; x.fillRect(W - 171, 160, 2, 140);
-    const lh = x.createLinearGradient(W - 170 - 46, 0, W - 170 + 46, 0);
-    lh.addColorStop(0, 'rgba(246,215,160,0)'); lh.addColorStop(0.5, 'rgba(246,215,160,0.30)'); lh.addColorStop(1, 'rgba(246,215,160,0)');
-    x.fillStyle = lh; x.fillRect(W - 216, 205, 92, 2);
-  }
-  x.restore();
   x.textBaseline = 'alphabetic';
 
   // 品牌四色點 + 名稱
@@ -2204,7 +2146,6 @@ function finish(martyred) {
     </section>`;
   const E = $('end');
   E.querySelector('.finale-place').textContent = `${c.name}・${g.name}`;
-  E.querySelector('.finale').classList.add(firstAge === null ? 'unmet' : 'met');
   $('epitaph').innerHTML = epitaph(end, martyred).map(() => '<p></p>').join('');
   [...$('epitaph').children].forEach((p, i) => p.textContent = epitaph(end, martyred)[i]);
   // 最重要的結局句：一生沒接觸到福音時是最後一句，其他結局是第二句
