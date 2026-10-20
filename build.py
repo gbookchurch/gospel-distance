@@ -28,7 +28,8 @@ HEAD = """<!doctype html>
 <meta name="twitter:title" content="福音距離｜你會在幾歲，第一次聽見耶穌的名字？">
 <meta name="twitter:description" content="依 53 國公開資料建立的人生模擬，《教會小本本》Podcast 特別企劃。">
 <meta name="twitter:image" content="https://gbookchurch.github.io/gospel-distance/og.png">
-<meta name="theme-color" content="#ededed">
+<meta name="theme-color" content="#f2f2f2">
+<meta name="color-scheme" content="only light">
 <style>
 :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 body { margin: 0; font-size: 14px; font-family: system-ui, sans-serif; }
@@ -44,6 +45,7 @@ def main():
             for k in DROP:
                 g.pop(k, None)
     page = (ROOT / 'src/template.html').read_text(encoding='utf-8')
+    page = page.replace('<meta charset="utf-8">\n', '', 1)
     page = page.replace('/*DATA*/', json.dumps({'countries': data['countries']}, ensure_ascii=False, separators=(',', ':')))
     page = page.replace('/*HERO*/', 'hero.webp')
     page = page.replace('/*MAP*/', (ROOT / 'data/worldmap.json').read_text(encoding='utf-8'))
