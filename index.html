@@ -620,6 +620,11 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
 .xdr > summary { min-height: 48px; padding: 12px 16px; font-weight: 600; font-size: 15.5px; }
 .xdr > :not(summary) { margin: 0 16px 16px; }
 @media (max-width: 380px) { .end .summary { grid-template-columns: 1fr; } }
+
+/* 代價提示：中性語氣，細磚紅線，不用大面積色塊 */
+.choice .cost { border-left: 3px solid var(--brick-line, #a46e61); padding: 8px 14px; background: var(--bg); border-radius: 0 10px 10px 0; display: grid; gap: 4px; }
+.choice .cost .eyebrow { font-size: 12px; }
+.choice .cost ul { margin: 0; padding-left: 1.1em; display: grid; gap: 2px; font-size: 14.5px; line-height: 1.65; }
 </style>
 
 </head>
@@ -756,7 +761,7 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
           <li><b>回應：</b>8 歲以後接觸到福音時由玩家選擇；同一秒出生的另外四個人由模型依機率選擇。</li>
           <li><b>信主之後：</b>依處境艱難程度六大面向分數和族群的基督徒比例，產生信仰壓力、成長、殉道等事件。族群本身多為基督徒時，沒有教會、被家人反對這類事件會少很多；族群過半是基督徒時，國家、教會和暴力層面的事件也會大幅減少，因為那些壓力多半落在改信的人和教會領袖身上。從小在基督徒家庭長大的人，不會遇到家人反對、法律上無法更改宗教身分這類只有改信者才會遇到的事；「法律上無法更改宗教身分」也只會出現在穆斯林佔多數的國家；如果族群過半是基督徒，也不會被鄰居排擠。</li>
           <li><b>信仰的十字路口：</b>遇到懷疑、受傷、信仰壓力等事件時，玩家可以選擇留下、離開教會或放下信仰，之後也可能回來。</li>
-          <li><b>生活片段：</b>人生紀錄裡的宗教日常、人生里程碑和「擦肩而過」是情境文字，依年齡和家裡的宗教隨機出現，不是統計資料，也不影響任何機率。擦肩而過不算接觸到福音。</li>
+          <li><b>生活片段：</b>人生紀錄裡的宗教日常、人生里程碑和「擦肩而過」是情境文字，依年齡和家裡的宗教隨機出現，不是統計資料，也不影響任何機率。擦肩而過不算接觸到福音。接觸福音時的選項描述、選完的後續、再次相遇的回想、代價提示，以及信徒言行帶來的爭議，也都是情境文字：代價提示依各國處境艱難程度分數挑選，其他依情境隨機抽出，都不改變機率。</li>
           <li><b>接觸福音的管道：</b>同學、營會、廣播、衛星電視等 20 種管道，依國家、族群和年齡加權抽出。</li>
           <li><b>模擬排行：</b>每國用同一套規則跑 6,000 段人生（蒙地卡羅模擬），依「一生沒接觸到福音的比例」由高到低排名；比例相同時，接觸到的人中位年齡較大的排前面。</li>
         </ol>
@@ -1157,10 +1162,100 @@ const HELP_URL = 'https://www.opendoors.org/persecution/countries';
 const GENTLE_KEY = 'gospel-distance-gentle';
 function gentleOn() { return !!(document.getElementById('gentle') && document.getElementById('gentle').checked); }
 function softText(ev) {
+  if (ev.id === 'doubt' || ev.id === 'church_hurt') return tensionText(ev);
   if (!gentleOn()) return ev.text;
   if (ev.id === 'martyred') return '你因為信仰，提早走完了這一生。';
   if (ev.help) return '這一年，你因為信仰經歷了很艱難的事。';
   return ev.text;
+}
+
+// ── 接觸福音時的轉折：選項描述、選完的餘波、再次相遇的呼應、代價提示、信徒言行帶來的爭議
+// 只換文字，不改任何機率；「回應／想再看看／不接受」三個選項和結果都不變
+function groupShare(p) { return (p.group.christian_pct ?? p.country.christian_pct ?? 0) / 100; }
+function baseCtx() {
+  if (!me.country.wwl.rank) return 'free_o';
+  return groupShare(me) >= 0.5 ? 'mid' : 'hard_o';
+}
+function faithCtx() {
+  if (phase === 'left') return 'left';
+  if (me.parentReligion === 'christian') return 'cfam';
+  const u = me.parentLabel === 'unaffiliated';
+  if (!me.country.wwl.rank) return u ? 'free_u' : 'free_o';
+  if (groupShare(me) >= 0.5) return 'mid';
+  return u ? 'hard_u' : 'hard_o';
+}
+const isHard = x => x === 'hard_o' || x === 'hard_u';
+const CHOICE_DESC = {
+  free_o: { respond: '你決定跟隨耶穌，想多認識主。', wait: '你覺得有意思，但還想多了解一點。', decline: '你覺得這是別人的信仰，跟你的生活沒什麼關係。' },
+  free_u: { respond: '你決定跟隨耶穌，想多認識主。', wait: '你覺得有意思，但還想多了解一點。', decline: '你習慣不信任何宗教，這次也一樣。' },
+  cfam: { respond: '從小聽的故事，這一次你決定讓它成為自己的信仰。', wait: '你還不確定，這是爸媽的信仰，還是你自己的。', decline: '你覺得自己只是跟著家裡去教會，並不真的相信。' },
+  hard_o: { respond: '你決定跟隨耶穌，但還不知道能告訴誰。', wait: '你很好奇，但想到家人，決定先放在心裡。', decline: '你覺得離開家裡的信仰代價太大，決定不再想這件事。' },
+  hard_u: { respond: '你決定跟隨耶穌，但知道只能偷偷地信。', wait: '你很好奇，但不確定值不值得冒這個風險。', decline: '你覺得這件事太危險，還是別碰比較好。' },
+  mid: { respond: '你決定跟隨耶穌，也知道在這裡，信仰有時要付上代價。', wait: '你身邊不少人是基督徒，你想先看看他們怎麼生活。', decline: '你覺得信不信都差不多，日子還是一樣過。' },
+  left: { respond: '你決定重新相信耶穌。', wait: '你想起從前，但還沒準備好回去。', decline: '你覺得那已經是過去的事了。' },
+};
+const AFTER = {
+  respond: { free: ['那天回家的路上，你覺得心裡很安靜。', '你傳了一則訊息給帶你認識耶穌的人：「我想多了解。」'], hard: ['你沒有告訴任何人，只在心裡默默禱告。', '你把一句經文抄在小紙條上，藏在口袋裡。'], cfam: ['你第一次自己禱告，不是跟著大人念。'] },
+  wait: { all: ['那天晚上，你把聽到的話又想了一遍。', '你決定下次遇到時，再多問一點。'], net: ['你上網查了一下，看了幾篇又關掉了。'], hard: ['你很想問問別人，可是不知道可以問誰。'] },
+  decline: { all: ['你很快就把這件事放下了。', '你禮貌地點點頭，沒有再多說什麼。', '後來有人再提起，你轉開了話題。'] },
+};
+function afterLine(c, x) {
+  let pool;
+  if (c === 'respond') pool = x === 'cfam' ? AFTER.respond.cfam : isHard(x) ? AFTER.respond.hard : AFTER.respond.free;
+  else if (c === 'wait') pool = [...AFTER.wait.all, ...(me.country.id !== 'KP' ? AFTER.wait.net : []), ...(isHard(x) ? AFTER.wait.hard : [])];
+  else pool = AFTER.decline.all;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+const CALLBACK = {
+  classmate: '你想起那年邀你去青少年聚會的同學。', friend: '當年跟你說起耶穌的那個人，前幾天又問你最近好不好。',
+  coworker: '當年跟你說起耶穌的那個人，前幾天又問你最近好不好。', partner: '當年跟你說起耶穌的那個人，前幾天又問你最近好不好。',
+  camp: '營會最後一晚的那首歌，你一直沒忘。', christmas: '你想起很多年前那場聖誕晚會。', english: '英文班的老師寫給你的那張卡片，你還留著。',
+  hospital: '那個在病床邊為你禱告的人，你一直記得他的樣子。', radio: '你又轉到了那個深夜廣播頻道。', satellite: '那個講耶穌的節目，你偶爾還會偷偷轉到。',
+  internet: '你又滑到一段講耶穌的影片，這次你看完了。', film: '你想起小時候在村子裡看過的那部電影。', bible: '那本小小的聖經，你一直藏在身邊。',
+  dream: '那個穿白衣的人，你又夢見了一次。', relative: '那位信了耶穌的親戚，這些年過得並不容易，卻還是很平靜。',
+};
+const CALLBACK_DEFAULT = '這不是你第一次聽到耶穌的名字了。';
+// 代價：依 WWL 2026 各面向分數（滿分約 16.7）挑句子
+const COST = {
+  family: ['跟隨耶穌可能讓家人跟你斷絕關係。', '家人可能會逼你放棄，甚至把你趕出家門。', '你的婚姻、孩子的教養，都可能因為這個決定被家族干涉。'],
+  private: ['你可能得把信仰完全藏起來，連家人都不能知道。', '一本聖經、一則訊息，都可能讓你被發現。', '你可能很久都找不到一個可以一起禱告的人。'],
+  community: ['改信的人常會失去工作，或被鄰居排擠。', '整個村子可能都會知道，從此用不同的眼光看你。', '你的孩子在學校可能會因此被針對。'],
+  national: ['信仰可能讓你被警方盯上。', '法律上，你可能沒辦法改變自己的宗教身分。', '你可能會被傳喚、拘留，甚至得離開自己的國家。'],
+  church: ['很難找到可以公開聚會的地方。', '你們的聚會可能隨時會被關閉。'],
+  violence: ['有些基督徒因為信仰遭到攻擊。', '你的村子、你的教會，都可能成為武裝團體的目標。', '有人曾經為了這個信仰失去了生命。'],
+};
+function costLines(x) {
+  const s = me.country.wwl.spheres; if (!s || x === 'cfam') return [];
+  if (x === 'left') x = baseCtx();
+  let keys;
+  if (isHard(x)) {
+    const all = Object.keys(COST).sort((a, b) => s[b] - s[a]);
+    keys = all.filter(k => s[k] >= 12).slice(0, 2); if (!keys.length) keys = all.slice(0, 1);
+  } else if (x === 'mid') keys = ['violence', 'national'].filter(k => s[k] >= 12).sort((a, b) => s[b] - s[a]).slice(0, 1);
+  else return [];
+  return keys.map(k => { const pool = COST[k].slice(0, k === 'violence' && gentleOn() ? 2 : undefined); return pool[Math.floor(Math.random() * pool.length)]; });
+}
+// 信徒言行帶來的爭議：只在信仰較自由或介於中間的地方出現
+const CONTRO_NEAR = [
+  [12, 70, '有人在街頭拿擴音器喊「不信就下地獄」，你加快腳步走過去。'],
+  [12, 70, '有人告訴你，你過世的阿公阿媽現在都在地獄裡，你很難再聽下去。', 'ea'],
+  [15, 60, '朋友信主後要你不要再拿香，家裡為了祭祖吵了一架。', 'ea'],
+  [12, 40, '傳福音的人一直催你填決志卡，你覺得自己只是一個數字。'],
+  [10, 80, '你生病的時候，有人說那是因為你的罪。'],
+  [15, 80, '新聞上又有教會領袖的醜聞，你覺得基督徒也不過如此。'],
+  [15, 60, '你聽到有人說同性戀會下地獄，想到你的好朋友，就沒再去那間教會了。'],
+  [15, 50, '同事說他的教會「不接納」某些人，你不確定自己算不算在內。'],
+];
+const CONTRO_TENSION = {
+  doubt: [[14, 40, '你問了演化論的問題，有人說你信心不夠。'], [20, 70, '每次聚會都在講奉獻，你開始懷疑錢都去了哪裡。'], [16, 60, '你的好朋友出櫃了，教會的立場讓你很掙扎。'], [14, 40, '你發現自己喜歡的是同性，不知道還能不能留在教會。']],
+  church_hurt: [[16, 35, '教會告訴你，不能和不是基督徒的人交往。'], [18, 40, '你在青少年營會簽了守貞卡，後來那份羞恥感跟了你很多年。'], [18, 60, '你很想服事，卻被告知女性不能講道。', 'f'], [16, 70, '你的憂鬱症被說是屬靈問題，有人勸你多禱告、別吃藥。'], [20, 70, '你對牧者的決定提出疑問，被說是不順服。']],
+};
+const OTHER_SIDE = ['教會清楚的規範，讓你在混亂的日子裡有了方向。', '有人願意陪你慢慢談那些難解的問題，沒有急著給答案。', '你和小組的人立場不一樣，大家還是一起吃飯、一起禱告。'];
+let otherSideShown = false;
+function tensionText(ev) {
+  const pool = (CONTRO_TENSION[ev.id] || []).filter(v => age >= v[0] && age <= v[1] && (!v[3] || v[3] === me.sex));
+  if (!pool.length || isHard(faithCtx()) || Math.random() < 0.35) return ev.text;
+  return pool[Math.floor(Math.random() * pool.length)][2];
 }
 const $ = id => document.getElementById(id);
 
@@ -1893,12 +1988,15 @@ function planScenes(p) {
 // 每年開始前，補上「前一年」的生活片段：那一年已經有重要事件就略過
 function showScene(a) {
   if (importantAt.has(a)) return;
+  if (phase === 'believer' && !otherSideShown && a >= 16 && !isHard(faithCtx()) && Math.random() < 0.02) { otherSideShown = true; addLog(a, OTHER_SIDE[Math.floor(Math.random() * OTHER_SIDE.length)], 'growth'); return; }
   const s = scenePlan[a];
   // 宗教日常只在還沒改信時出現（基督徒家庭的童年片段不受影響）
   if (s && !(s.kind === 'faith' && ['believer', 'dechurched'].includes(phase))) { addLog(a, s.text, 'scene'); return; }
   if (phase === 'unheard' && a >= 6 && nearCount < 3 && Math.random() < 0.07) {
     const strict = restriction(me.country) < 0.4, noNet = me.country.id === 'KP';
-    const opts = NEAR_MISS.filter(n => a >= n[0] && a <= n[1] && !sceneUsed.has(n[2]) && !(strict && n[3] === 'open') && !(noNet && n[3] === 'net'));
+    const x = faithCtx(), ea = EAST_ASIA.includes(me.country.id) && ['other', 'buddhist'].includes(me.parentLabel);
+    const contro = isHard(x) ? [] : CONTRO_NEAR.filter(n => !n[3] || (n[3] === 'ea' && ea));
+    const opts = [...NEAR_MISS, ...contro].filter(n => a >= n[0] && a <= n[1] && !sceneUsed.has(n[2]) && !(strict && n[3] === 'open') && !(noNet && n[3] === 'net'));
     if (opts.length) { const n = opts[Math.floor(Math.random() * opts.length)]; sceneUsed.add(n[2]); nearCount++; addLog(a, n[2], 'scene'); }
   }
 }
@@ -1906,7 +2004,7 @@ function start() {
   stop(); music.play();
   $('birth').classList.remove('living');
   me = makePerson();
-  scenePlan = planScenes(me); sceneUsed = new Set(); importantAt = new Set(); nearCount = 0;
+  scenePlan = planScenes(me); sceneUsed = new Set(); importantAt = new Set(); nearCount = 0; otherSideShown = false;
   others = Array.from({ length: 4 }, simulateNPC);
   channel = null; journey = []; highlights = []; feeling = null; lastCross = -99; stats = { persecution: 0, growth: 0 }; words = []; pendingReflect = null; age = 0; phase = 'unheard'; firstAge = null; faithAge = null; st = {}; hearCount = 0; paused = false;
   $('log').innerHTML = ''; $('choiceSlot').innerHTML = ''; $('end').hidden = true;
@@ -1981,8 +2079,9 @@ function tick() {
       // 沒去教會的時候：不會有成長事件，迫害也比較少找上你
       if (phase === 'dechurched' && ev.id !== 'martyred' && (cls === 'growth' || Math.random() < 0.5)) continue;
       if (cls === 'persecution') stats.persecution++; else if (cls === 'growth') stats.growth++;
-      addLog(age, softText(ev), cls, !!ev.help);
-      if (cls !== 'milestone') highlights.push({ age, text: softText(ev), cls });
+      const txt = softText(ev);
+      addLog(age, txt, cls, !!ev.help);
+      if (cls !== 'milestone') highlights.push({ age, text: txt, cls });
       if (!trigger && CROSS_TRIGGERS[ev.id]) trigger = CROSS_TRIGGERS[ev.id];
     }
     if (st.dead) return finish(true);
@@ -2018,13 +2117,16 @@ function hear() {
   const firstChoice = hearCount === 1;
   const how = phase === 'left' ? '你又想起了耶穌。那些放下很久的事，好像又回到心裡。' : me.parentReligion === 'christian'
     ? (firstChoice ? (first ? '你跟著家人去教會，這一次你開始認真想：耶穌跟我有什麼關係？' : '從小在教會聽的那些故事，這一次你開始認真想：這跟我有什麼關係？') : age < 12 ? '爸媽帶你去教會，你又一次聽見福音。' : '你自己走進教會，又一次聽見福音。')
-    : (() => { const ch = pickChannel(me, age); if (!channel) channel = { age, short: ch.short }; return (first || !firstChoice) ? ch.text : '小時候聽過的那個名字，這一次又出現了。' + ch.text; })();
+    : (() => { const ch = pickChannel(me, age); if (!channel) channel = { age, short: ch.short, id: ch.id }; if (first) return ch.text; if (firstChoice) return '小時候聽過的那個名字，這一次又出現了。' + ch.text; return (CALLBACK[channel && channel.id] || CALLBACK_DEFAULT) + ch.text; })();
   addLog(age, how, 'gospel');
   if (first) highlights.push({ age, text: channel && channel.age === age ? `第一次接觸到福音，透過${channel.short}。` : '第一次接觸到福音。', cls: 'gospel' });
   setStatus();
   const box = document.createElement('div'); box.className = 'choice';
-  box.innerHTML = `<h3>${age} 歲，${phase === 'left' ? '你又想起了耶穌' : '你聽見了福音'}</h3><p>你要怎麼回應？</p><div class="opts">${
-    Object.entries(CHOICES).map(([k, c]) => `<button data-c="${k}"><b>${c.label}</b><small>${c.desc}</small></button>`).join('')}</div>`;
+  const x = faithCtx(), cost = costLines(x), desc = CHOICE_DESC[x];
+  box.innerHTML = `<h3>${age} 歲，${phase === 'left' ? '你又想起了耶穌' : '你聽見了福音'}</h3>${cost.length ? `<div class="cost"><p class="eyebrow">在你的處境裡，這個選擇可能意味著</p><ul>${cost.map(() => '<li></li>').join('')}</ul></div>` : ''}<p>你要怎麼回應？</p><div class="opts">${
+    Object.entries(CHOICES).map(([k, c]) => `<button data-c="${k}"><b>${c.label}</b><small>${desc[k]}</small></button>`).join('')}</div>`;
+  box.querySelectorAll('.cost li').forEach((li, i) => li.textContent = cost[i]);
+  box.dataset.ctx = x;
   box.querySelectorAll('button').forEach(b => b.onclick = () => choose(b.dataset.c));
   $('choiceSlot').innerHTML = ''; $('choiceSlot').appendChild(box);
   box.querySelector('button').focus({ preventScroll: true });
@@ -2032,11 +2134,13 @@ function hear() {
 }
 
 function choose(c) {
+  const x = faithCtx(), desc = CHOICE_DESC[x][c];
   $('choiceSlot').innerHTML = '';
   if (c === 'respond' && phase === 'left') { phase = 'believer'; journey.push({ age, kind: 'return_faith' }); addLog(age, '你決定重新相信耶穌。', 'gospel'); highlights.push({ age, text: '重新回到了信仰。', cls: 'growth' }); }
   else if (c === 'respond') { phase = 'believer'; faithAge = age; journey.push({ age, kind: 'faith' }); addLog(age, '你決定跟隨耶穌。', 'gospel'); highlights.push({ age, text: '決定跟隨耶穌。', cls: 'gospel' }); }
-  else if (phase === 'left') { addLog(age, CHOICES[c].desc, 'milestone'); }
-  else { phase = c; addLog(age, CHOICES[c].desc, 'milestone'); }
+  else if (phase === 'left') { addLog(age, desc, 'milestone'); }
+  else { phase = c; addLog(age, desc, 'milestone'); }
+  if (x !== 'left') addLog(age, afterLine(c, x), 'milestone');
   setStatus();
   if (pendingReflect !== null) { const a = pendingReflect; pendingReflect = null; return reflect(a); }
   if (!paused) run();
