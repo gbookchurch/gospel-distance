@@ -145,6 +145,16 @@ label { font-size: 14px; color: var(--muted); display: flex; gap: 8px; align-ite
 .share img { width: 100%; max-width: 420px; border-radius: 10px; border: 1px solid var(--line); display: block; }
 .share .hint { font-size: 13px; color: var(--muted); }
 
+/* 節目品牌 */
+.brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+.brand b { color: var(--ink); font-family: var(--display); font-weight: 700; letter-spacing: .04em; }
+.brand .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--lamp); flex: none; }
+.show { border-top: 1px solid var(--line); padding-top: 20px; display: grid; gap: 10px; }
+.show h3 { font-size: 20px; }
+.show p { color: var(--muted); max-width: 34em; }
+.show a.cta { justify-self: start; display: inline-block; text-decoration: none; color: var(--ink); background: var(--lamp-soft); border: 1px solid var(--lamp); border-radius: 6px; padding: 10px 18px; font-weight: 700; }
+.show a.cta:hover { border-color: var(--ink); }
+
 /* 結局 */
 .end { display: grid; gap: 20px; }
 .end h2 { font-size: clamp(26px, 6vw, 36px); }
@@ -170,6 +180,7 @@ label { font-size: 14px; color: var(--muted); display: flex; gap: 8px; align-ite
 <body>
 <main>
   <section class="intro" id="intro">
+    <p class="brand"><span class="dot"></span><span><b>《教會小本本》</b>Podcast 特別企劃</span></p>
     <p class="eyebrow">人生模擬 · 依 53 國真實統計 · 測試版</p>
     <h1>你會在幾歲，第一次<em>聽見耶穌的名字</em>？</h1>
     <p class="lede">每一秒，地球上大約有四個嬰兒出生。你將成為其中一個。生在哪裡、哪個族群、什麼宗教的家庭，都由真實的出生數和人口比例決定。有些人很小就聽過福音，有些人一輩子都沒有機會。</p>
@@ -188,6 +199,13 @@ label { font-size: 14px; color: var(--muted); display: flex; gap: 8px; align-ite
       </label>
     </div>
     <p class="fine">信仰的代價也會照實際統計發生，包括被家人趕出家門、被拘留、因信仰失去生命。不描寫畫面。資料來源：Joshua Project、Pew Research Center、聯合國、Open Doors World Watch List 2026。</p>
+  </section>
+
+  <section class="show" id="show">
+    <p class="eyebrow">關於這個企劃</p>
+    <h3>這是《教會小本本》的節目活動之一</h3>
+    <p>我們在節目裡常聊信仰怎麼在真實生活裡長出來。這個模擬想讓你換一個位置想：如果你不是生在台灣，你會在幾歲聽見福音？玩完之後，歡迎來節目跟我們分享你活過的那一生。</p>
+    <a class="cta" href="https://portaly.cc/gbookchurch" target="_blank" rel="noopener">收聽《教會小本本》</a>
   </section>
 
   <section class="memorial" id="memorial" hidden>
@@ -600,7 +618,7 @@ function countryOdds(c) {
   return Math.max(1, Math.round(all / c.births_per_year));
 }
 function shareText(end, martyred) {
-  return `我生在${me.country.name}，${me.group.name}。${headline(end, martyred)}，活了 ${end} 歲。\n你會在幾歲第一次聽見耶穌的名字？來玩「福音距離」。`;
+  return `我生在${me.country.name}，${me.group.name}。${headline(end, martyred)}，活了 ${end} 歲。\n你會在幾歲第一次聽見耶穌的名字？來玩${SHOW_NAME}的「福音距離」：https://${SITE_URL}/`;
 }
 function fallbackCopy(txt, done) {
   const ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly', '');
@@ -635,7 +653,7 @@ async function makeShareCard(end, martyred) {
 
   x.textBaseline = 'alphabetic';
   x.fillStyle = C.muted; x.font = `500 28px ${SANS}`;
-  x.fillText('福音距離 · 人生模擬', P, P + 20);
+  x.fillText(`${SHOW_NAME} Podcast 特別企劃 · 福音距離`, P, P + 20);
 
   x.fillStyle = C.ink;
   const title = `我生在${me.country.name}`;
@@ -693,13 +711,18 @@ async function makeShareCard(end, martyred) {
   x.fillStyle = C.ink; x.font = `700 36px ${SERIF}`;
   x.fillText('你會在幾歲，第一次聽見耶穌的名字？', P, H - 90);
   x.fillStyle = C.muted; x.font = `400 22px ${SANS}`;
-  x.fillText('依 53 國真實統計：Joshua Project・Pew・聯合國・Open Doors', P, H - 50);
+  x.fillText(SITE_URL, P, H - 50);
+  x.textAlign = 'right'; x.fillText('依 53 國真實統計', W - P, H - 50); x.textAlign = 'left';
 
   try {
     $('shareImg').src = cv.toDataURL('image/png');
     $('shareImg').hidden = false; $('shareStatus').remove();
   } catch (e) { $('shareStatus').textContent = '這個瀏覽器沒辦法產生圖片，可以改用複製分享文字。'; }
 }
+
+const SHOW_NAME = '《教會小本本》';
+const SHOW_URL = 'https://portaly.cc/gbookchurch';
+const SITE_URL = 'gbookchurch.github.io/gospel-distance';
 
 // 玩家這一生
 let stats = { persecution: 0, growth: 0 };
@@ -730,7 +753,7 @@ function start() {
   others = Array.from({ length: 4 }, simulateNPC);
   stats = { persecution: 0, growth: 0 }; words = []; pendingReflect = null; age = 0; phase = 'unheard'; firstAge = null; faithAge = null; st = {}; hearCount = 0; paused = false;
   $('log').innerHTML = ''; $('choiceSlot').innerHTML = ''; $('end').hidden = true;
-  $('intro').hidden = true; $('memorial').hidden = true; $('birth').hidden = false; $('agebar').hidden = false;
+  $('intro').hidden = true; $('show').hidden = true; $('memorial').hidden = true; $('birth').hidden = false; $('agebar').hidden = false;
   const c = me.country, g = me.group;
   $('birthTitle').textContent = `你是${c.name}的一個${me.sex === 'm' ? '男' : '女'}嬰`;
   const facts = [
@@ -864,6 +887,11 @@ function finish(martyred) {
       <div class="controls"><button id="lastWordBtn">留下這句話</button></div>
     </div>
     <div class="controls"><button class="primary" id="againBtn">再出生一次</button><button id="memBtn">看追思館</button></div>
+    <div class="show">
+      <p class="brand"><span class="dot"></span><span><b>${SHOW_NAME}</b>Podcast 特別企劃</span></p>
+      <p>活過這一生之後，有什麼想說的？歡迎來節目跟我們分享，也可以把分享卡標記我們。</p>
+      <a class="cta" href="${SHOW_URL}" target="_blank" rel="noopener">收聽${SHOW_NAME}</a>
+    </div>
     <p class="fine">「每年聽見福音的機率」是根據族群信徒比例、母語聖經和迫害程度推估的設計假設，不是統計資料。壽命為簡化估計。族群與語言名稱依 Joshua Project 資料翻譯，少數冷門族群為音譯。</p>`;
   $('end').querySelectorAll('.other').forEach((el, i) => {
     el.querySelector('.c').textContent = others[i].p.country.name;
@@ -893,7 +921,7 @@ function finish(martyred) {
   $('againBtn').onclick = start;
   $('memBtn').onclick = () => {
     $('birth').hidden = true; $('agebar').hidden = true; $('end').hidden = true; $('log').innerHTML = '';
-    $('intro').hidden = false; renderMemorial();
+    $('intro').hidden = false; $('show').hidden = false; renderMemorial();
     $('memorial').scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
   $('end').scrollIntoView({ behavior: 'smooth', block: 'start' });
