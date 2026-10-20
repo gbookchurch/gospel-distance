@@ -291,22 +291,28 @@ function groupE(p) {
 // NPC：一次跑完一生
 function simulateNPC() {
   const p = makePerson();
-  let state = 'unheard', first = null, faith = null, dead = false, st = {};
+  let state = 'unheard', first = null, faith = null, dead = false, st = {}, returned = false;
   for (let a = 0; a <= p.lifespan && !dead; a++) {
-    if (state === 'unheard' || state === 'wait' || state === 'decline') {
-      const f = state === 'unheard' ? 1 : REHEAR_FACTOR[state];
+    if (state === 'unheard' || state === 'wait' || state === 'decline' || state === 'left') {
+      const f = state === 'unheard' ? 1 : state === 'left' ? 0.3 : REHEAR_FACTOR[state];
       if (Math.random() < yearlyHearProb(p, a) * f) {
         if (first === null) first = a;
         if (a < CHOICE_MIN_AGE) { state = 'wait'; continue; }
         const ch = npcChoice(p, groupE(p));
-        if (ch === 'respond') { state = 'believer'; faith = a; } else state = ch;
+        if (ch === 'respond') { if (faith === null) faith = a; else returned = true; state = 'believer'; }
+        else if (state !== 'left') state = ch;
       }
     } else {
       const evs = believerYear(p, a, st);
-      if (st.dead) { dead = true; }
+      if (st.dead) { dead = true; break; }
+      if (state === 'dechurched' && Math.random() < 0.05) state = 'believer';
+      else if (evs.some(e => CROSS_TRIGGERS[e.id])) {
+        const r = Math.random();
+        if (r < 0.08) state = 'left'; else if (r < 0.22 && state === 'believer') state = 'dechurched';
+      }
     }
   }
-  return { p, first, faith, martyred: dead };
+  return { p, first, faith, martyred: dead, endState: state, returned };
 }
 
 // 停頓反思：5、15、30、50、70 歲時間停下來，依這一生的狀態問一個問題
@@ -340,6 +346,8 @@ function reflectionQuestion(a) {
       believer: '70 歲。如果他要把信仰交棒給下一代，你覺得他最想說的是什麼？',
     },
   };
+  if (phase === 'left') return '他曾經跟隨耶穌，後來放下了。你覺得是什麼讓一個人離開？如果是你，你會希望身邊的人怎麼做？';
+  if (phase === 'dechurched') return '他還信，但已經不去教會了。你覺得教會可以為這樣的人做些什麼？';
   const key = phase === 'believer' ? 'believer' : phase === 'unheard' ? 'unheard' : 'heard';
   return Q[a][key];
 }
@@ -387,7 +395,7 @@ function renderMemorial() {
     li.querySelector('.when').textContent = l.date;
     const w = li.querySelector('.what');
     if (l.firstAge === null) { w.className = 'what never'; w.textContent = `活了 ${l.lifespan} 歲，一生沒有聽見福音`; }
-    else { w.className = 'what heard'; w.textContent = `活了 ${l.lifespan} 歲，${l.firstAge} 歲聽見福音` + (l.faithAge !== null ? `，${l.faithAge} 歲信主` : '，沒有回應') + (l.martyred ? '，因信仰離世' : ''); }
+    else { w.className = 'what heard'; w.textContent = `活了 ${l.lifespan} 歲，${l.firstAge} 歲聽見福音` + (l.faithAge !== null ? `，${l.journey || l.faithAge + ' 歲信主'}` : '，沒有回應') + (l.martyred ? '，因信仰離世' : ''); }
     const s = li.querySelector('.said');
     if (l.lastWord) s.textContent = `你對他說：${l.lastWord}`; else s.remove();
   });
@@ -411,7 +419,8 @@ function twOdds() {
 function headline(end, martyred) {
   if (firstAge === null) return '一生沒有聽見福音';
   if (faithAge === null) return `${firstAge} 歲第一次聽見福音`;
-  return martyred ? `${faithAge} 歲信主，因信仰離世` : `${firstAge} 歲聽見福音，${faithAge} 歲信主`;
+  if (martyred) return `${journeyText()}，因信仰離世`;
+  return journey.length > 1 ? journeyText() : `${firstAge} 歲聽見福音，${faithAge} 歲信主`;
 }
 function countryOdds(c) {
   const all = DATA.countries.reduce((s, x) => s + x.births_per_year, 0);
@@ -461,8 +470,12 @@ async function makeShareCard(end, martyred) {
   do { x.font = `900 ${fs}px ${SERIF}`; fs -= 4; } while (x.measureText(title).width > W - P * 2 - 150 && fs > 56);
   let y = 250;
   x.fillText(title, P, y); y += 108;
-  x.fillStyle = heard ? C.lamp : C.grave; x.font = `700 54px ${SERIF}`;
-  for (const l of wrapText(x, headline(end, martyred), W - P * 2)) { x.fillText(l, P, y); y += 70; }
+  x.fillStyle = (heard && phase !== 'left') ? C.lamp : C.grave;
+  const hl = headline(end, martyred);
+  let hs = 54;
+  do { x.font = `700 ${hs}px ${SERIF}`; hs -= 2; } while (x.measureText(hl).width > W - P * 2 && hs > 34);
+  const hlines = wrapText(x, hl, W - P * 2).slice(0, 2);
+  for (const l of hlines) { x.fillText(l, P, y); y += hs + 16; }
   y += 18;
   x.fillStyle = C.muted; x.font = `400 30px ${SANS}`;
   x.fillText(wrapText(x, `${me.group.name}・${me.sex === 'm' ? '男' : '女'}・活了 ${end} 歲`, W - P * 2)[0], P, y); y += 44;
@@ -552,6 +565,61 @@ function renderRanking() {
   });
 }
 
+// ── 信仰的十字路口：信主之後，在某些事件發生時可以選擇留下、離開教會或放下信仰
+const CROSS_TRIGGERS = {
+  doubt: '這段懷疑期讓你開始想：我還要繼續信嗎？',
+  church_hurt: '在教會受的傷還沒好，你不確定還要不要回去。',
+  burnout: '你累到不想再踏進教會。',
+  family_oppose: '家人要你在信仰和家之間做選擇。',
+  family_expel: '失去了家，你問自己：這樣值得嗎？',
+  discovered: '信仰被發現之後，你很害怕。',
+  detained: '被拘留的時候，有人要你簽字放棄信仰。',
+  job_loss: '因為信仰丟了工作，日子變得很難。',
+  raid: '聚會被突襲之後，大家都不敢再聚了。',
+  attacked: '受傷之後，你開始害怕。',
+  ancestor: '祭祖的壓力越來越大，長輩希望你「回來」。',
+};
+const CROSS_OPTIONS = {
+  believer: [
+    ['stay', '繼續跟隨', '你選擇留下來，繼續走這條路。'],
+    ['dechurch', '離開教會，但還信', '你不再去教會，但心裡還信耶穌。'],
+    ['leave', '放下信仰', '你決定不再信了。'],
+  ],
+  dechurched: [
+    ['return_church', '回到教會', '你又走進了教會。'],
+    ['stay', '繼續一個人信', '你還是一個人信，沒有回去。'],
+    ['leave', '放下信仰', '你決定不再信了。'],
+  ],
+};
+const JOURNEY_LABEL = { faith: '信主', dechurch: '離開教會', leave: '放下信仰', return_church: '回到教會', return_faith: '重新回到信仰' };
+let journey = [], lastCross = -99;
+function journeyText() { return journey.map(j => `${j.age} 歲${JOURNEY_LABEL[j.kind]}`).join('，'); }
+
+function crossroad(reason) {
+  stop(); lastCross = age;
+  const opts = CROSS_OPTIONS[phase];
+  const box = document.createElement('div'); box.className = 'choice';
+  box.innerHTML = `<h3>${age} 歲，信仰的十字路口</h3><p></p><div class="opts">${
+    opts.map(([k, l, d]) => `<button data-c="${k}"><b>${l}</b><small>${d}</small></button>`).join('')}</div>`;
+  box.querySelector('p').textContent = reason;
+  box.querySelectorAll('button').forEach(b => b.onclick = () => crossChoose(b.dataset.c));
+  $('choiceSlot').innerHTML = ''; $('choiceSlot').appendChild(box);
+  box.querySelector('button').focus({ preventScroll: true });
+  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+function crossChoose(c) {
+  $('choiceSlot').innerHTML = '';
+  const all = [...CROSS_OPTIONS.believer, ...CROSS_OPTIONS.dechurched];
+  const desc = all.find(o => o[0] === c)[2];
+  if (c === 'dechurch') { phase = 'dechurched'; journey.push({ age, kind: 'dechurch' }); addLog(age, desc, 'milestone'); }
+  else if (c === 'leave') { phase = 'left'; journey.push({ age, kind: 'leave' }); addLog(age, desc, 'persecution'); }
+  else if (c === 'return_church') { phase = 'believer'; journey.push({ age, kind: 'return_church' }); addLog(age, desc, 'growth'); }
+  else addLog(age, desc, 'milestone');
+  setStatus();
+  if (pendingReflect !== null) { const a = pendingReflect; pendingReflect = null; return reflect(a); }
+  if (!paused) run();
+}
+
 // 玩家這一生
 let stats = { persecution: 0, growth: 0 };
 let me, timer = null, paused = false, age = 0, phase = 'unheard', firstAge = null, faithAge = null, st = {}, hearCount = 0, others = [];
@@ -573,13 +641,15 @@ function setStatus() {
   const s = $('status');
   if (phase === 'unheard') s.textContent = '還沒有聽過福音';
   else if (phase === 'believer') s.innerHTML = `<span class="lit">${faithAge} 歲信主</span>`;
+  else if (phase === 'dechurched') s.innerHTML = `<span class="lit">${faithAge} 歲信主</span>，現在沒有去教會`;
+  else if (phase === 'left') s.innerHTML = `${faithAge} 歲信主，後來放下了信仰`;
   else s.innerHTML = `<span class="lit">${firstAge} 歲第一次聽見</span>，還沒有回應`;
 }
 
 function start() {
   me = makePerson();
   others = Array.from({ length: 4 }, simulateNPC);
-  stats = { persecution: 0, growth: 0 }; words = []; pendingReflect = null; age = 0; phase = 'unheard'; firstAge = null; faithAge = null; st = {}; hearCount = 0; paused = false;
+  journey = []; lastCross = -99; stats = { persecution: 0, growth: 0 }; words = []; pendingReflect = null; age = 0; phase = 'unheard'; firstAge = null; faithAge = null; st = {}; hearCount = 0; paused = false;
   $('log').innerHTML = ''; $('choiceSlot').innerHTML = ''; $('end').hidden = true;
   $('intro').hidden = true; $('show').hidden = true; $('ranking').hidden = true; $('memorial').hidden = true; $('birth').hidden = false; $('agebar').hidden = false;
   const c = me.country, g = me.group;
@@ -612,20 +682,32 @@ function tick() {
   if (age > me.lifespan) return finish(false);
   if (age % 10 === 0 && phase !== 'believer') addLog(age, `你 ${age} 歲了。`, 'milestone');
 
-  if (phase === 'unheard' || phase === 'wait' || phase === 'decline') {
-    const f = phase === 'unheard' ? 1 : REHEAR_FACTOR[phase];
+  if (phase === 'unheard' || phase === 'wait' || phase === 'decline' || phase === 'left') {
+    const f = phase === 'unheard' ? 1 : phase === 'left' ? 0.3 : REHEAR_FACTOR[phase];
     if (Math.random() < yearlyHearProb(me, age) * f) {
       if (age < CHOICE_MIN_AGE) return earlyHear();
       if (PAUSES.includes(age)) pendingReflect = age;
       return hear();
     }
-  } else if (phase === 'believer') {
+  } else if (phase === 'believer' || phase === 'dechurched') {
+    let trigger = null;
     for (const ev of believerYear(me, age, st)) {
       const cls = ev.id === 'martyred' || PERSECUTION_EVENTS.includes(ev) ? 'persecution' : GROWTH_EVENTS.includes(ev) ? 'growth' : 'milestone';
+      // 沒去教會的時候：不會有成長事件，迫害也比較少找上你
+      if (phase === 'dechurched' && ev.id !== 'martyred' && (cls === 'growth' || Math.random() < 0.5)) continue;
       if (cls === 'persecution') stats.persecution++; else if (cls === 'growth') stats.growth++;
       addLog(age, ev.text, cls, !!ev.help);
+      if (!trigger && CROSS_TRIGGERS[ev.id]) trigger = CROSS_TRIGGERS[ev.id];
     }
     if (st.dead) return finish(true);
+    // 離家讀書或工作的那一年，很多人就此離開教會
+    if (!trigger && phase === 'believer' && age === 19 && faithAge < 19 && Math.random() < 0.7) trigger = '你離開家去讀書或工作，身邊沒有人會問你這週有沒有去教會。';
+    // 沒去教會的人，偶爾會有人邀請你回來
+    if (!trigger && phase === 'dechurched' && Math.random() < 0.06) trigger = '一個老朋友約你，這週要不要一起回教會看看？';
+    if (trigger && age - lastCross >= 3) {
+      if (PAUSES.includes(age)) pendingReflect = age;
+      return crossroad(trigger);
+    }
   }
   if (PAUSES.includes(age)) reflect(age);
 }
@@ -647,14 +729,14 @@ function hear() {
   const first = firstAge === null;
   if (first) firstAge = age;
   const firstChoice = hearCount === 1;
-  const how = me.parentReligion === 'christian'
+  const how = phase === 'left' ? '你又想起了耶穌。那些放下很久的事，好像又回到心裡。' : me.parentReligion === 'christian'
     ? (firstChoice ? '從小在教會聽的那些故事，這一次你開始認真想：這跟我有什麼關係？' : '你又一次在教會裡聽見福音。')
     : first ? '有人第一次對你講起耶穌，說祂是為你而來的。'
     : firstChoice ? '小時候聽過的那個名字，這一次有人認真地跟你講起祂。' : '你又一次聽見了關於耶穌的事。';
   addLog(age, how, 'gospel');
   setStatus();
   const box = document.createElement('div'); box.className = 'choice';
-  box.innerHTML = `<h3>${age} 歲，你聽見了福音</h3><p>你要怎麼回應？</p><div class="opts">${
+  box.innerHTML = `<h3>${age} 歲，${phase === 'left' ? '你又想起了耶穌' : '你聽見了福音'}</h3><p>你要怎麼回應？</p><div class="opts">${
     Object.entries(CHOICES).map(([k, c]) => `<button data-c="${k}"><b>${c.label}</b><small>${c.desc}</small></button>`).join('')}</div>`;
   box.querySelectorAll('button').forEach(b => b.onclick = () => choose(b.dataset.c));
   $('choiceSlot').innerHTML = ''; $('choiceSlot').appendChild(box);
@@ -664,7 +746,9 @@ function hear() {
 
 function choose(c) {
   $('choiceSlot').innerHTML = '';
-  if (c === 'respond') { phase = 'believer'; faithAge = age; addLog(age, '你決定跟隨耶穌。', 'gospel'); }
+  if (c === 'respond' && phase === 'left') { phase = 'believer'; journey.push({ age, kind: 'return_faith' }); addLog(age, '你重新回到了耶穌面前。', 'gospel'); }
+  else if (c === 'respond') { phase = 'believer'; faithAge = age; journey.push({ age, kind: 'faith' }); addLog(age, '你決定跟隨耶穌。', 'gospel'); }
+  else if (phase === 'left') { addLog(age, CHOICES[c].desc, 'milestone'); }
   else { phase = c; addLog(age, CHOICES[c].desc, 'milestone'); }
   setStatus();
   if (pendingReflect !== null) { const a = pendingReflect; pendingReflect = null; return reflect(a); }
@@ -685,15 +769,15 @@ function finish(martyred) {
   const end = Math.min(age, me.lifespan);
   const lives = loadLives();
   const d = new Date();
-  lives.push({ date: `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`, country: me.country.name, group: me.group.name, sex: me.sex, lifespan: end, firstAge, faithAge, martyred, lastWord: '' });
+  lives.push({ date: `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`, country: me.country.name, group: me.group.name, sex: me.sex, lifespan: end, firstAge, faithAge, martyred, journey: journeyText(), lastWord: '' });
   saveLives(lives);
   addLog(end, martyred ? '你的一生在這裡結束。' : '你走完了這一生。', 'milestone');
   const line = firstAge === null
     ? `你活了 <b>${end}</b> 歲，<b>一生都沒有聽見福音</b>。`
-    : `你在 <b>${firstAge}</b> 歲第一次聽見福音${faithAge !== null ? `，<b>${faithAge}</b> 歲決定跟隨耶穌` : '，最後沒有回應'}。`;
+    : `你在 <b>${firstAge}</b> 歲第一次聽見福音${faithAge !== null ? `，${journey.map(j => `<b>${j.age}</b> 歲${JOURNEY_LABEL[j.kind]}`).join('，')}` : '，最後沒有回應'}${phase === 'left' ? '，最後沒有再回來' : ''}。`;
   const cards = others.map(o => {
     const r = o.first === null ? ['never', '一生沒有聽見福音']
-      : ['heard', `${o.first} 歲聽見${o.faith !== null ? `，${o.faith} 歲信主` : '，沒有回應'}${o.martyred ? '，因信仰離世' : ''}`];
+      : ['heard', `${o.first} 歲聽見${o.faith !== null ? `，${o.faith} 歲信主` : '，沒有回應'}${o.endState === 'left' ? '，後來放下信仰' : o.endState === 'dechurched' ? '，後來離開教會' : ''}${o.martyred ? '，因信仰離世' : ''}`];
     return `<div class="other"><span class="c"></span><span class="g"></span><span class="r ${r[0]}">${r[1]}</span><span class="fine">活了 ${o.p.lifespan} 歲</span></div>`;
   }).join('');
   $('end').innerHTML = `
