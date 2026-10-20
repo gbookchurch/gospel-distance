@@ -27,11 +27,14 @@
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
+#choiceSlot:empty, #log:empty { display: none; }
+html, body { margin: 0; }
 body {
   background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.7;
   padding-left: max(24px, env(safe-area-inset-left, 0px));
   padding-right: max(24px, env(safe-area-inset-right, 0px));
-  padding-block: 40px 64px;
+  padding-block: 40px 0;
 }
 main { max-width: 680px; margin: 0 auto; display: grid; gap: 32px; }
 h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.3; }
@@ -235,6 +238,20 @@ a.btn:hover { border-color: var(--ink); }
 .strip-axis { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
 .ranking summary { cursor: pointer; font-weight: 700; padding-block: 12px; min-height: 48px; }
 .ranking summary:focus-visible { outline: 2px solid var(--lamp); outline-offset: 2px; }
+.denomkey { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14px; color: var(--muted); }
+.denomkey i, .denombar i { display: inline-block; }
+.denomkey i { width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+.k-cat { background: #d9622b; } .k-pro { background: #e8a33d; } .k-ort { background: #3f7d5a; } .k-oth { background: #a8a8a8; }
+.denomsum { font-size: 15px; margin-top: 8px; }
+.denomlist { list-style: none; margin: 12px 0 0; padding: 0; display: grid; }
+.denomlist li { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; padding: 10px; border-radius: 6px; }
+.denomlist li:nth-child(odd) { background: rgba(0, 0, 0, 0.045); }
+.denomlist li.tw { background: var(--surface); outline: 2px solid var(--lamp); }
+.denomlist .n { font-weight: 700; }
+.denomlist .v { font-family: var(--mono); font-size: 13px; color: var(--muted); text-align: right; }
+.denombar { grid-column: 1 / -1; display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--line); }
+.denombar i { height: 100%; }
+.denomlist .d { grid-column: 1 / -1; font-size: 13px; color: var(--muted); }
 .ranklist { list-style: none; margin: 8px 0 0; padding: 0; display: grid; }
 .ranklist li { display: grid; grid-template-columns: 2.4em 1fr auto; gap: 4px 12px; padding: 12px 10px; border-radius: 6px; }
 .ranklist li:nth-child(odd) { background: rgba(0, 0, 0, 0.045); }
@@ -311,7 +328,7 @@ button.go { font-size: 18px; padding: 14px 34px; border-radius: 6px; }
 .more { display: grid; gap: 0; margin-top: 8px; }
 .band { padding-block: 32px; box-shadow: 0 0 0 100vmax var(--band); clip-path: inset(0 -100vmax); background: var(--band); }
 .band.b1 { --band: var(--b1); } .band.b2 { --band: var(--b2); } .band.b3 { --band: var(--b3); } .band.b4 { --band: var(--b4); }
-.band.show { border-top: 0; padding-top: 36px; padding-bottom: 104px; margin-bottom: -64px; }
+.band.show { border-top: 0; padding-top: 36px; padding-bottom: 36px; }
 /* 墨綠底上的文字改成淺色 */
 .band.b4 { --ink: #f4f4f4; --muted: #cfdcd4; --lamp: #f5a04a; --lamp-soft: rgba(255, 255, 255, 0.1); color: var(--ink); }
 .band.b4 .cta { border-color: #f5a04a; }
@@ -320,7 +337,16 @@ button.go { font-size: 18px; padding: 14px 34px; border-radius: 6px; }
 /* 結局 */
 .end { display: grid; gap: 0; }
 .end > .band { display: grid; gap: 20px; }
-.end > .band.endfoot { padding-bottom: 104px; margin-bottom: -64px; }
+.end > .band.endfoot { padding-bottom: 36px; }
+/* 頁尾：版權與使用許可，接在最後一塊墨綠底色下面 */
+.site-foot { max-width: 680px; margin: 0 auto; padding-block: 0 48px; font-size: 13px; line-height: 1.8; }
+.site-foot .sticker { display: block; margin-bottom: 28px; border-radius: 12px; overflow: hidden; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); transition: transform .2s; }
+.site-foot .sticker img { display: block; width: 100%; height: auto; }
+@media (hover: hover) { .site-foot .sticker:hover { transform: translateY(-2px); } }
+.site-foot .in { border-top: 1px solid rgba(255, 255, 255, 0.18); padding-top: 20px; display: grid; gap: 2px; }
+.site-foot b { font-weight: 700; }
+main:has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot { margin-top: 48px; padding-top: 32px; }
+main:has(> #birth:not([hidden])):has(> #end[hidden]) + .site-foot .in { border-top: 0; padding-top: 0; }
 .band.b4 .show { border-top: 0; padding-top: 0; }
 .band.b4 button:not(.primary) { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.35); color: var(--ink); }
 .band.b4 a { color: var(--lamp); }
@@ -381,6 +407,13 @@ button.go { font-size: 18px; padding: 14px 34px; border-radius: 6px; }
       <summary>53 國福音接觸機會模擬排行</summary>
       <p class="fine">這是模型模擬的結果，不是全球公認的實際排名。每個國家用同一套規則跑 6,000 段人生，算出「一生沒有接觸到福音的比例」和「接觸到的人中位年齡」。排名 1 代表在這個模型裡接觸機會最少。結果會隨模型參數和資料來源而變。<a href="#method" class="tomethod">看模擬方法</a></p>
       <ol class="ranklist" id="rankList"></ol>
+    </details>
+    <details>
+      <summary>53 國基督教宗派分布</summary>
+      <p class="fine">每一列是這個國家的基督徒之中，天主教、基督新教、東正教和其他基督教團體各佔多少，依基督徒比例由高到低排列。宗派比例來自 Pew Research Center《Global Christianity》2010 年估計，基督徒比例是 Pew 2020 年估計。只細到國家，沒有族群，也沒有再分新教裡的各個宗派。</p>
+      <p class="denomsum" id="denomSum"></p>
+      <ul class="denomkey"><li><i class="k-cat"></i>天主教</li><li><i class="k-pro"></i>基督新教</li><li><i class="k-ort"></i>東正教</li><li><i class="k-oth"></i>其他</li></ul>
+      <ol class="denomlist" id="denomList"></ol>
     </details>
   </section>
 
@@ -576,6 +609,16 @@ button.go { font-size: 18px; padding: 14px 34px; border-radius: 6px; }
 
   <section class="end" id="end" hidden></section>
 </main>
+<footer class="site-foot band b4">
+  <a class="sticker" href="https://store.line.me/stickershop/product/31241357/zh-Hant" target="_blank" rel="noopener noreferrer" aria-label="前往 LINE STORE 查看《教會小本本》LINE 貼圖">
+    <img src="/*STICKER*/" width="1400" height="588" alt="《教會小本本》LINE 貼圖上架中，教會裡不好說的就用貼圖說" loading="lazy" decoding="async">
+  </a>
+  <div class="in">
+    <p><b>© 版權 &amp; 使用許可</b></p>
+    <p>本網站採 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh_TW" target="_blank" rel="noopener license">CC BY-NC-SA 4.0</a> 許可</p>
+    <p>可自由分享、改編，但需署名、非商業、相同方式共享</p>
+  </div>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 <script>
@@ -1031,6 +1074,28 @@ function renderRanking() {
   });
 }
 
+// 53 國基督教宗派分布
+const DENOMS = [['catholic', '天主教', 'k-cat'], ['protestant', '基督新教', 'k-pro'], ['orthodox', '東正教', 'k-ort'], ['other', '其他', 'k-oth']];
+function renderDenoms() {
+  const list = DATA.countries.filter(c => c.christian_traditions).sort((a, b) => b.religion_pct.christian - a.religion_pct.christian);
+  // 依出生人數加權：在這 53 國出生、家裡是基督徒的人，各宗派大概佔多少
+  const tot = { catholic: 0, protestant: 0, orthodox: 0, other: 0 };
+  for (const c of list) for (const [k] of DENOMS) tot[k] += c.births_per_year * c.religion_pct.christian * c.christian_traditions[k];
+  const s = Object.values(tot).reduce((a, b) => a + b, 0);
+  $('denomSum').textContent = `依出生人數加權，在這 53 國出生的基督徒家庭裡，${DENOMS.map(([k, n]) => `${n}約 ${Math.round(tot[k] / s * 100)}%`).join('、')}。`;
+  $('denomList').innerHTML = list.map(c => `<li class="${c.id === 'TW' ? 'tw' : ''}"><span class="n"></span><span class="v"></span><span class="denombar">${
+    DENOMS.map(([k, , cls]) => `<i class="${cls}" style="width:${c.christian_traditions[k]}%"></i>`).join('')}</span><span class="d"></span></li>`).join('');
+  [...$('denomList').children].forEach((li, i) => {
+    const c = list[i], tr = c.christian_traditions, pc = c.religion_pct.christian;
+    li.querySelector('.n').textContent = c.name;
+    li.querySelector('.v').textContent = `基督徒 ${pc < 0.1 ? '不到 0.1%' : pct(pc)}`;
+    const parts = DENOMS.filter(([k]) => tr[k] >= 1).sort((a, b) => tr[b[0]] - tr[a[0]]).map(([k, n]) => `${n} ${pct(tr[k])}`).join('・');
+    li.querySelector('.d').textContent = parts + (pc < 1 ? '（基督徒很少，比例僅供參考）' : '');
+    li.querySelector('.denombar').setAttribute('aria-label', parts);
+    li.querySelector('.denombar').setAttribute('role', 'img');
+  });
+}
+
 // ── 信仰的十字路口：信主之後，在某些事件發生時可以選擇留下、離開教會或放下信仰
 const CROSS_TRIGGERS = {
   doubt: '這段懷疑期讓你開始想：我還要繼續信嗎？',
@@ -1391,7 +1456,7 @@ document.addEventListener('click', e => {
   $('mDefine').open = true; $('mHow').open = true;
   $('method').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
-resetClear(); renderMemorial(); renderRanking();
+resetClear(); renderMemorial(); renderRanking(); renderDenoms();
 
 function finish(martyred) {
   stop(); $('choiceSlot').innerHTML = '';
