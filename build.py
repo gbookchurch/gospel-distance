@@ -47,7 +47,7 @@ def main():
     page = (ROOT / 'src/template.html').read_text(encoding='utf-8')
     page = page.replace('<meta charset="utf-8">\n', '', 1)
     page = page.replace('/*DATA*/', json.dumps({'countries': data['countries']}, ensure_ascii=False, separators=(',', ':')))
-    page = page.replace('/*HERO*/', 'hero.webp').replace('/*STICKER*/', 'line-sticker.webp')
+    page = page.replace('/*HERO*/', 'hero.webp').replace('/*STICKER*/', 'line-sticker.webp').replace('/*BGM*/', 'bgm.mp3')
     page = page.replace('/*MAP*/', (ROOT / 'data/worldmap.json').read_text(encoding='utf-8'))
     page = page.replace('/*GOSPEL*/', (ROOT / 'src/gospel.js').read_text(encoding='utf-8'))
     page = page.replace('/*EVENTS*/', (ROOT / 'src/events.js').read_text(encoding='utf-8'))
