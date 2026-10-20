@@ -35,7 +35,7 @@ const PERSECUTION_EVENTS = [
   // 家庭生活
   { id: 'family_oppose', once: true, sphere: 'family', base: 0.30, text: '家人強烈反對你的信仰，要你放棄。' },
   { id: 'family_expel', once: true, sphere: 'family', base: 0.06, text: '你被趕出家門，家族和你斷絕關係。' },
-  { id: 'forced_marriage', once: true, sphere: 'family', base: 0.04, sex: 'f', minAge: 14, maxAge: 30, text: '家人安排你嫁給一個不信的人，你沒有拒絕的餘地。' },
+  { id: 'forced_marriage', once: true, sphere: 'family', base: 0.04, sex: 'f', minAge: 14, maxAge: 30, text: '家人安排你嫁給一個不是基督徒的人，你沒有拒絕的餘地。' },
   { id: 'child_custody', once: true, sphere: 'family', base: 0.02, minAge: 25, text: '因為你的信仰，你失去了孩子的監護權。' },
   // 社區生活
   { id: 'isolated', once: true, sphere: 'community', base: 0.25, text: '鄰居開始疏遠你，有些店家不再賣東西給你。' },
@@ -60,7 +60,7 @@ const PERSECUTION_EVENTS = [
 // 不在名單上的國家：壓力不大，但仍有真實的掙扎
 const LOW_PRESSURE_EVENTS = [
   { id: 'ancestor', once: true, countries: ['TW', 'KR', 'JP', 'CN'], prob: 0.15, text: '家裡祭祖拜拜的時候，你不知道該怎麼面對長輩的期待。' },
-  { id: 'family_cold', once: true, prob: 0.05, text: '家人覺得你變得很奇怪，關係有點冷。' },
+  { id: 'family_cold', once: true, prob: 0.05, text: '家人不太理解你的新信仰，關係變得有點冷。' },
   { id: 'church_hurt', once: true, minAge: 16, prob: 0.03, text: '你在教會裡受了傷，有一陣子不想再去。' },
   { id: 'burnout', once: true, minAge: 20, prob: 0.03, text: '你服事得很累，開始懷疑自己為什麼還在這裡。' },
   { id: 'doubt', once: true, minAge: 14, prob: 0.04, text: '你經歷了一段很長的信仰懷疑期。' },
