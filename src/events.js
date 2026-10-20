@@ -42,7 +42,7 @@ const PERSECUTION_EVENTS = [
   { id: 'job_loss', sphere: 'community', base: 0.050, minAge: 18, text: '你因為信仰失去了工作。' },
   { id: 'school_bullied', sphere: 'community', base: 0.06, maxAge: 18, text: '你在學校被同學和老師針對。' },
   // 國家生活
-  { id: 'id_religion', once: true, sphere: 'national', base: 0.20, minAge: 16, text: '你的身分證件上仍登記著原本的宗教，法律上你沒辦法改。' },
+  { id: 'id_religion', once: true, sphere: 'national', base: 0.20, minAge: 16, muslimMajority: true, text: '在法律上，你的宗教身分仍登記為原本的宗教，沒辦法更改。' },
   { id: 'summoned', sphere: 'national', base: 0.04, minAge: 16, text: '你被警方傳喚問話。' },
   { id: 'detained', sphere: 'national', base: 0.015, minAge: 16, help: true, text: '你被拘留，沒有經過審判。' },
   { id: 'flee_country', once: true, sphere: 'national', base: 0.015, minAge: 18, text: '你決定離開自己的國家。' },
@@ -114,6 +114,8 @@ function fits(ev, person, age) {
   if (ev.minAge != null && age < ev.minAge) return false;
   if (ev.maxAge != null && age > ev.maxAge) return false;
   if (ev.countries && !ev.countries.includes(person.country.id)) return false;
+  // 宗教身分無法在法律上更改，只在穆斯林佔多數的國家出現（Pew 2020）
+  if (ev.muslimMajority && (person.country.religion_pct?.muslim ?? 0) <= 50) return false;
   if (person.parentReligion === 'christian' && CONVERT_ONLY.includes(ev.id)) return false;
   // 在基督徒過半的族群裡長大的基督徒，不太會被鄰居排擠或擔心信仰被發現
   if (person.parentReligion === 'christian' && ['isolated', 'discovered'].includes(ev.id) && christianShare(person) >= 0.5) return false;
