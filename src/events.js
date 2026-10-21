@@ -35,8 +35,8 @@ const PERSECUTION_EVENTS = [
   // 家庭生活
   { id: 'family_oppose', once: true, sphere: 'family', base: 0.30, text: '家人強烈反對你的信仰，要你放棄。' },
   { id: 'family_expel', once: true, sphere: 'family', base: 0.06, text: '你被趕出家門，家族和你斷絕關係。' },
-  { id: 'forced_marriage', once: true, sphere: 'family', base: 0.04, sex: 'f', minAge: 14, maxAge: 30, text: '家人安排你嫁給一個不是基督徒的人，你沒有拒絕的餘地。' },
-  { id: 'child_custody', once: true, sphere: 'family', base: 0.02, minAge: 25, text: '因為你的信仰，你失去了孩子的監護權。' },
+  { id: 'forced_marriage', once: true, sphere: 'family', base: 0.04, sex: 'f', minAge: 14, maxAge: 30, noPartner: true, text: '家人安排你嫁給一個不是基督徒的人，你沒有拒絕的餘地。' },
+  { id: 'child_custody', once: true, sphere: 'family', base: 0.02, minAge: 25, needsChild: true, text: '因為你的信仰，你失去了孩子的監護權。' },
   // 社區生活
   { id: 'isolated', once: true, sphere: 'community', base: 0.25, text: '鄰居開始疏遠你，有些店家不再賣東西給你。' },
   { id: 'job_loss', sphere: 'community', base: 0.050, minAge: 18, text: '你因為信仰失去了工作。' },
@@ -69,7 +69,7 @@ const LOW_PRESSURE_EVENTS = [
 // 正向事件：每個人都可能發生，機率受教會生活壓力和聖經狀態影響
 const GROWTH_EVENTS = [
   { id: 'baptized', once: true, prob: 0.4, openPower: 2, text: '你受洗了。' },
-  { id: 'found_church', once: true, prob: 0.35, openPower: 3, needsChurch: true, text: '你找到了一群可以一起聚會的弟兄姊妹。' },
+  { id: 'found_church', once: true, prob: 0.35, openPower: 3, text: '你找到了一群可以一起聚會的弟兄姊妹。' },
   { id: 'read_bible', once: true, prob: 0.15, needsBible: true, text: '你第一次用自己的母語把整本新約讀完。' },
   { id: 'share_faith', prob: 0.08, text: '你把福音告訴了一個朋友。' },
   { id: 'lead_to_faith', prob: 0.02, text: '有一個人因為你而信了耶穌。' },
@@ -117,6 +117,14 @@ function fits(ev, person, age) {
   // 宗教身分無法在法律上更改，只在穆斯林佔多數的國家出現（Pew 2020）
   if (ev.muslimMajority && (person.country.religion_pct?.muslim ?? 0) <= 50) return false;
   if (person.parentReligion === 'christian' && CONVERT_ONLY.includes(ev.id)) return false;
+  // 失去監護權：這一生要有孩子，而且孩子已經出生
+  if (ev.needsChild && (person.childAt == null || age <= person.childAt)) return false;
+  // 被安排婚姻：已經遇到想共度一生的人之後就不會出現
+  if (ev.noPartner && person.partnerAt != null && age >= person.partnerAt) return false;
+  // 離開自己的國家之後，原本國家的國家層面事件不再出現
+  if (person.emigrated && ev.sphere === 'national') return false;
+  // 沒去教會的期間，不會遇到聚會被關閉、被突襲這類教會生活事件
+  if (person.dechurched && ev.sphere === 'church') return false;
   // 在基督徒過半的族群裡長大的基督徒，不太會被鄰居排擠或擔心信仰被發現
   if (person.parentReligion === 'christian' && ['isolated', 'discovered'].includes(ev.id) && christianShare(person) >= 0.5) return false;
   return true;
@@ -132,7 +140,11 @@ function believerYear(person, age, state, rand = Math.random) {
     for (const ev of PERSECUTION_EVENTS) {
       if (!fits(ev, person, age) || (ev.once && state.done[ev.id])) continue;
       const p = ev.base * Math.pow(scoreRatio(c, ev.sphere), 2) * minorityFactor(ev, person);
-      if (rand() < p) { out.push(ev); if (ev.once) state.done[ev.id] = true; }
+      if (rand() < p) {
+        out.push(ev); if (ev.once) state.done[ev.id] = true;
+        if (ev.id === 'flee_country') person.emigrated = true;
+        if (ev.id === 'forced_marriage') person.partnerAt = age;
+      }
     }
     const pm = MARTYRDOM.base * Math.pow(scoreRatio(c, 'violence'), MARTYRDOM.power) * (1 - 0.7 * christianShare(person));
     if (rand() < pm) { out.push({ id: 'martyred', ...MARTYRDOM }); state.dead = true; return out; }
