@@ -323,6 +323,12 @@ button.go { font-size: 18px; padding: 14px 34px; border-radius: 6px; }
 .method details { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
 .method summary { cursor: pointer; font-weight: 700; font-size: 15px; padding: 11px 14px; min-height: 44px; }
 .method summary:focus-visible { outline: 2px solid var(--lamp); outline-offset: 2px; }
+.howto { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 14px 16px; display: grid; gap: 10px; }
+.howto h3 { margin: 0; font-size: 17px; }
+.howto dl { margin: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.howto dl div { display: grid; gap: 2px; }
+.howto dt { font-weight: 700; font-size: 15px; }
+.howto dd { margin: 0; font-size: 14px; line-height: 1.6; color: var(--ink); }
 .mbody { padding: 0 14px 14px; display: grid; gap: 8px; font-size: 14px; line-height: 1.65; }
 .mbody ol, .mbody ul { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
 .mbody a { color: var(--lamp); }
@@ -682,7 +688,17 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
   <section class="method band b3" id="method">
     <p class="eyebrow">資料來源與模擬方法</p>
     <h2>這些數字怎麼算出來的？</h2>
-    <p class="fine">整合不同年份的公開資料和模型假設，模擬結果不代表對任何人命運的預測。點開下面各項看細節。</p>
+    <div class="howto">
+      <h3>這個遊戲怎麼決定你的人生？</h3>
+      <dl>
+        <div><dt>出生地</dt><dd>參考各國出生人口，隨機決定你出生在哪裡。</dd></div>
+        <div><dt>家庭背景</dt><dd>參考族群與宗教資料，模擬你的成長環境。</dd></div>
+        <div><dt>福音接觸</dt><dd>依公開資料及模型假設，計算你可能接觸福音的機會。</dd></div>
+        <div><dt>人生經歷</dt><dd>依事件規則產生不同情節，玩家也會在重要時刻做出選擇。</dd></div>
+      </dl>
+      <p class="fine">部分機率是遊戲的設計假設，模擬結果不代表真實統計或個人命運預測。</p>
+    </div>
+    <p class="fine">想知道哪些是統計、哪些是推估，或想看詳細的資料來源和模擬方法，點開下面各項。</p>
 
     <details id="mAbout">
       <summary>關於這個模擬</summary>
@@ -704,6 +720,34 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
         </ol>
         <p>模型主要模擬的是第 2 到第 3 種。有一個例外：出生在基督徒家庭的孩子，大約 3 歲起就會在家裡或主日學聽到聖經故事，模型把這也算成「接觸到福音」。8 歲以前接觸到的只會記錄下來，8 歲以後才讓玩家選擇怎麼回應。</p>
         <p>所以「一生沒有接觸到福音」的意思，是在這個模型裡一直沒有出現這樣的機會，不代表這個人從來沒聽過「耶穌」兩個字。</p>
+      </div>
+    </details>
+
+    <details id="mAssume">
+      <summary>哪些是統計、哪些是推估</summary>
+      <div class="mbody">
+        <p><b>來自公開統計或資料庫的數字</b>（年份與限制見下方）：</p>
+        <ul>
+          <li>各國出生數、平均餘命</li>
+          <li>各國宗教組成、基督徒中天主教、基督新教、東正教的比例</li>
+          <li>族群人口、族群的基督徒與福音派比例、母語聖經狀態、未得之民（Joshua Project 的推估值）</li>
+          <li>基督徒受迫害程度的排名與分數</li>
+        </ul>
+        <p><b>設計假設</b>：以下參數沒有直接的統計來源，是為了讓模擬能運作而設定的，可能高估或低估：</p>
+        <ul>
+          <li>身邊信徒比例換算成「每年接觸到福音」的機率</li>
+          <li>受迫害程度分數換算成信仰壓力事件和殉道的機率</li>
+          <li>信主後成長事件、離開教會、放下信仰和回來的機率</li>
+          <li>20 多種接觸管道的權重</li>
+          <li>不是基督徒的家庭信什麼宗教：族群有主要宗教時，八成五照族群、一成五照國家比例；華人、韓國人、日本人族群只抽民間信仰、佛教或沒有宗教。這是因為缺少族群層級的宗教細分資料而做的簡化，不是人口統計。</li>
+          <li>摩門教家庭目前只在美國出現；其他國家的摩門教徒算在「其他基督教」裡。</li>
+          <li>中國基督徒家庭在三自教會和家庭教會的比例（約四成、六成）是引用的估計值，各方估計差距很大。</li>
+          <li>新教角色的宗派，是從各國主要宗派的名單裡平均抽的，沒有各宗派的人數比例；宗派決定的教會型態、禮拜方式和救恩觀，是簡化的對應。</li>
+          <li>Pew 資料裡比例四捨五入為 0 的宗教，在那個國家不會被抽到。</li>
+          <li>每個國家的「挑戰說明」文字，依資料撰寫，部分使用一般背景知識</li>
+          <li>族群與語言的中文譯名，冷門族群多為音譯</li>
+          <li>人生紀錄裡的生活片段、故事線、反思問題，是劇情設計，不是統計資料</li>
+        </ul>
       </div>
     </details>
 
@@ -751,7 +795,7 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
         <ol>
           <li><b>出生國家：</b>依各國年出生數加權抽籤。分母是這 53 國的出生總數，大約佔全球出生數的 87%。</li>
           <li><b>族群：</b>在國家裡依族群人口加權抽籤。佔全國人口不到 0.1% 的族群合併成「其他小族群」。</li>
-          <li><b>父母的宗教：</b>國家整體用 Pew 的宗教組成，再依族群的基督徒比例（Joshua Project）調整高低。基督徒家庭再依國家整體的宗派比例，分成天主教、基督新教或東正教；美國另外依教會自報的會員人數（約占人口 2%），分出摩門教（耶穌基督後期聖徒教會）家庭，這只影響畫面上的文字，不改變接觸福音的機率。不是基督徒的家庭信什麼宗教：族群有明確的主要宗教時（Joshua Project），八成五照族群的主要宗教，其餘照國家整體的比例，例如生在美國的華人家庭，多半是沒有宗教。華人、韓國人、日本人族群的家庭，只會是民間信仰、佛教或沒有宗教。這也只影響畫面上的文字。</li>
+          <li><b>父母的宗教：</b>國家整體用 Pew 的宗教組成，再依族群的基督徒比例（Joshua Project）調整高低。基督徒家庭再依國家整體的宗派比例，分成天主教、基督新教或東正教；美國另外依教會自報的會員人數（約占人口 2%），分出摩門教（耶穌基督後期聖徒教會）家庭，這只影響畫面上的文字，不改變接觸福音的機率。不是基督徒的家庭信什麼宗教：族群有明確的主要宗教時（Joshua Project），八成五照族群的主要宗教，其餘照國家整體的比例，例如生在美國的華人家庭，多半是沒有宗教。華人、韓國人、日本人族群的家庭，只會抽到民間信仰、佛教或沒有宗教，這是缺少族群層級資料時的簡化。這也只影響畫面上的文字。</li>
           <li><b>壽命：</b>以該國該性別的平均餘命為中心，加上標準差 14 歲的隨機變化，限制在 1 到 102 歲之間。平均餘命不是每個人的實際壽命，這只是簡化的做法，不是逐年生命表。</li>
           <li><b>每年接觸福音的機會：</b>依族群的福音派與基督徒比例、母語聖經狀態、受迫害程度分數中「國家」和「教會」兩項，以及年齡，算出每年的機率。南亞多數族群沒有公開福音派比例，改用基督徒比例推估。</li>
           <li><b>回應：</b>8 歲以後接觸到福音時由玩家選擇；同一秒出生的另外四個人由模型依機率選擇。</li>
@@ -770,20 +814,6 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
       </div>
     </details>
 
-    <details id="mAssume">
-      <summary>哪些是設計假設</summary>
-      <div class="mbody">
-        <p>以下參數沒有直接的統計來源，是為了讓模擬能運作而設定的，可能高估或低估：</p>
-        <ul>
-          <li>身邊信徒比例換算成「每年接觸到福音」的機率</li>
-          <li>受迫害程度分數換算成信仰壓力事件和殉道的機率</li>
-          <li>信主後成長事件、離開教會、放下信仰和回來的機率</li>
-          <li>20 種接觸管道的權重</li>
-          <li>每個國家的「挑戰說明」文字，依資料撰寫，部分使用一般背景知識</li>
-          <li>族群與語言的中文譯名，冷門族群多為音譯</li>
-        </ul>
-      </div>
-    </details>
 
     <details id="mLimits">
       <summary>資料年份與已知限制</summary>
@@ -919,6 +949,8 @@ const RELIGION = { christian: '基督徒', catholic: '天主教', protestant: '�
 const BIBLE = { full: '有完整聖經', nt: '有新約聖經', portions: '只有部分經卷', started: '翻譯剛開始', none: '還沒有聖經', null: '不明' };
 const HELP_URL = 'https://www.opendoors.org/persecution/countries';
 const GENTLE_KEY = 'gospel-distance-gentle';
+// 系統設定「減少動態效果」時，捲動直接跳過去
+const SMOOTH = (() => { try { return matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'; } catch (e) { return 'smooth'; } })();
 function gentleOn() { return !!(document.getElementById('gentle') && document.getElementById('gentle').checked); }
 function softText(ev) {
   if (ev.id === 'ancestor') { ancestorLocal = isTwHan(me) && Math.random() < 0.75; return ancestorLocal ? ANCESTOR_TW[Math.floor(Math.random() * ANCESTOR_TW.length)] : ev.text; }
@@ -1134,8 +1166,10 @@ const ta = () => me.sex === 'm' ? '他' : '她';
 // 把「你」開頭的結局句改成第三人稱，放在分享卡上
 function thirdPerson(s) {
   const n = shortName(me.name);
-  if (/^你/.test(s)) return n + s.slice(1).replace(/你/g, ta());
-  return `${n}：${s.replace(/你/g, ta())}`;
+  // 「你們」開頭（你和伴侶、家人）改成「某某他們」，其他的「你們」改成「他們」
+  if (/^你們/.test(s)) return n + '他們' + s.slice(2).replace(/你們/g, '他們').replace(/你/g, ta());
+  if (/^你/.test(s)) return n + s.slice(1).replace(/你們/g, '他們').replace(/你/g, ta());
+  return `${n}：${s.replace(/你們/g, '他們').replace(/你/g, ta())}`;
 }
 function cardTurn(end) {
   const arcs = arcLines(), ml = ministryLine(end);
@@ -1331,7 +1365,7 @@ function showMinBox(title, scene, opts, onPick) {
   box.querySelectorAll('.opts button').forEach((b, i) => { b.querySelector('b').textContent = localize(opts[i][1]); if (opts[i][2] && opts[i].length > 2 && typeof opts[i][2] === 'string') b.querySelector('small').textContent = localize(opts[i][2]); b.onclick = () => onPick(opts[i][0]); });
   $('choiceSlot').innerHTML = ''; $('choiceSlot').appendChild(box);
   box.querySelector('button').focus({ preventScroll: true });
-  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  box.scrollIntoView({ behavior: SMOOTH, block: 'center' });
 }
 function ministryDone() {
   setStatus();
@@ -1813,7 +1847,9 @@ function arcFx(fx) {
 }
 function arcHelp(k) { if (k && !helpShown.has(k)) { helpShown.add(k); addLog(age, HELP_NOTE[k], 'milestone note'); } }
 function arcFinish() { arc = null; }
-function pushEnd(e) { const s = localize(fmt(val(e))); if (s && !arcEnds.includes(s)) arcEnds.push(s); }
+function pushEnd(e) { const s = localize(fmt(val(e))); if (s && !arcEnds.some(x => x.s === s)) arcEnds.push({ s, ph: phase }); }
+// 故事線結局裡講「現在還在信、還在教會」的句子，如果後來離開了教會或放下信仰，終章和分享卡就不再用
+const STILL_RE = /找回了自己的信仰|繼續相信|沒有離開信仰|沒有放下信仰|你留在教會/;
 // 每年最後呼叫；出現選擇時回傳 true
 function arcYear() {
   if (!arc) {
@@ -1887,7 +1923,7 @@ function arcStepChoice() {
 }
 // 終章：還在隱瞞的秘密，加上故事線的結局
 function arcLines() {
-  const L = [...arcEnds];
+  const L = arcEnds.filter(x => !(STILL_RE.test(x.s) && x.ph === 'believer' && ['left', 'dechurched'].includes(phase))).map(x => x.s);
   if (arc) { const S = ARCS[arc.id].S[arc.s]; if (S && S.t === 'secret') { const e = localize(fmt(val(S.end))); if (e) L.push(e); } }
   return L;
 }
@@ -1936,7 +1972,7 @@ const REFLECT_PHASE = {
   dechurched: [["沒去教會的週日，你都在做什麼？", ["補眠", "一個人讀點經文", "跟朋友出去"]], ["如果教會的人來找你，你希望他怎麼做？", ["陪我聊聊就好", "不要問我為什麼沒去", "我不想被找"]], ["一個人信，你覺得夠嗎？", ["夠了", "有時候會孤單", "還在想"]], ["你還會自己禱告嗎？", ["每天", "偶爾", "很少了"]], ["你離開教會，最大的原因是什麼？", ["人際之間的傷", "生活太忙", "找不到適合的地方"]], ["聖誕節的時候，你會想回教會看看嗎？", ["會", "不會", "想，但沒去"]], ["你現在怎麼聽講道？", ["網路上聽", "很少聽", "都不聽"]], ["你最想念教會的什麼？", ["一起唱詩歌", "小組的朋友", "什麼都不想念"]], ["你跟以前教會的人還有聯絡嗎？", ["有幾個", "很少", "沒有"]], ["你覺得自己還是基督徒嗎？", ["是", "應該是", "不確定"]], ["如果找到一間適合的教會，你會回去嗎？", ["會", "也許", "不會"]], ["你會帶孩子去教會嗎？", ["會", "讓他自己決定", "不會"]]],
   left: [["放下之後，你心裡是什麼感覺？", ["輕鬆了一點", "有點空空的", "說不上來"]], ["還會想起以前信耶穌的日子嗎？", ["常常", "偶爾", "幾乎不會"]], ["你怎麼看那段信耶穌的日子？", ["是一段重要的路", "那時候太年輕", "到現在還在想"]], ["有人問你以前為什麼信，你會怎麼說？", ["那時候很需要", "被朋友帶去的", "不太想提"]], ["你覺得自己放下的是什麼？", ["教會", "信仰", "我也分不清"]], ["身邊還有基督徒朋友嗎？", ["還有，偶爾聯絡", "很少了", "沒有了"]], ["現在遇到困難，你會怎麼做？", ["靠自己", "找朋友", "偶爾還是會禱告"]], ["你會跟孩子提起以前的信仰嗎？", ["會", "不會", "還沒想過"]], ["聖誕節的時候，你有什麼感覺？", ["有點懷念", "沒什麼感覺", "有點難過"]], ["你覺得神還在嗎？", ["在", "不在", "不知道"]], ["以前教會的朋友怎麼看你？", ["還是朋友", "很少聯絡", "覺得我變了"]], ["如果有人邀你回來，你會怎麼說？", ["謝謝，不用了", "讓我想想", "也許會"]]],
 };
-const NOT_CFAM = ['你身邊有基督徒嗎？', '你覺得基督徒跟你有什麼不一樣？', '你身邊信耶穌的人，這些年過得怎麼樣？', '你身邊還有基督徒朋友嗎？', '你覺得身邊的基督徒怎麼樣？'];
+const NOT_CFAM = ['那個說耶穌故事的人，你覺得他是怎樣的人？', '那次聽到的耶穌，你現在怎麼看？', '如果朋友邀你去教會，你會？', '你身邊有基督徒嗎？', '你覺得基督徒跟你有什麼不一樣？', '你身邊信耶穌的人，這些年過得怎麼樣？', '你身邊還有基督徒朋友嗎？', '你覺得身邊的基督徒怎麼樣？'];
 const PENTE_Q = {
   15: [['第一次聽到有人說方言，你的感覺是？', ['有點害怕', '很想知道那是什麼', '覺得很自然']], ['敬拜唱很久的時候，你通常在做什麼？', ['跟著舉手唱', '閉上眼睛聽', '等它結束']]],
   30: [['有人說生病是因為信心不夠，你怎麼想？', ['我不同意', '有時候會懷疑自己', '不知道']], ['奉獻和祝福，你覺得有關係嗎？', ['有，神會記念', '沒有直接關係', '我也還在想']], ['在熱鬧的聚會裡，你最常感受到什麼？', ['被愛', '被感動', '有點不自在']]],
@@ -1968,11 +2004,13 @@ function reflectionQuestion(a) {
   // 遇過靈恩、五旬節的場景、管道或故事線，而且聽過福音的人，多幾題
   if (penteSeen && phase !== 'unheard' && PENTE_Q[a]) pool = [...pool, ...PENTE_Q[a]];
   // 新教信徒：救恩觀
-  if (phase === 'believer' && isProt() && SOTER_Q[a]) pool = [...pool, ...SOTER_Q[a]];
+  if (phase === 'believer' && isProt() && !hardHere() && SOTER_Q[a]) pool = [...pool, ...SOTER_Q[a]];
   // 當過宣教士的人
   if (ministry.top === 'missionary' && MISSION_Q[a]) pool = [...pool, ...MISSION_Q[a]];
   // 基督徒家庭長大的人，家人本來就是基督徒，這幾題不適合
   if (me.parentReligion === 'christian') pool = pool.filter(q => !NOT_CFAM.includes(q[0]));
+  // 問到「你的孩子」的題目，只給已經有孩子的人
+  if (!(me.childAt != null && a >= me.childAt)) pool = pool.filter(q => !/(你的|帶|給|跟)孩子/.test(q[0]));
   if (!REFLECT_PHASE[phase]) pool = [...pool, ...general];
   const fresh = pool.filter(q => !reflectUsed.has(q[0]));
   const list = fresh.length ? fresh : pool;
@@ -2000,7 +2038,7 @@ function reflect(a) {
   });
   $('choiceSlot').innerHTML = ''; $('choiceSlot').appendChild(box);
   box.querySelector('button').focus({ preventScroll: true });
-  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  box.scrollIntoView({ behavior: SMOOTH, block: 'center' });
 }
 
 // 追思館：存在這個瀏覽器的 localStorage，讀寫失敗就當作沒有紀錄
@@ -2053,6 +2091,7 @@ function renderCompare(lives) {
     ['出生家庭宗教', l => l.parent || NA],
     ['第一次接觸福音', l => l.firstAge === null ? '一生沒有機會' : `${l.firstAge} 歲`],
     ['曾有接觸福音的機會', l => l.firstAge === null ? '沒有' : '有'],
+    ['信仰的路', l => l.faithAge !== null ? (l.journey || `${l.faithAge} 歲信主`) + (l.martyred ? '，因信仰離世' : '') : l.firstAge === null ? '沒有機會選擇' : '聽過，沒有回應'],
     ['生命長度', l => `${l.lifespan} 歲`],
   ];
   box.innerHTML = `<div class="ch"><span></span><b>人生 A</b><b>人生 B</b></div>` + f.map(() => '<div><span></span><span></span><span></span></div>').join('') + '<button id="cmpClose">收起比較</button>';
@@ -2093,7 +2132,7 @@ function epitaph(end, martyred) {
   const returned = journey.some(j => j.kind === 'return_faith' || j.kind === 'return_church');
   const L = [`你活了 ${end} 年。`];
   if (o === 'never') {
-    L.push('你在這裡長大、變老，過著跟身邊的人差不多的日子。');
+    L.push(end < 13 ? '你在這裡度過了短短的童年。' : end < 45 ? '你在這裡長大，過著跟身邊的人差不多的日子。' : '你在這裡長大、變老，過著跟身邊的人差不多的日子。');
     L.push('在這段模擬人生裡，直到生命最後一天，你都沒有機會清楚認識基督教的福音。');
   } else if (o === 'heard') {
     L.push(`你在 ${firstAge} 歲第一次接觸到福音${channel && channel.age === firstAge ? `，透過${channel.short}` : ''}。`);
@@ -2235,7 +2274,7 @@ async function makeShareCard(end, martyred) {
   const cells = [
     ['第一次接觸福音', firstAge === null ? '一生沒有機會' : `${firstAge} 歲`],
     ['生命長度', `${end} 歲`],
-    ['母語聖經', BIBLE[g.bible_status ?? 'null']],
+    ['母語聖經譯本', BIBLE[g.bible_status ?? 'null']],
     ['53 國接觸機會模擬排行', `第 ${c.difficulty.rank} 名`],
   ];
   const cw = (W - P * 2 - 24) / 2, ch = 104, top = 562;
@@ -2251,7 +2290,7 @@ async function makeShareCard(end, martyred) {
   let oy = top + 2 * (ch + 16) + 34;
   x.fillStyle = C.muted; x.font = `500 24px ${SANS}`;
   x.fillText('這一生的背景', P, oy); oy += 20;
-  const how = firstAge === null ? '沒有機會' : channel ? channel.short : (me.parentReligion === 'christian' ? '家裡' : '—');
+  const how = firstAge === null ? '沒有機會' : firstChannel() || (me.parentReligion === 'christian' ? '家裡' : '小時候聽人說');
   const bg = [
     ['出生家庭', RELIGION[me.parentLabel]],
     ['全國基督新教', protPct(me.country)],
@@ -2275,7 +2314,9 @@ async function makeShareCard(end, martyred) {
     let ty = oy + 112 + 44;
     x.fillStyle = C.muted; x.font = `500 22px ${SANS}`; x.fillText('這一生的轉折', P, ty); ty += 38;
     x.fillStyle = C.ink; x.font = `500 27px ${SANS}`;
-    for (const l of wrapText(x, turn, W - P * 2).slice(0, 2)) { x.fillText(l, P, ty); ty += 36; }
+    const tl = wrapText(x, turn, W - P * 2);
+    if (tl.length > 2) tl[1] = tl[1].slice(0, -1) + '…';
+    for (const l of tl.slice(0, 2)) { x.fillText(l, P, ty); ty += 36; }
   }
 
   // 頁尾：邀請 + 網址 + QR
@@ -2386,6 +2427,8 @@ const CROSS_OPTIONS = {
 };
 const JOURNEY_LABEL = { tspm: '轉到三自教會', house: '轉到家庭教會', faith: '信主', dechurch: '離開教會', leave: '放下信仰', return_church: '回到教會', return_faith: '重新回到信仰' };
 let journey = [], lastCross = -99, channel = null, highlights = [], feeling = null;
+// 第一次接觸福音的管道：只有在第一次接觸的那一年抽到管道才算（8 歲前在家裡或很小的時候聽到的不算）
+function firstChannel() { return channel && channel.age === firstAge ? channel.short : null; }
 function journeyText() { return journey.map(j => `${j.age} 歲${JOURNEY_LABEL[j.kind]}`).join('，'); }
 
 
@@ -2476,7 +2519,7 @@ function crossroad(reason, id) {
   box.querySelectorAll('button').forEach(b => b.onclick = () => crossChoose(b.dataset.c));
   $('choiceSlot').innerHTML = ''; $('choiceSlot').appendChild(box);
   box.querySelector('button').focus({ preventScroll: true });
-  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  box.scrollIntoView({ behavior: SMOOTH, block: 'center' });
 }
 function crossChoose(c) {
   $('choiceSlot').innerHTML = '';
@@ -2694,7 +2737,7 @@ function cnChoice(kind) {
   });
   $('choiceSlot').innerHTML = ''; $('choiceSlot').appendChild(box);
   box.querySelector('button').focus({ preventScroll: true });
-  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  box.scrollIntoView({ behavior: SMOOTH, block: 'center' });
 }
 function cnChoose(kind, [k, label, desc]) {
   $('choiceSlot').innerHTML = '';
@@ -2974,13 +3017,13 @@ function start(opt = {}) {
   setStatus(); showAge(0);
   // 先讀完出生登記，按「開始這一生」才開始
   $('agebar').hidden = true; $('liveBtn').hidden = false;
-  $('birth').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  $('birth').scrollIntoView({ behavior: SMOOTH, block: 'start' });
 }
 function beginLife() {
   $('birth').classList.add('living');
   document.querySelectorAll('#birth .drawer').forEach(d => d.open = false);
   $('liveBtn').hidden = true; $('agebar').hidden = false;
-  $('agebar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  $('agebar').scrollIntoView({ behavior: SMOOTH, block: 'start' });
   run();
 }
 
@@ -3037,7 +3080,7 @@ function tick() {
     }
     if (st.dead) return finish(true);
     // 離家讀書或工作的那一年，很多人就此離開教會
-    if (!trigger && ministryYear()) return;
+    if (!trigger && ministryYear()) { if (PAUSES.includes(age)) pendingReflect = age; return; }
     if (!trigger) { const mk = ministryTrigger(); if (mk) { if (PAUSES.includes(age)) pendingReflect = age; return ministryChoice(mk); } }
     if (!trigger && phase === 'believer' && inCN() && me.cnChurch && age - lastCross >= 3) {
       const k = cnClosed && me.cnChurch === 'house' ? 'closed' : me.cnChurch === 'tspm' && Math.random() < 0.03 ? 'invite' : me.cnChurch === 'house' && Math.random() < 0.03 ? 'register' : null;
@@ -3095,7 +3138,7 @@ function hear() {
   box.querySelectorAll('button').forEach(b => b.onclick = () => choose(b.dataset.c));
   $('choiceSlot').innerHTML = ''; $('choiceSlot').appendChild(box);
   box.querySelector('button').focus({ preventScroll: true });
-  box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  box.scrollIntoView({ behavior: SMOOTH, block: 'center' });
 }
 
 function choose(c) {
@@ -3180,9 +3223,9 @@ const music = (() => {
 $('birthBtn').onclick = start;
 $('liveBtn').onclick = beginLife;
 // 人生進行中，頁面最下方也能重新開始、回首頁或看紀錄
-$('lfAgain').onclick = () => { start({}); window.scrollTo({ top: 0, behavior: 'smooth' }); };
-$('lfHome').onclick = () => { showHome(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
-$('lfMem').onclick = () => { showHome(); $('memorial').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+$('lfAgain').onclick = () => { start({}); window.scrollTo({ top: 0, behavior: SMOOTH }); };
+$('lfHome').onclick = () => { showHome(); window.scrollTo({ top: 0, behavior: SMOOTH }); };
+$('lfMem').onclick = () => { showHome(); $('memorial').scrollIntoView({ behavior: SMOOTH, block: 'start' }); };
 try { $('gentle').checked = localStorage.getItem(GENTLE_KEY) === '1'; } catch (e) {}
 $('gentle').onchange = () => { try { localStorage.setItem(GENTLE_KEY, $('gentle').checked ? '1' : '0'); } catch (e) {} };
 // 任何「這些數字怎麼算出來的？」連結：回到首頁、打開說明
@@ -3191,7 +3234,7 @@ document.addEventListener('click', e => {
   e.preventDefault();
   if ($('intro').hidden) showHome();
   $('mDefine').open = true; $('mHow').open = true;
-  $('method').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  $('method').scrollIntoView({ behavior: SMOOTH, block: 'start' });
 });
 resetClear(); renderMemorial(); renderRanking(); renderDenoms();
 
@@ -3201,7 +3244,7 @@ function finish(martyred) {
   const end = Math.min(age, me.lifespan);
   const lives = loadLives();
   const d = new Date();
-  lives.push({ name: me.name, designated: me.designated || false, date: `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`, country: me.country.name, countryId: me.country.id, continent: me.country.continent, group: me.group.name, parent: RELIGION[me.parentLabel], sex: me.sex, lifespan: end, firstAge, faithAge, martyred, journey: journeyText(), channel: channel ? channel.short : null, feeling: null, lastWord: '' });
+  lives.push({ name: me.name, designated: me.designated || false, date: `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`, country: me.country.name, countryId: me.country.id, continent: me.country.continent, group: me.group.name, parent: RELIGION[me.parentLabel], sex: me.sex, lifespan: end, firstAge, faithAge, martyred, journey: journeyText(), channel: firstChannel(), feeling: null, lastWord: '' });
   saveLives(lives);
   addLog(end, martyred ? (gentleOn() ? '你提早走完了這一生。' : '你的一生在這裡結束。') : '你走完了這一生。', 'milestone');
   const c = me.country, g = me.group;
@@ -3212,7 +3255,7 @@ function finish(martyred) {
     ['活到', `${end} 歲`],
     ['第一次接觸福音', firstAge === null ? '一生沒有機會' : `${firstAge} 歲${channel && channel.age === firstAge ? `，透過${channel.short}` : ''}`],
     ['母語聖經翻譯', BIBLE[g.bible_status ?? 'null']],
-    ['信仰選擇', faithAge !== null ? journeyText() : firstAge === null ? '沒有機會選擇' : '聽過，沒有回應'],
+    ['信仰選擇', faithAge !== null ? journeyText() + (martyred ? '，因信仰離世' : '') : firstAge === null ? '沒有機會選擇' : '聽過，沒有回應'],
   ];
   const hl = highlights.slice(0, 6);
   const cards = others.map(o => {
@@ -3324,10 +3367,10 @@ function finish(martyred) {
   };
   E.hidden = false;
   $('againBtn').onclick = $('againTop').onclick = () => start();
-  $('toShare').onclick = e => { e.preventDefault(); $('share').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
-  $('memBtn').onclick = () => { showHome(); $('memorial').scrollIntoView({ behavior: 'smooth', block: 'start' }); };
-  $('homeBtn').onclick = $('homeTop').onclick = () => { showHome(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
-  E.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  $('toShare').onclick = e => { e.preventDefault(); $('share').scrollIntoView({ behavior: SMOOTH, block: 'start' }); };
+  $('memBtn').onclick = () => { showHome(); $('memorial').scrollIntoView({ behavior: SMOOTH, block: 'start' }); };
+  $('homeBtn').onclick = $('homeTop').onclick = () => { showHome(); window.scrollTo({ top: 0, behavior: SMOOTH }); };
+  E.scrollIntoView({ behavior: SMOOTH, block: 'start' });
 }
 
 // 開場計數器：每秒約 4.2 個嬰兒；依模擬結果，約四成可能一生聽不到
