@@ -1790,7 +1790,7 @@ const ARCS = {
     confEcho: { t: 'pick', delay: [3, 5], opts: [[1, 'ce1'], [1, 'ce2']] },
     ce1: { t: 'log', text: '幾年後，{member}託人轉告你：{memberTa}還沒辦法原諒，但已經慢慢好起來了。', cls: 'scene', next: 'end' },
     ce2: { t: 'log', text: '你的配偶陪你走過了那幾年，但你們都知道，有些東西已經不一樣了。', cls: 'scene', next: 'end' },
-    hide: { t: 'secret', lines: ['你在講台上講聖潔，心裡想著那件事。', '每次在名單上看到{member}的名字，你都會停下來。', '你聽說{member}離開了教會，很多年都不敢再走進任何一間。', '你好幾次想說出來，最後都沒有。'],
+    hide: { t: 'secret', lines: ['你在講台上講聖潔，心裡想著自己對{member}做過的事。', '每次在名單上看到{member}的名字，你都會停下來。', '你聽說{member}離開了教會，很多年都不敢再走進任何一間。', '你好幾次想承認自己傷害了{member}，最後都沒有說出口。'],
       expose: 0.06, repeat: 0.12, repeatNext: 'again', next: 'exposed', end: () => `到死，都沒有人知道那件事。但${arc.victims > 1 ? `那 ${arc.victims} 個人` : '{member}'}，記了一輩子。` },
     again: { t: 'log', text: ['你又對另一位會友越了界。', '你又傷害了另一個信任你的人。'], cls: 'decision', victims: 1, next: () => arc.victims >= 2 && !arc.f.asked ? 'stop' : 'hide' },
     stop: { delay: [0, 0], t: 'choice', title: '停不下來', scene: '你知道自己停不下來了。每一次，你都說這是最後一次。', mark: 'asked', opts: [
@@ -1811,7 +1811,7 @@ const ARCS = {
     drift: { t: 'pick', delay: [1, 2], opts: [[0.8, 'begin'], [0.2, 'fade']] },
     fade: { t: 'log', text: '特會結束後，你和{co}很自然地不再常見面。', next: 'end' },
     begin: { t: 'log', text: ['你和{co}開始偷偷見面。', '你和{co}的關係越過了界線。'], cls: 'decision', next: 'secret' },
-    secret: { t: 'secret', lines: ['每週日你站在講台上，{co}坐在第三排。', '你對配偶越來越客氣，也越來越陌生。', '孩子問你，為什麼你都不在家。', '你在婚禮上證道，講到忠誠的時候停頓了一下。'], expose: 0.2, next: 'caught', end: '到最後，你的配偶都不知道那幾年的事。但你自己一直知道。' },
+    secret: { t: 'secret', lines: () => ['每週日你站在講台上，和你偷偷交往的{co}就坐在第三排。', '因為和{co}的關係，你對配偶越來越客氣，也越來越陌生。', me.childAt != null && age > me.childAt ? '你常說要開會，其實是去見{co}。孩子問你，為什麼你都不在家。' : '你常說要開會，其實是去見{co}。', '你在婚禮上證道，講到忠誠的時候停頓了一下，想起自己和{co}的事。'], expose: 0.2, next: 'caught', end: '到最後，你的配偶都不知道那幾年的事。但你自己一直知道。' },
     caught: { t: 'pick', opts: [[1, 'c1'], [1, 'c2'], [1, 'c3']] },
     c1: { t: 'log', text: '你的配偶在你的手機裡看到了你和{co}的訊息。', cls: 'decision', next: 'spouse' },
     c2: { t: 'log', text: '有會友在餐廳撞見了你和{co}。', cls: 'decision', next: 'spouse' },
@@ -1860,7 +1860,7 @@ const ARCS = {
     lost: { t: 'log', text: '投資血本無歸，建堂計畫停了。{elder}也不再來教會。你沒有告訴任何人。', cls: 'decision', next: 'patch' },
     patch: { t: 'log', text: '為了補洞，你又挪用了一筆奉獻。', cls: 'decision', next: 'secret' },
     gain: { t: 'log', text: '投資真的賺了錢。你又拿一部分去付自己的房貸，說之後會補回來。', cls: 'decision', next: 'secret' },
-    secret: { t: 'secret', lines: ['每次會眾問建堂的進度，你都說「還在禱告」。', '奉獻的時候，你的手心一直冒汗。', '你晚上常常睡不著，算著還差多少。'], expose: 0.12, next: 'exp', end: '你把錢的事帶進了墳墓，沒有人知道那筆建堂基金去了哪裡。' },
+    secret: { t: 'secret', lines: ['每次會眾問建堂的進度，你都說「還在禱告」。', '收奉獻的時候，你的手心一直冒汗，怕有人發現建堂基金少了一大筆。', '你晚上常常睡不著，算著挪用的錢還差多少才補得回來。'], expose: 0.12, next: 'exp', end: '你把錢的事帶進了墳墓，沒有人知道那筆建堂基金去了哪裡。' },
     exp: { t: 'log', text: '會眾大會上，有人拿著帳本站了起來。', cls: 'decision', next: 'expPick' },
     expPick: { t: 'pick', opts: [[0.5, 'quit'], [0.3, 'sue'], [0.2, 'repay']] },
     quit: { t: 'log', text: '你被要求辭職，還要把錢還回來。', resign: true, end: '你曾經被託付一間教會的錢，最後辜負了那份信任。', next: 'split' },
@@ -1929,37 +1929,37 @@ const ARCS = {
     start: { t: 'choice', title: '一個說不出口的發現', help: 'lgbt', scene: () => phase === 'believer' || me.parentReligion === 'christian' ? '你發現自己喜歡的是同性。在教會裡，你從沒聽過有人這樣說自己。' : '你發現自己喜歡的是同性。身邊好像沒有人可以說。', opts: () => [
       ['告訴一個信任的人', '你鼓起勇氣說了出來，對方聽完抱了你一下。', 'toCrush'], [phase === 'believer' ? '拼命禱告，希望這個感覺消失' : '拼命壓下來，希望這個感覺消失', '', 'toCrush'], ['先不去想', '', 'toCrush']] },
     toCrush: { t: 'wait', until: 19, next: 'crush' },
-    crush: { t: 'log', text: '大學時，你對{crush}心動了。{crushTa}是你最好的朋友，什麼都不知道。', cls: 'scene', next: () => phase === 'believer' ? 'camp' : 'toMarry' },
-    camp: { t: 'choice', title: '醫治營會', scene: '教會的輔導知道了你的事，建議你去參加一個「醫治」營會，說可以幫你「恢復」。', opts: [
+    crush: { t: 'log', text: '大學時，你對同性的{crush}心動了，那是你第一次這麼確定自己喜歡的是同性。{crushTa}是你最好的朋友，什麼都不知道。', cls: 'scene', next: () => phase === 'believer' ? 'camp' : 'toMarry' },
+    camp: { t: 'choice', title: '醫治營會', scene: '教會的輔導知道你喜歡同性，建議你去參加一個「醫治」營會，說可以幫你「恢復」成喜歡異性。', opts: [
       ['去參加', '', 'campGo'], ['不去', '你謝謝輔導，說你想自己想清楚。', 'toMarry'], ['問問其他信任的人', '你問了幾個人，大家的看法都不一樣。你最後沒有去。', 'toMarry']] },
-    campGo: { t: 'log', text: '你在營會裡待了好幾個月，每天禱告、認罪，被要求說出自己的「傷口」。', next: 'campAfter' },
-    campAfter: { t: 'log', delay: [1, 2], text: '你後來說，那段日子是你人生裡最痛苦的時候。你沒有改變，只是更討厭自己了。', next: 'toMarry' },
+    campGo: { t: 'log', text: '你在營會裡待了好幾個月，每天禱告、認罪，被要求說出讓你「變成同性戀」的「傷口」。', next: 'campAfter' },
+    campAfter: { t: 'log', delay: [1, 2], text: '你後來說，那段日子是你人生裡最痛苦的時候。你還是喜歡同性，只是更討厭自己了。', next: 'toMarry' },
     toMarry: { t: 'wait', until: 25, next: 'marry' },
     marry: { t: 'choice', title: '催婚', scene: () => phase === 'believer' ? '家人開始催你結婚，教會也有人熱心幫你介紹對象。' : '家人開始催你結婚，親戚見面就問什麼時候請喝喜酒。', opts: [
-      ['跟異性交往、結婚，把這件事藏起來', '', 'wed'], ['誠實告訴家人', '', 'honest'], ['選擇單身', '你告訴大家你想一個人過，沒有多解釋。', 'single']] },
-    wed: { t: 'log', text: '你結婚了。婚禮上，大家都說你們很登對。{crush}也來了，坐在最後一排。', next: 'secret' },
-    secret: { t: 'secret', lines: () => ministry.role === 'pastor' ? ['你在講台上講婚姻與家庭，每次都覺得自己在演戲。', '你輔導過一個跟你一樣的年輕人，卻說不出自己的事。', '配偶問你，為什麼你們總是像室友。'] : ['每次有人問你們什麼時候生孩子，你都笑著帶過。', '配偶問你，為什麼你們總是像室友。', '你半夜醒來，覺得自己一直在演一個不是自己的人。'],
-      expose: 0.05, next: 'turn', end: () => ministry.top === 'pastor' ? '你一輩子都站在講台上，卻從來沒有被真正認識過。' : '你一輩子都沒有說出口，連最親的人也不知道真正的你。' },
+      ['跟異性交往、結婚，把這件事藏起來', '', 'wed'], ['誠實告訴家人', '', 'honest'], ['選擇單身', '你告訴大家你想一個人過，沒有說是因為你喜歡同性。', 'single']] },
+    wed: { t: 'log', text: '你和一位異性結婚了，沒有讓對方知道你喜歡的是同性。婚禮上，大家都說你們很登對。{crush}也來了，坐在最後一排。', next: 'secret' },
+    secret: { t: 'secret', lines: () => ministry.role === 'pastor' ? ['你在講台上講婚姻與家庭，心裡清楚自己喜歡的是同性，每次都覺得自己在演戲。', '你輔導過一個跟你一樣喜歡同性的年輕人，卻不敢說自己也是。', '配偶問你，為什麼你們總是像室友。你知道原因，卻說不出口：你喜歡的是同性。'] : ['每次有人問你們什麼時候生孩子，你都笑著帶過，沒有人知道你其實喜歡同性。', '配偶問你，為什麼你們總是像室友。你知道原因，卻說不出口：你喜歡的是同性。', `你半夜醒來，想到自己喜歡的一直是同性，卻每天都在扮演一個${me.sex === 'm' ? '好丈夫' : '好妻子'}。`],
+      expose: 0.05, next: 'turn', end: () => ministry.top === 'pastor' ? '你一輩子都站在講台上，卻從來沒有讓人知道你喜歡的是同性。' : '你一輩子都沒有說出自己喜歡同性，連最親的人也不知道。' },
     turn: { t: 'pick', opts: [[0.4, 'outed'], [0.6, 'self']] },
-    outed: { t: 'log', text: '有人把你的私人訊息截圖傳到了群組。你還沒準備好，所有人就都知道了。', cls: 'decision', next: 'outedC' },
+    outed: { t: 'log', text: '有人把你和同性的私人訊息截圖傳到了群組。你還沒準備好，所有人就都知道你喜歡同性了。', cls: 'decision', next: 'outedC' },
     outedC: { delay: [0, 0], free: true, t: 'choice', title: '被公開了', scene: '電話一直響，你不知道該先回誰。', opts: [
       ['面對，把話說清楚', '', 'after'], ['否認', '你否認了，但大家看你的眼神已經不一樣了。', 'denied'], ['離開這個地方', '你搬到另一個城市，重新開始。', 'after', 'resign']] },
-    denied: { t: 'end', end: '你否認了，從此把自己藏得更深。' },
-    self: { t: 'log', text: '有一天，你終於把這件事告訴了配偶。', next: 'after' },
+    denied: { t: 'end', end: '你否認自己喜歡同性，從此把自己藏得更深。' },
+    self: { t: 'log', text: '有一天，你終於告訴配偶：你喜歡的其實是同性。', next: 'after' },
     after: { t: 'pick', delay: [0, 1], opts: [[0.5, 'div'], [0.3, 'stay'], [() => phase === 'believer' ? 0.2 : 0, 'leaveCh']] },
-    div: { t: 'log', text: () => ministry.role === 'pastor' ? '你們離婚了，你也離開了牧職。' : '你們離婚了。', resign: true, end: '你很晚才說出來，但那之後，你第一次覺得自己是完整的。', next: 'crushEcho' },
-    stay: { t: 'log', text: '配偶沉默了很久，最後說：我們一起想辦法面對。', end: '你們用自己的方式，一起走完了這段婚姻。', next: 'end' },
-    leaveCh: { t: 'log', text: '你離開了原本的教會，很久都沒有再踏進任何一間。', fx: 'dechurch', end: '你說出了真話，也失去了原本的教會。', next: 'crushEcho' },
-    honest: { t: 'log', text: '你跟家人說了。媽媽哭了一整晚，爸爸好幾個月不跟你說話。', next: 'honestPick' },
+    div: { t: 'log', text: () => ministry.role === 'pastor' ? '你們離婚了，你也離開了牧職。' : '你們離婚了。', resign: true, end: '你很晚才說出自己喜歡同性，但那之後，你第一次覺得自己是完整的。', next: 'crushEcho' },
+    stay: { t: 'log', text: '配偶聽完你喜歡同性這件事，沉默了很久，最後說：我們一起想辦法面對。', end: '你們用自己的方式，一起走完了這段婚姻。', next: 'end' },
+    leaveCh: { t: 'log', text: '說出自己喜歡同性之後，你離開了原本的教會，很久都沒有再踏進任何一間。', fx: 'dechurch', end: '你說出自己喜歡同性，也失去了原本的教會。', next: 'crushEcho' },
+    honest: { t: 'log', text: '你跟家人說，你喜歡的是同性。媽媽哭了一整晚，爸爸好幾個月不跟你說話。', next: 'honestPick' },
     honestPick: { t: 'pick', delay: [2, 4], opts: [[() => phase === 'believer' ? 0.35 : 0, 'affirm'], [() => phase === 'believer' ? 0.35 : 0, 'trad'], [() => phase === 'believer' ? 0.3 : 0, 'leaveF'], [() => phase === 'believer' ? 0 : 1, 'fam']] },
-    affirm: { t: 'log', text: '你找到了一間接納你的教會，在那裡繼續聚會、服事。', end: '你找到了一個可以做完整的自己、也繼續相信的地方。', next: 'famEcho' },
-    trad: { t: 'log', text: '你的教會要你退出服事。你留在台下，聽了很多年的講道。', resign: true, end: '你留在教會，但很多年都只能坐在台下。', next: 'famEcho' },
-    leaveF: { t: 'log', text: '你在教會裡找不到自己的位置，最後離開了信仰。', fx: 'leave', next: 'famEcho' },
-    fam: { t: 'log', text: '家人花了好幾年，才慢慢接受。', end: '你誠實地活著，家人也花了很多年學著接住你。', next: 'famEcho' },
+    affirm: { t: 'log', text: '你找到了一間接納同志的教會，在那裡繼續聚會、服事。', end: '你找到了一個可以做完整的自己、也繼續相信的地方。', next: 'famEcho' },
+    trad: { t: 'log', text: '你的教會知道你喜歡同性之後，要你退出服事。你留在台下，聽了很多年的講道。', resign: true, end: '你留在教會，但很多年都只能坐在台下。', next: 'famEcho' },
+    leaveF: { t: 'log', text: '因為喜歡同性，你在教會裡找不到自己的位置，最後離開了信仰。', fx: 'leave', next: 'famEcho' },
+    fam: { t: 'log', text: '家人花了好幾年，才慢慢接受你喜歡同性這件事。', end: '你誠實地活著，家人也花了很多年學著接住你。', next: 'famEcho' },
     famEcho: { t: 'log', delay: [3, 6], text: '過了好多年，爸爸第一次在電話裡問起你的生活。', cls: 'scene', next: 'end' },
-    crushEcho: { t: 'log', delay: [3, 8], text: '多年後，你在路上遇到{crush}。你們聊了很久，誰都沒有提當年。', cls: 'scene', next: 'end' },
+    crushEcho: { t: 'log', delay: [3, 8], text: '多年後，你在路上遇到當年讓你心動的{crush}。你們聊了很久，誰都沒有提當年。', cls: 'scene', next: 'end' },
     single: { t: 'pick', opts: [[() => phase === 'believer' ? 0.6 : 0, 'celib'], [() => phase === 'believer' ? 0.4 : 1, 'crushEcho']] },
-    celib: { t: 'log', text: '你選擇獨身，在教會繼續服事。有時候很孤單，有時候也很平安。', end: '你選擇了一條很少人走的路，一個人，也沒有離開信仰。', next: 'end' },
+    celib: { t: 'log', text: '你選擇獨身，不和同性交往，在教會繼續服事。有時候很孤單，有時候也很平安。', end: '你選擇了一條很少人走的路，一個人，也沒有離開信仰。', next: 'end' },
   } },
   // H. 被公審的神學
   npp: { who: () => isProt() && isPastorish() && !hardHere() && age >= 28 && age <= 65, p: 0.008, role: true, S: {
@@ -2022,7 +2022,7 @@ const ARCS = {
     rich: { t: 'choice', delay: [1, 3], title: '新的座駕', scene: '董事會提議幫你買一架私人飛機，說這樣才能更有效地到各地佈道。{elder}私下跟你說，他覺得不妥。', opts: [
       ['買', '你們買了飛機。新聞拍到你從飛機上走下來的照片。', 'secret'], ['不買，把錢拿去蓋學校', '你婉拒了，把那筆錢拿去鄉下蓋了一間學校。', 'school'], ['先換一台好車就好', '你換了一台很好的車，告訴自己這是神的祝福。', 'secret']] },
     school: { t: 'log', delay: [2, 4], text: '學校落成那天，你站在一群孩子中間，突然想起剛當牧師時的自己。', cls: 'scene', end: '你站上很大的講台，最後把一部分的豐盛留給了別人。', next: 'end' },
-    secret: { t: 'secret', lines: ['有會友拿房子去貸款來奉獻，你知道了，沒有說什麼。', '你的講台越來越大，身邊說真話的人越來越少。', '{elder}離開了教會，臨走前留了一封信給你，你一直沒有拆。', '你在鏡子前試了好幾套西裝，才走上講台。'],
+    secret: { t: 'secret', lines: ['有會友拿房子去貸款來奉獻，你知道了，沒有說什麼。', '你的講台越來越大，身邊說真話的人越來越少。', '{elder}看不慣教會花錢的方式，離開前留了一封信給你，你一直沒有拆。', '你在鏡子前試了好幾套用奉獻買的名牌西裝，才走上講台。'],
       expose: 0.06, next: 'probe', end: '你一路風光到退休，講台上的豐盛，沒有人敢問。' },
     probe: { t: 'log', text: '記者開始調查教會的帳目，報導說有一大筆奉獻流進了你家人的公司。', cls: 'decision', next: 'probeC' },
     probeC: { delay: [0, 0], free: true, t: 'choice', title: '被調查', scene: '會友在群組裡吵成一團，有人要你出來說明。', opts: [
@@ -3628,7 +3628,6 @@ function finish(martyred) {
     <section class="band b4 endfoot">
     <div class="controls"><button class="primary" id="againBtn">再活一次</button><button id="homeBtn">回首頁</button><button id="memBtn">看賽道上的每個人</button></div>
     <div class="show">
-      <p class="brand"><span class="dot" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>${SHOW_NAME}</b>Podcast 特別企劃</span></p>
       <p>聽聽${SHOW_NAME}，一起聊聊教會裡不太好說、卻很值得聊的信仰問題。玩完之後有什麼想說的，也歡迎分享給我們。</p>
       <a class="cta" href="${SHOW_URL}" target="_blank" rel="noopener">收聽${SHOW_NAME}</a>
     </div>
