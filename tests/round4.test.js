@@ -152,6 +152,37 @@ setup({ trad: 'orthodox', a: 40 }); ok('東正教用語：領洗、聖神、祈�
 E("arc={id:'scandal',s:'h3',wait:0,victims:0,f:{},cast:makeCast()}");
 ok('東正教神父出事：由主教調動', /主教/.test(E("val(ARCS.scandal.S.h3.text)")));
 
+// 華人民間信仰
+setup({ c: 'TW', trad: 'catholic', a: 30 });
+ok('天主教角色祭祖：寫成可以上香敬祖，不是掙扎', /允許教友/.test(E("softText(LOW_PRESSURE_EVENTS.find(e=>e.id==='ancestor'))")));
+ok('十字路口不再把祭祖寫成要你「回來」', !/「回來」/.test(E('CROSS_TRIGGERS.ancestor')));
+ok('祭祖有議題說明', !!E('EXPLAIN.ancestor'));
+const folk = (cc, re) => E(`REGION_SCENES.filter(x=>x.when({country:DATA.countries.find(c=>c.id==='${cc}'),parentLabel:'other',group:{name:'x'}})).flatMap(x=>x.items).map(s=>s[2]).join('|')`);
+ok('韓國的民間信仰家庭不會拜土地公', !/土地公/.test(folk('KR')) && /祭桌|巫堂/.test(folk('KR')));
+ok('台灣店家拜土地公是初二、十六', /初二、十六/.test(folk('TW')));
+
+// 道教、佛教、新教各宗派、猶太教
+E("start();stop();");
+ok('台灣漢人的民間信仰顯示為道教', E("relName({country:DATA.countries.find(c=>c.id==='TW'),group:{name:'台灣人'},parentLabel:'other'})") === '道教');
+ok('台灣原住民的傳統信仰不會被叫成道教', E("relName({country:DATA.countries.find(c=>c.id==='TW'),group:{name:'阿美族'},parentLabel:'other'})") !== '道教');
+const bud = (cc, sex, g) => E(`buddhistScenes({country:DATA.countries.find(c=>c.id==='${cc}'),sex:'${sex}',group:{name:'${g}'}}).map(s=>s[2]).join('|')`);
+ok('泰國：女性不會短期出家，男性會', !/披上袈裟/.test(bud('TH', 'f', '泰國人')) && /披上袈裟/.test(bud('TH', 'm', '泰國人')));
+ok('日本、韓國、越南有各自的佛教片段', /盂蘭盆/.test(bud('JP', 'm', '日本人')) && /蓮花燈/.test(bud('KR', 'f', '韓國人')) && /紅玫瑰/.test(bud('VN', 'f', '越南人')));
+ok('換宗派的故事不再說長老會、浸信會「很嚴格」', !/很嚴格/.test(E('SWITCH_SCENE.anglican')) && !/太冷/.test(E('SWITCH_SCENE.pente')));
+ok('成功神學有議題說明，並說明五旬節派不等於成功神學', /不等於成功神學/.test(E('EXPLAIN.prosperity[1]')) && E("ARCS.seed.S.start.explain") === 'prosperity');
+ok('猶太成年禮分男女', E("jewishScenes({sex:'f'})").some(s => s[0] === 12) && E("jewishScenes({sex:'m'})").some(s => s[0] === 13 && /妥拉/.test(s[2])));
+ok('信義宗、天主教的背景說明提到和猶太人的歷史', /反猶/.test(E("TRAD_INFO.lutheran.bg.join('')")) && /猶太人/.test(E("TRAD_INFO.catholic.bg.join('')")));
+
+// 無宗教者
+ok('無宗教家庭的片段不寫成空虛', !/很少想到信仰|到底在追求什麼/.test(E("SCENES.unaffiliated.map(s=>s[2]).join('')")));
+ok('拒絕福音不寫成「習慣不信」', !/習慣不信/.test(E('CHOICE_DESC.free_u.decline')));
+ok('年老的反思題不問「缺了什麼」「會不會上天堂」', !/缺了什麼|如果有天堂/.test(E('JSON.stringify(REFLECT[70].unheard)')));
+
+// 中國：批判中國共產黨的宗教控制
+ok('出生卡有中國共產黨宗教政策的背景說明', E('CN_FACTS.length') >= 3 && /王怡/.test(E("CN_FACTS.join('')")) && /金明日/.test(E("CN_FACTS.join('')")));
+ok('登記的選擇寫出黨的領導和「宗教中國化」', /宗教中國化/.test(E('CN_CHOICES.register.scene()')));
+ok('交流團有統戰的議題說明', E("ARCS.tour.S.start.explain") === 'unitedfront' && !!E('EXPLAIN.unitedfront'));
+
 ok('沒有 JS 錯誤', errs.length === 0, errs.slice(0, 3).join(' / '));
 console.log(res.join('\n')); const fail = res.filter(r => r.startsWith('✗')).length;
 console.log(`\n${res.length - fail}/${res.length} 通過`); process.exit(fail ? 1 : 0);
