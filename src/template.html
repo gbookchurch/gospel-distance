@@ -743,7 +743,7 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
         <ul>
           <li>各國出生數、平均餘命</li>
           <li>各國宗教組成、基督徒中天主教、基督新教、東正教的比例</li>
-          <li>族群人口、族群的基督徒與福音派比例、母語聖經狀態、未得之民（Joshua Project 的推估值）</li>
+          <li>族群人口、族群的基督徒與福音派比例、母語聖經狀態（Joshua Project 的推估值）</li>
           <li>基督徒受迫害程度的排名與分數</li>
         </ul>
         <p><b>設計假設</b>：以下參數沒有直接的統計來源，是為了讓模擬能運作而設定的，可能高估或低估：</p>
@@ -755,8 +755,9 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
           <li>不是基督徒的家庭信什麼宗教：族群有主要宗教時，八成五照族群、一成五照國家比例；華人、韓國人、日本人族群只抽民間信仰、佛教或沒有宗教。這是因為缺少族群層級的宗教細分資料而做的簡化，不是人口統計。</li>
           <li>摩門教家庭目前只在美國出現；其他國家的摩門教徒算在「其他基督教」裡。</li>
           <li>中國基督徒家庭在三自教會和家庭教會的比例（約四成、六成）是引用的估計值，各方估計差距很大。</li>
-          <li>美國的浸信會角色，約六成是美南浸信會，依美南浸信會和美國全國浸信會的會友數比例。</li>
-          <li>新教角色的宗派，是從各國主要宗派的名單裡平均抽的，沒有各宗派的人數比例；宗派、神學傾向和教會文化分開抽：宗派決定可能的範圍，同一個宗派裡的禮拜方式、小組或團契、救恩觀，依設計的比例抽。</li>
+          <li>美國的浸信會角色，約三分之一是美南浸信會，依 Pew 2023–24 調查（浸信會約占成人 12%，美南浸信會約 4%）。</li>
+          <li>新教角色的宗派：美國、巴西、韓國、德國、英國依全國調查或會友統計的真實比例抽（美國：Pew 2023–24；巴西：2010 年人口普查；韓國：文化體育觀光部 2018 年宗教現況，五旬節派只有汝矣島純福音教會的人數，是下限；德國：EKD 與 REMID 2024；英國：British Social Attitudes 2018），沒有指明宗派的人不計入；其他國家沒有可靠的全國資料，仍在主要宗派的名單裡平均抽，台灣也是（台灣教會普查自 2022 年起不再分宗派統計）。宗派、神學傾向和教會文化分開抽：宗派決定可能的範圍，同一個宗派裡的禮拜方式、小組或團契、救恩觀，依設計的比例抽。</li>
+          <li>從其他宗教歸信的人會進哪個傳統：東正教只出現在本身以基督徒為主的族群（基督徒超過五成），例外是俄羅斯和衣索比亞，東正教是主流教會，也接收周圍族群的歸信者；新教的比例取全國基督徒裡新教的比例，和族群裡福音派占基督徒的比例（Joshua Project），兩者取較高的；其餘是天主教。在基督徒家庭出生的人，照全國的比例（Pew）。</li>
           <li>摩門教的分類：人口統計沿用資料來源，把摩門教算進廣義的基督教；遊戲裡出生在摩門教家庭也算在基督教家庭長大。這不代表神學判斷，天主教、東正教和多數新教教會不承認摩門教的洗禮。</li>
           <li>Pew 資料裡比例四捨五入為 0 的宗教，在那個國家不會被抽到。</li>
           <li>每個國家的「挑戰說明」文字，依資料撰寫，部分使用一般背景知識</li>
@@ -773,7 +774,7 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
       <div class="mbody">
         <ul class="sources">
           <li><a href="https://joshuaproject.net/resources/datasets" target="_blank" rel="noopener">Joshua Project</a>
-            <span>族群、基督徒比例、福音派比例、母語聖經狀態、未得之民。2026 年 10 月下載的 CSV。</span>
+            <span>族群、基督徒比例、福音派比例、母語聖經狀態。2026 年 10 月下載的 CSV。</span>
             <span class="use">用途：抽出生族群、估算接觸福音的機會、出生資料卡。</span></li>
           <li><a href="https://www.pewresearch.org/dataset/dataset-of-global-religious-composition-estimates-for-2010-and-2020/" target="_blank" rel="noopener">Pew Research Center</a>
             <span>各國宗教組成。2010–2020 全球宗教組成資料集，使用 2020 年數字。</span>
@@ -816,7 +817,7 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
           <li><b>壽命：</b>以該國該性別的平均餘命為中心，加上標準差 14 歲的隨機變化，限制在 1 到 102 歲之間。平均餘命不是每個人的實際壽命，這只是簡化的做法，不是逐年生命表。</li>
           <li><b>每年接觸福音的機會：</b>依族群的福音派與基督徒比例、母語聖經狀態、受迫害程度分數中「國家」和「教會」兩項，以及年齡，算出每年的機率。南亞多數族群沒有公開福音派比例，改用基督徒比例推估。</li>
           <li><b>回應：</b>8 歲以後接觸到福音時由玩家選擇；同一秒出生的另外四個人由模型依機率選擇。</li>
-          <li><b>信主之後：</b>依受迫害程度六大面向分數和族群的基督徒比例，產生信仰壓力、成長、殉道等事件。族群本身多為基督徒時，沒有教會、被家人反對這類事件會少很多；族群過半是基督徒時，國家、教會和暴力層面的事件也會大幅減少，因為那些壓力多半落在改信的人和教會領袖身上。從小在基督徒家庭長大的人，不會遇到家人反對、法律上無法更改宗教身分這類只有改信者才會遇到的事；「法律上無法更改宗教身分」也只會出現在穆斯林佔多數的國家；如果族群過半是基督徒，也不會被鄰居排擠。基督徒過半的國家到處都有公開的教會，不會出現「附近沒有可以公開聚會的教會」；從小在基督徒家庭長大的人，只有在信仰本身幾乎不被允許的國家（受迫害程度的私人生活或教會生活分數 15 以上，例如北韓、索馬利亞），才會需要偷偷聚會、把聖經藏起來。</li>
+          <li><b>信主之後：</b>依受迫害程度六大面向分數和族群的基督徒比例，產生信仰壓力、成長、殉道等事件。族群本身多為基督徒時，沒有教會、被家人反對這類事件會少很多；族群過半是基督徒時，國家、教會和暴力層面的事件也會大幅減少，因為那些壓力多半落在改信的人和教會領袖身上。從小在基督徒家庭長大的人，不會遇到家人反對、法律上無法更改宗教身分這類只有改信者才會遇到的事；「法律上無法更改宗教身分」只會出現在從穆斯林家庭改信、而且法律上不承認離開伊斯蘭教的國家（例如埃及、伊朗、巴基斯坦、摩洛哥），印尼、土耳其、孟加拉、奈及利亞這些可以更改或不登記宗教的國家不會出現；Open Doors 的資料著重基督徒的處境，同一個地區的穆斯林也常是武裝團體的受害者；如果族群過半是基督徒，也不會被鄰居排擠。基督徒過半的國家到處都有公開的教會，不會出現「附近沒有可以公開聚會的教會」；從小在基督徒家庭長大的人，只有在信仰本身幾乎不被允許的國家（受迫害程度的私人生活或教會生活分數 15 以上，例如北韓、索馬利亞），才會需要偷偷聚會、把聖經藏起來。</li>
           <li><b>信仰的十字路口：</b>遇到懷疑、受傷、信仰壓力等事件時，玩家可以選擇留下、離開教會或放下信仰，之後也可能回來。</li>
           <li><b>名字：</b>每段人生出生時，依國家、族群、性別和家裡的宗教，從常見名字裡抽一個，名字是虛構的，不對應任何真實人物。每段人生都照 53 國的真實出生比例抽。</li>
           <li><b>教會裡的秘密與醜聞：</b>有些人生會遇到教會裡的掙扎和醜聞，例如服事者越界、婚外情、挪用奉獻、被政治力量影響、神學爭議被公審，以及藏起自己性傾向的痛苦。一生最多兩條，中間的選擇會影響後來的走向。這些是劇情設計，不是統計資料，也不影響接觸福音的機率。</li>
@@ -976,11 +977,12 @@ function baptText() {
   const k = me.trad === 'protestant' ? me.denom : me.trad;
   if (!INFANT_BAP.includes(k)) return null;
   if (k === 'catholic') return age < 11 ? '你嬰兒時就領洗了。這一年，你第一次領聖體。' : '你嬰兒時就領洗了。這一年，你領了堅振，自己確認了這份信仰。';
-  if (k === 'orthodox') return '你嬰兒時就領洗、領了傅油和聖體。這一年，你第一次自己去辦告解。';
+  if (k === 'orthodox') return '你嬰兒時就領洗、領了傅油和聖體。這一年，你開始自己準備，固定去辦告解、領聖體。';
   return '你小時候受過洗。這一年，你在會眾面前行了堅信禮，自己承認了這份信仰。';
 }
 function softText(ev) {
   if (ev.id === 'baptized') { const b = baptText(); if (b) return b; }
+  if (ev.id === 'job_loss' && ministry && ['pastor', 'missionary'].includes(ministry.role)) return ministry.pk === 'nun' ? '你們修會辦的學校被迫關閉，你失去了服事的地方。' : '你服事的地方被迫關閉，你失去了生活的來源。';
   if (ev.id === 'ancestor') { ancestorLocal = isTwHan(me) && Math.random() < 0.75; return ancestorLocal ? ANCESTOR_TW[Math.floor(Math.random() * ANCESTOR_TW.length)] : ev.text; }
   if (ev.id === 'doubt' || ev.id === 'church_hurt') return tensionText(ev);
   if (!gentleOn()) return ev.text;
@@ -1091,8 +1093,8 @@ function tensionText(ev) {
 // [完整說明, 人生紀錄裡的一句話, 是否在前面加上「大約有 X% 的人是基督徒」]
 const PARADOX = {
   CM: ['在南部城市可以自由上教會，壓力集中在三種情況：極北區的 Boko Haram 和伊斯蘭國西非省會襲擊村莊和教會；西北、西南英語區的武裝衝突讓教會夾在中間；從穆斯林家庭改信的人，常被家人和社區排斥。', '極北區有 Boko Haram 襲擊、英語區有武裝衝突，從穆斯林家庭改信的人也常被排斥。', 1],
-  MZ: ['大部分地方可以公開聚會，但北部德爾加杜角省從 2017 年起有伊斯蘭武裝團體攻擊村莊和教會，很多人被迫逃離；北部穆斯林地區改信的人，也會被家人和社區施壓。', '北部德爾加杜角省從 2017 年起有伊斯蘭武裝團體攻擊村莊和教會。', 1],
-  ET: ['大部分地方可以公開聚會，壓力多半來自家族和社區：從伊斯蘭教或東正教轉到基督新教的人，可能被家人排斥；在穆斯林為主的地區，改信的人處境更難。', '從伊斯蘭教或東正教轉到基督新教的人，常被家人和社區排斥。', 1],
+  MZ: ['大部分地方可以公開聚會，但北部德爾加杜角省從 2017 年起有伊斯蘭武裝團體攻擊村莊和教會，很多人被迫逃離，受害的也有很多穆斯林；北部穆斯林地區改信的人，也會被家人和社區施壓。', '北部德爾加杜角省從 2017 年起有伊斯蘭武裝團體攻擊村莊和教會。', 1],
+  ET: ['大部分地方可以公開聚會，壓力多半來自家族和社區：從伊斯蘭教或東正教轉到基督新教的人，可能被家人排斥（衣索比亞正教會則常批評新教在既有的基督徒裡傳教是「搶羊」）；在穆斯林為主的地區，改信的人處境更難。', '從伊斯蘭教或東正教轉到基督新教的人，常被家人和社區排斥。', 1],
   TZ: ['大部分地方可以公開聚會，但在桑吉巴和東部沿海這些穆斯林為主的地區，改信基督教的人常被家人和社區排斥，有時還會遇到暴力。', '桑吉巴和東部沿海的穆斯林地區，改信的人常被家人和社區排斥。', 1],
   RU: ['大部分人屬於東正教，可以公開聚會。但 2016 年起的「反傳教」法律限制在教會以外傳福音，一些基督新教和小教派被罰款、聚會被查；北高加索穆斯林地區改信的人壓力更大。', '2016 年起的「反傳教」法律限制在教會以外傳福音，小教派常被罰款、查聚會。', 1],
   KE: ['大部分地方可以自由上教會，壓力集中在東北部靠近索馬利亞的地區，青年黨曾多次攻擊基督徒；在沿海和東北部的穆斯林家庭裡，改信的人也會被家人排斥。', '東北部靠近索馬利亞的地區，青年黨多次攻擊基督徒。', 1],
@@ -1101,16 +1103,16 @@ const PARADOX = {
   MX: ['大部分地方可以公開聚會，但犯罪集團會威脅、勒索牧師；在恰帕斯、瓦哈卡等地的一些原住民社區，改信基督新教的人可能被斷水斷電，甚至被趕出村子。', '犯罪集團會勒索牧師，一些原住民社區會把改信基督新教的人趕出村子。', 1],
   AO: ['大部分地方可以公開聚會，但宗教團體要取得政府承認的門檻很高，很多沒有登記的教會被關閉。', '教會要取得政府承認的門檻很高，很多沒有登記的教會被關閉。', 1],
   CD: ['大部分地方可以自由上教會，壓力集中在東部：與伊斯蘭國有關的武裝團體多次屠殺村民、攻擊教會，很多基督徒被迫逃離。', '東部有與伊斯蘭國有關的武裝團體屠殺村民、攻擊教會。', 1],
-  NG: ['南部可以自由上教會，但北部和中部地帶有 Boko Haram、伊斯蘭國西非省和部分富拉尼武裝襲擊村莊和教會；北部實行伊斯蘭法的州，改信的人壓力也很大。', '北部和中部地帶有武裝團體襲擊村莊和教會，北部伊斯蘭法州的改信者壓力很大。', 1],
+  NG: ['南部可以自由上教會，但北部和中部地帶有 Boko Haram、伊斯蘭國西非省和部分富拉尼武裝襲擊村莊和教會（中部的衝突也牽涉土地和水源，受害的也有很多穆斯林）；北部實行伊斯蘭法的州，改信的人壓力也很大。', '北部和中部地帶有武裝團體襲擊村莊和教會，北部伊斯蘭法州的改信者壓力很大。', 1],
   CI: ['南部可以自由上教會，壓力集中在北部穆斯林為主的地區，改信的人常被家人排斥；靠近布吉納法索的邊境也有武裝團體活動。', '北部穆斯林地區改信的人常被家人排斥，邊境也有武裝團體活動。', 1],
   TD: ['南部基督徒很多，可以公開聚會；北部和東部以穆斯林為主，改信的人常被家人和社區施壓，有些地區也有武裝團體活動。', '北部和東部穆斯林地區改信的人，常被家人和社區施壓。', 1],
-  BF: ['2015 年起，伊斯蘭武裝團體控制了北部和東部的大片地區，攻擊教會、殺害牧師，很多教會被迫關閉，上百萬人流離失所。', '伊斯蘭武裝團體控制北部和東部大片地區，很多教會被迫關閉。', 1],
+  BF: ['2015 年起，伊斯蘭武裝團體控制了北部和東部的大片地區，攻擊教會、殺害牧師，很多教會被迫關閉；不服從的穆斯林村民和伊瑪目也被殺害，上百萬人流離失所。', '伊斯蘭武裝團體控制北部和東部大片地區，很多教會被迫關閉。', 1],
   ID: ['印尼大約一成人口是基督徒，大城市裡有很多公開的教會。但蓋教會需要附近居民簽名同意，不少教會因此蓋不起來或被封；亞齊省實行伊斯蘭法，從穆斯林家庭改信的人壓力也很大。2018 年泗水曾發生教會連環爆炸案。', '蓋教會需要附近居民簽名同意，不少教會被封；從穆斯林家庭改信的人壓力很大。', 0],
   EG: ['埃及有數百萬名科普特基督徒，大城市可以公開聚會。但新建教會常被地方阻擋，上埃及的村莊不時發生攻擊基督徒的事件；從伊斯蘭教改信的人，法律上無法更改宗教身分，還可能被家人追打。', '新建教會常被地方阻擋，上埃及村莊不時有攻擊基督徒的事件。', 0],
   VN: ['天主教在越南有很長的歷史，城市裡可以公開聚會。但教會要向政府登記，中部高原和北部山區的少數民族基督徒，常被地方官員施壓要他們放棄信仰。', '少數民族地區的基督徒，常被地方官員施壓要放棄信仰。', 0],
   MM: ['緬甸的欽族、克欽族、克倫族多半是基督徒，有自己的教會。2021 年軍事政變後，軍方在這些地區空襲、焚燒村莊，許多教會被毀。', '2021 年政變後，軍方空襲基督徒為主的少數民族地區，許多教會被毀。', 0],
-  IN: ['印度的基督徒只佔約 2%，人數卻有兩、三千萬，很多地方可以公開聚會。但有多個邦訂了「反改宗」法律，牧師可能因為帶人信主被捕，也常有暴民攻擊聚會；2023 年曼尼普爾邦的族群衝突中，數百間教會被燒。', '多個邦有「反改宗」法律，牧師可能因帶人信主被捕，也常有暴民攻擊聚會。', 0],
-  PK: ['巴基斯坦有兩、三百萬名基督徒，有公開的教會。但「褻瀆法」常被用來指控基督徒，一句話就可能引來暴民；2023 年賈蘭瓦拉有二十多間教會被燒。很多基督徒只能從事最底層的工作。', '「褻瀆法」常被用來指控基督徒，一句話就可能引來暴民。', 0],
+  IN: ['印度的基督徒只佔約 2%，人數卻有兩、三千萬，很多地方可以公開聚會。但有十多個邦訂了禁止以強迫、利誘或欺騙方式改宗的法律（官方多稱為「宗教自由法」，批評者稱為「反改宗法」），牧師可能因為帶人信主被捕，也有民族主義團體以防止改宗為由衝進聚會。支持這些法律的人認為，有些傳教是利用貧窮和醫療來換取改宗。2023 年起曼尼普爾邦的梅泰族和庫基族衝突中，雙方都有大量死傷，數百間教會被燒，也有廟宇和住家被毀。', '多個邦有限制改宗的法律，牧師可能因帶人信主被捕，聚會也可能被衝進來。', 0],
+  PK: ['巴基斯坦有兩、三百萬名基督徒，有公開的教會。但「褻瀆法」常被用來指控基督徒，一句話就可能引來暴民（被指控的人其實也有很多是穆斯林和艾哈邁迪亞信徒）；2023 年賈蘭瓦拉有二十多間教會被燒。很多基督徒只能從事最底層的工作。', '「褻瀆法」常被用來指控基督徒，一句話就可能引來暴民。', 0],
   IQ: ['伊拉克的基督徒社群有將近兩千年的歷史，但 2003 年以來的戰亂和伊斯蘭國讓大多數基督徒離開，留下來的人仍面對民兵和歧視。', '戰亂和伊斯蘭國讓大多數基督徒離開，留下的人仍面對民兵和歧視。', 0],
   SY: ['敘利亞有非常古老的教會，但內戰和伊斯蘭國讓大量基督徒逃離，至今仍有攻擊教會的事件。', '內戰讓大量基督徒逃離，至今仍有攻擊教會的事件。', 0],
 };
@@ -1135,9 +1137,15 @@ const GROUP_REL = { 'Islam': 'muslim', 'Hinduism': 'hindu', 'Buddhism': 'buddhis
 const CHINESE_RE = /台灣人|華人|漢人|華語族群|閩南|客家|廣東人|海南人|疍家|吳語|晉語|湘語|贛語|徽語|閩東|閩北|閩中|莆仙|雷州|平話|果敢/;
 const NOT_CHINESE_RE = /漢志|喬漢|漢加扎|阿漢塔|拉漢韋因/;
 function isChinese(g) { return CHINESE_RE.test(g.name) && !NOT_CHINESE_RE.test(g.name); }
+// 錫克教：模型裡算在「其他宗教」，顯示和生活片段另外處理，不歸到民間信仰
+const isSikh = p => p.parentLabel === 'other' && p.group && p.group.primary_religion === 'Sikhism';
+const relName = p => isSikh(p) ? '錫克教' : RELIGION[p.parentLabel];
+const relPhrase = p => isSikh(p) ? '信錫克教' : REL_PHRASE[p.parentLabel];
+const SIKH_SCENES = [[3, 8, '每天早上，家裡的長輩都會念誦《古魯格蘭特・薩希卜》裡的禱文。'], [5, 15, '你跟著家人去謁師所（古魯德瓦拉），在那裡和大家一起坐在地上吃免費的共食。'], [8, 20, '你學著在謁師所的廚房幫忙，替來的人盛飯。'], [12, 25, '家人帶你去阿姆利則的金廟，你在水池邊站了很久。'], [5, 15, '排燈節那天，錫克教稱為「解放日」，家裡和謁師所都點滿了燈。'], [20, 40, '你的婚禮在謁師所舉行，你們繞著經書走了四圈。', 'partner']];
 function familyReligion(p) {
   const g = GROUP_REL[p.group.primary_religion];
-  if (g && Math.random() < 0.85) return g;
+  // 印度、巴基斯坦、孟加拉的族群（Joshua Project）是依宗教和種姓劃分的，例如「雅達夫人（印度教）」「謝赫人」，家庭宗教幾乎都照族群
+  if (g && Math.random() < (['IN', 'PK', 'BD'].includes(p.country.id) ? 0.99 : 0.85)) return g;
   // 華人、韓國人、日本人族群：不會抽到伊斯蘭教、猶太教這類在東亞移民裡很少見的宗教（例如美國韓裔，Pew 2023：基督徒 59%、無宗教 34%、佛教 3%）
   if (isChinese(p.group) || /韓國人|朝鮮|日本人/.test(p.group.name)) {
     const r = p.country.religion_pct, keys = ['other', 'buddhist', 'unaffiliated'];
@@ -1255,12 +1263,28 @@ function simulateNPC() {
 
 // ── 宗派與教會型態：基督徒家庭跟著家裡；後來信主的人依該國天主教、新教、東正教的比例抽（只換用詞，不影響任何機率）
 // 新教再分小組教會、團契式的傳統教會，各半；團契式教會有一半是長老制
+// 從其他宗教歸信的人會進哪個傳統：用真實資料估計
+// 一、東正教（含東方正統教會）幾乎只存在於歷史上以基督徒為主的族群（印度的敘利亞基督徒、埃及的科普特人、衣索比亞的阿姆哈拉人、俄羅斯人等），
+//     族群裡基督徒不到五成的人歸信，不會進東正教。例外是俄羅斯和衣索比亞：東正教是國家的主流教會，也接收周圍族群的歸信者（如韃靼人、奧羅莫人）。
+// 二、新教的比例：取「全國基督徒裡新教的比例」和「族群裡福音派占基督徒的比例」（Joshua Project）比較高的一個；
+//     福音派只是新教的一部分，所以族群的比例只當下限。其餘是天主教。
+function convertTrad(p) {
+  const t = p.country.christian_traditions || {}, g = p.group || {};
+  const orthOK = (g.christian_pct || 0) >= 50 || ['RU', 'ET'].includes(p.country.id);
+  const cath = t.catholic || 0, prot = (t.protestant || 0) + (t.other || 0) + 0.01, orth = orthOK ? (t.orthodox || 0) : 0;
+  const base = cath + prot + orth;
+  let pProt = prot / base;
+  if (g.christian_pct > 0 && g.evangelical_pct != null) pProt = Math.max(pProt, Math.min(1, g.evangelical_pct / g.christian_pct));
+  const rest = 1 - pProt, pOrth = cath + orth > 0 ? rest * orth / (cath + orth) : 0, pCath = rest - pOrth;
+  const r = Math.random();
+  return r < pProt ? 'protestant' : r < pProt + pCath ? 'catholic' : 'orthodox';
+}
 function assignTrad(p) {
   const fam = { catholic: 'catholic', orthodox: 'orthodox', lds: 'lds', protestant: 'protestant', christian: 'protestant' };
   if (p.parentReligion === 'christian') p.trad = fam[p.parentLabel] || 'protestant';
-  else { const t = p.country.christian_traditions || {}; p.trad = pickWeighted(['catholic', 'protestant', 'orthodox'], k => (t[k] || 0) + (k === 'protestant' ? (t.other || 0) : 0) + (k === 'protestant' ? 0.01 : 0)); }
+  else p.trad = convertTrad(p);
   p.denom = null; p.style = null; p.eldership = false; p.worship = null; p.soter = null;
-  if (p.trad === 'protestant') { const l = PROT_DENOMS[p.country.id] || PROT_DENOMS.default; setDenom(p, l[Math.floor(Math.random() * l.length)]); }
+  if (p.trad === 'protestant') { const W = PROT_WEIGHTS[p.country.id], l = PROT_DENOMS[p.country.id] || PROT_DENOMS.default; setDenom(p, W ? pickWeighted(Object.keys(W), k => W[k]) : l[Math.floor(Math.random() * l.length)]); }
 }
 // 新教的宗派：每國列當地主要的幾個宗派，平均抽（沒有各宗派的比例資料）；宗派決定教會型態、禮拜的樣子和救恩觀
 const PROT_DENOMS = {
@@ -1273,14 +1297,29 @@ const PROT_DENOMS = {
   DE: ['lutheran', 'presby', 'baptist', 'pente'], GB: ['anglican', 'presby', 'methodist', 'baptist', 'pente'], FR: ['presby', 'lutheran', 'pente', 'indep'], RU: ['baptist', 'pente', 'lutheran'], EG: ['presby', 'pente'],
   default: ['indep', 'pente', 'baptist'],
 };
+// 有全國調查或會友統計的國家，依真實比例抽宗派；其他國家仍在名單裡平均抽
+// 單位：美國是占新教徒的百分比，其餘是人數（百萬）。沒有指明宗派的人（美國的「無特定宗派新教徒」、巴西的「未確定的福音派」、英國的「沒有宗派的基督徒」）不計入
+const PROT_WEIGHTS = {
+  // Pew Religious Landscape Study 2023–24：浸信會 29、無宗派教會與復原運動 21、衛理宗與聖潔運動 10.5、五旬節 10、長老與改革宗、公理會 8、信義宗 7、聖公會 3.5、安息日會 1
+  US: { baptist: 29, indep: 21, methodist: 10.5, pente: 10, presby: 8, lutheran: 7, anglican: 3.5, sda: 1 },
+  // 巴西 2010 年人口普查（IBGE）：五旬節派 2,537 萬、浸信會 372 萬、安息日會 156 萬、長老會與公理會 103 萬、信義宗 100 萬、衛理宗 34 萬
+  BR: { pente: 25.37, baptist: 3.72, sda: 1.56, presby: 1.03, lutheran: 1.0, methodist: 0.34 },
+  // 韓國：文化體育觀光部《2018 韓國的宗教現況》長老會（統合、合同、百石）695 萬、衛理公會 133 萬；聖潔會（衛理宗系統）約 38 萬、浸信會約 33 萬；
+  // 五旬節派沒有全國總數，用汝矣島純福音教會 2025 年約 48 萬人當下限
+  KR: { presby: 6.95, methodist: 1.71, pente: 0.48, baptist: 0.33 },
+  // 德國：EKD 2024 年 1,798 萬（信義宗與聯合教會，其中改革宗約 10 萬另計）；自由教會：浸信會 7.2 萬、五旬節 7.3 萬、衛理宗 4.3 萬、安息日會 3.4 萬、自由福音教會與弟兄會 8.1 萬（REMID）
+  DE: { lutheran: 17.88, presby: 0.1, pente: 0.073, baptist: 0.072, indep: 0.081, methodist: 0.043, sda: 0.034 },
+  // 英國：British Social Attitudes 2018：聖公會 12%、長老會 2%、衛理宗 1%、浸信會不到 0.5%、其他基督教 1%（五旬節和獨立教會各半）
+  GB: { anglican: 12, presby: 2, methodist: 1, pente: 0.5, indep: 0.5, baptist: 0.4 },
+};
 function setDenom(p, d) {
   p.denom = d;
   // 宗派、神學傾向、教會文化是三件事：同一個宗派裡，各間教會的禮拜和神學也不一樣（比例是設計假設）
   const r = Math.random;
   p.style = d === 'baptist' ? (r() < 0.5 ? 'cell' : 'fellow') : ['pente', 'indep'].includes(d) ? 'cell' : r() < (d === 'presby' && p.country.id === 'KR' ? 0.6 : 0.25) ? 'cell' : 'fellow';
   p.eldership = d === 'presby' || d === 'sda';
-  // 美國的浸信會：依會友數，美南浸信會約 1,233 萬、美國全國浸信會約 840 萬，約六成是美南浸信會
-  p.sbc = d === 'baptist' && p.country.id === 'US' && r() < 12.3 / (12.3 + 8.4);
+  // 美國的浸信會：Pew 2023–24，浸信會約占成人 12%，美南浸信會約 4%，約三分之一是美南浸信會
+  p.sbc = d === 'baptist' && p.country.id === 'US' && r() < 4 / 12;
   // 高教會（禮儀式）、傳統聖詩、敬拜讚美；衣索比亞的信義宗教會偏靈恩
   const W = d === 'lutheran' && p.country.id === 'ET' ? { praise: 1 } : { anglican: { high: 0.6, hymn: 0.25, praise: 0.15 }, lutheran: { high: 0.6, hymn: 0.3, praise: 0.1 }, presby: { hymn: 0.6, praise: 0.35, high: 0.05 }, methodist: { hymn: 0.6, praise: 0.35, high: 0.05 }, baptist: { hymn: 0.5, praise: 0.5 }, sda: { hymn: 0.8, praise: 0.2 } }[d] || { praise: 1 };
   p.worship = pickWeighted(Object.keys(W), k => W[k]);
@@ -1294,11 +1333,14 @@ const SWITCH_SCENE = { presby: '你在網路上聽了一整個系列的改革宗
 const SWITCH_GO = { presby: '換到改革宗教會', anglican: '轉到聖公會', pente: '換到那間靈恩教會' };
 const isProt = () => me.trad === 'protestant';
 const isCath = () => me.trad === 'catholic';
+// 有主教制度的教會（天主教、東正教）：神職的調動、處分、堂區合併由主教決定
+const isHier = () => ['catholic', 'orthodox'].includes(me.trad);
 // 文字原本用新教小組教會的說法，依宗派換掉
 const LOCAL = {
-  catholic: [['教會同工', '堂區志工'], ['小組長', '善會的帶領人'], ['小組', '祈禱會'], ['組員', '會員'], ['同工', '夥伴'], ['牧師', '神父'], ['主日學', '道理班'], ['主日聚會', '主日彌撒'], ['做完禮拜', '望完彌撒'], ['做禮拜', '望彌撒'], ['神學院', '修院'], ['會友', '教友'], ['受洗', '領洗'], ['差會', '修會'], ['團契', '善會'], ['宣教士', '傳教士']],
-  orthodox: [['教會同工', '堂區志工'], ['小組長', '查經聚會的帶領人'], ['小組', '查經聚會'], ['組員', '弟兄姊妹'], ['同工', '夥伴'], ['牧師', '神父'], ['主日聚會', '主日禮儀'], ['做完禮拜', '做完禮儀'], ['做禮拜', '參加禮儀'], ['會友', '教友']],
-  lds: [['教會同工', '支會的服事人員'], ['小組長', () => me.sex === 'm' ? '長老定額組會長' : '慈助會的教師'], ['小組', () => me.sex === 'm' ? '長老定額組' : '慈助會'], ['組員', '成員'], ['牧師', '主教'], ['神學院', '訓練'], ['會友', '支會成員'], ['宣教士', '傳教士']],
+  // 華人天主教的用語：天主、聖神、祈禱、聖體、聖歌（「神」只換指上帝的用法，不換神父、神學、精神、神蹟這類詞）
+  catholic: [[/(?<![精眼留心門財山海死失出分傷勞走女天成入灶小])神(?![父學蹟祕秘職經話情色明采韻聖性龕])/g, '天主'], ['上帝', '天主'], ['聖靈', '聖神'], ['禱告', '祈禱'], ['聖餐桌', '祭台'], ['聖餐', '聖體'], ['詩歌', '聖歌'], ['查經', '讀經'], ['信主', '信天主'], ['牧者', '神父'], ['講台', '講道台'], ['青少年團契', '青年會'], ['會眾大會', '堂區經濟委員會的會議'], ['會眾', '教友'], ['最後一次禮拜', '最後一台彌撒'], ['長老', '堂區議會的成員'], ['長執會', '堂區議會'], ['教會同工', '堂區志工'], ['小組長', '善會的帶領人'], ['小組', '祈禱會'], ['組員', '會員'], ['同工', '夥伴'], ['牧師', '神父'], ['主日學', '道理班'], ['主日聚會', '主日彌撒'], ['做完禮拜', '望完彌撒'], ['做禮拜', '望彌撒'], ['神學院', '修院'], ['會友', '教友'], ['受洗', '領洗'], ['差會', '修會'], ['團契', '善會'], ['宣教士', '傳教士']],
+  orthodox: [['講台', '講道台'], ['青少年團契', '青年會'], ['團契', '堂區的讀書會'], ['受洗', '領洗'], ['聖靈', '聖神'], ['禱告', '祈禱'], ['聖餐桌', '祭台'], ['聖餐', '聖體'], ['詩歌', '聖詩'], ['宣教士', '傳教士'], ['會眾大會', '堂區大會'], ['會眾', '教友'], ['最後一次禮拜', '最後一次禮儀'], ['長老', '堂區議會的成員'], ['長執會', '堂區議會'], ['教會同工', '堂區志工'], ['小組長', '查經聚會的帶領人'], ['小組', '查經聚會'], ['組員', '弟兄姊妹'], ['同工', '夥伴'], ['牧師', '神父'], ['主日聚會', '主日禮儀'], ['做完禮拜', '做完禮儀'], ['做禮拜', '參加禮儀'], ['會友', '教友']],
+  lds: [['長執會', '支會議會'], ['教會同工', '支會的服事人員'], ['小組長', () => me.sex === 'm' ? '長老定額組會長' : '慈助會的教師'], ['小組', () => me.sex === 'm' ? '長老定額組' : '慈助會'], ['組員', '成員'], ['牧師', '主教'], ['神學院', '訓練'], ['會友', '支會成員'], ['宣教士', '傳教士']],
   hymnish: [['敬拜或招待', '詩班或招待']],
   fellow: [['教會同工', '團契同工'], ['小組長', '團契會長'], ['帶小組', '帶團契'], ['小組', '團契'], ['組員', '團契的弟兄姊妹']],
 };
@@ -1307,7 +1349,7 @@ function localize(t) {
   let rules = me.trad === 'protestant' ? (me.style === 'fellow' ? LOCAL.fellow : null) : LOCAL[me.trad];
   if (me.trad === 'protestant' && me.worship !== 'praise') rules = [...LOCAL.hymnish, ...(rules || [])];
   if (!rules) return t;
-  for (const [a, b] of rules) if (t.includes(a)) t = t.split(a).join(typeof b === 'function' ? b() : b);
+  for (const [a, b] of rules) { if (a instanceof RegExp) t = t.replace(a, typeof b === 'function' ? b() : b); else if (t.includes(a)) t = t.split(a).join(typeof b === 'function' ? b() : b); }
   return t;
 }
 // 守獨身：之後不會再有伴侶和孩子這條線
@@ -1329,19 +1371,19 @@ const TRAD_INFO = {
     src: [['Theosis', 'https://en.wikipedia.org/wiki/Theosis_(Eastern_Christian_theology)'], ['Irenaeus', 'https://en.wikipedia.org/wiki/Irenaeus'], ['Athanasius', 'https://en.wikipedia.org/wiki/Athanasius_of_Alexandria'], ['Gregory Palamas', 'https://en.wikipedia.org/wiki/Gregory_Palamas']],
     scenes: [[12, 80, '神父在講道裡引用亞他那修：「神成為人，好讓人可以成為神。」你想了很久這句話。'], [15, 80, '你學著反覆念耶穌禱文：「主耶穌基督，神的兒子，憐憫我這個罪人。」'], [12, 70, '大齋期很長，神父說禁食不是為了贏得什麼，是讓整個人慢慢被改變。'], [8, 70, '領聖體之前，你先去辦了告解。']],
     q: [['你覺得得救比較像被赦免，還是慢慢被改變、越來越像神？', ['被赦免', '慢慢被改變', '兩者都是', '我還不確定']]] },
-  oriental: { name: '東方正統教會', note: '你的教會屬於東方正統教會；亞他那修說，神成為人，好讓人可以分享神的生命。',
+  oriental: { name: '東方正統教會', note: '你的教會屬於東方正統教會，相信基督完全是神、也完全是人，神性和人性結合在一個本性裡。',
     bg: ['埃及的科普特正教、衣索比亞的特瓦西多正教，屬於「東方正統教會」（又稱非迦克墩派）。451 年迦克墩會議之後，它們因為對基督神性與人性的表達方式不同，慢慢和其他教會分開。它們自稱「合性論」：基督完全是神，也完全是人，神性和人性在一個本性裡結合，沒有混合，也沒有分開。外界有時叫它們「一性論」，但它們不接受這個名稱，因為那是指否認基督完整人性的說法。1973 年，科普特教宗謝努達三世和天主教教宗保祿六世發表共同聲明，表示雙方對基督的信仰是一致的。',
       '這個家族包括埃及的科普特正教、亞美尼亞使徒教會、衣索比亞和厄利垂亞的特瓦西多正教、敘利亞正教，以及印度的馬蘭卡拉正教。它們彼此共融，但語言、禮儀和歷史各不相同：傳統上，亞美尼亞在 301 年左右成為第一個以基督教為國教的王國；衣索比亞教會的正典卷數比其他教會多；科普特教會的禮儀使用科普特語和阿拉伯語。',
-      '它們和東正教有很多共同點：都相信「成神」的救恩觀，尊崇聖母，有七件聖事，但彼此目前沒有共融，仍在對話。',
+      '它們和東正教有很多共同點：尊崇聖母，有七件聖事，重視禁食和教父傳統，但彼此目前沒有共融，仍在對話。東正教常用「成神」描述救恩，東方正統教會內部對這個說法看法不一：科普特的馬太・艾爾・梅斯金神父（1919–2006）用這個說法寫作，已故的科普特教宗謝努達三世（1923–2012）則公開批評，認為容易被誤解成人會變成神。',
       '亞他那修（約 296–373）是亞歷山大城的主教，科普特教會稱他為「使徒般的亞他那修」。他在《論道成肉身》裡說：「祂成為人，好讓我們可以成為神。」意思是人因為與基督聯合，可以分享神的生命（彼得後書 1:4）。更早的愛任紐也說，基督「成為我們的樣子，好讓我們成為祂的樣子」。'],
-    src: [['Oriental Orthodox Churches', 'https://en.wikipedia.org/wiki/Oriental_Orthodox_Churches'], ['Miaphysitism', 'https://en.wikipedia.org/wiki/Miaphysitism'], ['Armenian Apostolic Church', 'https://en.wikipedia.org/wiki/Armenian_Apostolic_Church'], ['Ethiopian Orthodox Tewahedo Church', 'https://en.wikipedia.org/wiki/Ethiopian_Orthodox_Tewahedo_Church'], ['Athanasius', 'https://en.wikipedia.org/wiki/Athanasius_of_Alexandria'], ['Theosis', 'https://en.wikipedia.org/wiki/Theosis_(Eastern_Christian_theology)']],
-    scenes: [[8, 70, '教會的牆上掛著亞他那修的聖像，大家叫他「使徒般的亞他那修」。'], [12, 70, '神父說，禁食和祈禱，是讓人一點一點變得更像基督。']],
-    q: [['你覺得得救比較像被赦免，還是慢慢被改變、越來越像神？', ['被赦免', '慢慢被改變', '兩者都是', '我還不確定']]] },
+    src: [['Oriental Orthodox Churches', 'https://en.wikipedia.org/wiki/Oriental_Orthodox_Churches'], ['Miaphysitism', 'https://en.wikipedia.org/wiki/Miaphysitism'], ['Armenian Apostolic Church', 'https://en.wikipedia.org/wiki/Armenian_Apostolic_Church'], ['Matta El Meskeen', 'https://en.wikipedia.org/wiki/Matta_El_Meskeen'], ['Ethiopian Orthodox Tewahedo Church', 'https://en.wikipedia.org/wiki/Ethiopian_Orthodox_Tewahedo_Church'], ['Athanasius', 'https://en.wikipedia.org/wiki/Athanasius_of_Alexandria'], ['Theosis', 'https://en.wikipedia.org/wiki/Theosis_(Eastern_Christian_theology)']],
+    scenes: [[12, 70, '神父說，禁食和祈禱，是讓人一點一點變得更像基督。']],
+    q: [['你覺得禁食對信仰的意義是什麼？', ['操練自己', '和受苦的人站在一起', '跟著教會一起守', '我還不確定']]] },
   catholic: { name: '天主教', note: '天主教相信恩典透過七件聖事臨到人，人用信德接受，也在愛德中和恩典合作。',
-    bg: ['天主教相信，人得救完全出於神的恩典，恩典主要透過七件聖事臨到人：聖洗、堅振、聖體、和好（告解）、病人傅油、聖秩、婚配。人要以信德接受恩典，也要和恩典合作，在愛德中活出來。',
+    bg: ['天主教相信，人得救完全出於天主的恩典，恩典主要透過七件聖事臨到人：聖洗、堅振、聖體、和好（告解）、病人傅油、聖秩、婚配。人要以信德接受恩典，也要和恩典合作，在愛德中活出來。',
       '十六世紀宗教改革之後，天特會議（1545–1563）回應新教的「唯獨信心」，強調人和恩典的合作，並重申七件聖事。',
       '天主教相信煉獄：在恩寵中去世、但還沒有完全潔淨的人，死後會經過最後的煉淨；活著的人可以為他們祈禱、獻彌撒。煉獄不是地獄，經過煉淨的人已經確定得救。',
-      '梵二會議（1962–1965）讓彌撒可以用各地的語言；《教會憲章》第 16 節說，非因自己的過錯而不認識基督福音、卻真誠尋求神的人，也能得救。1999 年，天主教和世界信義宗聯會簽署《因信稱義聯合聲明》，同意雙方對「因恩典藉信心稱義」的基本理解，十六世紀互相定罪的條文不再適用於對方。聲明也承認，雙方在一些說法上仍有差異，並沒有解決所有爭議。',
+      '梵二會議（1962–1965）讓彌撒可以用各地的語言；《教會憲章》第 16 節說，非因自己的過錯而不認識基督福音、卻真誠尋求天主的人，也能得救。1999 年，天主教和世界信義宗聯會簽署《因信稱義聯合聲明》，同意雙方對「因恩典藉信心稱義」的基本理解，十六世紀互相定罪的條文不再適用於對方。聲明也承認，雙方在一些說法上仍有差異，並沒有解決所有爭議。',
       '在天主教家庭長大的孩子，通常嬰兒時就領洗，大約七歲初領聖體，之後再領堅振（各地年齡不同）。成人慕道的人，則在復活節前夕一起領受聖洗、堅振和聖體。',
       '聖秩分成主教、司鐸（神父）和執事三個品級。執事和神父不一樣：已婚的男性可以成為終身執事，講道、主持洗禮和婚禮，但不主持彌撒。拉丁禮的神父一般守獨身，但有例外，例如從聖公會或信義宗轉入天主教的已婚牧師；東方禮的天主教會（像烏克蘭希臘禮天主教會）也可以按立已婚男性為神父。',
       '天主教只為男性授聖秩，但女性的服事不只有修女：還有傳道員、牧靈工作者、學校和醫院的負責人、教區的行政主管。2025 年，教宗方濟各任命布蘭比拉修女擔任梵蒂岡一個部會的首長，是第一位擔任這個職位的女性。'],
@@ -1369,6 +1411,12 @@ const TRAD_INFO = {
       '這個遊戲裡有四件事是分開的：一、人口統計的分類，沿用資料來源，把摩門教算進基督教人口；二、教會的自我認同，它自稱是恢復的基督教會；三、遊戲裡「接觸福音」的定義，出生在摩門教家庭在模型裡算是在基督教家庭長大；四、神學上的判斷：2001 年，天主教信理部判定摩門教的洗禮無效，多數新教宗派也不承認，摩門教自己同樣會為加入的人重新施洗。遊戲只描述這些立場，不替任何一方下結論。'],
     src: [['The Church of Jesus Christ of Latter-day Saints', 'https://en.wikipedia.org/wiki/The_Church_of_Jesus_Christ_of_Latter-day_Saints'], ['Mormonism and Christianity', 'https://en.wikipedia.org/wiki/Mormonism_and_Christianity'], ['Bishop (Latter Day Saints)', 'https://en.wikipedia.org/wiki/Bishop_(Latter_Day_Saints)']],
     scenes: [], q: [] },
+  assyrian: { name: '東方亞述教會', note: '你的教會屬於東方亞述教會，禮儀用的是和耶穌說的話很接近的亞蘭語（敘利亞語）。',
+    bg: ['東方亞述教會源自古代美索不達米亞的「東方教會」，傳統上追溯到使徒多馬和他的門徒。它在 431 年以弗所會議之後，和羅馬帝國境內的教會分開，既不屬於東正教，也不屬於東方正統教會。',
+      '七世紀起，東方教會的修士沿著絲路把信仰帶到中亞和中國，唐代稱為「景教」；西安的〈大秦景教流行中國碑〉立於 781 年。',
+      '1994 年，東方亞述教會的宗主教和天主教教宗若望保祿二世發表共同聲明，表示雙方對基督的信仰一致。伊拉克戰爭和伊斯蘭國之後，大多數信徒離開了伊拉克，現在散居各國。'],
+    src: [['Assyrian Church of the East', 'https://en.wikipedia.org/wiki/Assyrian_Church_of_the_East'], ['Nestorian Stele', 'https://en.wikipedia.org/wiki/Xi%27an_Stele'], ['Common Christological Declaration 1994', 'https://en.wikipedia.org/wiki/Common_Christological_Declaration_Between_the_Catholic_Church_and_the_Assyrian_Church_of_the_East']],
+    scenes: [[8, 70, '神父用亞蘭語念禱文，奶奶說，耶穌當年說的就是這種話。']], q: [] },
   sbc: { name: '美南浸信會', note: '美南浸信會重視信徒受浸和地方教會自治，是美國最大的新教宗派。',
     bg: ['美南浸信會 1845 年在喬治亞州奧古斯塔成立。當時南方的浸信會和北方分開，原因是北方不願差派家裡蓄奴的人當宣教士。1995 年，美南浸信會正式為過去替奴隸制、種族隔離和白人至上辯護道歉。',
       '它是美國最大的新教宗派，也是全世界最大的浸信會團體。2025 年回報約 1,233 萬名會友，比 2006 年高峰的約 1,600 萬少。',
@@ -1409,7 +1457,8 @@ const NEO_Q = ['你覺得聖經就是神的話，還是見證神的話？', ['�
 // 東方正統教會：埃及（科普特）、衣索比亞、印度（馬蘭卡拉）
 function tradKey() {
   if (!me) return null;
-  if (me.trad === 'orthodox') return ['EG', 'ET', 'IN'].includes(me.country.id) ? 'oriental' : 'eastern';
+  // 伊朗、土耳其的「東正教」主要是亞美尼亞使徒教會（東方正統教會）；伊拉克主要是東方亞述教會
+  if (me.trad === 'orthodox') return ['EG', 'ET', 'IN', 'IR', 'TR'].includes(me.country.id) ? 'oriental' : me.country.id === 'IQ' ? 'assyrian' : 'eastern';
   if (me.trad === 'catholic') return 'catholic';
   if (me.trad === 'lds') return 'lds';
   if (me.trad === 'protestant') return me.denom === 'lutheran' ? 'lutheran' : me.denom === 'anglican' ? 'anglican' : me.denom === 'baptist' && me.sbc ? 'sbc' : null;
@@ -1471,7 +1520,7 @@ const MIN_CHOICES = {
     opts: [['yes', '答應服事', '你開始固定服事。'], ['no', '先當會友就好', '你想先好好聚會，不急著服事。'], ['try', '幫忙一次看看', '你答應先幫一次忙。']] }),
   lead: () => ({ title: '接下小組', scene: hardHere() ? '帶查經的弟兄要搬去別的城市了，大家看著你，希望你接下來。你知道，帶領的人最容易被盯上。' : '小組長要搬家了，大家希望你接下小組，每週陪大家讀經、禱告。',
     opts: [['yes', '接下來', '你開始帶領一群人。'], ['keep', '繼續原本的服事', '你覺得現在這樣就好。'], ['rest', '先退下來休息', '你想先停下來，好好休息一陣子。']] }),
-  call: () => ({ title: me.trad === 'lds' ? '更重的召喚' : '全職服事的呼召', scene: hardHere() ? '帶你信主的人問你，有沒有想過把一生都放在這件事上。你知道，那代表更大的風險。' : localize('牧師約你喝咖啡，問你有沒有想過全職服事。你想了好幾個晚上。'),
+  call: () => ({ title: me.trad === 'lds' ? '更重的召喚' : isCath() ? '聖召' : '全職服事的呼召', scene: hardHere() ? '帶你信主的人問你，有沒有想過把一生都放在這件事上。你知道，那代表更大的風險。' : localize('牧師約你喝咖啡，問你有沒有想過全職服事。你想了好幾個晚上。'),
     opts: [pastorOpt(), ['missionary', '當' + (['catholic', 'lds'].includes(me.trad) ? '傳教士' : '宣教士'), hardHere() ? '你決定到更難的地方去傳福音。' : '你決定到另一個國家，去還沒有人聽過福音的地方。'], ['market', '留在職場，繼續服事', '你留在原本的工作，下班後繼續服事。']].filter(Boolean) }),
   deacon: () => ({ title: '執事選舉', scene: '會員大會要選新一屆的執事，有人提名了你。執事要管教會的財務，也要參與教會的決定。',
     opts: [['yes', '接受提名', '你被選為執事，開始參與教會的財務和決策。'], ['keep', '繼續帶團契', '你想繼續陪團契的弟兄姊妹。'], ['no', '婉拒', '你說自己還不夠成熟，婉拒了提名。']] }),
@@ -1486,6 +1535,9 @@ const MIN_EVENTS = {
   missionary: [['你第一次用當地的語言禱告，大家都笑了，也都哭了。', '你協助翻譯的經卷完成了，村裡的人第一次讀到自己語言的聖經。', '你開的小診所，救了很多人。'], ['你把自己的文化當成福音，跟當地人起了衝突。', '你在宣教地累倒了，被送回家休養了一年。', '你的孩子在異鄉長大，不知道哪裡才是家。']],
 };
 MIN_EVENTS.marketplace = MIN_EVENTS.leader;
+// 不站講台的全職服事（修女、牧靈工作者、堂區全職同工、慈助會會長）
+MIN_EVENTS.religious = [['你陪一個家庭走過喪子之痛，他們說那一年最記得的是你一直都在。', '你在醫院陪一位沒有家人的老太太，走完了最後一段路。', '你教過的孩子長大以後回來看你，說那時候只有你相信他。', '教會開始照顧社區裡的獨居老人。'], ['服事排得太滿，你病倒了一陣子。', '你和一起服事的姊妹處不來，好幾年都很難熬。', '你說話太直，傷了一個來求助的人，他後來再也沒有來。']];
+const minKey = role => role === 'pastor' && ['nun', 'catechist', 'lay', 'rs'].includes(ministry.pk) ? 'religious' : role;
 MIN_EVENTS.deacon = [['你做的財務報告，第一次讓每個會友都看得懂。', '教會缺錢的那一年，執事會決定先把弟兄姊妹的急難救助放在前面。'], ['執事會為了要不要換新的音響，吵了三個月。', '你在執事會上說話太衝，一位老執事好幾個禮拜不理你。']];
 MIN_EVENTS.elder = [['你陪一位牧師走過他最低潮的一年，他說還好有你。', '你主持了一場和好的聚會，兩個吵了十年的家族坐下來一起吃飯。'], ['長老會為了要不要解聘牧師吵翻了，教會分成兩邊。', '有人說長老會只會開會，不會關心人，你聽了很難過。']];
 // 服事中的抉擇：[題目, 場景, [[標籤, 結果, 分數變化], ...]]
@@ -1499,6 +1551,10 @@ MIN_DILEMMAS.marketplace = MIN_DILEMMAS.leader;
 MIN_DILEMMAS.deacon = [['牧師的薪水', '執事會在討論要不要幫牧師加薪，教會今年的奉獻不太夠。', [['先加薪', '牧師很感謝，也有會友覺得錢不該這樣用。', 0], ['維持不變', '牧師什麼都沒說，但你知道他家裡很緊。', -1], ['把帳目攤開，請大家一起決定', '會員大會開了很久，最後大家一起做了決定。', 1]]]];
 MIN_DILEMMAS.elder = [['聘牧師', '老牧師要退休了，長老會要決定請誰來接。', [['請年輕有活力的傳道', '年輕人回來了，有些長輩卻覺得聽不懂講道。', 0], ['請資深穩重的牧師', '教會很穩定，但年輕人慢慢少了。', 0], ['花一年和會友一起尋求', '過程很慢，但大家都覺得這是一起做的決定。', 1]]]];
 function setRole(role) {
+  if (role && phase === 'believer' && !(st.done && st.done.baptized)) {
+    st.done = st.done || {}; st.done.baptized = true; stats.growth++;
+    const b = baptText() || '你受洗了。'; addLog(age, b, 'growth'); highlights.push({ age, text: b, cls: 'growth' });
+  }
   ministry.role = role; ministry.since = age;
   if (ministry.firstServe === null && role) ministry.firstServe = age;
   me.leader = role === 'pastor';
@@ -1556,16 +1612,16 @@ function ministryYear() {
   const m = ministry, role = m.role;
   if (!role || phase !== 'believer') return false;
   // 70 歲退下來
-  if (age >= 70 && role !== 'marketplace') { addLog(age, `你從${ROLE_NAME()[role]}的位置退了下來，把棒子交給年輕一輩。`, 'milestone'); m.role = null; m.endAge = age; me.leader = false; return false; }
-  const dl = (MIN_DILEMMAS[role] || []).filter(d => !m.used.has(d[0]));
+  if (age >= 70 && role !== 'marketplace') { addLog(age, ministry.pk === 'nun' && role === 'pastor' ? '你年紀大了，把手上的工作交給年輕的修女，留在修院裡禱告。' : `你從${ROLE_NAME()[role]}的位置退了下來，把棒子交給年輕一輩。`, 'milestone'); m.role = null; m.endAge = age; me.leader = false; return false; }
+  const dl = (MIN_DILEMMAS[minKey(role)] || []).filter(d => !m.used.has(d[0]));
   if (dl.length && age - lastCross >= 3 && age - m.since >= 2 && Math.random() < 0.08) {
     const d = dl[Math.floor(Math.random() * dl.length)]; m.used.add(d[0]); stop(); lastCross = age;
     showMinBox(d[0], d[1], d[2].map(o => [o[0], o[0]]), k => { const o = d[2].find(x => x[0] === k); m.score += o[2]; $('choiceSlot').innerHTML = ''; addLog(age, o[1], 'milestone'); ministryDone(); });
     return true;
   }
   if (Math.random() < 0.1) {
-    const [good, bad] = MIN_EVENTS[role], pGood = Math.min(0.85, Math.max(0.2, 0.55 + 0.12 * m.score));
-    const pick = Math.random() < pGood, pool = (pick ? good : bad).filter(x => !m.used.has(x) && !(me.celibate && /孩子|配偶/.test(x)));
+    const [good, bad] = MIN_EVENTS[minKey(role)], pGood = Math.min(0.85, Math.max(0.2, 0.55 + 0.12 * m.score));
+    const pick = Math.random() < pGood, pool = (pick ? good : bad).filter(x => !m.used.has(x) && !((me.celibate || me.childAt == null || me.childAt > age) && /孩子|配偶/.test(x)));
     if (pool.length) { const x = pool[Math.floor(Math.random() * pool.length)]; m.used.add(x); addLog(age, x, pick ? 'growth' : 'decision'); highlights.push({ age, text: x, cls: pick ? 'growth' : 'milestone' }); }
   }
   return false;
@@ -1599,10 +1655,11 @@ const val = x => typeof x === 'function' ? x() : x;
 const fmt = s => typeof s === 'string' && arc ? s.replace(/\{(\w+)\}/g, (m, k) => arc.cast[k] ?? m) : s;
 const tx = x => fmt(gtx(val(x)));
 const HELP_NOTE = {
-  abuse: '如果你或身邊的人遇過類似的事，可以打 113 保護專線（台灣）。',
-  lgbt: '如果你也正在掙扎，可以打 1925 安心專線，或聯絡台灣同志諮詢熱線（02-2392-1970）。',
+  abuse: () => me.country.id === 'TW' ? '如果你或身邊的人遇過類似的事，可以打 113 保護專線（台灣）。' : '如果你或身邊的人遇過類似的事，可以找當地的保護專線，或信任的專業機構。',
+  lgbt: () => me.country.id === 'TW' ? '如果你也正在掙扎，可以打 1925 安心專線，或聯絡台灣同志諮詢熱線（02-2392-1970）。' : '如果你也正在掙扎，可以找當地的心理支持專線，或一位信任的人談談。',
 };
 const isPastorish = () => ['pastor', 'leader'].includes(ministry.role) && ministry.pk !== 'nun';
+const CHR_POOL = { in: 'in_c', in_m: 'in_c', bd: 'in_c', bd_h: 'in_c', pk: 'pk_c', eg: 'eg_c', arab: 'lev_c', malay: 'id_c', bali: 'id_c', mm: 'mm_c', tw: 'tw_c', cn: 'cn_c', hui: 'cn_c', uyghur: 'cn_c', sahel_m: 'ng_c', fr_m: 'fr_c', td_m: 'fr_c', cm_f: 'fr_c', et_m: 'et', sw_m: 'tz', ru_m: 'ru' };
 function makeCast() {
   const key = namePool(me), pool = NAME_POOLS[key] || NAME_POOLS.us, used = new Set([me.name]);
   const pick = sex => { const l = pool[sex === 'm' ? 0 : 1].filter(n => !used.has(n)); const n = l.length ? l[Math.floor(Math.random() * l.length)] : pool[sex === 'm' ? 0 : 1][0]; used.add(n); return n; };
@@ -1612,9 +1669,11 @@ function makeCast() {
   const S = {}, P = (k, sex) => { S[k] = shortName(pick(sex)); S[k + 'Ta'] = sex === 'm' ? '他' : '她'; };
   P('co', opp); P('member', any()); P('crush', me.sex); P('friend', any()); P('pco', pSex === 'm' ? 'f' : 'm');
   const pt = { catholic: '神父', orthodox: '神父', lds: '主教' }[me.trad] || '牧師';
-  S.pastor = titled(pick(pSex), pt); S.pastorTa = pSex === 'm' ? '他' : '她';
+  // 教會的神職和長老：用當地基督徒常見的名字（主角若來自穆斯林或其他宗教的家庭，配角朋友照原本的名字表）
+  const cp = NAME_POOLS[CHR_POOL[key]], pickC = sex => { if (!cp) return pick(sex); const l = cp[sex === 'm' ? 0 : 1].filter(n => !used.has(n)); const n = l.length ? l[Math.floor(Math.random() * l.length)] : cp[sex === 'm' ? 0 : 1][0]; used.add(n); return n; };
+  S.pastor = titled(pickC(pSex), pt); S.pastorTa = pSex === 'm' ? '他' : '她';
   S.pwife = { orthodox: '神父的太太', lds: '主教的太太' }[me.trad] || (pSex === 'm' ? '師母' : '牧師的先生'); S.pwifeTa = pSex === 'm' ? '她' : '他';
-  S.elder = titled(pick('m'), ['catholic', 'orthodox'].includes(me.trad) ? '主席' : me.trad === 'lds' ? '弟兄' : '長老');
+  S.elder = titled(pickC('m'), ['catholic', 'orthodox'].includes(me.trad) ? '主席' : me.trad === 'lds' ? '弟兄' : '長老');
   return S;
 }
 const STAY_OPTS = [['留下來，陪教會走過', '你決定留下來，陪大家一起面對。', 'echo'], ['換一間教會', '你換到另一間教會，重新開始。', 'echo', 'resign'], ['不再去任何教會', '', 'echo', 'dechurch'], ['不想再信了', '', 'echo', 'leave']];
@@ -1632,7 +1691,7 @@ const ARCS = {
     after: { delay: [0, 0], t: 'choice', title: '你知道自己做了什麼', scene: '{member}後來再也沒有單獨跟你說話，小組也不來了。你知道自己做了什麼。', opts: [
       ['承認，接受教會處理', '', 'confess'], ['絕口不提', '你什麼都沒有說。', 'hide']] },
     confess: { t: 'log', text: '你被停職，接受輔導。有些人說願意原諒，有些人再也不來了。教會陪伴{member}，尊重{memberTa}要不要再跟你見面。', resign: true, end: '你犯了很嚴重的錯，也花了很多年面對它。', next: 'confEcho' },
-    confEcho: { t: 'pick', delay: [3, 5], opts: [[1, 'ce1'], [1, 'ce2']] },
+    confEcho: { t: 'pick', delay: [3, 5], opts: [[1, 'ce1'], [() => married() ? 1 : 0, 'ce2']] },
     ce1: { t: 'log', text: '幾年後，{member}託人轉告你：{memberTa}還沒辦法原諒，但已經慢慢好起來了。', cls: 'scene', next: 'end' },
     ce2: { t: 'log', text: '你的配偶陪你走過了那幾年，但你們都知道，有些東西已經不一樣了。', cls: 'scene', next: 'end' },
     hide: { t: 'secret', lines: ['你在講台上講聖潔，心裡想著自己對{member}做過的事。', '每次在名單上看到{member}的名字，你都會停下來。', '你聽說{member}離開了教會，很多年都不敢再走進任何一間。', '你好幾次想承認自己傷害了{member}，最後都沒有說出口。'],
@@ -1645,7 +1704,7 @@ const ARCS = {
     fired: { t: 'log', text: '你被免職，離開了教會。教會公開向受傷的人道歉。你的家人很久都不知道怎麼面對你。', resign: true, end: '大家記得你是一個被免職的牧者，也記得那些勇敢說出來的人。', next: 'firedEcho' },
     firedEcho: { t: 'log', delay: [2, 4], text: '你後來靠打零工過日子，很少再跟以前教會的人聯絡。', cls: 'scene', next: 'voice' },
     voice: { t: 'log', delay: [1, 3], text: '幾年後，{member}在網路上寫了一篇文章，沒有寫你的名字，但你知道是你。', cls: 'scene', next: 'end' },
-    covered: { t: 'log', text: '長執會決定不要聲張，把你調到別的地方。{member}被說是「破壞合一」，最後自己離開了。', next: () => arc.f.covered ? 'fired' : (arc.f.covered = 1, 'hide') },
+    covered: { t: 'log', text: () => (isHier() ? '教區決定不要聲張，把你調到別的堂區。' : '長執會決定不要聲張，把你調到別的地方。') + '{member}被說是「破壞合一」，最後自己離開了。', next: () => arc.f.covered ? 'fired' : (arc.f.covered = 1, 'hide') },
     news: { t: 'log', text: '事情上了新聞，教會分裂成兩半。', resign: true, end: () => arc.victims > 1 ? `你傷害了 ${arc.victims} 個信任你的人，最後是新聞讓大家知道的。` : '你的名字和那則新聞一起，被很多人記住了。', next: 'voice' },
   } },
   // B. 牧師與同工的婚外情
@@ -1704,15 +1763,15 @@ const ARCS = {
     invest: { t: 'pick', delay: [1, 2], opts: [[0.7, 'lost'], [0.3, 'gain']] },
     lost: { t: 'log', text: '投資血本無歸，建堂計畫停了。{elder}也不再來教會。你沒有告訴任何人。', cls: 'decision', next: 'patch' },
     patch: { t: 'log', text: '為了補洞，你又挪用了一筆奉獻。', cls: 'decision', next: 'secret' },
-    gain: { t: 'log', text: '投資真的賺了錢。你又拿一部分去付自己的房貸，說之後會補回來。', cls: 'decision', next: 'secret' },
+    gain: { t: 'log', text: () => ministry.pk === 'priest' ? '投資真的賺了錢。你又拿一部分去幫家人還債，說之後會補回來。' : '投資真的賺了錢。你又拿一部分去付自己的房貸，說之後會補回來。', cls: 'decision', next: 'secret' },
     secret: { t: 'secret', lines: ['每次會眾問建堂的進度，你都說「還在禱告」。', '收奉獻的時候，你的手心一直冒汗，怕有人發現建堂基金少了一大筆。', '你晚上常常睡不著，算著挪用的錢還差多少才補得回來。'], expose: 0.12, next: 'exp', end: '你把錢的事帶進了墳墓，沒有人知道那筆建堂基金去了哪裡。' },
     exp: { t: 'log', text: '會眾大會上，有人拿著帳本站了起來。', cls: 'decision', next: 'expPick' },
     expPick: { t: 'pick', opts: [[0.5, 'quit'], [0.3, 'sue'], [0.2, 'repay']] },
     quit: { t: 'log', text: '你被要求辭職，還要把錢還回來。', resign: true, end: '你曾經被託付一間教會的錢，最後辜負了那份信任。', next: 'split' },
     sue: { t: 'log', text: '有會友提告，事情鬧上了法院。', resign: true, end: '你的名字最後出現在法院的判決書上。', next: 'split' },
-    repay: { t: 'log', text: '你賣掉了自己的房子，把錢補了回去，向會眾公開道歉。', end: '你做錯過，也盡力補了回來。', next: 'split' },
+    repay: { t: 'log', text: () => ministry.pk === 'priest' ? '你和家人湊錢把洞補了回去，向教友公開道歉，也接受了主教的處分。' : '你賣掉了自己的房子，把錢補了回去，向會眾公開道歉。', end: '你做錯過，也盡力補了回來。', next: 'split' },
     split: { t: 'log', delay: [1, 2], text: '會眾分成要追究和要原諒的兩邊，好幾個家庭離開了。', cls: 'scene', next: 'echoD' },
-    echoD: { t: 'log', delay: [3, 6], text: '幾年後，教會還在租場地聚會。牆上那張建堂的設計圖，一直沒有拿下來。', cls: 'scene', next: 'end' },
+    echoD: { t: 'log', delay: [3, 6], text: () => isHier() ? '幾年後，新聖堂的工程一直沒有開始。牆上那張設計圖，一直沒有拿下來。' : '幾年後，教會還在租場地聚會。牆上那張建堂的設計圖，一直沒有拿下來。', cls: 'scene', next: 'end' },
   } },
   // E. 中國：牧師變成黨的使者
   party: { who: () => ministry.role === 'pastor' && ministry.pk !== 'nun' && inCN() && age >= 30 && age <= 65, p: 0.012, role: true, S: {
@@ -1755,17 +1814,17 @@ const ARCS = {
     pre: { t: 'log', text: '你最喜歡{pastor}的講道。那段很難的日子，是{pastorTa}陪你走過來的。', cls: 'scene', next: 'burst', delay: [0, 0] },
     burst: { t: 'pick', delay: [1, 3], opts: [[1, 'b1'], [1, 'b2'], [1, 'b3'], [() => inCN() ? 1 : 0, 'b4']] },
     b1: { t: 'log', text: ['你的教會爆出{pastor}性騷擾會友的事。', '你的教會爆出{pastor}傷害會友的事。'], cls: 'decision', help: 'abuse', next: 'react' },
-    b2: { t: 'log', text: '你的教會爆出{pastor}和同工{pco}外遇的事。', cls: 'decision', next: 'react' },
+    b2: { t: 'log', text: () => isCath() ? '你的堂區爆出{pastor}和{pco}有不正當的關係，違背了守貞的誓願。' : '你的教會爆出{pastor}和同工{pco}外遇的事。', cls: 'decision', next: 'react' },
     b3: { t: 'log', text: '你發現教會的建堂基金不見了，帳本上最後簽名的是{pastor}。', cls: 'decision', next: 'react' },
     b4: { t: 'log', text: '你聽說，{pastor}一直在向有關部門報告誰去了家庭聚會。', cls: 'decision', next: 'react' },
     react: { delay: [0, 0], t: 'log', text: '有人說「不要論斷」，有人說「發生了就要負責」，小組裡吵了起來。', next: 'handle' },
     handle: { t: 'pick', delay: [0, 1], opts: [[1, 'h1'], [1, 'h2'], [1, 'h3']] },
     h1: { t: 'log', text: '教會公開向受傷的人道歉，{pastor}離開了。', next: 'decide' },
-    h2: { t: 'log', text: '長執會把事情壓了下來，{pastor}照常講道。', next: 'decide' },
-    h3: { t: 'log', text: '教會分成兩邊，一半的人跟著{pastor}出去另外聚會。', next: 'decide' },
+    h2: { t: 'log', text: () => isHier() ? '教區把事情壓了下來，{pastor}照常主持彌撒。' : '長執會把事情壓了下來，{pastor}照常講道。', next: 'decide' },
+    h3: { t: 'log', text: () => isHier() ? '主教把{pastor}調走了，堂區的教友分成兩邊，有人覺得處理得太輕，有人覺得太重。' : '教會分成兩邊，一半的人跟著{pastor}出去另外聚會。', next: 'decide' },
     decide: { delay: [0, 0], free: true, t: 'choice', title: '還要留下來嗎', scene: '你不知道，自己還能不能像以前一樣相信這間教會。', opts: STAY_OPTS },
     echo: { t: 'pick', delay: [3, 6], opts: [[1, 'fe1'], [1, 'fe2'], [1, 'fe3']] },
-    fe1: { t: 'log', text: '幾年後，你聽說{pastor}在別的城市開了一間新教會。', cls: 'scene', end: '你曾經很信任一位牧者，後來學著把信仰和人分開。', next: 'end' },
+    fe1: { t: 'log', text: () => isHier() ? '幾年後，你聽說{pastor}被調到很遠的一個堂區，那裡的教友什麼都不知道。' : '幾年後，你聽說{pastor}在別的城市開了一間新教會。', cls: 'scene', end: '你曾經很信任一位牧者，後來學著把信仰和人分開。', next: 'end' },
     fe2: { t: 'log', text: '幾年後，{pastor}寫了一封公開信道歉。你讀了好幾遍。', cls: 'scene', end: '你曾經很信任一位牧者，後來學著把信仰和人分開。', next: 'end' },
     fe3: { t: 'log', text: '你偶爾還會想起{pastor}以前講過的那些話，不知道該怎麼放。', cls: 'scene', end: '你曾經很信任一位牧者，那份信任碎了以後，一直沒有完全拼回去。', next: 'end' },
   } },
@@ -1782,7 +1841,7 @@ const ARCS = {
     toMarry: { t: 'wait', until: 25, next: 'marry' },
     marry: { t: 'choice', title: '催婚', scene: () => phase === 'believer' ? '家人開始催你結婚，教會也有人熱心幫你介紹對象。' : '家人開始催你結婚，親戚見面就問什麼時候請喝喜酒。', opts: [
       ['跟異性交往、結婚，把這件事藏起來', '', 'wed'], ['誠實告訴家人', '', 'honest'], ['選擇單身', '你告訴大家你想一個人過，沒有說是因為你喜歡同性。', 'single']] },
-    wed: { t: 'log', text: '你和一位異性結婚了，沒有讓對方知道你喜歡的是同性。婚禮上，大家都說你們很登對。{crush}也來了，坐在最後一排。', next: 'secret' },
+    wed: { t: 'log', fx: () => { if (me.partnerAt == null || me.partnerAt > age) me.partnerAt = age; for (const k in scenePlan) if (+k > age && scenePlan[k].text === PARTNER_TEXT) delete scenePlan[k]; return null; }, text: '你和一位異性結婚了，沒有讓對方知道你喜歡的是同性。婚禮上，大家都說你們很登對。{crush}也來了，坐在最後一排。', next: 'secret' },
     secret: { t: 'secret', lines: () => ministry.role === 'pastor' ? ['你在講台上講婚姻與家庭，心裡清楚自己喜歡的是同性，每次都覺得自己在演戲。', '你輔導過一個跟你一樣喜歡同性的年輕人，卻不敢說自己也是。', '配偶問你，為什麼你們總是像室友。你知道原因，卻說不出口：你喜歡的是同性。'] : ['每次有人問你們什麼時候生孩子，你都笑著帶過，沒有人知道你其實喜歡同性。', '配偶問你，為什麼你們總是像室友。你知道原因，卻說不出口：你喜歡的是同性。', `你半夜醒來，想到自己喜歡的一直是同性，卻每天都在扮演一個${me.sex === 'm' ? '好丈夫' : '好妻子'}。`],
       expose: 0.05, next: 'turn', end: () => ministry.top === 'pastor' ? '你一輩子都站在講台上，卻從來沒有讓人知道你喜歡的是同性。' : '你一輩子都沒有說出自己喜歡同性，連最親的人也不知道。' },
     turn: { t: 'pick', opts: [[0.4, 'outed'], [0.6, 'self']] },
@@ -1792,12 +1851,12 @@ const ARCS = {
     denied: { t: 'end', end: '你否認自己喜歡同性，從此把自己藏得更深。' },
     self: { t: 'log', text: '有一天，你終於告訴配偶：你喜歡的其實是同性。', next: 'after' },
     after: { t: 'pick', delay: [0, 1], opts: [[0.5, 'div'], [0.3, 'stay'], [() => phase === 'believer' ? 0.2 : 0, 'leaveCh']] },
-    div: { t: 'log', text: () => ministry.role === 'pastor' ? '你們離婚了，你也離開了牧職。' : '你們離婚了。', resign: true, end: '你很晚才說出自己喜歡同性，但那之後，你第一次覺得自己是完整的。', next: 'crushEcho' },
+    div: { t: 'log', text: () => (ministry.role === 'pastor' ? '你們離婚了，你也離開了牧職。' : '你們離婚了。') + (isCath() ? '在天主教會裡，除非經過審理、宣告婚姻無效，這段婚姻仍被視為有效。' : ''), resign: true, end: '你很晚才說出自己喜歡同性，但那之後，你第一次覺得自己是完整的。', next: 'crushEcho' },
     stay: { t: 'log', text: '配偶聽完你喜歡同性這件事，沉默了很久，最後說：我們一起想辦法面對。', end: '你們用自己的方式，一起走完了這段婚姻。', next: 'end' },
     leaveCh: { t: 'log', text: '說出自己喜歡同性之後，你離開了原本的教會，很久都沒有再踏進任何一間。', fx: 'dechurch', end: '你說出自己喜歡同性，也失去了原本的教會。', next: 'crushEcho' },
     honest: { t: 'log', text: '你跟家人說，你喜歡的是同性。媽媽哭了一整晚，爸爸好幾個月不跟你說話。', next: 'honestPick' },
     honestPick: { t: 'pick', delay: [2, 4], opts: [[() => phase === 'believer' ? 0.35 : 0, 'affirm'], [() => phase === 'believer' ? 0.35 : 0, 'trad'], [() => phase === 'believer' ? 0.3 : 0, 'leaveF'], [() => phase === 'believer' ? 0 : 1, 'fam']] },
-    affirm: { t: 'log', text: '你找到了一間接納同志的教會，在那裡繼續聚會、服事。', end: '你找到了一個可以做完整的自己、也繼續相信的地方。', next: 'famEcho' },
+    affirm: { t: 'log', text: () => isCath() ? '你找到了一個陪伴同志天主教徒的團體，在那裡繼續參與彌撒。' : '你找到了一間接納同志的教會，在那裡繼續聚會、服事。', end: '你找到了一個可以做完整的自己、也繼續相信的地方。', next: 'famEcho' },
     trad: { t: 'log', text: '你的教會知道你喜歡同性之後，要你退出服事。你留在台下，聽了很多年的講道。', resign: true, end: '你留在教會，但很多年都只能坐在台下。', next: 'famEcho' },
     leaveF: { t: 'log', text: '因為喜歡同性，你在教會裡找不到自己的位置，最後離開了信仰。', fx: 'leave', next: 'famEcho' },
     fam: { t: 'log', text: '家人花了好幾年，才慢慢接受你喜歡同性這件事。', end: '你誠實地活著，家人也花了很多年學著接住你。', next: 'famEcho' },
@@ -1879,16 +1938,16 @@ const ARCS = {
   } },
   // M. 宣教的路：選了當宣教士之後
   mission: { who: () => ministry.role === 'missionary' && age <= 60, p: 0.35, role: true, S: {
-    start: { t: 'choice', title: '要去哪裡', scene: () => missionFrom() + '差派你的人給了你幾個地方。', opts: [
+    start: { t: 'choice', title: '要去哪裡', explain: 'tentmaking', scene: () => missionFrom() + '差派你的人給了你幾個地方。', opts: [
       ['鄰近國家的少數族群', '你去了鄰國的山區，那裡的人說一種你從沒聽過的語言。', () => missionDest('near')],
-      ['遙遠的未得之民', '你飛了三天，又坐了兩天的車，才到那個村子。', () => missionDest('far')],
+      ['遙遠、幾乎沒有基督徒的族群', '你飛了三天，又坐了兩天的車，才到那個村子。', () => missionDest('far')],
       ['用專業身分，進入不能公開傳教的國家', '你用醫生的身分申請到簽證，搬進一座陌生的城市。', () => missionDest('tent')]] },
     lang: { t: 'log', delay: [1, 1], text: '頭兩年，你連買菜都要比手畫腳。第一次用當地的話禱告，大家笑了，也哭了。', next: 'dress' },
-    dress: { t: 'choice', delay: [1, 2], title: '像他們一樣', scene: '當地人說，你穿的、吃的都像外國人。同工建議你穿當地的衣服，住進村子裡。', note: '戴德生在 1865 年創立中國內地會，他穿上中國人的衣服深入內地，當時被不少西方人取笑。', opts: [
+    dress: { t: 'choice', delay: [1, 2], title: '像他們一樣', scene: '當地人說，你穿的、吃的都像外國人。同工建議你穿當地的衣服，住進村子裡。', note: () => me.trad === 'orthodox' ? '俄羅斯修士尼古拉 1861 年到日本函館，學日文、把聖經和禮儀譯成日文，建立日本正教會，1912 年在東京過世，1970 年被封為聖人。' : isCath() ? '耶穌會士利瑪竇 1582 年到澳門，後來改穿中國讀書人的衣服，用中文寫書介紹信仰，1610 年在北京過世。' : '戴德生在 1865 年創立中國內地會，他穿上中國人的衣服深入內地，當時被不少西方人取笑。', opts: [
       ['搬進村子，跟他們一樣生活', '你搬進村子，學著蹲在地上吃飯。', 'wait1'], ['住在城裡，每週進村子', '你在城裡租了房子，每週騎車進村子。', 'wait1'], ['先把語言學好再說', '你又花了一年，專心學語言。', 'wait1']] },
     wait1: { t: 'pick', delay: [2, 4], opts: [[0.55, 'first'], [0.45, 'nofirst']] },
     nofirst: { t: 'log', text: '好幾年過去了，還是沒有一個人信主。你寫給支持者的信，越來越難下筆。', next: 'first' },
-    first: { t: 'log', delay: [1, 3], text: '{friend}成為你在這裡第一個信主的人。受洗那天，河邊只有你們幾個人。', cls: 'decision', next: 'firstC' },
+    first: { t: 'log', delay: [1, 3], text: () => isCath() ? '{friend}成為你在這裡第一個領洗的人。領洗那天，小聖堂裡只有你們幾個人。' : '{friend}成為你在這裡第一個信主的人。受洗那天，河邊只有你們幾個人。', cls: 'decision', next: 'firstC' },
     firstC: { t: 'choice', delay: [1, 2], title: '被趕出家門', scene: '{friend}的家人知道了，把{friendTa}趕了出來。{friendTa}站在你家門口，什麼都沒帶。', opts: [
       ['收留{friendTa}', '你讓{friendTa}住進來。村裡開始有人說，外國人在搶別人的孩子。', 'work'],
       ['幫{friendTa}找當地的信徒家庭', '一對當地的信徒夫妻收留了{friendTa}，你常常去看{friendTa}。', 'work'],
@@ -1896,8 +1955,8 @@ const ARCS = {
     work: { t: 'pick', delay: [1, 3], opts: [[1, 'clinic'], [1, 'trans'], [1, 'rescue']] },
     clinic: { t: 'log', text: '你開了一間小診所。每天早上門口都排著長長的隊，有人走了一整天的路來。', note: '馬偕 1872 年抵達淡水，一邊幫人拔牙一邊傳福音，據他自述，在台灣拔了兩萬一千多顆牙。', next: 'trial' },
     trans: { t: 'log', text: '你和當地的同工花了十幾年，把新約翻成他們的語言。奉獻禮拜那天，一位老人捧著書哭了。', note: '耶德遜 1813 年到緬甸，英緬戰爭期間被當成間諜關了二十一個月，出獄後繼續翻譯，1834 年完成緬甸文聖經。', next: 'trial' },
-    rescue: { t: 'log', text: '村裡常有被丟棄的孩子，你一個一個抱回家養，家裡越來越熱鬧。', note: () => Math.random() < 0.5 ? '瑪麗・史雷蘇 1876 年到奈及利亞的卡拉巴，救下許多因為「雙胞胎是詛咒」而被丟棄的嬰兒，收養了好幾個孩子，1915 年在當地過世。' : '艾美・卡邁可在印度服事 55 年，1901 年在南印度創立杜納維團契，收容被迫在廟裡服事的女孩。', next: 'trial' },
-    trial: { t: 'pick', delay: [1, 3], opts: [[() => arc.f.dest === 'tent' ? 0.4 : 0.15, 'visa'], [0.15, 'violence'], [0.2, 'mk'], [0.2, 'funds'], [0.2, 'burn']] },
+    rescue: { t: 'log', text: '村裡常有被丟棄的孩子，你一個一個抱回家養，家裡越來越熱鬧。', note: () => Math.random() < 0.5 ? '瑪麗・史雷蘇 1876 年到奈及利亞的卡拉巴，救下許多因為「雙胞胎是詛咒」而被丟棄的嬰兒，收養了好幾個孩子，1915 年在當地過世。' : '艾美・卡邁可在印度服事 55 年，1901 年在南印度創立杜納維團契，收容被獻給廟宇、常被迫從事性交易的德瓦達西（devadasi）女孩。印度的改革者也長期推動廢除這個制度，1947 年馬德拉斯省立法禁止。', next: 'trial' },
+    trial: { t: 'pick', delay: [1, 3], opts: [[() => arc.f.dest === 'tent' ? 0.4 : 0.15, 'visa'], [0.15, 'violence'], [() => me.childAt != null && me.childAt <= age ? 0.2 : 0, 'mk'], [() => isCath() ? 0 : 0.2, 'funds'], [0.2, 'burn']] },
     visa: { t: 'log', text: '有一天，警察來到你家，給你四十八小時離開這個國家。', cls: 'decision', next: 'visaC' },
     visaC: { delay: [0, 0], free: true, t: 'choice', title: '被驅逐', scene: '你只能帶一個行李箱。{friend}來送你，說：「我們會繼續聚會。」', opts: [
       ['把聚會交給{friend}', '你把名冊燒掉，把帶領交給了{friend}。', 'visaEcho', 'resign'], ['搬到鄰國，繼續陪他們', '你搬到鄰國，每個月用網路陪他們讀經。', 'visaEcho'], ['回國', '你回到了自己的國家。', 'visaEcho', 'resign']] },
@@ -1988,7 +2047,7 @@ const POOL_ARCS = {
   } },
   // ── 二、受洗與聖餐：在別的傳統的教會裡
   th_sacr: { pool: true, who: () => freeLife() && ['catholic', 'protestant', 'orthodox'].includes(me.trad) && age >= 16 && age <= 75, p: 1, S: {
-    start: { t: 'choice', title: '要不要上前領', explain: 'eucharist', scene: () => me.trad === 'protestant' ? '你去參加{friend}在天主教堂的婚禮彌撒。領聖體前，神父說：「沒有領洗加入天主教的朋友，可以雙手交叉放胸前，上前領受降福。」你身邊的人都站起來了。' : '你去參加{friend}在新教教會的婚禮。分聖餐時，牧師說：「凡是受洗的基督徒，都歡迎一起領。」你想起{pastor}說過，天主教和東正教的信徒不在其他教會領聖餐。', opts: [
+    start: { t: 'choice', title: '要不要上前領', explain: 'eucharist', scene: () => me.trad === 'protestant' ? '你去參加{friend}在天主教堂的婚禮彌撒。領聖體前，神父說：「不是天主教徒的朋友，可以雙手交叉放胸前，上前領受降福。」你身邊的人都站起來了。' : '你去參加{friend}在新教教會的婚禮。分聖餐時，牧師說：「凡是受洗的基督徒，都歡迎一起領。」你想起{pastor}說過，天主教和東正教的信徒不在其他教會領聖餐。', opts: [
       ['照主人的規矩，上前領祝福或留在座位上', '你照著那間教會的規矩做，靜靜地在一旁禱告。', 'keep'],
       ['照自己的心意領', '你覺得都是同一位主，就領了。', 'take'],
       ['事後去問那裡的牧者', '你沒有領。散會後，你去問那裡的牧者，為什麼他們這樣做。', 'ask']],
@@ -2063,7 +2122,7 @@ const POOL_ARCS = {
       ['物資和單張一起發，但不強迫', '你說，單張放著，要不要看是他們的自由。', 'both'],
       ['支持先聽講道再領物資', '你覺得機會難得，應該先讓他們聽見福音。', 'cond']],
       alts: ['如果只發物資：你們可能錯過一些分享的機會，但當地人比較放心收下幫助。', '如果和單張一起發：有人會讀，有人會丟掉，也可能讓當地的伙伴之後比較難做。', '如果先聽講道才能領：可能有很多人來聽，但他們記得的，也許是「要聽完才能吃飯」。'] },
-    serve: { t: 'log', delay: [0, 1], text: '一位清真寺的長老來幫忙搬物資。最後一天，他問你：「你們為什麼大老遠跑來？」你跟他說了你相信的事。他沒有信，但握了你的手很久。', cls: 'scene', end: '你在災區學會，先好好服事，福音才有被聽見的空間。', next: 'end' },
+    serve: { t: 'log', delay: [0, 1], text: '清真寺的伊瑪目帶著幾個年輕人來幫忙搬物資。最後一天，他問你：「你們為什麼大老遠跑來？」你跟他說了你相信的事。他沒有信，但握了你的手很久。', cls: 'scene', end: '你在災區學會，先好好服事，福音才有被聽見的空間。', next: 'end' },
     both: { t: 'log', delay: [0, 1], text: '大部分的人收下了單張，有些被丟在路邊。當地的伙伴說，這次還好，但下次要先問過社區的長老。', cls: 'scene', next: 'end' },
     cond: { t: 'log', delay: [0, 1], text: '講道的帳棚坐滿了人，但隔天，地方的報紙寫「外國教會用救援物資逼人改信」。當地的伙伴後來好幾年都很難再進那個村子。', cls: 'scene', next: 'end' },
   } },
@@ -2122,11 +2181,11 @@ const POOL_ARCS = {
     push: { t: 'log', delay: [0, 1], text: '那頓飯吃得很尷尬。{member}後來很少回你的訊息。你想了很久，覺得自己太急了。', cls: 'scene', next: 'end' },
   } },
   g_lastsvc: { pool: true, who: () => freeLife() && age >= 35 && age <= 85, p: 1, S: {
-    start: { t: 'log', text: '你小時候去的那間老教會，只剩下十幾個長輩。長執會決定，下個月要和鎮上的另一間教會合併。', cls: 'scene', next: 'go' },
+    start: { t: 'log', text: () => isHier() ? '你小時候去的那間老聖堂，只剩下十幾個長輩。教區決定，下個月要和鎮上的另一個堂區合併。' : '你小時候去的那間老教會，只剩下十幾個長輩。長執會決定，下個月要和鎮上的另一間教會合併。', cls: 'scene', next: 'go' },
     go: { t: 'choice', title: '最後一次禮拜', explain: 'smallchurch', scene: '最後一次禮拜，大家輪流分享在這裡受洗、結婚、送走家人的回憶。你被邀請上台說幾句話。', opts: [
       ['說謝謝', '你說：「謝謝這間教會，把我養大。」', 'thanks'], ['說捨不得', '你說：「我很捨不得，也很難過我們沒有守住它。」', 'sad']],
       alts: ['如果你說謝謝：大家會笑著哭。', '如果你說捨不得：大家會哭著笑。兩種都是真的。'] },
-    thanks: { t: 'log', text: '散會時，大家把聖餐桌搬到新的教會。合併以後，週日的長輩多了好幾個孫子陪著來。', cls: 'scene', end: '你送走了那間把你養大的老教會。', next: 'end' },
+    thanks: { t: 'log', text: () => (isCath() ? '彌撒結束，神父把聖體櫃裡的聖體恭送到新的聖堂。' : me.trad === 'orthodox' ? '禮儀結束，神父把祭台上的聖布收起來，帶到新的聖堂。' : '散會時，大家把聖餐桌搬到新的教會。') + '合併以後，週日的長輩多了好幾個孫子陪著來。', cls: 'scene', end: '你送走了那間把你養大的老教會。', next: 'end' },
     sad: { t: 'log', text: '散會後，一位長輩拍拍你的肩：「教會不是房子，是我們這些人。」你們一起把十字架拆下來，帶去新的地方。', cls: 'scene', end: '你送走了那間把你養大的老教會。', next: 'end' },
   } },
   g_work: { pool: true, who: () => freeLife() && age >= 23 && age <= 64, p: 1, S: {
@@ -2236,7 +2295,7 @@ let mvSeen = new Set(), explainSeen = new Set(), cfNodes = [];
 const EXPLAIN = {
   scripture: ['聖經的權威', '大家都說聖經是權威，爭的是怎麼讀。保守的讀法看重字面，擔心一路「看處境」讀下去，什麼都能重新解釋；被質疑的是，有些經文顯然寫給特定的時代。進步的讀法看重歷史處境，被質疑的是，誰來決定哪些經文只屬於當時？很多人在兩者之間找平衡。'],
   eucharist: ['聖餐和受洗', '天主教、東正教相信餅酒在祝聖後成為基督的身體和血，領聖體也表示和教會完全共融，所以只讓自己的信徒領；信義宗相信基督真實臨在；很多新教教會看成紀念，歡迎所有受洗的人。受洗也分兩派：嬰兒洗禮看重神先揀選人，信徒受浸看重本人的回應。每一方都覺得自己最忠於聖經。'],
-  women: ['女性可以當牧師嗎', '支持的人指出，聖經裡有女先知、女執事，保羅也稱讚女同工，加拉太書說在基督裡不分男女；被質疑的是，是不是讓文化走在聖經前面。反對的人根據提摩太前書等經文，認為牧養的職分屬於男性，但不代表女性比較不重要；被質疑的是，有沒有把一段經文讀得比整本聖經更重。天主教、東正教只為男性授聖秩；新教各宗派的做法不一樣。'],
+  women: ['女性可以當牧師嗎', '支持的人指出，聖經裡有女先知、女執事，保羅也稱讚女同工，加拉太書說在基督裡不分男女；被質疑的是，是不是讓文化走在聖經前面。反對的人根據提摩太前書等經文，認為牧養的職分屬於男性，但不代表女性比較不重要；被質疑的是，有沒有把一段經文讀得比整本聖經更重。天主教、東正教只為男性授聖秩（東正教歷史上有女執事，2024 年又在辛巴威按立了一位）；新教各宗派不一樣。'],
   prophecy: ['預言要怎麼分辨', '靈恩派相信，神今天仍然透過預言說話，聖經也要人「凡事察驗」；被質疑的是，預言常常說不準，也容易被有心人利用。另一邊的「止息論」認為，預言和說方言這類恩賜在使徒時代以後就停止了，聖經已經足夠；被質疑的是，這樣是不是限制了聖靈。多數教會的共識是：預言要被群體察驗，不能拿來控制人。'],
   healing: ['醫治和醫療', '很多基督徒相信神今天仍然醫治，也為病人禱告；被質疑的是，沒有好起來的人常被說成信心不夠，反而多受一層傷。也有人認為神多半透過醫學醫治，不期待神蹟；被質疑的是，會不會把禱告變得可有可無。大多數教會都同意：禱告不需要停藥，停藥前一定要問醫生。'],
   neighbor: ['教會和弱勢的鄰舍', '有人認為照顧窮人、街友和難民，本身就是福音的一部分，耶穌也這樣做；被質疑的是，教會會不會變成社福機構，忘了傳福音。也有人認為教會的核心是傳福音，社會服務交給專業的人；被質疑的是，愛人如己如果停在嘴上，福音就很難被相信。兩邊的人常常一起出現在救災現場。'],
@@ -2253,6 +2312,7 @@ const EXPLAIN = {
   prayerhouse: ['二十四小時禱告和末世', '二十四小時不停禱告和敬拜的「禱告殿」，在靈恩圈子很受歡迎，很多人說在那裡第一次愛上禱告；被質疑的是，有些禱告殿很強調末世，讓人活在焦慮裡，也常把一位創辦人看得很重。其他傳統的修道院，其實早就有日夜輪流禱告的傳統。'],
   celebrity: ['大型教會和明星領袖', '大型教會能做很多小教會做不到的事：好的音樂、大型的救援、培育很多人；被質疑的是，權力容易集中在少數明星領袖身上，出事的時候沒有人管得了。也有人認為問題不在大小，而在有沒有監督。近年好幾間知名的教會，都在醜聞以後請外部機構調查、改變治理的方式。'],
   worshipmusic: ['敬拜歌曲', '當代的敬拜歌曲旋律好唱、很能帶動情感，讓很多人在敬拜裡經歷神；被質疑的是，有些歌的歌詞太淺，比較像演唱會，也讓全世界的教會都唱少數幾間大教會的歌。傳統聖詩的支持者看重歌詞的神學深度；被質疑的是，年輕人可能聽不懂。很多教會兩種都唱。'],
+  tentmaking: ['用專業身分宣教', '支持的人說，保羅也一邊織帳棚一邊傳福音，醫生、老師真的在服務當地人，信仰只是自然流露。批評的人，包括很多當地的穆斯林，認為如果工作只是拿簽證的掩護，就是不誠實，也會讓當地的信徒和真正的外籍專業人士受到懷疑。很多差會因此要求成員真的把專業做好，並對當地人坦白自己是基督徒。'],
   charisma: ['靈恩運動', '靈恩派和五旬節派相信，聖靈今天仍然賜下說方言、預言和醫治，是全世界成長最快的基督教群體；被質疑的是，有時太追求經歷，忽略了聖經和品格。非靈恩的教會比較看重講道和教義；被質疑的是，會不會讓信仰只剩下頭腦。兩邊其實都有很多人在問同一個問題：怎樣才是被聖靈帶領。'],
 };
 
@@ -2288,7 +2348,7 @@ function arcFx(fx) {
   if (fx === 'leave' && (phase === 'believer' || phase === 'dechurched')) { drop(); phase = 'left'; journey.push({ age, kind: 'leave' }); addLog(age, '你決定不再信了。', 'decision'); highlights.push({ age, text: '放下了信仰。', cls: 'milestone' }); }
   setStatus();
 }
-function arcHelp(k) { if (k && !helpShown.has(k)) { helpShown.add(k); addLog(age, HELP_NOTE[k], 'milestone note'); } }
+function arcHelp(k) { if (k && !helpShown.has(k)) { helpShown.add(k); addLog(age, val(HELP_NOTE[k]), 'milestone note'); } }
 function arcFinish() { arc = null; }
 function pushEnd(e) { const s = localize(fmt(val(e))); if (s && !arcEnds.some(x => x.s === s)) arcEnds.push({ s, ph: phase }); }
 // 故事線結局裡講「現在還在信、還在教會」的句子，如果後來離開了教會或放下信仰，終章和分享卡就不再用
@@ -2813,10 +2873,10 @@ async function makeShareCard(end, martyred) {
   x.fillText('這一生的背景', P, oy); oy += 20;
   const how = firstAge === null ? '沒有機會' : firstChannel() || (me.parentReligion === 'christian' ? '家裡' : '小時候聽人說');
   const bg = [
-    ['出生家庭', RELIGION[me.parentLabel]],
+    ['出生家庭', relName(me)],
     ['全國基督新教', protPct(me.country)],
     ['怎麼接觸到', how],
-    ['未得之民', g.unreached === true ? '是' : g.unreached === false ? '否' : '不明'],
+    ['族群的基督徒', g.christian_pct != null ? pct(g.christian_pct) : '不明'],
   ];
   const ow = (W - P * 2 - 3 * 16) / 4;
   bg.forEach(([k, v], i) => {
@@ -3010,13 +3070,13 @@ const CROSS_SCENE = {
   doubt: '你禱告了很久，事情卻沒有變好。晚上躺在床上，你問自己：如果神真的在，為什麼這麼安靜？你不想騙自己，也不想就這樣放掉。',
   church_hurt: '那件事過後，你走進教會時心裡總是一緊。台上的人還在講愛，你卻想起那天沒有人站在你這邊。你開始想，自己還要不要再來。',
   burnout: '你在教會服事了很多年，每個週末都排得滿滿的。有一天早上醒來，你發現自己一點都不想出門。你不確定是累了，還是心裡有什麼東西慢慢熄了。',
-  family_oppose: '吃飯的時候，家人終於問你，是不是在信那個外國的宗教。桌上沒有人說話，大家都在等你回答。你知道，你接下來說的每一句話，都會被記很久。',
+  family_oppose: '吃飯的時候，家人終於問你，是不是改信了別的宗教。桌上沒有人說話，大家都在等你回答。你知道，你接下來說的每一句話，都會被記很久。',
   family_expel: '長輩把你叫到客廳，說如果你不放棄，就不要再回這個家。你的東西已經被放在門口。你站在那裡，想起小時候在這個家長大的每一天。',
   discovered: '有人看到你藏在抽屜裡的那本書。隔天，鄰居看你的眼神變了，連平常會打招呼的人也轉過頭去。你知道，事情已經傳開了。',
   detained: '他們把你帶到一個沒有窗戶的房間，問你跟誰聚會、書是誰給的。你一直沒有回答，他們就一直問。到了深夜，有人把一張紙推到你面前，說簽了就可以回家。',
   job_loss: '主管把你叫進辦公室，說公司「不方便」留用你。他沒有說原因，可是你們都知道是為什麼。走出大樓的時候，你不知道回家要怎麼跟家人說。',
   raid: '你們正在小聲唱歌，門突然被撞開。有人大喊，所有人被押到牆邊，聖經被丟在地上。你看著身邊一起禱告的人，一個一個被帶走。',
-  attacked: '你回家的路上，被幾個人攔了下來。他們罵你背叛了自己的族人，動手打你。你倒在地上，聽見他們說，下次就沒這麼簡單了。',
+  attacked: () => me.parentReligion === 'christian' ? '你回家的路上，被幾個人攔了下來。他們說這裡不歡迎你們這些人，動手打你。你倒在地上，聽見他們說，下次就沒這麼簡單了。' : '你回家的路上，被幾個人攔了下來。他們罵你背叛了自己的族人，動手打你。你倒在地上，聽見他們說，下次就沒這麼簡單了。',
   ancestor: '過年了，全家族圍在祖先牌位前，長輩把香遞到你手上。所有人都在看你。你手裡拿著香，心裡想著這一拜代表什麼。',
   leave_home: '你離家到外地讀書或工作，沒有人再叫你週日起床去教會。第一個週末，你睡到中午。你想，要不要在這裡找一間教會，還是就先這樣。',
   invite: '很多年沒去教會了，有一天收到以前一起聚會的朋友傳來的訊息。他沒有多問什麼，只說這週日有空的話，一起吃個飯。你看著那則訊息，想了很久。',
@@ -3024,16 +3084,18 @@ const CROSS_SCENE = {
 const CROSS_SCENE_GENTLE = {
   detained: '你被帶走問話，他們想知道你跟誰聚會。問了很久，最後有人說，只要你簽一張保證書，就可以回家。',
   raid: '聚會進行到一半，有人闖了進來，要大家停下來。聖經被收走，幾個人被帶去問話。那天之後，聚會的地方就空了。',
-  attacked: '你回家的路上被人攔下來，他們說你背叛了自己的族人，警告你小心一點。你回到家，很久都沒辦法平靜下來。',
+  attacked: () => me.parentReligion === 'christian' ? '你回家的路上被人攔下來，他們說這裡不歡迎你們這些人，警告你小心一點。你回到家，很久都沒辦法平靜下來。' : '你回家的路上被人攔下來，他們說你背叛了自己的族人，警告你小心一點。你回到家，很久都沒辦法平靜下來。',
 };
 const ANCESTOR_TW_SCENE = '你知道家人不是要為難你，他們只是害怕，怕家裡的事從此沒人接下去。你想守住自己的信仰，也不想讓他們傷心。那天晚上，你想了很久，要怎麼跟他們說。';
-function crossScene(id) { if (id === 'ancestor' && ancestorLocal) return ANCESTOR_TW_SCENE; return id ? (gentleOn() && CROSS_SCENE_GENTLE[id]) || CROSS_SCENE[id] || '' : ''; }
+function crossScene(id) { if (id === 'ancestor' && ancestorLocal) return ANCESTOR_TW_SCENE; return id ? val((gentleOn() && CROSS_SCENE_GENTLE[id]) || CROSS_SCENE[id]) || '' : ''; }
+const PRESSURE_X = ['family_oppose', 'family_expel', 'discovered', 'detained', 'job_loss', 'raid', 'attacked', 'ancestor'];
+let crossN = 0, crossP = 0;
 function crossroad(reason, id) {
   stop(); lastCross = age;
   const opts = CROSS_OPTIONS[phase];
   const box = document.createElement('div'); box.className = 'choice';
   const scene = crossScene(id);
-  box.innerHTML = `<h3>${age} 歲，信仰的十字路口</h3>${scene ? '<p class="scene"></p>' : ''}<p class="ask"></p><div class="opts">${
+  box.innerHTML = `<h3>${age} 歲，${PRESSURE_X.includes(id) && id !== 'ancestor' ? '壓力之下' : '信仰的十字路口'}</h3>${scene ? '<p class="scene"></p>' : ''}<p class="ask"></p><div class="opts">${
     opts.map(([k, l, d]) => `<button data-c="${k}"><b>${l}</b><small>${d}</small></button>`).join('')}</div>`;
   if (scene) box.querySelector('.scene').textContent = scene;
   box.querySelector('.ask').textContent = reason;
@@ -3136,11 +3198,11 @@ function fillBirthCard() {
   $('whoCountry').textContent = c.name;
   $('whoName').textContent = `家人叫你　${me.name}`;
   $('whoMeta').textContent = `${d.getFullYear()} 年 ${d.getMonth() + 1} 月・${c.continent}`;
-  const tags = [...(me.designated ? ['指定出生在台灣（真實比例約每 ' + twOdds().toLocaleString() + ' 個嬰兒一個）'] : []), me.sex === 'm' ? '男孩' : '女孩', g.name.startsWith('其他') ? '當地的少數族群' : g.name, `家庭宗教：${RELIGION[me.parentLabel]}`];
+  const tags = [...(me.designated ? ['指定出生在台灣（真實比例約每 ' + twOdds().toLocaleString() + ' 個嬰兒一個）'] : []), me.sex === 'm' ? '男孩' : '女孩', g.name.startsWith('其他') ? '當地的少數族群' : g.name, `家庭宗教：${relName(me)}`];
   if (g.language_name) tags.push(`母語：${g.language_name}`);
   $('whoTags').innerHTML = tags.map(() => '<li></li>').join('');
   [...$('whoTags').children].forEach((li, i) => li.textContent = tags[i]);
-  $('birthStory').textContent = `${d.getFullYear()} 年 ${d.getMonth() + 1} 月，你出生在${c.name}（${c.continent}），是個${me.sex === 'm' ? '男孩' : '女孩'}，家人叫你${me.name}。你的家人是${g.name.startsWith('其他') ? '當地的少數族群' : g.name}${g.language_name ? `，說${g.language_name}` : ''}，家裡${REL_PHRASE[me.parentLabel]}。`;
+  $('birthStory').textContent = `${d.getFullYear()} 年 ${d.getMonth() + 1} 月，你出生在${c.name}（${c.continent}），是個${me.sex === 'm' ? '男孩' : '女孩'}，家人叫你${me.name}。你的家人是${g.name.startsWith('其他') ? '當地的少數族群' : g.name}${g.language_name ? `，說${g.language_name}` : ''}，家裡${relPhrase(me)}。`;
   // 在 53 國中的位置
   const all = DATA.countries.reduce((s, x) => s + x.births_per_year, 0);
   const share = c.births_per_year / all * 100;
@@ -3164,7 +3226,7 @@ function fillBirthCard() {
     const parts = [['天主教', tr.catholic], ['基督新教', tr.protestant], ['東正教', tr.orthodox], ['其他基督教團體', tr.other]].filter(([, v]) => v >= 1).sort((a, b) => b[1] - a[1]);
     xn.push(`基督徒之中，${parts.map(([n, v], i) => `${n}${i === 0 ? '約佔 ' : '約 '}${pct(v)}`).join('、')}（Pew，2010 年估計）。`);
   }
-  xn.push(`${c.jp.people_groups_total} 個族群裡，有 ${c.jp.unreached_groups} 個被列為未得之民，約佔人口的 ${pct(c.jp.unreached_population_pct)}。`);
+  xn.push(`${c.jp.people_groups_total} 個族群裡，有 ${c.jp.unreached_groups} 個族群的基督徒很少（福音派不到 2%），約佔人口的 ${pct(c.jp.unreached_population_pct)}。`);
   if (c.wwl.rank) {
     const top2 = Object.entries(c.wwl.spheres).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k]) => SPHERE_ZH[k]);
     xn.push(`基督徒受迫害程度全球第 ${c.wwl.rank} 名${c.wwl.rank > 50 ? '（觀察名單）' : ''}，壓力最大的是${top2.join('和')}層面。`);
@@ -3279,11 +3341,24 @@ function setStatus() {
   else if (phase === 'dechurched') s.innerHTML = `<span class="lit">${faithAge} 歲信主</span>，現在沒有去教會`;
   else if (phase === 'left') s.innerHTML = `${faithAge} 歲信主，後來放下了信仰`;
   else s.innerHTML = `<span class="lit">${firstAge} 歲第一次接觸福音</span>，還沒有回應`;
+  // 天主教的用語（例如「信主」）
+  if (isCath()) s.innerHTML = localize(s.innerHTML);
 }
 
 
 // ── 生活片段：情境文字，不是統計資料，也不影響任何機率
 // 宗教日常依家裡的宗教；人生里程碑不分國家；擦肩而過只在還沒接觸福音時出現，不算接觸到福音
+// 穆斯林家庭：週五的聚禮對男性是義務，很多地方的女性在家裡做禮拜；伊朗、伊拉克多數是什葉派；
+// 中國的新疆和部分回族地區，未成年人不能上清真寺的經文班，學生在齋月常被要求照常吃午飯（路透社、人權觀察等報導）
+function muslimScenes(p) {
+  const S = SCENES.muslim.filter(s => !/聚禮|喚拜/.test(s[2]));
+  const many = (p.country.religion_pct.muslim || 0) >= 20;
+  S.push(many ? [3, 7, '清晨，你被遠處清真寺的喚拜聲叫醒。'] : [3, 7, '清晨，爸爸手機裡的喚拜提醒響了，家裡的大人起來做晨禮。']);
+  S.push(p.sex === 'm' ? [16, 70, '每週五中午，你跟著大家去清真寺聚禮。'] : [16, 70, '週五中午，家裡的男人去清真寺聚禮，你在家裡鋪好禮拜毯做禮拜。']);
+  if (['IR', 'IQ'].includes(p.country.id)) S.push([6, 40, '阿舒拉節，你跟著家人去參加紀念伊瑪目侯賽因的悼念遊行。']);
+  if (p.country.id === 'CN') return [[6, 12, '你在家裡跟著奶奶學念《古蘭經》，因為未成年人不能去清真寺的經文班。'], [10, 18, '齋月的時候，學校的老師會在中午看著大家吃午飯。'], [4, 15, '開齋節，你穿上新衣服，跟著家人去親戚家拜訪。'], [20, 60, '鎮上清真寺的圓頂被拆掉了，換成了中式的屋頂。'], [16, 70, p.sex === 'm' ? '週五你去清真寺做禮拜，門口裝著好幾支攝影機。' : '週五你在家裡做禮拜，聽說清真寺門口裝了好幾支攝影機。'], [40, 80, '你一直存錢，希望有一天能去麥加朝覲。']];
+  return S;
+}
 const SCENES = {
   muslim: [[3, 7, '清晨，你被遠處清真寺的喚拜聲叫醒。'], [6, 10, '你開始跟著家人學念《古蘭經》。'], [8, 12, '這是你第一次跟著大人守齋戒月，撐到傍晚開齋的那一刻特別難忘。'], [4, 15, '開齋節，你穿上新衣服，跟著家人去親戚家拜訪。'], [10, 40, '宰牲節，家裡把肉分給鄰居和需要的人。'], [16, 70, '每週五中午，你跟著大家去清真寺聚禮。'], [30, 60, '你開始教自己的孩子做禮拜。', 'child'], [40, 80, '你一直存錢，希望有一天能去麥加朝覲。']],
   hindu: [[3, 8, '家裡的小神龕每天都點著燈，你學著雙手合十。'], [5, 15, '排燈節的晚上，整條街都點滿了油燈。'], [6, 18, '灑紅節，你和朋友把彩色粉末撒得滿身都是。'], [10, 40, '你跟著家人去廟裡，排隊獻上花和供品。'], [20, 40, '你的婚禮依照家族的傳統，在聖火前完成儀式。', 'partner'], [40, 80, '你一直想走一趟聖地朝聖。']],
@@ -3339,6 +3414,8 @@ let penteConv = 0;
 // 處境片段：依當下的信仰狀態出現，每年約 4%，一生最多三句；[最小年齡, 最大年齡, 文字, 真實故事備註]
 const EU3 = ['DE', 'GB', 'FR'];
 const believerish = () => phase === 'believer' || (me.parentReligion === 'christian' && phase !== 'left' && phase !== 'dechurched');
+// 印度的達利特（表列種姓）族群（Joshua Project 名稱）
+const DALIT_RE = /查馬爾|馬迪加|瓦爾米基|杜薩德|帕斯人|馬拉人（印度教）|阿迪達羅毗荼|馬哈爾|納馬蘇德拉|莫奇/;
 const SITU = [
   { when: () => !hardHere() && !['RU', 'CN', 'KP'].includes(me.country.id) && (me.country.religion_pct.muslim ?? 0) < 50, items: [[15, 80, '兩個穿得很整齊的人按了你家的門鈴，遞給你一本小冊子，說想跟你談談聖經。', '', 0.25]] },
   { when: () => me.country.id === 'RU', items: [[15, 80, '鄰居是耶和華見證人，有一天警察搜了他家，把他帶走了。', '2017 年 4 月，俄羅斯最高法院把耶和華見證人列為「極端組織」，約 17.5 萬名信徒的 395 個地方聚會被關閉。']] },
@@ -3349,7 +3426,10 @@ const SITU = [
   { when: () => EU3.includes(me.country.id) && me.parentReligion === 'christian' && phase !== 'believer', items: [[25, 70, '你受過洗，婚禮也在教堂辦，可是你已經很多年沒有禱告了。']] },
   { when: () => EU3.includes(me.country.id), items: [[15, 80, '家附近的老教堂改成了酒吧，彩繪玻璃還留在牆上。', '', 0.5]] },
   { when: () => EU3.includes(me.country.id) && phase === 'believer', items: [[20, 80, '週日的教堂裡只有十幾個人，大多頭髮都白了。'], [20, 60, '教會來了一群從伊朗和非洲來的移民，聚會突然變得很擠，詩歌也多了好幾種語言。']] },
-  { when: () => me.country.id === 'EG' && believerish(), items: [[15, 80, '教會為那二十一位在利比亞被殺的基督徒禱告。', '2015 年，21 名在利比亞工作的基督徒被伊斯蘭國綁架殺害，大多來自上埃及的農村。家屬沒有談報仇，其中一位父親說：「我已經原諒了殺害我兒子的人。」']] },
+  { when: () => me.country.id === 'IN' && phase === 'believer' && ['hindu', 'other', 'buddhist'].includes(me.parentLabel) && DALIT_RE.test(me.group.name), items: [[16, 70, '你信主以後才知道，在法律上，你會失去原本「表列種姓」的身分，也不能再用保障名額考試和求職。', '依 1950 年的《表列種姓憲法命令》，只有信印度教、錫克教（1956 年加入）或佛教（1990 年加入）的達利特可以列為表列種姓；改信基督教或伊斯蘭教的人會失去這個身分。要不要擴及基督徒和穆斯林，印度最高法院和政府委員會已經討論了二十多年。']] },
+  { when: () => me.country.id === 'NG' && phase !== 'unheard', items: [[15, 80, '你聽說，鄰州有一位老伊瑪目，在武裝分子來襲時把兩百多位基督徒藏進清真寺和自己家裡。', '2018 年 6 月，奈及利亞高原州的伊瑪目阿布巴卡・阿布杜拉希，把 262 位基督徒藏在清真寺和家中，擋在門口不讓武裝分子進去。2019 年，他獲得美國國務院頒發的國際宗教自由獎。']] },
+  { when: () => me.country.id === 'KE' && phase !== 'unheard', items: [[15, 80, '你讀到一篇報導：武裝分子攔下一輛公車，要穆斯林乘客把基督徒指出來，他們不肯。', '2015 年 12 月，肯亞曼德拉的公車遇襲，青年黨要乘客分成穆斯林和非穆斯林，穆斯林乘客拒絕，還把頭巾借給基督徒女性。教師薩拉赫・法拉為此中槍，隔月過世。他說：「我們是兄弟，只是信仰不同。」']] },
+  { when: () => me.country.id === 'EG' && believerish(), items: [[15, 80, '教會為那二十一位在利比亞被殺的基督徒禱告。', '2015 年，21 名在利比亞工作的基督徒被伊斯蘭國綁架殺害，大多來自上埃及的農村。其中兩位罹難者的哥哥貝希爾，在電視上為殺害他弟弟的人禱告。']] },
   { when: () => me.country.id === 'US' && phase !== 'unheard', items: [[15, 80, '你讀到一篇舊報導：一間教會的查經聚會發生槍擊，家屬在法庭上對兇手說，我們原諒你。', '2015 年 6 月，查爾斯頓的以馬內利非裔衛理公會教會發生槍擊，九人死亡。幾天後的法庭上，好幾位家屬對兇手說，他們原諒他。', 0.5],
     [15, 80, '你讀到艾美許人的故事，他們去了殺害自己孩子的人的喪禮。', '2006 年，賓州艾美許人的學校發生槍擊，五個女孩死亡。槍手的喪禮上，約三十位艾美許人到場，安慰他的遺孀。', 0.5]] },
   { when: () => phase === 'believer' && !hardHere(), items: [[20, 50, '你開始把從小學到的信仰一條一條拆開來想，有些放下了，有些反而更確定。'],
@@ -3433,7 +3513,10 @@ const REGION_SCENES = [
   { when: p => p.parentLabel === 'catholic', items: [[7, 15, '第一次辦告解，你在小隔間裡緊張得說不出話。'], [5, 15, '奶奶每天晚上帶著全家念玫瑰經。'], [10, 40, '四旬期的星期五，家裡不吃肉。'], [20, 70, '你跟著教會去朝聖，走了好幾天的路。']] },
   { when: p => p.parentLabel === 'catholic' && p.country.id === 'PH', items: [[10, 60, '一月九日，你光著腳跟著黑耶穌像遊行，在人群裡擠了一整天，只想摸到拉車的繩子。']] },
   { when: p => p.parentLabel === 'orthodox', items: [[4, 15, '家裡的角落掛著聖像，媽媽每天在前面點一盞小燈。'], [6, 30, '復活節前夜，全村的人拿著蠟燭等到午夜，神父喊：「基督復活了！」']] },
-  { when: p => p.parentLabel === 'orthodox' && p.country.id === 'ET', items: [[8, 40, '一年有一百八十天要禁食，不吃肉、蛋和奶，你很早就習慣了。']] },
+  { when: p => p.parentLabel === 'orthodox' && p.country.id === 'ET', items: [[8, 40, '一年有一百八十天要禁食，不吃肉、蛋和奶，你很早就習慣了。'], [5, 40, '一月的主顯節（提姆卡特），你披著白色的披巾跟著大家到水邊，看神父為水祝福。']] },
+  { when: p => p.parentLabel === 'orthodox' && p.country.id === 'EG', items: [[8, 40, '教會的牆上掛著亞他那修的聖像，大家叫他「使徒般的亞他那修」。'], [10, 60, '聖母升天前的齋期，你跟著家人每天去教堂。']] },
+  { when: p => p.parentLabel === 'orthodox' && p.country.id === 'IN', items: [[8, 60, '你們的教會說，使徒多馬在公元 52 年來到喀拉拉，你們的祖先就是那時信的。']] },
+  { when: p => p.parentLabel === 'orthodox' && ['IR', 'TR'].includes(p.country.id), items: [[5, 40, '亞美尼亞教會在一月六日一起慶祝聖誕和主顯，奶奶會煮一大鍋魚和米飯。']] },
   { when: p => isChristianFam(p) && p.country.id === 'EG', items: [[4, 10, '爸媽帶你在手腕內側刺了一個小十字架，說這樣到哪裡，大家都知道你是誰。']] },
   // 教會記得的宣教歷史
   { when: p => isTwHan(p) && isChristianFam(p), items: [[6, 12, '主日學老師講馬偕的故事：一百多年前，他在淡水一邊幫人拔牙，一邊講耶穌。'], [10, 50, '你去彰化的醫院看病，走廊上掛著「切膚之愛」的故事：1928 年，蘭大衛醫生的妻子連瑪玉，把自己的皮膚移植給一個傷口潰爛的少年。']] },
@@ -3442,7 +3525,7 @@ const REGION_SCENES = [
   { when: p => p.country.id === 'KR' && isChristianFam(p), items: [[6, 15, '主日學老師說，1885 年的復活節，兩位美國宣教士搭同一艘船來到韓國。'], [15, 60, '教會的牆上貼著一張世界地圖，插滿了你們差派出去的宣教士的照片。']] },
   { when: p => p.country.id === 'NG' && isChristianFam(p), items: [[6, 15, '主日學老師講瑪麗・史雷蘇的故事：她從蘇格蘭來到卡拉巴，救下了很多被丟棄的雙胞胎。'], [20, 60, '你們教會差派了一對夫妻，到北方還沒有教會的地方。']] },
   { when: p => p.country.id === 'BR' && isChristianFam(p), items: [[20, 60, '你們教會差派了一對夫妻去莫三比克，那裡也說葡萄牙語。']] },
-  { when: p => p.country.id === 'IN' && isChristianFam(p), items: [[10, 40, '你聽過艾美・卡邁可的故事，她在南印度住了五十五年，收容了很多被迫在廟裡服事的女孩。']] },
+  { when: p => p.country.id === 'IN' && isChristianFam(p), items: [[10, 40, '你聽過艾美・卡邁可的故事，她在南印度住了五十五年，收容了很多被獻給廟宇的女孩。後來印度的改革者也推動立法，廢除了這個制度。']] },
   { when: p => ['US', 'KR', 'TW', 'BR'].includes(p.country.id) && isChristianFam(p), items: [[16, 30, '你參加了一趟十天的短宣，拍了很多照片。回來之後你在想，到底是誰在幫誰。']] },
   // 五旬節派、靈恩派興盛的國家，新教或獨立教會的家庭
   { when: p => PENTE.includes(p.country.id) && ['protestant', 'christian'].includes(p.parentLabel) && ['pente', 'indep'].includes(p.denom), items: PENTE_FAM },
@@ -3484,7 +3567,7 @@ function planScenes(p) {
   const ea = EAST_ASIA.includes(p.country.id) && !['ID', 'PH', 'MM', 'TH'].includes(p.country.id);
   const ok = s => !s[3] || s[3] === 'all' || s[3] === p.parentLabel || (s[3] === 'ea' && ea) || (s[3] === 'nea' && !ea) || (s[3] === 'child' && child !== null) || (s[3] === 'partner' && partner !== null);
   const local = REGION_SCENES.filter(x => x.when(p)).flatMap(x => x.items);
-  const pool = [...(SCENES[fam] || []), ...local].filter(ok).filter(s => s[0] <= life);
+  const pool = [...((fam === 'muslim' ? muslimScenes(p) : isSikh(p) ? SIKH_SCENES : SCENES[fam]) || []), ...local].filter(ok).filter(s => s[0] <= life);
   pool.sort(() => Math.random() - 0.5).slice(0, r(3, 4)).forEach(s => {
     let lo = s[0];
     if (s[3] === 'child') lo = Math.max(lo, child + 6);
@@ -3526,7 +3609,7 @@ function start(opt = {}) {
   stop(); music.play();
   $('birth').classList.remove('living');
   me = makePerson(opt && opt.tw ? { tw: true } : {}); assignTrad(me);
-  scenePlan = planScenes(me); paradoxShown = false; lastLife = null; ancestorLocal = false; cnSceneUsed = new Set(); cnSceneCount = 0; ministry = newMinistry(); arc = null; arcUsed = new Set(); mvSeen = new Set(); explainSeen = new Set(); cfNodes = []; notesShown = new Set(); arcEnds = []; helpShown = new Set(); sceneUsed = new Set(); importantAt = new Set(); nearCount = 0; otherSideShown = false;
+  scenePlan = planScenes(me); paradoxShown = false; lastLife = null; ancestorLocal = false; cnSceneUsed = new Set(); cnSceneCount = 0; ministry = newMinistry(); arc = null; arcUsed = new Set(); crossN = 0; crossP = 0; mvSeen = new Set(); explainSeen = new Set(); cfNodes = []; notesShown = new Set(); arcEnds = []; helpShown = new Set(); sceneUsed = new Set(); importantAt = new Set(); nearCount = 0; otherSideShown = false;
   others = Array.from({ length: 4 }, simulateNPC);
   channel = null; journey = []; highlights = []; feeling = null; lastCross = -99; stats = { persecution: 0, growth: 0 }; words = []; reflectUsed = new Set(); penteSeen = false; penteConv = 0; situCount = 0; tradNoteShown = false; neoSeen = false; pendingReflect = null; age = 0; phase = 'unheard'; firstAge = null; faithAge = null; st = {}; hearCount = 0; paused = false;
   $('log').innerHTML = ''; $('choiceSlot').innerHTML = ''; $('end').hidden = true;
@@ -3536,9 +3619,9 @@ function start(opt = {}) {
     ['族群', g.name],
     ['母語', g.language_name || '多種語言'],
     ['母語聖經翻譯', BIBLE[g.bible_status ?? 'null'], ['none', 'started'].includes(g.bible_status)],
-    ['家裡的宗教', RELIGION[me.parentLabel]],
+    ['家裡的宗教', relName(me)],
     ['全國基督新教', protPct(c)],
-    ['未得之民族群', g.unreached === true ? '是' : g.unreached === false ? '否' : '不明', g.unreached === true],
+    ['族群的基督徒比例', g.christian_pct != null ? pct(g.christian_pct) : '不明', g.christian_pct != null && g.christian_pct < 2],
     ['平均壽命', `${c.life_expectancy[me.sex]} 歲`],
     ['基督徒受迫害程度（WWL 2026）', c.wwl.rank ? `第 ${c.wwl.rank} 名` : '不在評分名單上'],
   ];
@@ -3546,7 +3629,7 @@ function start(opt = {}) {
   [...$('facts').querySelectorAll('dd')].forEach((dd, i) => dd.textContent = facts[i][1]);
   drawMap(c.id);
   fillBirthCard();
-  if (g.unreached) addLog(0, '你出生的族群被 Joshua Project 列為未得之民，意思是族群裡的基督徒很少，還不足以靠自己把福音傳遍整個族群。', 'milestone');
+  if (g.unreached) addLog(0, `你出生的族群裡，基督徒很少（Joshua Project 估計約 ${g.christian_pct != null ? pct(g.christian_pct) : '不到 5%'}）。`, 'milestone');
   addLog(0, '你出生了。', 'milestone');
   setStatus(); showAge(0);
   // 先讀完出生登記，按「開始這一生」才開始
@@ -3623,7 +3706,10 @@ function tick() {
     if (!trigger && phase === 'believer' && age === 19 && faithAge < 19 && Math.random() < 0.7) { trigger = '你離開家去讀書或工作，身邊沒有人會問你這週有沒有去教會。'; triggerId = 'leave_home'; }
     // 沒去教會的人，偶爾會有人邀請你回來
     if (!trigger && phase === 'dechurched' && Math.random() < 0.06) { trigger = '一個老朋友約你，這週要不要一起回教會看看？'; triggerId = 'invite'; }
-    if (trigger && age - lastCross >= 3) {
+    // 十字路口一生最多三次，因為迫害而來的最多兩次、而且相隔至少八年，避免一再「重新決定要不要信」
+    const persX = PRESSURE_X.includes(triggerId);
+    if (trigger && age - lastCross >= (persX ? 8 : 3) && crossN < 3 && (!persX || crossP < 2)) {
+      crossN++; if (persX) crossP++;
       if (PAUSES.includes(age)) pendingReflect = age;
       return crossroad(trigger, triggerId);
     }
@@ -3787,14 +3873,14 @@ function finish(martyred) {
   const end = Math.min(age, me.lifespan);
   const lives = loadLives();
   const d = new Date();
-  lives.push({ name: me.name, designated: me.designated || false, date: `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`, country: me.country.name, countryId: me.country.id, continent: me.country.continent, group: me.group.name, parent: RELIGION[me.parentLabel], sex: me.sex, lifespan: end, firstAge, faithAge, martyred, journey: journeyText(), channel: firstChannel(), feeling: null, lastWord: '' });
+  lives.push({ name: me.name, designated: me.designated || false, date: `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`, country: me.country.name, countryId: me.country.id, continent: me.country.continent, group: me.group.name, parent: relName(me), sex: me.sex, lifespan: end, firstAge, faithAge, martyred, journey: journeyText(), channel: firstChannel(), feeling: null, lastWord: '' });
   saveLives(lives);
   addLog(end, martyred ? (gentleOn() ? '你提早走完了這一生。' : '你的一生在這裡結束。') : '你走完了這一生。', 'milestone');
   const c = me.country, g = me.group;
   const rows = [
     ['出生地', `${c.name}（${c.continent}）`],
     ['族群', g.name],
-    ['出生家庭的宗教', RELIGION[me.parentLabel]],
+    ['出生家庭的宗教', relName(me)],
     ['活到', `${end} 歲`],
     ['第一次接觸福音', firstAge === null ? '一生沒有機會' : `${firstAge} 歲${channel && channel.age === firstAge ? `，透過${channel.short}` : ''}`],
     ['母語聖經翻譯', BIBLE[g.bible_status ?? 'null']],
