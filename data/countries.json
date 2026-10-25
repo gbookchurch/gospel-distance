@@ -8035,7 +8035,7 @@
     },
     {
      "jp_id": 22099,
-     "name": "喬拉人（織工）",
+     "name": "喬拉人",
      "population": 1386000,
      "primary_language": "ben",
      "language_name": "孟加拉語",
@@ -8140,7 +8140,7 @@
     },
     {
      "jp_id": 19655,
-     "name": "哈詹人（理髮匠）",
+     "name": "哈詹人",
      "population": 574000,
      "primary_language": "ben",
      "language_name": "孟加拉語",
@@ -8185,7 +8185,7 @@
     },
     {
      "jp_id": 17016,
-     "name": "凱巴爾塔人（漁民）",
+     "name": "凱巴爾塔人",
      "population": 511000,
      "primary_language": "ben",
      "language_name": "孟加拉語",
@@ -8275,7 +8275,7 @@
     },
     {
      "jp_id": 17316,
-     "name": "陶匠種姓（印度教）",
+     "name": "庫姆哈爾人（印度教）",
      "population": 250000,
      "primary_language": "ben",
      "language_name": "孟加拉語",
@@ -8305,7 +8305,7 @@
     },
     {
      "jp_id": 17639,
-     "name": "莫奇人（皮匠，印度教）",
+     "name": "莫奇人（印度教）",
      "population": 242000,
      "primary_language": "ben",
      "language_name": "孟加拉語",
@@ -8320,7 +8320,7 @@
     },
     {
      "jp_id": 17007,
-     "name": "賈洛馬洛人（漁民）",
+     "name": "賈洛馬洛人",
      "population": 224000,
      "primary_language": "ben",
      "language_name": "孟加拉語",
@@ -8395,7 +8395,7 @@
     },
     {
      "jp_id": 17379,
-     "name": "洛哈爾人（鐵匠，印度教）",
+     "name": "洛哈爾人（印度教）",
      "population": 195000,
      "primary_language": "ben",
      "language_name": "孟加拉語",
@@ -8410,7 +8410,7 @@
     },
     {
      "jp_id": 18194,
-     "name": "蘇特拉達爾人（木匠，印度教）",
+     "name": "蘇特拉達爾人（印度教）",
      "population": 192000,
      "primary_language": "ben",
      "language_name": "孟加拉語",
@@ -8425,7 +8425,7 @@
     },
     {
      "jp_id": 18786,
-     "name": "馬利人（園丁，印度教）",
+     "name": "馬利人（印度教）",
      "population": 180000,
      "primary_language": "syl",
      "language_name": "錫爾赫特語",
@@ -8970,7 +8970,7 @@
     },
     {
      "jp_id": 16561,
-     "name": "查馬爾人（皮革匠，印度教）",
+     "name": "查馬爾人（印度教）",
      "population": 48611000,
      "primary_language": "hin",
      "language_name": "印地語",
@@ -9000,7 +9000,7 @@
     },
     {
      "jp_id": 16318,
-     "name": "巴尼亞人（商人）",
+     "name": "巴尼亞人",
      "population": 31232000,
      "primary_language": "hin",
      "language_name": "印地語",
@@ -9045,7 +9045,7 @@
     },
     {
      "jp_id": 18229,
-     "name": "泰利人（榨油匠，印度教）",
+     "name": "泰利人（印度教）",
      "population": 20242000,
      "primary_language": "hin",
      "language_name": "印地語",
@@ -9090,7 +9090,7 @@
     },
     {
      "jp_id": 17316,
-     "name": "陶匠種姓（印度教）",
+     "name": "庫姆哈爾人（印度教）",
      "population": 16935000,
      "primary_language": "hin",
      "language_name": "印地語",
@@ -9150,7 +9150,7 @@
     },
     {
      "jp_id": 17745,
-     "name": "奈人（理髮匠，印度教）",
+     "name": "奈人（印度教）",
      "population": 12816000,
      "primary_language": "hin",
      "language_name": "印地語",
@@ -9165,7 +9165,7 @@
     },
     {
      "jp_id": 16709,
-     "name": "洗衣匠種姓（印度教）",
+     "name": "多比人（印度教）",
      "population": 12692000,
      "primary_language": "hin",
      "language_name": "印地語",
@@ -9225,7 +9225,7 @@
     },
     {
      "jp_id": 18786,
-     "name": "馬利人（園丁，印度教）",
+     "name": "馬利人（印度教）",
      "population": 10706000,
      "primary_language": "hin",
      "language_name": "印地語",
@@ -9240,7 +9240,7 @@
     },
     {
      "jp_id": 17379,
-     "name": "洛哈爾人（鐵匠，印度教）",
+     "name": "洛哈爾人（印度教）",
      "population": 10215000,
      "primary_language": "hin",
      "language_name": "印地語",
@@ -9405,7 +9405,7 @@
     },
     {
      "jp_id": 18150,
-     "name": "索納爾人（金匠，印度教）",
+     "name": "索納爾人（印度教）",
      "population": 8399000,
      "primary_language": "hin",
      "language_name": "印地語",
@@ -9435,7 +9435,7 @@
     },
     {
      "jp_id": 17852,
-     "name": "帕西人（印度教）",
+     "name": "帕斯人（印度教）",
      "population": 8264000,
      "primary_language": "hin",
      "language_name": "印地語",
@@ -9540,7 +9540,7 @@
     },
     {
      "jp_id": 16768,
-     "name": "加達里亞人（牧羊人，印度教）",
+     "name": "加達里亞人（印度教）",
      "population": 7132000,
      "primary_language": "hin",
      "language_name": "印地語",
@@ -9585,7 +9585,7 @@
     },
     {
      "jp_id": 16332,
-     "name": "巴代人（木匠，印度教）",
+     "name": "巴代人（印度教）",
      "population": 7008000,
      "primary_language": "hin",
      "language_name": "印地語",
@@ -9600,7 +9600,7 @@
     },
     {
      "jp_id": 18314,
-     "name": "維什瓦卡瑪人（工匠）",
+     "name": "維什瓦卡瑪人",
      "population": 6998000,
      "primary_language": "tam",
      "language_name": "泰米爾語",
@@ -9720,7 +9720,7 @@
     },
     {
      "jp_id": 18217,
-     "name": "坦蒂人（織工，印度教）",
+     "name": "坦蒂人（印度教）",
      "population": 5296000,
      "primary_language": "ben",
      "language_name": "孟加拉語",
@@ -10140,7 +10140,7 @@
     },
     {
      "jp_id": 17432,
-     "name": "馬拉人（船夫，印度教）",
+     "name": "馬拉赫人（印度教）",
      "population": 3491000,
      "primary_language": "hin",
      "language_name": "印地語",
@@ -10485,7 +10485,7 @@
     },
     {
      "jp_id": 17263,
-     "name": "科里人（織工）",
+     "name": "科里人",
      "population": 2740000,
      "primary_language": "hin",
      "language_name": "印地語",
@@ -10710,7 +10710,7 @@
     },
     {
      "jp_id": 19655,
-     "name": "哈詹人（理髮匠）",
+     "name": "哈詹人",
      "population": 2109000,
      "primary_language": "urd",
      "language_name": "烏爾都語",
@@ -10740,7 +10740,7 @@
     },
     {
      "jp_id": 17639,
-     "name": "莫奇人（皮匠，印度教）",
+     "name": "莫奇人（印度教）",
      "population": 2067000,
      "primary_language": "ben",
      "language_name": "孟加拉語",
@@ -10830,7 +10830,7 @@
     },
     {
      "jp_id": 17016,
-     "name": "凱巴爾塔人（漁民）",
+     "name": "凱巴爾塔人",
      "population": 1941000,
      "primary_language": "ben",
      "language_name": "孟加拉語",
@@ -10995,7 +10995,7 @@
     },
     {
      "jp_id": 17692,
-     "name": "泰利人（榨油匠，穆斯林）",
+     "name": "泰利人（穆斯林）",
      "population": 1804000,
      "primary_language": "hin",
      "language_name": "印地語",
@@ -11100,7 +11100,7 @@
     },
     {
      "jp_id": 18060,
-     "name": "查馬爾人（皮革匠，錫克教）",
+     "name": "查馬爾人（錫克教）",
      "population": 1662000,
      "primary_language": "pan",
      "language_name": "東旁遮普語",
@@ -11220,7 +11220,7 @@
     },
     {
      "jp_id": 16905,
-     "name": "哈爾瓦伊人（甜點匠，印度教）",
+     "name": "哈爾瓦伊人（印度教）",
      "population": 1535000,
      "primary_language": "hin",
      "language_name": "印地語",
@@ -11568,7 +11568,7 @@
     },
     {
      "jp_id": 17597,
-     "name": "陶匠種姓（穆斯林）",
+     "name": "庫姆哈爾人（穆斯林）",
      "population": 3571000,
      "primary_language": "pnb",
      "language_name": "西旁遮普語",
@@ -11598,7 +11598,7 @@
     },
     {
      "jp_id": 17625,
-     "name": "莫奇人（皮匠，穆斯林）",
+     "name": "莫奇人（穆斯林）",
      "population": 3208000,
      "primary_language": "pnb",
      "language_name": "西旁遮普語",
@@ -11613,7 +11613,7 @@
     },
     {
      "jp_id": 17695,
-     "name": "塔爾汗人（木匠，穆斯林）",
+     "name": "塔爾汗人（穆斯林）",
      "population": 2867000,
      "primary_language": "pnb",
      "language_name": "西旁遮普語",
@@ -11628,7 +11628,7 @@
     },
     {
      "jp_id": 17692,
-     "name": "泰利人（榨油匠，穆斯林）",
+     "name": "泰利人（穆斯林）",
      "population": 2737000,
      "primary_language": "pnb",
      "language_name": "西旁遮普語",
@@ -11688,7 +11688,7 @@
     },
     {
      "jp_id": 17618,
-     "name": "馬奇人（漁民，穆斯林）",
+     "name": "馬奇人（穆斯林）",
      "population": 2178000,
      "primary_language": "pnb",
      "language_name": "西旁遮普語",
@@ -11703,7 +11703,7 @@
     },
     {
      "jp_id": 19655,
-     "name": "哈詹人（理髮匠）",
+     "name": "哈詹人",
      "population": 2084000,
      "primary_language": "pnb",
      "language_name": "西旁遮普語",
@@ -11718,7 +11718,7 @@
     },
     {
      "jp_id": 17609,
-     "name": "洛哈爾人（鐵匠，穆斯林）",
+     "name": "洛哈爾人（穆斯林）",
      "population": 2013000,
      "primary_language": "pnb",
      "language_name": "西旁遮普語",
@@ -11913,7 +11913,7 @@
     },
     {
      "jp_id": 17519,
-     "name": "洗衣匠種姓（穆斯林）",
+     "name": "多比人（穆斯林）",
      "population": 1166000,
      "primary_language": "skr",
      "language_name": "西萊基語",
@@ -12468,7 +12468,7 @@
     },
     {
      "jp_id": 18136,
-     "name": "信德莫哈納人（漁民）",
+     "name": "信德莫哈納人",
      "population": 491000,
      "primary_language": "snd",
      "language_name": "信德語",
@@ -12618,7 +12618,7 @@
     },
     {
      "jp_id": 17624,
-     "name": "馬拉人（船夫，穆斯林）",
+     "name": "馬拉赫人（穆斯林）",
      "population": 412000,
      "primary_language": "skr",
      "language_name": "西萊基語",
@@ -12843,7 +12843,7 @@
     },
     {
      "jp_id": 17684,
-     "name": "索納爾人（金匠，穆斯林）",
+     "name": "索納爾人（穆斯林）",
      "population": 337000,
      "primary_language": "skr",
      "language_name": "西萊基語",
