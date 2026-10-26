@@ -183,6 +183,33 @@ ok('出生卡有中國共產黨宗教政策的背景說明', E('CN_FACTS.length'
 ok('登記的選擇寫出黨的領導和「宗教中國化」', /宗教中國化/.test(E('CN_CHOICES.register.scene()')));
 ok('交流團有統戰的議題說明', E("ARCS.tour.S.start.explain") === 'unitedfront' && !!E('EXPLAIN.unitedfront'));
 
+// 人生回顧故事卡
+E("document.getElementById('lifeRecap')&&document.getElementById('lifeRecap').remove()");
+setup({ c: 'TW', a: 70 }); E("firstAge=null;faithAge=null;phase='unheard';journey=[];stats={persecution:0,growth:0};me.lifespan=70;");
+ok('沒聽過福音的人生：稱號不評斷', E("lifeTitle(70,false)[0]") === '在遠方長大的人');
+E("firstAge=20;faithAge=null;phase='decline';"); ok('基督徒家庭、聽過但沒有信：稱號是「從家裡走出去的人」', E("lifeTitle(70,false)[0]") === '從家裡走出去的人');
+E("firstAge=20;faithAge=22;phase='believer';journey=[{age:22,kind:'faith'},{age:30,kind:'leave'},{age:40,kind:'return_faith'}];"); ok('放下又重新相信：稱號正確', E("lifeTitle(70,false)[0]") === '重新相信的人');
+ok('稱號一共 60 個，而且不重複', E('TITLES.length') === 60 && new Set(E('TITLES.map(t=>t[0])')).size === 60);
+E("journey=[{age:22,kind:'faith'}];"); ok('殉道：稱號正確', E("lifeTitle(40,true)[0]") === '為信仰走到最後的人');
+E("finish(false)");
+ok('跑完一生會出現回顧故事卡', !!d.getElementById('lifeRecap') && d.querySelectorAll('#lifeRecap .rc-bars i').length >= 5);
+d.querySelector('#lifeRecap .rc-skip').click(); ok('可以跳過回顧，直接看結局', !d.getElementById('lifeRecap') && !d.getElementById('end').hidden);
+
+// 輕鬆片段
+ok('輕鬆片段一生最多兩則', /funCount >= 2/.test(E('funScene.toString()')));
+ok('教會日常的輕鬆片段只給信徒、不在迫害嚴重的處境', /believerish\(\) && !hardHere\(\)/.test(E('funScene.toString()')));
+setup({ trad: 'catholic', a: 30 }); ok('天主教的退修會叫避靜', E("localize('教會退修會')") === '教會避靜');
+
+// 穆斯林家庭的地區稱號
+ok('稱號總數 151 個（60＋穆斯林 40＋印度教 15＋佛教 22＋道教與民間信仰 14），全部不重複', E('TITLE_TOTAL()') === 151 && new Set([...E('TITLES.map(t=>t[0])'), ...E('MUSLIM_TITLES.map(t=>t[0])'), ...E('HINDU_TITLES.map(t=>t[0])'), ...E('BUDDHIST_TITLES.map(t=>t[0])'), ...E('FOLK_TITLES.map(t=>t[0])')]).size === 151);
+ok('色彩系統：每個家庭宗教和改信後的傳統都有顏色，配方加起來是 100%', (() => { for (let n = 0; n < 40; n++) { E('start();stop();'); for (let y = 0; y < 30; y++) E('tick();stop();'); const r = E('lifeRecipe(false)'); const sum = r.comps.reduce((a, c) => a + c.w, 0); if (Math.abs(sum - 1) > 1e-6 || r.comps.some(c => !/^#[0-9a-f]{6}$/.test(c.color))) return false; } return true; })());
+ok('色彩系統：53 國都分到地區色', E('DATA.countries.every(c => REGION_OF[c.id])'));
+const mt = (cc, re) => E(`(me.country=DATA.countries.find(c=>c.id==='${cc}'),me.group=me.country.people_groups.find(g=>${re}.test(g.name)),muslimTitle())`);
+setup({ c: 'CN', a: 40 });
+ok('中國：回族和維吾爾族拿到不同的地方稱號', mt('CN', '/回族/') === '在黃土高原的清真寺旁長大的人' && mt('CN', '/維吾爾/') === '在天山腳下長大的人');
+ok('俄羅斯：韃靼人是伏爾加河畔', mt('RU', '/韃靼/') === '在伏爾加河畔長大的人');
+ok('歐美的穆斯林家庭沒有地區稱號，維持原本的稱號', E("(me.country=DATA.countries.find(c=>c.id==='US'),muslimTitle())") === null);
+
 ok('沒有 JS 錯誤', errs.length === 0, errs.slice(0, 3).join(' / '));
 console.log(res.join('\n')); const fail = res.filter(r => r.startsWith('✗')).length;
 console.log(`\n${res.length - fail}/${res.length} 通過`); process.exit(fail ? 1 : 0);
