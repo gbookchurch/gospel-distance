@@ -654,6 +654,7 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
 .lifeprog i { transition: width .3s linear; }
 .lifeprog { height: 4px; }
 .rc-wash { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.rc-paper { mix-blend-mode: multiply; opacity: .55; }
 .liferecap > *:not(.rc-wash) { position: relative; z-index: 1; }
 .rc-skip { position: absolute !important; }
 .rc-strip { height: 10px; border-radius: 5px; }
@@ -950,7 +951,6 @@ body.rc-open { overflow: hidden; }
 
   <section class="birth" id="birth" hidden>
     <article class="cert">
-      <header class="cert-head"><h2>關於我的人生</h2><span class="cert-no" id="certNo"></span></header>
       <div class="cert-body">
         <div class="who">
           <p class="who-meta" id="whoMeta"></p>
@@ -2439,8 +2439,8 @@ function arcGo(next, now) {
 function arcFx(fx) {
   const drop = () => { if (ministry.role) { ministry.role = null; ministry.endAge = ministry.endAge ?? age; me.leader = false; } };
   if (fx === 'resign') drop();
-  if (fx === 'dechurch' && phase === 'believer') { drop(); phase = 'dechurched'; journey.push({ age, kind: 'dechurch' }); addLog(age, '你不再去教會，但心裡還信耶穌。', 'milestone'); highlights.push({ age, text: '離開了教會，但心裡還信。', cls: 'milestone' }); }
-  if (fx === 'leave' && (phase === 'believer' || phase === 'dechurched')) { drop(); phase = 'left'; journey.push({ age, kind: 'leave' }); addLog(age, '你決定不再信了。', 'decision'); highlights.push({ age, text: '放下了信仰。', cls: 'milestone' }); }
+  if (fx === 'dechurch' && phase === 'believer') { drop(); phase = 'dechurched'; journey.push({ age, kind: 'dechurch', arc: arc && arc.id }); addLog(age, '你不再去教會，但心裡還信耶穌。', 'milestone'); highlights.push({ age, text: '離開了教會，但心裡還信。', cls: 'milestone' }); }
+  if (fx === 'leave' && (phase === 'believer' || phase === 'dechurched')) { drop(); phase = 'left'; journey.push({ age, kind: 'leave', arc: arc && arc.id }); addLog(age, '你決定不再信了。', 'decision'); highlights.push({ age, text: '放下了信仰。', cls: 'milestone' }); }
   setStatus();
 }
 function arcHelp(k) { if (k && !helpShown.has(k)) { helpShown.add(k); addLog(age, val(HELP_NOTE[k]), 'milestone note'); } }
@@ -2971,7 +2971,15 @@ function lifeRecipe(martyred) {
   const comps = [{ k: 'region', label: `出生在${rl}`, color: adj(rc), w: 0.25 }];
   for (const k of order) comps.push({ k, label: hueLabel(k), color: adj(HUES[k][1]), w: 0.6 * cnt[k] / yrs.length, rel: true });
   comps.push({ k: 'sex', label: SEX_HUE[me.sex][0], color: adj(SEX_HUE[me.sex][1]), w: 0.15, rim: true });
-  return { comps, strip: yrs, quiet: !!martyred, faint: yrs.length < 15 };
+  // 這一生的陰影：受逼迫、離開教會或信仰、服事中的傷害、教會的醜聞或傷害
+  const badMin = new Set(Object.values(MIN_EVENTS).flatMap(v => v[1]));
+  const negArcs = [...arcUsed].filter(id => /^(scandal|abuse|cult|affair|g_hurt|g_apology|g_finance)$/.test(id)).length;
+  // 同志信徒的故事線（hidden）不算進陰影：身分不是污點
+  const jn = journey.filter(j => j.arc !== 'hidden');
+  const ages = [...highlights.filter(h => h.cls === 'persecution' || badMin.has(h.text)).map(h => h.age), ...jn.filter(j => j.kind === 'leave' || j.kind === 'dechurch').map(j => j.age)].sort((a, b) => a - b);
+  const neg = stats.persecution + 2 * jn.filter(j => j.kind === 'leave').length + jn.filter(j => j.kind === 'dechurch').length + highlights.filter(h => badMin.has(h.text)).length + 1.5 * negArcs;
+  const shade = { f: Math.min(1, neg / 10), ages, end: yrs.length };
+  return { comps, strip: yrs, quiet: !!martyred, faint: yrs.length < 15, shade };
 }
 // 水彩：多邊形反覆變形、一層一層薄薄地疊上去
 function mulberry(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
@@ -2987,45 +2995,95 @@ function deform(pts, depth, v, R) {
   }
   return pts;
 }
-function paintBlob(x, cx, cy, r, color, R, layers, alpha) {
-  { const [h, s, l] = hexHsl(color); if (l < 0.52) color = hslHex(h, s, 0.52); } // 太深的顏色在白紙上會像墨塊，調亮一點
+function paintBlob(x, cx, cy, r, color, R, layers, alpha, raw) {
+  if (!raw) { const [h, s, l] = hexHsl(color); if (l < 0.52) color = hslHex(h, s, 0.52); } // 太深的顏色在白紙上會像墨塊，調亮一點
   const base = deform(Array.from({ length: 10 }, (_, i) => { const a = i / 10 * Math.PI * 2, rr = r * (0.8 + R() * 0.4); return [cx + Math.cos(a) * rr, cy + Math.sin(a) * rr]; }), 3, 0.55, R);
-  x.fillStyle = color; x.globalAlpha = alpha;
-  for (let l = 0; l < layers; l++) {
-    const p = deform(base, 2, 0.6, R);
-    x.beginPath(); x.moveTo(p[0][0], p[0][1]); for (const q of p) x.lineTo(q[0], q[1]); x.closePath(); x.fill();
-  }
+  const trace = p => { x.beginPath(); x.moveTo(p[0][0], p[0][1]); for (const q of p) x.lineTo(q[0], q[1]); x.closePath(); };
+  x.fillStyle = color; x.strokeStyle = color; x.lineJoin = 'round'; x.globalAlpha = alpha;
+  for (let l = 0; l < layers; l++) { trace(deform(base, 2, 0.6, R)); x.fill(); }
+  // 顏料在水痕的邊緣聚積，描幾圈很淡的外緣
+  x.lineWidth = Math.max(1, r * 0.014); x.globalAlpha = alpha * 1.8;
+  for (let l = 0; l < 3; l++) { trace(deform(base, 2, 0.3, R)); x.stroke(); }
   x.globalAlpha = 1;
+}
+// 顏料顆粒：在色層上挖出細小的斑點，像水彩沉澱在紙紋裡
+function grainCanvas(W, H, R, density) {
+  const g = document.createElement('canvas'); g.width = Math.ceil(W / 2); g.height = Math.ceil(H / 2);
+  const x = g.getContext('2d'), n = Math.round(g.width * g.height * density);
+  x.fillStyle = '#000';
+  for (let i = 0; i < n; i++) { x.globalAlpha = 0.15 + R() * 0.55; const s = R() < 0.85 ? 1 : 2; x.fillRect(R() * g.width, R() * g.height, s, s); }
+  return g;
+}
+function granulate(cv, R, amount, density) {
+  try {
+    const x = cv.getContext('2d'); x.save(); x.globalCompositeOperation = 'destination-out'; x.globalAlpha = amount;
+    x.drawImage(grainCanvas(cv.width, cv.height, R, density), 0, 0, cv.width, cv.height); x.restore();
+  } catch (e) {}
+  return cv;
+}
+// 紙的紋理：細小的明暗起伏加上幾條纖維，用「色彩增值」疊在最上面
+function paperCanvas(W, H, R) {
+  const p = document.createElement('canvas'); p.width = Math.ceil(W / 2); p.height = Math.ceil(H / 2);
+  const x = p.getContext('2d'); if (!x) return null;
+  const img = x.createImageData(p.width, p.height), d = img.data;
+  for (let i = 0; i < d.length; i += 4) { const v = 236 + Math.floor(R() * 20); d[i] = v; d[i + 1] = v - 1; d[i + 2] = v - 4; d[i + 3] = 255; }
+  x.putImageData(img, 0, 0);
+  x.strokeStyle = '#b9b2a6'; x.lineWidth = 0.6;
+  for (let i = 0; i < p.width / 6; i++) { const sx = R() * p.width, sy = R() * p.height, a = R() * Math.PI, l = 6 + R() * 18; x.globalAlpha = 0.08 + R() * 0.1; x.beginPath(); x.moveTo(sx, sy); x.quadraticCurveTo(sx + Math.cos(a) * l / 2 + (R() - 0.5) * 4, sy + Math.sin(a) * l / 2 + (R() - 0.5) * 4, sx + Math.cos(a) * l, sy + Math.sin(a) * l); x.stroke(); }
+  return p;
+}
+function drawPaper(x, paper, W, H, alpha) {
+  if (!paper) return;
+  x.save(); x.globalCompositeOperation = 'multiply'; x.globalAlpha = alpha; x.drawImage(paper, 0, 0, W, H); x.restore();
 }
 // 每個顏色畫在自己的一層，回傳圖層和漂移參數；在 jsdom 或不支援畫布的環境回傳 null
 function washLayers(recipe, W, H, seed) {
   const R = mulberry(seed), S = Math.min(W, H), layers = [];
   const mk = () => { const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext && cv.getContext('2d'); return x ? [cv, x] : null; };
   if (!mk()) return null;
-  const k = recipe.faint ? 0.7 : 1, A = (recipe.quiet ? 0.032 : 0.045) * k;
+  const k = recipe.faint ? 0.7 : 1, A = (recipe.quiet ? 0.026 : 0.036) * k;
+  const along = f => [W * (0.12 + 0.76 * f), H * (0.1 + 0.8 * f)];
   // 沿著對角線排：左上是出生，往右下是人生的後來
   const main = recipe.comps.filter(c => !c.rim);
   let t = 0;
   for (const c of main) {
-    const m = mk(), [cv, x] = m, mid = t + c.w / 0.85 / 2; t += c.w / 0.85;
-    const px = W * (0.12 + 0.76 * mid), py = H * (0.1 + 0.8 * mid), n = Math.max(2, Math.round(c.w * 16)), rad = S * (0.16 + 0.22 * Math.sqrt(c.w));
-    for (let i = 0; i < n; i++) paintBlob(x, px + (R() - 0.5) * S * 0.45, py + (R() - 0.5) * S * 0.45, rad * (0.6 + R() * 0.5), c.color, R, 30, A * 0.8);
-    layers.push({ cv: soften(cv, S), ph: R() * 6.28, amp: S * 0.025 });
+    const [cv, x] = mk(), mid = t + c.w / 0.85 / 2; t += c.w / 0.85;
+    const [px, py] = along(mid), n = Math.max(2, Math.round(c.w * 16)), rad = S * (0.16 + 0.22 * Math.sqrt(c.w));
+    for (let i = 0; i < n; i++) paintBlob(x, px + (R() - 0.5) * S * 0.45, py + (R() - 0.5) * S * 0.45, rad * (0.6 + R() * 0.5), c.color, R, 40, A);
+    layers.push({ cv: granulate(soften(cv, S, 0.02), R, 0.35, 0.05), ph: R() * 6.28, amp: S * 0.022 });
   }
   for (const c of recipe.comps.filter(c => c.rim)) {
     const [cv, x] = mk();
-    for (let i = 0; i < 10; i++) { const side = i % 4, e = R(); const [px, py] = side === 0 ? [W * e, 0] : side === 1 ? [W, H * e] : side === 2 ? [W * e, H] : [0, H * e]; paintBlob(x, px, py, S * (0.14 + R() * 0.08), c.color, R, 18, A * 0.9); }
-    layers.push({ cv: soften(cv, S), ph: R() * 6.28, amp: S * 0.012 });
+    for (let i = 0; i < 10; i++) { const side = i % 4, e = R(); const [px, py] = side === 0 ? [W * e, 0] : side === 1 ? [W, H * e] : side === 2 ? [W * e, H] : [0, H * e]; paintBlob(x, px, py, S * (0.14 + R() * 0.08), c.color, R, 26, A); }
+    layers.push({ cv: granulate(soften(cv, S, 0.02), R, 0.3, 0.05), ph: R() * 6.28, amp: S * 0.01 });
+  }
+  // 受傷、受壓的年日：在那個時間點留下像煙灰一樣的深色污痕，越多越重
+  const sh = recipe.shade;
+  if (sh && sh.f > 0) {
+    const [cv, x] = mk(), f = sh.f, n = Math.max(1, Math.round(1 + f * 6));
+    const spots = Array.from({ length: n }, (_, i) => sh.ages[i] != null ? sh.ages[i] / Math.max(1, sh.end) : R());
+    for (const s of spots) {
+      // 污痕只留在畫面外圍：依發生的年紀，從左上角順時針沿著四邊排，不壓在中間
+      const q = Math.min(0.999, Math.max(0, s)) * 2 * (W + H), ins = S * (0.01 + R() * 0.04);
+      const [cx, cy] = q < W ? [q, ins] : q < W + H ? [W - ins, q - W] : q < 2 * W + H ? [W - (q - W - H), H - ins] : [ins, H - (q - 2 * W - H)];
+      const r = S * (0.05 + 0.08 * f) * (0.7 + R() * 0.6);
+      paintBlob(x, cx, cy, r, '#2f2a26', R, 26, 0.018 + 0.03 * f, true);
+      // 濺開的小點
+      x.fillStyle = '#2f2a26';
+      for (let i = 0; i < 6 + f * 26; i++) { const a = R() * 6.28, dd = r * (0.9 + R() * 1.1), rr = S * (0.002 + R() * 0.006); x.globalAlpha = 0.12 + R() * 0.25 * f; x.beginPath(); x.arc(cx + Math.cos(a) * dd, cy + Math.sin(a) * dd, rr, 0, 6.28); x.fill(); }
+      x.globalAlpha = 1;
+    }
+    layers.push({ cv: granulate(soften(cv, S, 0.008), R, 0.55, 0.09), ph: R() * 6.28, amp: S * 0.008 });
   }
   return layers;
 }
 // 邊緣再柔一點，像顏料在紙上暈開；不支援畫布濾鏡的瀏覽器就保持原樣
-function soften(cv, S) {
+function soften(cv, S, b = 0.02) {
   try {
     const o = document.createElement('canvas'); o.width = cv.width; o.height = cv.height; const x = o.getContext('2d');
     if (!('filter' in x)) return cv;
-    x.filter = `blur(${Math.round(S * 0.012)}px)`; x.drawImage(cv, 0, 0); x.filter = 'none';
-    x.globalAlpha = 0.5; x.drawImage(cv, 0, 0); return o;
+    x.filter = `blur(${Math.max(1, Math.round(S * b))}px)`; x.drawImage(cv, 0, 0); x.filter = 'none';
+    x.globalAlpha = 0.35; x.drawImage(cv, 0, 0); return o;
   } catch (e) { return cv; }
 }
 // 畫的時候放大一點點再漂移，邊緣不會露出空白
@@ -3043,6 +3101,8 @@ function recapWash(box, recipe, quiet) {
   const dpr = Math.min(window.devicePixelRatio || 1, 1.5), W = Math.round(innerWidth * dpr), H = Math.round(innerHeight * dpr);
   cv.width = W; cv.height = H; box.prepend(cv);
   const layers = washLayers(recipe, W, H, washSeed()); if (!layers) return;
+  const pp = paperCanvas(W, H, mulberry(washSeed() + 1));
+  if (pp) { pp.className = 'rc-wash rc-paper'; pp.setAttribute('aria-hidden', 'true'); cv.after(pp); }
   if (quiet) { drawWash(x, layers, W, H, 0, 0.6); return; }
   const t0 = performance.now();
   const loop = t => { if (!cv.isConnected) return; x.clearRect(0, 0, W, H); drawWash(x, layers, W, H, t - t0, Math.min(0.6, (t - t0) / 2500)); requestAnimationFrame(loop); };
@@ -3063,7 +3123,8 @@ async function makeShareCard(end, martyred) {
   try {
     const rcp = lifeRecipe(martyred), wl = washLayers(rcp, W, H, washSeed());
     if (wl) {
-      drawWash(x, wl, W, H, 0, 0.8);
+      drawWash(x, wl, W, H, 0, 0.85);
+      drawPaper(x, paperCanvas(W, H, mulberry(washSeed() + 1)), W, H, 0.55);
       const veil = x.createLinearGradient(0, 0, 0, H); veil.addColorStop(0, 'rgba(251,250,246,0.5)'); veil.addColorStop(0.4, 'rgba(251,250,246,0.4)'); veil.addColorStop(1, 'rgba(251,250,246,0.55)');
       x.fillStyle = veil; x.fillRect(0, 0, W, H);
       const ys = rcp.strip, n = ys.length;
@@ -3456,7 +3517,6 @@ function topReligion(c) { return Object.entries(c.religion_pct).sort((a, b) => b
 function fillBirthCard() {
   const c = me.country, g = me.group, tw = DATA.countries.find(x => x.id === 'TW');
   const d = new Date();
-  $('certNo').textContent = `No. ${c.id}-${d.getFullYear()}-${String(Math.floor(Math.random() * 1e7)).padStart(7, '0')}`;
   $('whoCountry').textContent = c.name;
   $('whoName').textContent = `家人叫你　${me.name}`;
   $('whoMeta').textContent = `${d.getFullYear()} 年 ${d.getMonth() + 1} 月・${c.continent}`;
@@ -3595,7 +3655,7 @@ function cnChoice(kind) {
 }
 function cnChoose(kind, [k, label, desc]) {
   $('choiceSlot').innerHTML = '';
-  if (k === 'alone') { phase = 'dechurched'; me.cnChurch = null; addLog(age, kind === 'where' ? '你決定先一個人信，暫時不去任何教會。' : desc, 'milestone'); }
+  if (k === 'alone') { phase = 'dechurched'; me.cnChurch = null; if (ministry.role) { ministry.role = null; ministry.endAge = ministry.endAge ?? age; me.leader = false; } addLog(age, kind === 'where' ? '你決定先一個人信，暫時不去任何教會。' : desc, 'milestone'); }
   else if (k === 'tspm' || k === 'house') {
     const moved = me.cnChurch && me.cnChurch !== k;
     me.cnChurch = k; addLog(age, kind === 'where' ? `你開始在${cnName(k)}聚會。` : desc, 'milestone');
@@ -4014,6 +4074,7 @@ function tick() {
   } else if (phase === 'believer' || phase === 'dechurched') {
     let trigger = null, triggerId = null, cnClosed = false;
     me.dechurched = phase === 'dechurched';
+    me.serving = !!ministry.role && ministry.role !== 'marketplace';
     for (const ev of believerYear(me, age, st)) {
       const cls = ev.id === 'martyred' || PERSECUTION_EVENTS.includes(ev) ? 'persecution' : GROWTH_EVENTS.includes(ev) ? 'growth' : 'milestone';
       // 沒去教會的時候：不會有成長事件，迫害也比較少找上你
@@ -4380,7 +4441,7 @@ function recapSlides(end, martyred) {
   if (words.length > 0) nums.push([words.length, '個問題，你在人生的停頓裡回答過']);
   S.push({ k: 'nums', eyebrow: '這一生的數字', nums: nums.slice(0, 4), quiet: o === 'martyred' });
   const rc = lifeRecipe(martyred);
-  S.push({ k: 'color', eyebrow: '這一生的顏色', swatches: rc.comps.map(c => [c.color, c.label, Math.round(c.w * 100)]), strip: rc.strip, lines: ['出生的地方、性別，加上你在每個信仰裡度過的年數，調出了這一生的顏色。'] });
+  S.push({ k: 'color', eyebrow: '這一生的顏色', swatches: rc.comps.map(c => [c.color, c.label, Math.round(c.w * 100)]), strip: rc.strip, lines: ['出生的地方、性別，加上你在每個信仰裡度過的年數，調出了這一生的顏色。', ...(rc.shade.f >= 0.15 ? [rc.shade.f >= 0.6 ? '畫上那些很深的污痕，是這一生受過的傷和壓力。' : '畫上幾處深色的痕跡，是這一生受過的傷和壓力。'] : [])] });
   const [tt, ts] = lifeTitle(end, martyred);
   const got = collectTitle(tt);
   S.push({ k: 'title', eyebrow: '你這一生的稱號', big: tt, lines: [ts, ...(got ? [`你已經收集了 ${got} / ${TITLE_TOTAL()} 個稱號`] : [])] });

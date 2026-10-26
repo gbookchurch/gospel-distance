@@ -64,7 +64,7 @@ const LOW_PRESSURE_EVENTS = [
   { id: 'ancestor', once: true, countries: ['TW', 'KR', 'JP', 'CN'], prob: 0.15, text: '家裡祭祖拜拜的時候，你不知道該怎麼面對長輩的期待。' },
   { id: 'family_cold', once: true, prob: 0.05, text: '家人不太理解你的新信仰，關係變得有點冷。' },
   { id: 'church_hurt', once: true, minAge: 16, prob: 0.03, text: '你在教會裡受了傷，有一陣子不想再去。' },
-  { id: 'burnout', once: true, minAge: 20, prob: 0.03, text: '你服事得很累，開始懷疑自己為什麼還在這裡。' },
+  { id: 'burnout', once: true, minAge: 20, needsRole: true, prob: 0.03, text: '你服事得很累，開始懷疑自己為什麼還在這裡。' },
   { id: 'doubt', once: true, minAge: 14, prob: 0.04, text: '你經歷了一段很長的信仰懷疑期。' },
 ];
 
@@ -144,6 +144,8 @@ function fits(ev, person, age) {
   if (ev.id === 'no_church' && (countryShare(person) >= 0.5 || (born && sc && sc.church < 15))) return false;
   if ((ev.id === 'hide_bible' || ev.id === 'secret_prayer') && born && sc && sc.private < 15) return false;
   // 失去監護權：這一生要有孩子，而且孩子已經出生
+  // 服事得很累：要正在服事（只有玩家這一生會標記 serving，模擬的其他人照舊）
+  if (ev.needsRole && person.serving === false) return false;
   if (ev.needsChild && (person.childAt == null || age <= person.childAt)) return false;
   // 被安排婚姻：已經遇到想共度一生的人之後就不會出現
   if (ev.noPartner && person.partnerAt != null && age >= person.partnerAt) return false;
