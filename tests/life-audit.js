@@ -35,7 +35,10 @@ for(let i=0;i<N;i++){w.eval('start();stop();__cx=[];');let g=0;
  const bap=at(/^你受洗了|^你嬰兒時就領洗|^你小時候受過洗/);if(bap.length>1)add('受洗兩次',`${tag} ${bap.join(',')}`);
  // 8 服事事件出現在沒有服事、或離開信仰之後
  const leaveA=at(/^你決定不再信了|^你不再去教會/);const roleEnd=at(/的位置退了下來|辭去了|交給年輕的修女/);
- const minAfter=L.filter(x=>MINEV.includes(x[1])&&(leaveA.some(a=>x[0]>a&&!at(/重新相信|回到了教會|回到教會/).some(r=>r>a&&r<=x[0]))||roleEnd.some(a=>x[0]>a)));
+ const reServe=at(/你開始固定服事|你就留下來了|你開始帶領一群人|你被選為|成為牧師|晉鐸|成為修女|宣教士|傳教士|你被召喚|全職傳道|全職同工/);
+ const minAfter=L.filter(x=>MINEV.includes(x[1])&&(leaveA.some(a=>x[0]>a&&!at(/重新相信|回到了教會|回到教會|又走進了教會/).some(r=>r>a&&r<=x[0]))||roleEnd.some(a=>x[0]>a&&!reServe.some(r=>r>a&&r<=x[0]))));
+ // 8b 沒在服事卻「服事得很累」
+ for(const a of at(/^你服事得很累/)){const lastStart=Math.max(-1,...reServe.filter(r=>r<=a));const lastEnd=Math.max(-1,...[...roleEnd,...at(/你想先停下來|不再去教會|不再信了/)].filter(r=>r<a));if(lastStart<0||lastEnd>=lastStart)add('沒在服事卻服事得很累',`${tag} ${a}歲`);}
  if(minAfter.length)add('服事事件出現在卸任或離開之後',`${tag} ${minAfter[0][0]}歲 ${minAfter[0][1].slice(0,14)}`);
  // 9 決定跟隨耶穌兩次（中間沒有離開）
  if(at(/^你決定跟隨耶穌/).length>1)add('重複決志',`${tag}`);
