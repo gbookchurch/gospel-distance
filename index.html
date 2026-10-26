@@ -673,6 +673,91 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
 @keyframes optIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @keyframes cueBlink { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
 .who-name { font-size: 15px; color: var(--ink); font-weight: 700; letter-spacing: .02em; }
+/* 色彩系統：出生地區、現在的信仰、性別 */
+@property --wa { syntax: '<color>'; inherits: true; initial-value: transparent; }
+@property --wb { syntax: '<color>'; inherits: true; initial-value: transparent; }
+@property --wc { syntax: '<color>'; inherits: true; initial-value: transparent; }
+#birth { transition: --wa 2.5s ease, --wb 3s ease, --wc 2.5s ease; }
+#birth .cert { background-image: radial-gradient(55% 45% at 0% 0%, color-mix(in srgb, var(--wa) 14%, transparent), transparent 75%), radial-gradient(45% 40% at 100% 0%, color-mix(in srgb, var(--wc) 9%, transparent), transparent 75%); }
+#birth.living .cert { background-image: radial-gradient(60vw 50vh at 0% 0%, color-mix(in srgb, var(--wa) 12%, transparent), transparent 75%), radial-gradient(70vw 60vh at 100% 100%, color-mix(in srgb, var(--wb) 16%, transparent), transparent 75%), radial-gradient(40vw 40vh at 100% 0%, color-mix(in srgb, var(--wc) 8%, transparent), transparent 75%); background-attachment: fixed; }
+#birth .lifearea .agebar { background: linear-gradient(90deg, color-mix(in srgb, var(--wa) 10%, var(--surface)), var(--surface) 40%, color-mix(in srgb, var(--wb) 16%, var(--surface))); }
+#birth .lifearea .choice { border-top-color: color-mix(in srgb, var(--wb) 70%, var(--sage)); }
+.lifeprog i { transition: width .3s linear; }
+.lifeprog { height: 4px; }
+.rc-wash { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+.liferecap > *:not(.rc-wash) { position: relative; z-index: 1; }
+.rc-skip { position: absolute !important; }
+.rc-strip { height: 10px; border-radius: 5px; }
+.rc-sw { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.rc-sw li { display: grid; grid-template-columns: 22px 1fr auto; align-items: center; gap: 12px; font-size: 17px; }
+.rc-sw i { width: 22px; height: 22px; border-radius: 50%; box-shadow: 0 0 0 2px rgba(255,255,255,.25); }
+.rc-sw b { font-weight: 500; color: rgba(255,255,255,.8); }
+/* 人生回顧：全螢幕故事卡 */
+body.rc-open { overflow: hidden; }
+.liferecap { position: fixed; inset: 0; z-index: 1000; display: flex; flex-direction: column; background: #222b28; color: #f4f1ea; padding: max(14px, env(safe-area-inset-top)) 18px max(16px, env(safe-area-inset-bottom)); }
+.liferecap.rc-martyred { background: #1f2329; }
+.liferecap.rc-never, .liferecap.rc-heard { background: #2b2722; }
+.liferecap.rc-left, .liferecap.rc-dechurched { background: #262a33; }
+.rc-bars { display: flex; gap: 4px; position: relative; }
+.rc-bars i { flex: 1; height: 3px; border-radius: 2px; background: rgba(255,255,255,.22); overflow: hidden; }
+.rc-bars i b { display: block; height: 100%; width: 0; background: #f2b81c; transition: width .3s; }
+.rc-bars i.on b { width: 100%; }
+.rc-skip { position: absolute; top: max(24px, calc(env(safe-area-inset-top) + 10px)); right: 14px; background: none; border: 0; color: rgba(255,255,255,.7); font: inherit; font-size: 14px; padding: 8px; cursor: pointer; }
+.rc-stage { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; overflow-y: auto; cursor: pointer; user-select: none; -webkit-user-select: none; }
+.rc-card { width: 100%; max-width: 520px; display: grid; gap: 14px; padding: 24px 4px; }
+.rc-anim > * { animation: rcIn .55s both; }
+.rc-anim > *:nth-child(2) { animation-delay: .12s; } .rc-anim > *:nth-child(3) { animation-delay: .24s; } .rc-anim > *:nth-child(4) { animation-delay: .36s; } .rc-anim > *:nth-child(n+5) { animation-delay: .48s; }
+@keyframes rcIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.rc-eyebrow { margin: 0; font-size: 14px; letter-spacing: .14em; color: #f2b81c; }
+.rc-big { font-family: var(--display); font-size: clamp(40px, 12vw, 72px); line-height: 1.15; margin: 0; color: #fff; }
+.rc-title .rc-big { font-size: clamp(32px, 9vw, 54px); }
+.rc-line { margin: 0; font-size: 17px; line-height: 1.8; color: rgba(255,255,255,.86); }
+.rc-quote { margin: 0; font-family: var(--display); font-size: clamp(22px, 6vw, 32px); line-height: 1.6; color: #fff; }
+.rc-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.rc-list li { display: grid; grid-template-columns: 64px 1fr; gap: 10px; font-size: 17px; line-height: 1.6; }
+.rc-list .num { color: #f2b81c; }
+.rc-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.rc-chips li { border: 1px solid rgba(255,255,255,.35); border-radius: 999px; padding: 8px 16px; font-size: 17px; }
+.rc-nums { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+.rc-nums li { display: flex; align-items: baseline; gap: 12px; }
+.rc-nums b { font-size: clamp(40px, 11vw, 60px); font-weight: 500; color: #f2b81c; min-width: 2.2ch; }
+.rc-nums span { font-size: 17px; color: rgba(255,255,255,.86); }
+.rc-nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.rc-nav button { background: none; border: 1px solid rgba(255,255,255,.35); color: #fff; border-radius: 999px; font: inherit; padding: 10px 18px; min-height: 44px; cursor: pointer; }
+.rc-nav button:disabled { opacity: .3; cursor: default; }
+.rc-prev { width: 44px; padding: 0 !important; font-size: 22px !important; }
+.rc-hint { font-size: 13px; color: rgba(255,255,255,.55); }
+.rc-end { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+.rc-end .rc-full { background: #e8741a; color: #fff; border: 0; border-radius: 999px; padding: 12px 22px; font: inherit; font-weight: 700; min-height: 44px; cursor: pointer; }
+.rc-end .rc-again { background: none; border: 1px solid rgba(255,255,255,.4); color: #fff; border-radius: 999px; padding: 12px 22px; font: inherit; min-height: 44px; cursor: pointer; }
+.liferecap button:focus-visible { outline: 2px solid rgba(242,184,28,.55); outline-offset: 3px; }
+.liferecap::before { content: ''; position: absolute; inset: -20% -30% auto; height: 70%; background: radial-gradient(closest-side, rgba(242,184,28,.16), transparent); pointer-events: none; }
+.liferecap.rc-martyred::before { background: radial-gradient(closest-side, rgba(255,255,255,.06), transparent); }
+.rc-title { text-align: center; justify-items: center; }
+.rc-title .rc-big { padding: 18px 0; border-top: 1px solid rgba(242,184,28,.5); border-bottom: 1px solid rgba(242,184,28,.5); }
+.rc-nums li { border-bottom: 1px solid rgba(255,255,255,.1); padding-bottom: 12px; }
+.rc-last .rc-quote::before { content: '「'; color: #f2b81c; } .rc-last .rc-quote::after { content: '」'; color: #f2b81c; }
+/* 回顧改成白紙底、深色字，水彩染在紙上 */
+.liferecap, .liferecap.rc-martyred, .liferecap.rc-never, .liferecap.rc-heard, .liferecap.rc-left, .liferecap.rc-dechurched { background: #fbfaf6; color: #1f2622; }
+.liferecap::before, .liferecap.rc-martyred::before { display: none; }
+/* 回顧的字、邊框、按鈕只用黑、灰、白，顏色留給水彩 */
+.liferecap .rc-bars i { background: rgba(31,38,34,.14); } .liferecap .rc-bars i b { background: #1f2622; }
+.liferecap .rc-skip { color: #4a544e; }
+.liferecap .rc-eyebrow { color: #4a544e; font-weight: 700; }
+.liferecap .rc-big, .liferecap .rc-quote { color: #1a201d; }
+.liferecap .rc-line, .liferecap .rc-nums span { color: rgba(31,38,34,.85); }
+.liferecap .rc-list .num, .liferecap .rc-nums b { color: #1a201d; }
+.liferecap .rc-chips li { border-color: rgba(31,38,34,.3); background: rgba(255,255,255,.55); }
+.liferecap .rc-nums li { border-bottom-color: rgba(31,38,34,.12); }
+.liferecap .rc-title .rc-big { border-color: rgba(31,38,34,.35); }
+.liferecap .rc-last .rc-quote::before, .liferecap .rc-last .rc-quote::after { color: #6b746f; }
+.liferecap .rc-nav button, .liferecap .rc-end .rc-again { border-color: rgba(31,38,34,.3); color: #1f2622; background: rgba(255,255,255,.6); }
+.liferecap .rc-end .rc-full { background: #1f2622; color: #fff; }
+.liferecap .rc-hint { color: rgba(31,38,34,.55); }
+.liferecap .rc-sw i { box-shadow: 0 0 0 2px rgba(255,255,255,.8), 0 0 0 3px rgba(31,38,34,.15); }
+.liferecap .rc-sw b { color: #3d4641; }
+.liferecap button:focus-visible { outline: 2px solid #1f2622; }
+.liferecap .rc-card { text-shadow: 0 0 12px rgba(251,250,246,.9); }
 </style>
 
 </head>
@@ -1664,7 +1749,7 @@ const isHier = () => ['catholic', 'orthodox'].includes(me.trad);
 // 文字原本用新教小組教會的說法，依宗派換掉
 const LOCAL = {
   // 華人天主教的用語：天主、聖神、祈禱、聖體、聖歌（「神」只換指上帝的用法，不換神父、神學、精神、神蹟這類詞）
-  catholic: [[/(?<![精眼留心門財山海死失出分傷勞走女天成入灶小])神(?![父學蹟祕秘職經話情色明采韻聖性龕])/g, '天主'], ['上帝', '天主'], ['聖靈', '聖神'], ['禱告', '祈禱'], ['聖餐桌', '祭台'], ['聖餐', '聖體'], ['詩歌', '聖歌'], ['查經', '讀經'], ['信主', '信天主'], ['牧者', '神父'], ['講台', '講道台'], ['青少年團契', '青年會'], ['會眾大會', '堂區經濟委員會的會議'], ['會眾', '教友'], ['最後一次禮拜', '最後一台彌撒'], ['長老', '堂區議會的成員'], ['長執會', '堂區議會'], ['教會同工', '堂區志工'], ['小組長', '善會的帶領人'], ['小組', '祈禱會'], ['組員', '會員'], ['同工', '夥伴'], ['牧師', '神父'], ['主日學', '道理班'], ['主日聚會', '主日彌撒'], ['做完禮拜', '望完彌撒'], ['做禮拜', '望彌撒'], ['神學院', '修院'], ['會友', '教友'], ['受洗', '領洗'], ['差會', '修會'], ['團契', '善會'], ['宣教士', '傳教士']],
+  catholic: [[/(?<![精眼留心門財山海死失出分傷勞走女天成入灶小])神(?![父學蹟祕秘職經話情色明采韻聖性龕])/g, '天主'], ['上帝', '天主'], ['聖靈', '聖神'], ['禱告', '祈禱'], ['聖餐桌', '祭台'], ['聖餐', '聖體'], ['詩歌', '聖歌'], ['查經', '讀經'], ['信主', '信天主'], ['牧者', '神父'], ['講台', '講道台'], ['青少年團契', '青年會'], ['會眾大會', '堂區經濟委員會的會議'], ['會眾', '教友'], ['最後一次禮拜', '最後一台彌撒'], ['退修會', '避靜'], ['長老', '堂區議會的成員'], ['長執會', '堂區議會'], ['教會同工', '堂區志工'], ['小組長', '善會的帶領人'], ['小組', '祈禱會'], ['組員', '會員'], ['同工', '夥伴'], ['牧師', '神父'], ['主日學', '道理班'], ['主日聚會', '主日彌撒'], ['做完禮拜', '望完彌撒'], ['做禮拜', '望彌撒'], ['神學院', '修院'], ['會友', '教友'], ['受洗', '領洗'], ['差會', '修會'], ['團契', '善會'], ['宣教士', '傳教士']],
   orthodox: [['講台', '講道台'], ['青少年團契', '青年會'], ['團契', '堂區的讀書會'], ['受洗', '領洗'], ['聖靈', '聖神'], ['禱告', '祈禱'], ['聖餐桌', '祭台'], ['聖餐', '聖體'], ['詩歌', '聖詩'], ['宣教士', '傳教士'], ['會眾大會', '堂區大會'], ['會眾', '教友'], ['最後一次禮拜', '最後一次禮儀'], ['長老', '堂區議會的成員'], ['長執會', '堂區議會'], ['教會同工', '堂區志工'], ['小組長', '查經聚會的帶領人'], ['小組', '查經聚會'], ['組員', '弟兄姊妹'], ['同工', '夥伴'], ['牧師', '神父'], ['主日聚會', '主日禮儀'], ['做完禮拜', '做完禮儀'], ['做禮拜', '參加禮儀'], ['會友', '教友']],
   lds: [['長執會', '支會議會'], ['教會同工', '支會的服事人員'], ['小組長', () => me.sex === 'm' ? '長老定額組會長' : '慈助會的教師'], ['小組', () => me.sex === 'm' ? '長老定額組' : '慈助會'], ['組員', '成員'], ['牧師', '主教'], ['神學院', '訓練'], ['會友', '支會成員'], ['宣教士', '傳教士']],
   hymnish: [['敬拜或招待', '詩班或招待']],
@@ -1978,7 +2063,7 @@ function ministryLine(end) {
 // 配角從同一國的名字表抽，文字裡的 {pastor}、{co} 這類記號會換成名字；分享卡只用角色自己的名字
 const gtx = x => Array.isArray(x) ? (gentleOn() && x[1] ? x[1] : x[0]) : x;
 const val = x => typeof x === 'function' ? x() : x;
-const fmt = s => typeof s === 'string' && arc ? s.replace(/\{(\w+)\}/g, (m, k) => arc.cast[k] ?? m) : s;
+const fmt = s => typeof s === 'string' && arc ? s.replace(/\{(\w+)\}/g, (m, k) => { const v = arc.cast[k]; if (v != null && !/Ta$/.test(k) && k !== 'pwife' && typeof castSeen !== 'undefined') castSeen.add(v); return v ?? m; }) : s;
 const tx = x => fmt(gtx(val(x)));
 const HELP_NOTE = {
   abuse: () => me.country.id === 'TW' ? '如果你或身邊的人遇過類似的事，可以打 113 保護專線（台灣）。' : '如果你或身邊的人遇過類似的事，可以找當地的保護專線，或信任的專業機構。',
@@ -3129,19 +3214,184 @@ function drawQR(x, text, left, top, size, dark, light) {
     return true;
   } catch (e) { return false; }
 }
+// ── 色彩系統：出生背景、性別、信仰歷程 ───────────────────────────
+// 宗教的顏色（家庭宗教、改信之後的傳統都用這一張表）
+const HUES = {
+  protestant: ['基督新教', '#c9a227'], catholic: ['天主教', '#a8673a'], orthodox: ['東正教', '#a9b1ba'], oriental: ['東方正教', '#bfae9c'], lds: ['摩門教', '#e2d29b'],
+  muslim: ['伊斯蘭', '#2a9d8f'], hindu: ['印度教', '#f08a1c'], buddhist: ['佛教', '#8f2d3f'], folk: ['道教與民間信仰', '#d8432f'],
+  jewish: ['猶太教', '#2e3f7f'], sikh: ['錫克教', '#e7a81a'], ethnic: ['傳統信仰', '#9c6a3e'], none: ['無宗教', '#9ba4aa']
+};
+const SEX_HUE = { m: ['男生', '#3e9b5f'], f: ['女生', '#3d7fc4'] };
+// 出生的地區：按洲分色調，同一洲的國家再做小幅變化
+const REGIONS = { ea: ['東亞', '#46505e'], sea: ['東南亞', '#9b6fa8'], sa: ['南亞', '#e0a93a'], mena: ['中東與北非', '#d4b88f'], af: ['撒哈拉以南非洲', '#b5552f'], eu: ['歐洲', '#4f7d8c'], am: ['美洲', '#c4714c'] };
+const REGION_OF = {};
+for (const [k, ids] of Object.entries({ ea: 'TW KR JP CN KP', sea: 'PH ID VN MM TH', sa: 'IN PK BD', mena: 'EG MA IR YE IQ TR SY SA DZ SD UZ AF', eu: 'RU DE GB FR', am: 'US BR MX CO', af: 'CD ET NG TZ UG KE AO MZ ZA NE MG CI ML CM TD GH SO BF ZM MW' })) for (const id of ids.split(' ')) REGION_OF[id] = k;
+function hexHsl(h) {
+  const n = parseInt(h.slice(1), 16), r = (n >> 16) / 255, g = (n >> 8 & 255) / 255, b = (n & 255) / 255;
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn;
+  if (!d) return [0, 0, l];
+  const s = d / (1 - Math.abs(2 * l - 1));
+  const hh = mx === r ? ((g - b) / d + 6) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+  return [hh * 60, s, l];
+}
+function hslHex(h, s, l) {
+  s = Math.max(0, Math.min(1, s)); l = Math.max(0, Math.min(1, l)); h = (h % 360 + 360) % 360;
+  const c = (1 - Math.abs(2 * l - 1)) * s, x = c * (1 - Math.abs(h / 60 % 2 - 1)), m = l - c / 2;
+  const [r, g, b] = h < 60 ? [c, x, 0] : h < 120 ? [x, c, 0] : h < 180 ? [0, c, x] : h < 240 ? [0, x, c] : h < 300 ? [x, 0, c] : [c, 0, x];
+  return '#' + [r, g, b].map(v => Math.round((v + m) * 255).toString(16).padStart(2, '0')).join('');
+}
+const strHash = s => [...String(s)].reduce((a, ch) => (a * 31 + ch.charCodeAt(0)) >>> 0, 7);
+function regionColor(c) {
+  const r = REGIONS[REGION_OF[c.id] || 'af'], [h, s, l] = hexHsl(r[1]), k = strHash(c.id);
+  return [r[0], hslHex(h + (k % 17) - 8, s, l + ((k >> 5) % 11 - 5) / 100)];
+}
+// 這一年你在哪個信仰裡
+function christKey() { return me.trad === 'orthodox' ? (tradKey() === 'eastern' ? 'orthodox' : 'oriental') : HUES[me.trad] ? me.trad : 'protestant'; }
+function famKey() {
+  const l = me.parentLabel;
+  if (me.parentReligion === 'christian') return christKey();
+  if (l === 'other') return isSikh(me) ? 'sikh' : ['TW', 'CN', 'VN', 'KR', 'JP', 'KP'].includes(me.country.id) ? 'folk' : 'ethnic';
+  return l === 'unaffiliated' ? 'none' : HUES[l] ? l : 'ethnic';
+}
+function relKeyNow() { return phase === 'believer' || phase === 'dechurched' ? christKey() : phase === 'left' ? 'none' : famKey(); }
+function hueLabel(k) { return k === famKey() && me.parentReligion !== 'christian' && k !== 'none' ? relName(me) : HUES[k][0]; }
+let colorYears = [];
+function recordColor() {
+  const k = relKeyNow(), prev = colorYears[colorYears.length - 1];
+  colorYears.push(k);
+  if (k !== prev) setTint();
+  paintProg();
+}
+// 遊戲畫面的淡淡底色：出生地區、性別、現在的信仰
+function setTint() {
+  const el = $('birth'); if (!el || !me) return;
+  el.style.setProperty('--wa', regionColor(me.country)[1]);
+  el.style.setProperty('--wb', HUES[relKeyNow()][1]);
+  el.style.setProperty('--wc', SEX_HUE[me.sex][1]);
+}
+// 年齡進度條變成這一生的色帶
+function paintProg() {
+  const el = $('lifeProg'); if (!el || !colorYears.length) return;
+  el.style.background = stripCss(colorYears);
+}
+function stripCss(ys) {
+  const n = ys.length, stops = [];
+  let i = 0;
+  while (i < n) { let j = i; while (j + 1 < n && ys[j + 1] === ys[i]) j++; const c = HUES[ys[i]][1]; stops.push(`${c} ${(i / n * 100).toFixed(1)}%`, `${c} ${((j + 1) / n * 100).toFixed(1)}%`); i = j + 1; }
+  return `linear-gradient(90deg, ${stops.join(', ')})`;
+}
+// 這一生的配方：出生背景 25%、性別 15%、信仰歷程 60%（依在每個信仰裡的年數）
+function lifeRecipe(martyred) {
+  const yrs = colorYears.length ? colorYears : [famKey()], cnt = {}, order = [];
+  for (const k of yrs) { if (!(k in cnt)) { cnt[k] = 0; order.push(k); } cnt[k]++; }
+  const f = Math.min(stats.persecution, 8) / 8;
+  const adj = hex => { const [h, s, l] = hexHsl(hex); return hslHex(h, s * (1 - 0.3 * f), l * (1 - 0.1 * f)); };
+  const [rl, rc] = regionColor(me.country);
+  const comps = [{ k: 'region', label: `出生在${rl}`, color: adj(rc), w: 0.25 }];
+  for (const k of order) comps.push({ k, label: hueLabel(k), color: adj(HUES[k][1]), w: 0.6 * cnt[k] / yrs.length, rel: true });
+  comps.push({ k: 'sex', label: SEX_HUE[me.sex][0], color: adj(SEX_HUE[me.sex][1]), w: 0.15, rim: true });
+  return { comps, strip: yrs, quiet: !!martyred, faint: yrs.length < 15 };
+}
+// 水彩：多邊形反覆變形、一層一層薄薄地疊上去
+function mulberry(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function deform(pts, depth, v, R) {
+  for (let d = 0; d < depth; d++) {
+    const out = [];
+    for (let i = 0; i < pts.length; i++) {
+      const [x1, y1] = pts[i], [x2, y2] = pts[(i + 1) % pts.length], dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy);
+      const g = (R() + R() + R() - 1.5) * v * len;
+      out.push([x1, y1], [(x1 + x2) / 2 - dy / len * g, (y1 + y2) / 2 + dx / len * g]);
+    }
+    pts = out;
+  }
+  return pts;
+}
+function paintBlob(x, cx, cy, r, color, R, layers, alpha) {
+  { const [h, s, l] = hexHsl(color); if (l < 0.52) color = hslHex(h, s, 0.52); } // 太深的顏色在白紙上會像墨塊，調亮一點
+  const base = deform(Array.from({ length: 10 }, (_, i) => { const a = i / 10 * Math.PI * 2, rr = r * (0.8 + R() * 0.4); return [cx + Math.cos(a) * rr, cy + Math.sin(a) * rr]; }), 3, 0.55, R);
+  x.fillStyle = color; x.globalAlpha = alpha;
+  for (let l = 0; l < layers; l++) {
+    const p = deform(base, 2, 0.6, R);
+    x.beginPath(); x.moveTo(p[0][0], p[0][1]); for (const q of p) x.lineTo(q[0], q[1]); x.closePath(); x.fill();
+  }
+  x.globalAlpha = 1;
+}
+// 每個顏色畫在自己的一層，回傳圖層和漂移參數；在 jsdom 或不支援畫布的環境回傳 null
+function washLayers(recipe, W, H, seed) {
+  const R = mulberry(seed), S = Math.min(W, H), layers = [];
+  const mk = () => { const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext && cv.getContext('2d'); return x ? [cv, x] : null; };
+  if (!mk()) return null;
+  const k = recipe.faint ? 0.7 : 1, A = (recipe.quiet ? 0.032 : 0.045) * k;
+  // 沿著對角線排：左上是出生，往右下是人生的後來
+  const main = recipe.comps.filter(c => !c.rim);
+  let t = 0;
+  for (const c of main) {
+    const m = mk(), [cv, x] = m, mid = t + c.w / 0.85 / 2; t += c.w / 0.85;
+    const px = W * (0.12 + 0.76 * mid), py = H * (0.1 + 0.8 * mid), n = Math.max(2, Math.round(c.w * 16)), rad = S * (0.16 + 0.22 * Math.sqrt(c.w));
+    for (let i = 0; i < n; i++) paintBlob(x, px + (R() - 0.5) * S * 0.45, py + (R() - 0.5) * S * 0.45, rad * (0.6 + R() * 0.5), c.color, R, 30, A * 0.8);
+    layers.push({ cv: soften(cv, S), ph: R() * 6.28, amp: S * 0.025 });
+  }
+  for (const c of recipe.comps.filter(c => c.rim)) {
+    const [cv, x] = mk();
+    for (let i = 0; i < 10; i++) { const side = i % 4, e = R(); const [px, py] = side === 0 ? [W * e, 0] : side === 1 ? [W, H * e] : side === 2 ? [W * e, H] : [0, H * e]; paintBlob(x, px, py, S * (0.14 + R() * 0.08), c.color, R, 18, A * 0.9); }
+    layers.push({ cv: soften(cv, S), ph: R() * 6.28, amp: S * 0.012 });
+  }
+  return layers;
+}
+// 邊緣再柔一點，像顏料在紙上暈開；不支援畫布濾鏡的瀏覽器就保持原樣
+function soften(cv, S) {
+  try {
+    const o = document.createElement('canvas'); o.width = cv.width; o.height = cv.height; const x = o.getContext('2d');
+    if (!('filter' in x)) return cv;
+    x.filter = `blur(${Math.round(S * 0.012)}px)`; x.drawImage(cv, 0, 0); x.filter = 'none';
+    x.globalAlpha = 0.5; x.drawImage(cv, 0, 0); return o;
+  } catch (e) { return cv; }
+}
+// 畫的時候放大一點點再漂移，邊緣不會露出空白
+function drawWash(x, layers, W, H, t, alpha) {
+  x.save(); x.globalAlpha = alpha; x.globalCompositeOperation = 'multiply';
+  const ow = W * 0.08, oh = H * 0.08;
+  for (const L of layers) { const a = t / 9000 + L.ph; x.drawImage(L.cv, -ow / 2 + Math.sin(a) * L.amp, -oh / 2 + Math.cos(a * 0.8) * L.amp, W + ow, H + oh); }
+  x.restore();
+}
+const washSeed = () => strHash(me.name + me.country.id + colorYears.length);
+// 回顧故事卡的背景：慢慢流動的水彩
+function recapWash(box, recipe, quiet) {
+  const cv = document.createElement('canvas'); cv.className = 'rc-wash'; cv.setAttribute('aria-hidden', 'true');
+  const x = cv.getContext && cv.getContext('2d'); if (!x) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 1.5), W = Math.round(innerWidth * dpr), H = Math.round(innerHeight * dpr);
+  cv.width = W; cv.height = H; box.prepend(cv);
+  const layers = washLayers(recipe, W, H, washSeed()); if (!layers) return;
+  if (quiet) { drawWash(x, layers, W, H, 0, 0.6); return; }
+  const t0 = performance.now();
+  const loop = t => { if (!cv.isConnected) return; x.clearRect(0, 0, W, H); drawWash(x, layers, W, H, t - t0, Math.min(0.6, (t - t0) / 2500)); requestAnimationFrame(loop); };
+  requestAnimationFrame(loop);
+}
+
 let cardBlob = null;
 async function makeShareCard(end, martyred) {
   try { await document.fonts.load('900 80px "Noto Serif TC"'); await document.fonts.load('700 40px "Noto Serif TC"'); await document.fonts.load('500 30px "Noto Sans TC"'); await document.fonts.load('500 30px "IBM Plex Mono"'); } catch (e) {}
   const W = 1080, H = 1350, P = 84;
   const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const x = cv.getContext('2d');
-  const C = { bg: '#222b28', panel: '#2c3733', ink: '#eef1ee', muted: '#a9b4ae', line: '#3d4a44', lamp: '#f59b3c', sun: '#f6c845', grave: '#f27a5e', hope: '#6cc48a' };
+  const C = { bg: '#fbfaf6', panel: 'rgba(255,255,255,0.72)', ink: '#1f2622', muted: '#56605a', line: 'rgba(31,38,34,0.22)', lamp: '#1f2622', sun: '#f6c845', grave: '#1f2622', hope: '#1f2622' };
   const SERIF = '"Noto Serif TC", "Songti TC", serif', SANS = '"Noto Sans TC", "PingFang TC", sans-serif', MONO = '"IBM Plex Mono", "Noto Sans TC", monospace';
   const o = lifeOutcome(martyred), heard = firstAge !== null;
   x.fillStyle = C.bg; x.fillRect(0, 0, W, H);
+  // 這一生的顏色：水彩暈染當底，再蓋一層暗色讓字清楚
+  try {
+    const rcp = lifeRecipe(martyred), wl = washLayers(rcp, W, H, washSeed());
+    if (wl) {
+      drawWash(x, wl, W, H, 0, 0.8);
+      const veil = x.createLinearGradient(0, 0, 0, H); veil.addColorStop(0, 'rgba(251,250,246,0.5)'); veil.addColorStop(0.4, 'rgba(251,250,246,0.4)'); veil.addColorStop(1, 'rgba(251,250,246,0.55)');
+      x.fillStyle = veil; x.fillRect(0, 0, W, H);
+      const ys = rcp.strip, n = ys.length;
+      ys.forEach((k, i) => { x.fillStyle = HUES[k][1]; x.fillRect(W * i / n, 0, Math.ceil(W / n) + 1, 14); });
+    }
+  } catch (e) {}
   const glow = x.createRadialGradient(W - 170, 230, 10, W - 170, 230, 420);
-  glow.addColorStop(0, heard ? 'rgba(245,155,60,0.34)' : 'rgba(163,163,163,0.10)');
-  glow.addColorStop(1, 'rgba(34,43,40,0)');
+  glow.addColorStop(0, heard ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.3)');
+  glow.addColorStop(1, 'rgba(251,250,246,0)');
   x.fillStyle = glow; x.fillRect(0, 0, W, H);
   x.beginPath(); x.arc(W - 170, 230, heard ? 16 : 10, 0, Math.PI * 2);
   x.fillStyle = heard ? C.lamp : C.line; x.fill();
@@ -3232,7 +3482,7 @@ async function makeShareCard(end, martyred) {
   // 頁尾：邀請 + 網址 + QR
   x.fillStyle = C.line; x.fillRect(P, 1110, W - P * 2, 2);
   const qrSize = 168, qrX = W - P - qrSize, qrY = 1140;
-  const hasQR = drawQR(x, `https://${SITE_URL}/`, qrX, qrY, qrSize, '#222b28', '#eef1ee');
+  const hasQR = drawQR(x, `https://${SITE_URL}/`, qrX, qrY, qrSize, '#1f2622', '#ffffff');
   const textW = hasQR ? W - P * 2 - qrSize - 30 : W - P * 2;
   x.fillStyle = C.ink; x.font = `700 38px ${SERIF}`;
   let fy = 1195;
@@ -3826,6 +4076,33 @@ const SITU = [
   { when: () => phase === 'heard', items: [[72, 110, '安養院的志工每週來陪你聊天，有一次問你要不要聽一首詩歌。']] },
 ];
 let situCount = 0;
+// 輕鬆片段：笑的是生活，不是信仰，也不嘲笑任何群體；每年約 2.5%，一生最多兩則，不會出現在發生大事的那一年
+// [最小年齡, 最大年齡, 文字, 條件]：p＝只有新教、tw＝只有台灣、child＝要有孩子
+const FUN_CHURCH = [
+  [6, 12, '主日學的點心被你偷吃了一半，老師假裝沒看到。'], [6, 12, '聖誕節演戲，你演第三隻羊，只有一句台詞「咩」，你還是忘詞了。'],
+  [12, 18, '營會的晚會，輔導們扮成各種角色跳舞，全場笑到停不下來。'], [13, 20, '青少年團契玩「殺手遊戲」玩到十二點，隔天主日大家都在打瞌睡。'],
+  [15, 60, '詩班練到第三遍，司琴阿姨說：「再一次，最後一次。」那是第五個最後一次。'], [16, 70, '團契的便當訂了三十個，來了四十五個人。大家很有默契地把雞腿切成兩半。'],
+  [18, 50, '教會退修會，你被分到跟最會打呼的那位叔叔同房，整晚數羊都沒用。'], [20, 70, '禱告會上你一緊張，把「奉主耶穌的名」講成「奉主耶穌的命」，旁邊的人都在憋笑。', 'p'],
+  [20, 70, '有位阿姨每次見到你，都問你什麼時候結婚。等你結了婚，她開始問你什麼時候生小孩。'], [18, 60, '你負責放投影片，唱到一半，歌詞突然停在上一首，全場的人自動清唱了起來。', 'p'],
+  [25, 80, '教會的冷氣壞了，牧師說今天的講道會短一點。結果那天講了一個半小時。'], [10, 70, '主日聚餐說好每家帶一道菜，結果桌上有七鍋炒米粉。', 'tw'],
+  [40, 85, '你被拉進第十二個代禱群組，每天早上都收到一百張長輩圖。', 'tw'], [25, 80, '新來的牧師第一次講道，緊張到把你的名字叫錯，你決定以後就用那個名字了。']];
+const FUN_LIFE = [
+  [5, 10, '你把爸媽的手機調成一種沒人看得懂的語言，全家研究了一個晚上。'], [8, 14, '你跟朋友打賭誰吃得了比較多辣椒，最後兩個人一起坐在水缸旁邊。'],
+  [12, 18, '考試前一晚，你才發現自己讀錯了範圍。'], [10, 20, '你第一次學騎腳踏車，直接摔進鄰居家的菜園，鄰居還送你一把菜。'],
+  [18, 30, '你第一次自己煮飯，煮出一鍋分不清是粥還是飯的東西。'], [25, 45, '你在朋友的婚禮上致詞，緊張到把新郎的名字講錯。'],
+  [35, 65, '孩子教你用新手機，教到第三遍，他嘆了一口氣。', 'child'], [50, 85, '你開始在家族群組裡傳長輩圖，還覺得每一張都很有道理。'],
+  [55, 90, '醫生說你要少吃鹹，你回家就把鹽罐藏起來，三天後又自己找了出來。'], [65, 95, '晚輩問你年輕時是不是很厲害，你講了一整個下午，有一半是誇大的。']];
+let funCount = 0;
+function funScene(a) {
+  if (funCount >= 2 || Math.random() >= 0.025) return false;
+  const church = believerish() && !hardHere();
+  const pool = [...(church ? FUN_CHURCH : []), ...FUN_LIFE].filter(s => a >= s[0] && a <= s[1] && !sceneUsed.has(s[2]) && (s[3] !== 'p' || isProt()) && (s[3] !== 'tw' || me.country.id === 'TW') && (s[3] !== 'child' || (me.childAt != null && a > me.childAt)));
+  if (!pool.length) return false;
+  const s = pool[Math.floor(Math.random() * pool.length)];
+  sceneUsed.add(s[2]); funCount++;
+  addLog(a, s[2], 'scene fun');
+  return true;
+}
 function situScene(a) {
   if (situCount >= 3 || Math.random() >= 0.04) return false;
   const l = SITU.filter(g => g.when()).flatMap(g => g.items).map(i => typeof i[2] === 'function' ? [i[0], i[1], i[2](), i[3], i[4]] : i).filter(i => a >= i[0] && a <= i[1] && !sceneUsed.has(i[2]));
@@ -3965,6 +4242,7 @@ function showScene(a) {
     if (l.length) { const t = l[Math.floor(Math.random() * l.length)]; sceneUsed.add(t); penteConv++; penteSeen = true; addLog(a, t, 'growth'); return; }
   }
   if (me.parentReligion === 'christian' && a >= 12 && !['left', 'unheard'].includes(phase)) tradNote(a);
+  if (!scenePlan[a] && funScene(a)) return;
   if (!scenePlan[a] && situScene(a)) return;
   const s = scenePlan[a];
   if (s && PENTE_FAM_TEXT.has(s.text)) penteSeen = true;
@@ -3983,7 +4261,7 @@ function start(opt = {}) {
   stop(); music.play();
   $('birth').classList.remove('living');
   me = makePerson(opt && opt.tw ? { tw: true } : {}); assignTrad(me);
-  scenePlan = planScenes(me); paradoxShown = false; lastLife = null; ancestorLocal = false; cnSceneUsed = new Set(); cnSceneCount = 0; ministry = newMinistry(); arc = null; arcUsed = new Set(); crossN = 0; crossP = 0; mvSeen = new Set(); explainSeen = new Set(); cfNodes = []; notesShown = new Set(); arcEnds = []; helpShown = new Set(); sceneUsed = new Set(); importantAt = new Set(); nearCount = 0; otherSideShown = false;
+  scenePlan = planScenes(me); paradoxShown = false; lastLife = null; ancestorLocal = false; cnSceneUsed = new Set(); cnSceneCount = 0; ministry = newMinistry(); arc = null; arcUsed = new Set(); castSeen = new Set(); funCount = 0; closeRecap(); crossN = 0; crossP = 0; mvSeen = new Set(); explainSeen = new Set(); cfNodes = []; notesShown = new Set(); arcEnds = []; helpShown = new Set(); sceneUsed = new Set(); importantAt = new Set(); nearCount = 0; otherSideShown = false;
   others = Array.from({ length: 4 }, simulateNPC);
   channel = null; journey = []; highlights = []; feeling = null; lastCross = -99; stats = { persecution: 0, growth: 0 }; words = []; reflectUsed = new Set(); penteSeen = false; penteConv = 0; situCount = 0; tradNoteShown = false; neoSeen = false; pendingReflect = null; age = 0; phase = 'unheard'; firstAge = null; faithAge = null; st = {}; hearCount = 0; paused = false;
   $('log').innerHTML = ''; $('choiceSlot').innerHTML = ''; $('end').hidden = true;
@@ -4005,7 +4283,7 @@ function start(opt = {}) {
   fillBirthCard();
   if (g.unreached) addLog(0, `你出生的族群裡，基督徒很少（Joshua Project 估計約 ${g.christian_pct != null ? pct(g.christian_pct) : '不到 5%'}）。`, 'milestone');
   addLog(0, '你出生了。', 'milestone');
-  setStatus(); showAge(0);
+  setStatus(); colorYears = []; recordColor(); showAge(0);
   // 先讀完出生登記，按「開始這一生」才開始
   $('agebar').hidden = true; $('liveBtn').hidden = false;
   $('birth').scrollIntoView({ behavior: SMOOTH, block: 'start' });
@@ -4041,6 +4319,7 @@ function tick() {
   showScene(age);
   age++;
   if (age > me.lifespan) return finish(false);
+  recordColor();
   showAge(age);
   if (age % 10 === 0 && phase !== 'believer') addLog(age, `你 ${age} 歲了。`, 'milestone');
 
@@ -4241,6 +4520,228 @@ document.addEventListener('click', e => {
 });
 resetClear(); renderMemorial(); renderRanking(); renderDenoms();
 
+// ── 人生回顧：跑完一生後，用一張一張全螢幕的卡片回顧，最後再看完整結局
+// 配角名字：故事線裡出現過的人，回顧時列出來
+let castSeen = new Set();
+// 人生稱號：60 個，由上往下判斷，符合第一個就停；沉重的經歷優先，信或不信都有好聽、不評斷的稱號
+function titleCtx(end, martyred) {
+  const logT = [...document.querySelectorAll('#log li .t')].map(x => x.textContent);
+  const S = arc && ARCS[arc.id] && ARCS[arc.id].S[arc.s];
+  const jr = journey.map(j => j.kind), ret = journey.filter(j => j.kind === 'return_faith' || j.kind === 'return_church');
+  return {
+    o: lifeOutcome(martyred), end, mart: martyred, fam: me.parentReligion === 'christian', pl: me.parentLabel, ph: phase,
+    first: firstAge, faith: faithAge, hear: hearCount, top: ministry && ministry.top, pk: ministry && ministry.pk, trad: me.trad,
+    pers: stats.persecution, fled: !!me.fled, hard: hardHere(), arcs: arcUsed, ends: arcEnds.map(x => x.s).join('｜'),
+    secret: S && S.t === 'secret' ? arc.id : null, jr, retAge: ret.length ? ret[ret.length - 1].age : null,
+    leaveAge: lastJourneyAge('leave'), told: logT.filter(t => /^你把福音告訴了一個朋友/.test(t)).length, led: logT.filter(t => /^有一個人因為你而信了耶穌/.test(t)).length,
+    chose: cfNodes.map(n => n.chose).join('｜'), switched: logT.some(t => /^你換了教會/.test(t)),
+  };
+}
+const OTHER_FAITH = ['muslim', 'hindu', 'buddhist', 'jewish'];
+const TITLES = [
+  // 特別沉重或特別的一生
+  ['短短的一程', '這段人生很短，但它也是完整的一段。', x => x.end < 13 && !x.mart],
+  ['為信仰走到最後的人', '你在很難的地方，守住了自己相信的。', x => x.mart && x.fam],
+  ['為選擇付上一切的人', '你從另一個信仰走過來，最後為這個選擇付上了一切。', x => x.mart],
+  ['被困住很多年的人', '你把人生最好的十幾年，給了一個要你遠離家人的團體。', x => x.secret === 'cult'],
+  ['把真實的自己藏了一輩子的人', '你一直沒有說出自己喜歡同性，連最親的人也不知道。', x => x.secret === 'hidden'],
+  ['背著秘密走完一生的人', '有一件事，你到最後都沒有說出口。', x => !!x.secret],
+  ['終於做回自己的人', '你很晚才說出自己是誰，但那之後，你覺得自己是完整的。', x => x.arcs.has('hidden') && /完整|誠實地活著|做完整的自己/.test(x.ends)],
+  ['從迷霧裡走出來的人', '你曾經被一個團體困住，後來走了出來。', x => x.arcs.has('cult')],
+  // 一生沒有接觸到福音
+  ['聽著喚拜聲長大的人', '福音沒有走到你身邊，你在家族的信仰裡過完了一生。', x => x.o === 'never' && x.pl === 'muslim'],
+  ['在油燈和花香裡長大的人', '福音沒有走到你身邊，你在家族的信仰裡過完了一生。', x => x.o === 'never' && x.pl === 'hindu'],
+  ['在寺院鐘聲裡長大的人', '福音沒有走到你身邊，你在家族的信仰裡過完了一生。', x => x.o === 'never' && x.pl === 'buddhist'],
+  ['在香火裡長大的人', '福音沒有走到你身邊，你在家族的信仰裡過完了一生。', x => x.o === 'never' && x.pl === 'other' && ['TW', 'CN', 'VN', 'KR'].includes(me.country.id)],
+  ['跟著祖先的路走的人', '福音沒有走到你身邊，你照著祖先的方式過完了一生。', x => x.o === 'never' && x.pl === 'other'],
+  ['自己找答案的人', '你沒有宗教，也沒有遇見福音，用自己的方式回答了人生的問題。', x => x.o === 'never' && x.pl === 'unaffiliated'],
+  ['在遠方長大的人', '福音一直沒有走到你身邊，你用自己的方式過完了這一生。', x => x.o === 'never'],
+  // 接觸過，沒有選擇信
+  ['一直沒有關上門的人', '你一直說「再想想」，那扇門到最後都沒有關上。', x => x.o === 'heard' && x.ph === 'wait'],
+  ['從家裡走出去的人', '你在基督徒家庭長大，最後選擇了自己的路。', x => x.o === 'heard' && x.fam],
+  ['被敲過很多次門的人', '很多人跟你談過耶穌，你都認真聽了，最後還是走自己的路。', x => x.o === 'heard' && x.hear >= 4],
+  ['很晚才聽見的人', '你到了晚年，才第一次聽見福音。', x => x.o === 'heard' && x.first >= 55],
+  ['走自己路的人', '你聽見了，也想過了，最後選擇了自己的路。', x => x.o === 'heard'],
+  // 放下信仰
+  ['從講台走下來的人', '你曾經站在台上帶領別人，後來放下了信仰。', x => x.o === 'left' && ['pastor', 'missionary'].includes(x.top)],
+  ['帶著傷離開的人', '你在教會裡受過傷，最後選擇離開。離開的理由，往往比外人看到的複雜。', x => x.o === 'left' && ['heal', 'seed', 'scandal', 'th_spirit'].some(a => x.arcs.has(a))],
+  ['走了很久才轉彎的人', '你信了很多年，後來慢慢走向另一條路。', x => x.o === 'left' && x.leaveAge != null && x.leaveAge - x.faith >= 30],
+  ['走出另一條路的人', '你曾經相信，後來放下了。這兩段都是你。', x => x.o === 'left'],
+  // 離開教會，仍然相信
+  ['一個人守著信仰的人', '在很難聚會的地方，你一個人守著自己的信仰。', x => x.o === 'dechurched' && x.hard],
+  ['對教會失望、沒有對神失望的人', '教會讓你失望了，但你沒有放下信仰。', x => x.o === 'dechurched' && ['scandal', 'seed', 'heal', 'abuse'].some(a => x.arcs.has(a))],
+  ['在門外仍相信的人', '你離開了教會，但沒有離開信仰。', x => x.o === 'dechurched'],
+  // 離開又回來
+  ['晚年回家的人', '你走了很遠，到了晚年才又回來。', x => x.retAge != null && x.retAge >= 60],
+  ['重新相信的人', '你曾經放下信仰，後來又重新相信。', x => x.jr.includes('return_faith')],
+  ['繞了一大圈才回家的人', '你曾經走遠，後來又回來了。', x => x.retAge != null],
+  // 全職的服事
+  ['一生守著祭台的人', '你當了一輩子神父，陪人走過出生、婚禮和告別。', x => x.pk === 'priest' && x.top === 'pastor'],
+  ['把一生交給修院的人', '你發願成為修女，把一生給了祈禱和服事。', x => x.pk === 'nun' && x.top === 'pastor'],
+  ['在祭台旁服事的人', '你成為終身執事，一邊顧家，一邊在堂區服事。', x => x.pk === 'deacon' && x.top === 'pastor'],
+  ['在支會裡服事的人', '你接受召喚，一邊工作，一邊照顧支會裡的人。', x => ['bishop', 'rs'].includes(x.pk) && x.top === 'pastor'],
+  ['把家打開的人', '你打開自己的家，讓一群人可以偷偷聚在一起。', x => x.top === 'pastor' && x.hard],
+  ['把燈留到最後的人', '你陪很多人走過他們最難的時候。', x => x.top === 'pastor'],
+  ['把家安在遠方的人', '你離開熟悉的地方，把一生給了另一片土地。', x => x.top === 'missionary'],
+  // 因信仰而來的壓力
+  ['帶著信仰遠走的人', '你為了信仰離開自己的國家，在新的地方重新開始。', x => x.fled],
+  ['在風裡沒有熄滅的燈', '你經歷了很多次因信仰而來的壓力，燈一直沒有熄。', x => x.pers >= 6],
+  ['默默相信的人', '你的信仰很少人知道，你一直默默地守著。', x => x.o !== 'heard' && x.hard && !x.fam && x.pers < 2],
+  ['在暗處點燈的人', '信仰讓你付上了代價，你還是走完了這一生。', x => x.pers >= 2],
+  // 教會裡的服事
+  ['替教會守夜的人', '你當了長老，和牧者一起扛起整間教會。', x => x.top === 'elder'],
+  ['管帳也管人心的人', '你當了執事，算清楚每一筆錢，也記得每一個人。', x => x.top === 'deacon'],
+  ['陪一群人長大的人', '你帶了很多年的小組，看著一群人慢慢長大。', x => x.top === 'leader'],
+  ['在職場裡活出信仰的人', '你沒有站上講台，信仰活在你每天的工作裡。', x => x.top === 'marketplace'],
+  ['在角落服事的人', '你在別人看不見的地方，默默服事了很多年。', x => x.top === 'worker'],
+  // 人生裡的好故事
+  ['接住別人的人', '在別人快撐不下去的時候，你伸手接住了他們。', x => x.arcs.has('g_jobless') || x.arcs.has('g_hurt')],
+  ['在泥巴裡分不出宗派的人', '救災那幾天，你和不同教會、不同信仰的人一起清淤。', x => x.arcs.has('g_disaster')],
+  ['和意見不同的人做朋友的人', '你們很多事都看法不同，但一直沒有斷了聯絡。', x => x.arcs.has('g_friends')],
+  ['送走老教會的人', '你陪那間把你養大的老教會，走完了最後一段。', x => x.arcs.has('g_lastsvc')],
+  ['不肯改數字的人', '主管要你改報告的數字，你說了不。', x => /拒絕修改/.test(x.chose)],
+  // 一般的信仰人生
+  ['帶別人走上這條路的人', '有人因為你，開始認識耶穌。', x => x.led >= 1],
+  ['把好消息說出去的人', '你很多次把自己相信的，說給身邊的人聽。', x => x.told >= 3],
+  ['換過教會、也學會欣賞的人', '你換過一次教會，也看見了不同傳統的美好。', x => x.switched],
+  ['在兩個世界之間的人', '你從另一個信仰傳統走過來，兩邊都是你的一部分。', x => !x.fam && (OTHER_FAITH.includes(x.pl) || x.pl === 'other')],
+  ['很晚才回應的人', '你到了晚年，才決定跟隨耶穌。', x => x.faith >= 50],
+  ['很小就說好的人', '你很小就決定跟隨耶穌，一路走到最後。', x => !x.fam && x.faith <= 12],
+  ['自己做了決定的人', '你在基督徒家庭長大，長大後才自己決定要不要信。', x => x.fam && x.faith >= 18],
+  ['在信仰裡長大的人', '你從小在信仰裡長大，這份信仰後來也成了你自己的。', x => x.fam],
+  ['一路走下去的人', '你決定跟隨耶穌，一直走到最後。', x => true],
+];
+// 一生沒有接觸到福音的穆斯林家庭：依出生的地方，另外 40 個稱號（原本的「聽著喚拜聲長大的人」留給其他地方）
+// [稱號, 國家, 族群條件或變體編號]；同一國有好幾個時，依族群判斷，沒有族群條件的依名字固定抽一個
+const MUSLIM_TITLES = [
+  ['在印度河平原長大的人', 'PK'], ['聽著卡瓦里歌聲長大的人', 'PK'], ['在旁遮普的麥田邊長大的人', 'PK'],
+  ['在千島之國長大的人', 'ID'], ['聽著甘美朗和喚拜聲長大的人', 'ID'], ['在稻田和清真寺之間長大的人', 'ID'],
+  ['在恆河三角洲長大的人', 'BD'], ['在雨季和喚拜聲裡長大的人', 'BD'], ['划著小船長大的人', 'BD'],
+  ['在喀什米爾山谷長大的人', 'IN', /喀什米爾/], ['在馬拉巴海岸長大的人', 'IN', /馬皮拉|泰米爾/], ['在恆河平原的老城長大的人', 'IN'],
+  ['在卡諾古城牆邊長大的人', 'NG', /豪薩/], ['在薩赫勒邊緣長大的人', 'NG'],
+  ['在尼羅河邊長大的人', 'EG'], ['在開羅的宣禮塔下長大的人', 'EG'],
+  ['在波斯詩歌裡長大的人', 'IR'], ['在伊斯法罕的藍色穹頂下長大的人', 'IR'],
+  ['在博斯普魯斯海峽邊長大的人', 'TR'], ['在安納托利亞高原長大的人', 'TR'],
+  ['在黃土高原的清真寺旁長大的人', 'CN', /回族/], ['在天山腳下長大的人', 'CN'],
+  ['在伏爾加河畔長大的人', 'RU', /韃靼|巴什基爾/], ['在高加索山下長大的人', 'RU'],
+  ['在興都庫什山下長大的人', 'AF'], ['在青白尼羅河交會的地方長大的人', 'SD'], ['在撒哈拉北邊長大的人', 'DZ'],
+  ['在兩河之間長大的人', 'IQ'], ['在阿特拉斯山下長大的人', 'MA'], ['在泥磚高樓之間長大的人', 'YE'],
+  ['在絲路古城長大的人', 'UZ'], ['在尼日河畔長大的人', 'NE'], ['在廷巴克圖的風沙裡長大的人', 'ML'],
+  ['在印度洋岸邊長大的人', 'SO'], ['在沙漠綠洲長大的人', 'SA'], ['在大馬士革古巷長大的人', 'SY'],
+  ['在薩赫勒的風裡長大的人', 'BF'], ['在查德湖邊長大的人', 'TD'], ['在東非高原長大的人', 'ET'], ['在斯瓦希里語的世界長大的人', 'TZ|KE']];
+function muslimTitle() { return placeTitle(MUSLIM_TITLES); }
+// 一生沒有接觸到福音的印度教家庭：依母語的地區，另外 15 個稱號（印地語人口最多，有 4 個版本）
+const HINDU_TITLES = [
+  ['在恆河平原長大的人', 'IN', /印地|博傑普爾/], ['在神龕的燈火旁長大的人', 'IN', /印地|博傑普爾/], ['在北印度的村莊長大的人', 'IN', /印地|博傑普爾/], ['在排燈節的燈火裡長大的人', 'IN', /印地|博傑普爾/],
+  ['跳著加爾巴舞長大的人', 'IN', /古吉拉特/], ['在德干高原長大的人', 'IN', /泰盧固/], ['在杜爾迦節的鼓聲裡長大的人', 'IN|BD', /孟加拉|錫爾赫特/],
+  ['在神廟高塔下長大的人', 'IN', /泰米爾/], ['在象頭神節的遊行裡長大的人', 'IN', /馬拉地/], ['在邁索爾的十勝節燈火下長大的人', 'IN', /卡納達/],
+  ['在歐南節的花毯旁長大的人', 'IN', /馬拉雅拉姆/], ['在普里的車節裡長大的人', 'IN', /奧里亞/], ['在森林和部落的歌聲裡長大的人', 'IN', /桑塔利|庫魯克|蒙達|蘭巴迪|貢德|比利/],
+  ['在峇里島的廟宇和梯田間長大的人', 'ID', /峇里/], ['在信德的沙漠邊長大的人', 'PK', /信德/]];
+// 依國家和族群（語言或族群名稱）挑一個地方稱號；同一國有好幾個符合時，依名字固定抽一個
+function placeTitle(list) {
+  const c = me.country.id, key = (me.group.language_name || '') + '｜' + me.group.name;
+  const here = list.filter(m => m[1].split('|').includes(c));
+  if (!here.length) return null;
+  const hit = here.filter(m => m[2] && m[2].test(key)), pool = hit.length ? hit : here.filter(m => !m[2]);
+  if (!pool.length) return null;
+  const h = [...me.name].reduce((s, ch) => s + ch.charCodeAt(0), 0);
+  return pool[h % pool.length][0];
+}
+// 一生沒有接觸到福音的佛教家庭：依國家和族群
+const BUDDHIST_TITLES = [
+  ['跟著阿嬤念佛長大的人', 'TW'], ['在佛堂的木魚聲裡長大的人', 'TW'], ['在浴佛節的隊伍裡長大的人', 'TW'],
+  ['在盂蘭盆舞的太鼓聲裡長大的人', 'JP'], ['在寺町的石板路上長大的人', 'JP'], ['在家裡的佛壇前長大的人', 'JP'],
+  ['在山寺的鐘聲裡長大的人', 'KR'], ['在燃燈會的燈海裡長大的人', 'KR'],
+  ['在轉經筒旁長大的人', 'CN', /藏/], ['在經幡和草原之間長大的人', 'CN', /蒙古/], ['在名山古剎的香客裡長大的人', 'CN'],
+  ['在盂蘭節的燈火裡長大的人', 'VN'], ['在湄公河的高棉佛寺旁長大的人', 'VN', /高棉/],
+  ['在金色佛塔下長大的人', 'MM'], ['在清晨托缽的隊伍旁長大的人', 'MM'], ['在撣邦高原的寺院裡長大的人', 'MM', /撣/],
+  ['在潑水節長大的人', 'TH'], ['在水燈節的河邊長大的人', 'TH'], ['在伊善的稻田和佛寺間長大的人', 'TH', /伊善/], ['在清邁古城的佛寺旁長大的人', 'TH', /北泰/],
+  ['在安貝卡帶來的佛法裡長大的人', 'IN', /馬哈爾/], ['在吉大港山區的佛寺長大的人', 'BD', /查克馬|馬爾馬/]];
+// 一生沒有接觸到福音的道教、民間信仰家庭：台灣依族群，另有中國、越南、沖繩
+const FOLK_TITLES = [
+  ['跟著媽祖遶境長大的人', 'TW'], ['在廟埕前長大的人', 'TW'], ['聽著廟口布袋戲長大的人', 'TW'], ['跟著陣頭的鑼鼓長大的人', 'TW'],
+  ['在中元普渡的供桌旁長大的人', 'TW'], ['在土地公廟旁長大的人', 'TW'], ['在王船祭的海邊長大的人', 'TW'], ['拜過七娘媽、做過十六歲的人', 'TW'],
+  ['在義民廟的鼓聲裡長大的人', 'TW', /客家/], ['在伯公樹下長大的人', 'TW', /客家/],
+  ['在祠堂的香火裡長大的人', 'CN'], ['在清明的祖墳前長大的人', 'CN'], ['在祖先神桌前長大的人', 'VN'], ['在御嶽的森林旁長大的人', 'JP', /沖繩/]];
+const TITLE_TOTAL = () => TITLES.length + MUSLIM_TITLES.length + HINDU_TITLES.length + BUDDHIST_TITLES.length + FOLK_TITLES.length;
+const TITLE_KEY = 'gospel-distance-titles';
+function lifeTitle(end, martyred) {
+  const x = titleCtx(end, martyred);
+  const t = TITLES.find(([, , f]) => { try { return f(x); } catch (e) { return false; } }) || TITLES[TITLES.length - 1];
+  if (t[0] === '聽著喚拜聲長大的人') { const m = placeTitle(MUSLIM_TITLES); if (m) return [m, t[1]]; }
+  if (t[0] === '在油燈和花香裡長大的人') { const m = placeTitle(HINDU_TITLES); if (m) return [m, t[1]]; }
+  if (t[0] === '在寺院鐘聲裡長大的人') { const m = placeTitle(BUDDHIST_TITLES); if (m) return [m, t[1]]; }
+  if (t[0] === '在香火裡長大的人' || t[0] === '跟著祖先的路走的人') { const m = placeTitle(FOLK_TITLES); if (m) return [m, t[1]]; }
+  return [t[0], t[1]];
+}
+// 收集過的稱號（只存在這台裝置的瀏覽器）
+function collectTitle(name) {
+  try { const s = new Set(JSON.parse(localStorage.getItem(TITLE_KEY) || '[]')); s.add(name); localStorage.setItem(TITLE_KEY, JSON.stringify([...s])); return s.size; } catch (e) { return null; }
+}
+function recapSlides(end, martyred) {
+  const c = me.country, g = me.group, o = lifeOutcome(martyred), d = new Date();
+  const all = DATA.countries.reduce((s, x) => s + x.births_per_year, 0), one = Math.round(all / c.births_per_year);
+  const logT = [...document.querySelectorAll('#log li .t')].map(x => x.textContent);
+  const count = re => logT.filter(t => re.test(t)).length;
+  const S = [];
+  S.push({ k: 'birth', eyebrow: `${d.getFullYear()} 年 ${d.getMonth() + 1} 月`, big: c.name, lines: [`你出生了，家人叫你${me.name}。`, `${g.name.startsWith('其他') ? '當地的少數族群' : g.name}・家庭宗教：${relName(me)}`, `這 53 國每年出生的嬰兒裡，每 ${one.toLocaleString()} 個就有 1 個在${c.name}。`] });
+  if (firstAge === null) S.push({ k: 'far', eyebrow: '福音的距離', big: '很遠', lines: ['這一生，你沒有機會清楚認識福音。', '不是因為你不願意，而是它一直沒有走到你身邊。'] });
+  else S.push({ k: 'gospel', eyebrow: '第一次聽見', big: `${firstAge} 歲`, lines: [channel && channel.age === firstAge ? `透過${channel.short}，你第一次接觸到福音。` : '你第一次接觸到福音。', faithAge !== null ? (faithAge === firstAge ? '同一年，你決定跟隨耶穌。' : `${faithAge} 歲，你決定跟隨耶穌。`) : '你想了很久，最後沒有選擇這份信仰。'] });
+  const JL = { leave: '你放下了信仰', dechurch: '你離開了教會', return_faith: '你重新回到信仰', return_church: '你回到了教會' };
+  const ch = [...cfNodes.filter(n => !n.gospel).map(n => [n.age, `${n.title}：你選了「${n.chose}」`]), ...journey.filter(j => JL[j.kind]).map(j => [j.age, JL[j.kind]])].sort((a, b) => a[0] - b[0]).slice(0, 4);
+  if (ch.length) S.push({ k: 'choices', eyebrow: '你做過的決定', list: ch.map(([a, t]) => [`${a} 歲`, t]) });
+  const ppl = [...castSeen].slice(0, 6);
+  if (ppl.length) S.push({ k: 'people', eyebrow: '走進你故事裡的人', chips: ppl, lines: ['有些人陪你走了一段，有些人讓你很難忘記。'] });
+  const nums = [[end, '年，你活了這麼久']];
+  if (stats.persecution > 0) nums.push([stats.persecution, '次，因為信仰而來的壓力']);
+  const told = count(/^你把福音告訴了一個朋友|^有一個人因為你而信了耶穌/); if (told > 0) nums.push([told, '次，你把福音告訴了別人']);
+  if (arcUsed.size > 0) nums.push([arcUsed.size, '段，讓你停下來做決定的故事']);
+  if (words.length > 0) nums.push([words.length, '個問題，你在人生的停頓裡回答過']);
+  S.push({ k: 'nums', eyebrow: '這一生的數字', nums: nums.slice(0, 4), quiet: o === 'martyred' });
+  const rc = lifeRecipe(martyred);
+  S.push({ k: 'color', eyebrow: '這一生的顏色', swatches: rc.comps.map(c => [c.color, c.label, Math.round(c.w * 100)]), strip: rc.strip, lines: ['出生的地方、性別，加上你在每個信仰裡度過的年數，調出了這一生的顏色。'] });
+  const [tt, ts] = lifeTitle(end, martyred);
+  const got = collectTitle(tt);
+  S.push({ k: 'title', eyebrow: '你這一生的稱號', big: tt, lines: [ts, ...(got ? [`你已經收集了 ${got} / ${TITLE_TOTAL()} 個稱號`] : [])] });
+  S.push({ k: 'last', eyebrow: '最後', quote: cardLine(end, martyred), lines: ['這一段人生是依真實統計產生的模擬，不是任何一個真實人物的紀錄。'] });
+  return S;
+}
+function closeRecap() { const r = document.getElementById('lifeRecap'); if (r) r.remove(); document.body.classList.remove('rc-open'); }
+function showRecap(end, martyred) {
+  closeRecap();
+  const o = lifeOutcome(martyred), slides = recapSlides(end, martyred);
+  const quiet = o === 'martyred' || SMOOTH === 'auto' || typeof requestAnimationFrame !== 'function';
+  const box = document.createElement('div');
+  box.id = 'lifeRecap'; box.className = `liferecap rc-${o}`; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', '這一生的回顧');
+  box.innerHTML = `<div class="rc-bars">${slides.map(() => '<i><b></b></i>').join('')}</div><button class="rc-skip" type="button">跳過</button><div class="rc-stage"></div><div class="rc-nav"><button class="rc-prev" type="button" aria-label="上一張">‹</button><span class="rc-hint">點一下繼續</span><button class="rc-next" type="button">下一張 ›</button></div>`;
+  document.body.appendChild(box); document.body.classList.add('rc-open');
+  try { recapWash(box, lifeRecipe(martyred), quiet); } catch (e) {}
+  const stage = box.querySelector('.rc-stage'), bars = [...box.querySelectorAll('.rc-bars i')];
+  let i = 0;
+  const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+  const close = () => { box.remove(); document.body.classList.remove('rc-open'); document.removeEventListener('keydown', key); $('end').scrollIntoView({ behavior: 'auto', block: 'start' }); };
+  const render = () => {
+    const s = slides[i];
+    bars.forEach((b, j) => b.classList.toggle('on', j <= i));
+    stage.innerHTML = `<section class="rc-card rc-${s.k}${quiet ? '' : ' rc-anim'}"><p class="rc-eyebrow">${esc(s.eyebrow)}</p>${s.big ? `<h2 class="rc-big">${esc(s.big)}</h2>` : ''}${s.quote ? `<blockquote class="rc-quote">${esc(s.quote)}</blockquote>` : ''}${s.list ? `<ol class="rc-list">${s.list.map(([a, t]) => `<li><span class="num">${esc(a)}</span><span>${esc(t)}</span></li>`).join('')}</ol>` : ''}${s.swatches ? `<div class="rc-strip" style="background:${stripCss(s.strip)}" aria-hidden="true"></div><ul class="rc-sw">${s.swatches.map(([c, l, p]) => `<li><i style="background:${c}"></i><span>${esc(l)}</span><b class="num">${p}%</b></li>`).join('')}</ul>` : ''}${s.chips ? `<ul class="rc-chips">${s.chips.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}${s.nums ? `<ul class="rc-nums">${s.nums.map(([n, t]) => `<li><b class="num" data-n="${n}">${quiet ? n : 0}</b><span>${esc(t)}</span></li>`).join('')}</ul>` : ''}${(s.lines || []).map(l => `<p class="rc-line">${esc(l)}</p>`).join('')}${i === slides.length - 1 ? '<div class="rc-end"><button class="rc-full btn" type="button">看完整結局</button><button class="rc-again" type="button">再活一次</button></div>' : ''}</section>`;
+    box.querySelector('.rc-prev').disabled = i === 0;
+    box.querySelector('.rc-next').hidden = i === slides.length - 1; box.querySelector('.rc-hint').hidden = i === slides.length - 1;
+    if (s.nums && !quiet) stage.querySelectorAll('[data-n]').forEach(el => { const n = +el.dataset.n, t0 = performance.now(); const step = t => { const p = Math.min(1, (t - t0) / 900); el.textContent = Math.round(n * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); });
+    const f = stage.querySelector('.rc-full'); if (f) { f.onclick = close; f.focus({ preventScroll: true }); stage.querySelector('.rc-again').onclick = () => { close(); start(); }; } else box.querySelector('.rc-next').focus({ preventScroll: true });
+  };
+  const go = dlt => { const n = i + dlt; if (n < 0 || n >= slides.length) return; i = n; render(); };
+  box.querySelector('.rc-next').onclick = e => { e.stopPropagation(); go(1); };
+  box.querySelector('.rc-prev').onclick = e => { e.stopPropagation(); go(-1); };
+  box.querySelector('.rc-skip').onclick = e => { e.stopPropagation(); close(); };
+  // 點畫面左邊三分之一回上一張，其他地方下一張；左右滑也可以
+  let sx = null;
+  stage.addEventListener('pointerdown', e => { sx = e.clientX; });
+  stage.addEventListener('pointerup', e => { if (e.target.closest('button')) return; const dx = sx === null ? 0 : e.clientX - sx; sx = null; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1); else go(e.clientX < innerWidth / 3 ? -1 : 1); });
+  const key = e => { if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); } else if (e.key === 'ArrowLeft') go(-1); else if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', key);
+  render();
+}
+
 function finish(martyred) {
   $('lifefoot').hidden = true; $('agebar').hidden = true;
   stop(); music.fadeOut(martyred ? 2.5 : 5); $('choiceSlot').innerHTML = '';
@@ -4380,6 +4881,8 @@ function finish(martyred) {
   $('memBtn').onclick = () => { showHome(); $('memorial').scrollIntoView({ behavior: SMOOTH, block: 'start' }); };
   $('homeBtn').onclick = $('homeTop').onclick = () => { showHome(); window.scrollTo({ top: 0, behavior: SMOOTH }); };
   E.scrollIntoView({ behavior: SMOOTH, block: 'start' });
+  // 先播人生回顧，看完或跳過再看完整結局
+  showRecap(end, martyred);
 }
 
 // 開場計數器：每秒約 4.2 個嬰兒；依模擬結果，約四成可能一生聽不到
