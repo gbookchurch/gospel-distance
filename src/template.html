@@ -1175,6 +1175,30 @@ body.rc-open { overflow: hidden; }
   .end #share .controls { grid-template-columns: minmax(0, 1fr); }
   .end #share .controls .primary { grid-column: auto; }
 }
+/* 參考資料預設收起來，避免長網址和大量來源沖淡文章閱讀節奏。 */
+.source-drawer { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 8px; min-width: 0; }
+.source-drawer > summary { cursor: pointer; font-size: 13.5px; color: var(--muted); font-weight: 600; min-height: 44px; display: flex; align-items: center; gap: 8px; list-style: none; }
+.source-drawer > summary::-webkit-details-marker { display: none; }
+.source-drawer > summary::after { content: '⌄'; font-size: 18px; margin-left: auto; line-height: 1; }
+.source-drawer[open] > summary::after { transform: rotate(180deg); }
+.source-drawer ul { list-style: disc; display: grid; gap: 9px; margin: 2px 0 10px; padding-left: 1.4em; }
+.source-drawer li { font-size: 13.5px; line-height: 1.65; overflow-wrap: anywhere; }
+.source-drawer a { color: var(--lamp); text-underline-offset: 3px; }
+.source-drawer > summary:focus-visible { outline: 2px solid var(--lamp); outline-offset: 2px; border-radius: 4px; }
+/* 結果頁尾段的神學延伸：一句問題、一句引導、一個展開入口。 */
+.end .theo-access { gap: 13px; padding-top: 36px; padding-bottom: 40px; }
+.end .theo-access h2 { font-family: var(--display); font-size: clamp(21px, 4.7vw, 27px); font-weight: 700; line-height: 1.65; color: var(--v3-ink); }
+.theo-access-lede { font-size: 15.5px; line-height: 1.75; color: var(--v3-muted); }
+.theo-access #theoBox { margin-top: 6px; border-color: #aebbb0; background: #f4f7f3; overflow: hidden; }
+.theo-access #theoSum { min-height: 54px; padding: 14px 18px; font-size: 16px; color: #345646; font-weight: 700; }
+.theo-access #theoSum::after { border-color: #557568; }
+.theo-access #theoBox[open] { background: var(--surface); }
+.theo-access #theoBox[open] #theoSum { border-bottom: 1px solid var(--line); }
+@media (max-width: 640px) {
+  .end .theo-access { gap: 11px; padding-block: 28px 32px; }
+  .end .theo-access h2 { font-size: clamp(20px, 5.5vw, 24px); }
+  .theo-access #theoSum { padding: 13px 16px; }
+}
 </style>
 
 <main>
@@ -1296,7 +1320,6 @@ body.rc-open { overflow: hidden; }
           <li>族群與語言的中文譯名，冷門族群多為音譯</li>
           <li>人生紀錄裡的生活片段、故事線、反思問題，是劇情設計，不是統計資料。一生最多兩條故事線；新的故事線和原本的故事線共用名額，不另外提高機率</li>
           <li>有些故事線的靈感來自真實的教會文化與公共討論（IHOPKC、Hillsong、Bethel），角色與情節為虛構；結局頁另外列出整理到 2026 年 10 月的公開資料</li>
-          <li>「如果當時選了另一條路呢？」是預寫的另一種可能，沒有重新模擬，也不表示另一條路比較好</li>
           <li>關於中國的內容，本遊戲採取批判中國共產黨宗教政策的立場，所有描述都依公開紀錄。批判的對象是黨和政策，不是在三自教會聚會的信徒。</li>
         </ul>
       </div>
@@ -1493,6 +1516,17 @@ body.rc-open { overflow: hidden; }
 </footer>
 
 <script>
+// 手機重新整理時不要恢復上次捲到的頁尾；保留帶 # 錨點的正常連結行為。
+try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+window.addEventListener('pageshow', e => {
+  if (e.persisted) return; // 從瀏覽器上一頁返回時，保留使用者原來的位置
+  const nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+  if (location.hash && (!nav || nav.type !== 'reload')) return;
+  const toTop = () => window.scrollTo(0, 0);
+  toTop();
+  if (typeof requestAnimationFrame === 'function') requestAnimationFrame(toTop);
+  setTimeout(toTop, 120); // 部分手機瀏覽器會在 pageshow 後才還原捲動位置
+});
 const DATA = /*DATA*/;
 const WORLD = /*MAP*/;
 /*GOSPEL*/
@@ -3195,7 +3229,7 @@ function twOdds() {
 
 // ── 結局敘事：依這一生實際發生的事產生結語，不補造沒有發生的經歷
 // 結局頁：這一生的信仰傳統、那些一生沒聽過福音的人呢（內容都是程式裡的固定文字）
-const srcLine = l => `<p class="fine">資料：${l.map(([t, u]) => `<a href="${u}" target="_blank" rel="noopener">${t}</a>`).join('、')}</p>`;
+const srcLine = l => `<details class="source-drawer"><summary>資料來源（${l.length} 項）</summary><ul>${l.map(([t, u]) => `<li><a href="${u}" target="_blank" rel="noopener">${t}</a></li>`).join('')}</ul></details>`;
 function tradPanel() {
   const k = tradKey(), T = TRAD_INFO[k];
   if (!T || !(faithAge !== null || me.parentReligion === 'christian')) return '';
@@ -3240,12 +3274,6 @@ function explainPanel() {
   const ks = [...explainSeen].filter(k => EXPLAIN[k]);
   if (!ks.length) return '';
   return `<details class="xdr"><summary>這個議題在吵什麼？</summary><div class="tradbg"><p>這一生遇到的爭議，用白話說明每一方在想什麼，也說每一方被質疑的地方。只介紹，不下結論。</p><dl>${ks.map(k => `<div><dt>${EXPLAIN[k][0]}</dt><dd>${EXPLAIN[k][1]}</dd></div>`).join('')}</dl></div></details>`;
-}
-function cfPanel() {
-  const N = cfNodes.slice(0, 3);
-  if (!N.length) return '';
-  const esc = s => String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
-  return `<details class="xdr" id="cfBox"><summary>如果當時選了另一條路呢？</summary><div class="tradbg"><p>這一生有幾個轉彎的地方。下面是另一種可能，只是想像，不是重新模擬，也不表示另一條路比較好。你真正走過的那一生，不會被改變。</p>${N.map(n => `<div class="cf"><p><b>${n.age} 歲，${esc(n.title)}</b>：你選了「${esc(n.chose)}」。</p>${n.alt.map(([l, d]) => `<p class="cfalt"><b>${esc(l.startsWith('如果') ? l : '如果選了「' + l + '」')}</b>：${esc(d.replace(/^如果[^：]*：/, ''))}</p>`).join('')}</div>`).join('')}</div></details>`;
 }
 function neoPanel() {
   if (!neoSeen) return '';
@@ -3321,21 +3349,17 @@ function theoMatrix() {
   <p class="theo-foot">這張圖是幫助理解不同神學問題的探索地圖，並不代表每一種組合都是歷史上獨立成立的神學立場。註：萬物復原論者在第一層通常趨近或等同於普救論。「普世盼望」比較像一種盼望的態度，和排他論、包容論不完全在同一個層次；「還不確定」是一種態度，所以沒有放進矩陣。</p>
 </section>`;
 }
-const THEO_SHARE = '如果一個人一生都沒聽過福音，最後會怎樣？\n\n基督教內部其實有排他論、包容論、普世盼望，以及不同的審判觀點。\n\n如果是你最愛的人，一輩子都沒有相信耶穌，你會怎麼理解他的結局？\n\n來玩玩《福音距離》：\nhttps://gbookchurch.github.io/gospel-distance/';
 function hellPanel(open) {
   theoSel.col = theoSel.row = null;
   const SRC = { intro: '/*IMG:theology-intro*/', salvation: '/*IMG:theology-salvation*/', destiny: '/*IMG:theology-destiny*/' };
   const img = (k, alt, cls) => `<img class="${cls}" src="${SRC[k]}" alt="${alt}" loading="lazy" decoding="async" width="1200" height="${k === 'destiny' ? 675 : 800}">`;
-  return `<details class="xdr theo" id="theoBox"${open ? ' open' : ''}><summary id="theoSum">那些一生沒聽過福音的人呢？</summary><div class="theo-wrap">
+  return `<details class="xdr theo" id="theoBox"${open ? ' open' : ''}><summary id="theoSum">看看不同神學觀點</summary><div class="theo-wrap">
   <figure class="theo-hero">${img('intro', '水彩插畫：深藍、金黃和淡紫的顏料彼此交融', 'theo-img')}</figure>
   <div class="theo-lede"><p class="theo-q">「如果一個人從出生到死亡，都沒有機會認識耶穌，神會怎麼看待他？」</p><p>這個問題困擾過無數基督徒。歷代神學家提出了不同答案，而這些答案，也影響著我們如何理解宣教、救恩，以及神的公義與憐憫。</p></div>
   <p class="theo-note">這是這個遊戲最核心的問題，基督教內部有好幾種回答。以下只介紹，不下結論。這個問題其實有兩層：誰能得救，和沒有得救的人最後會怎樣。</p>
   <section class="theo-layer"><div class="theo-head">${img('salvation', '水彩插畫：三條不同的路在山野間延伸', 'theo-thumb')}<div><span class="theo-kicker">第一層</span><h4>誰能得救？</h4></div></div>${theoCards(THEO_SAVE, theoMore(SAVE_VIEWS))}</section>
   <section class="theo-layer"><div class="theo-head">${img('destiny', '水彩插畫：一個人站在山頂，望著遠方的日出和蜿蜒的道路', 'theo-thumb')}<div><span class="theo-kicker">第二層</span><h4>沒有得救的人最後會怎樣？</h4></div></div>${theoCards(THEO_FATE, theoMore(FATE_VIEWS))}</section>
   ${theoMatrix()}
-  <div class="theo-end"><p>不同的回答，會影響基督徒如何理解宣教，也會影響我們怎麼看待身邊還沒有信主的家人與朋友。</p><p class="theo-big">如果你最愛的人，一輩子都沒有相信耶穌，你會怎麼理解他的結局？</p>
-  <div class="theo-share"><button type="button" class="theo-copy">複製討論問題</button><button type="button" class="theo-again">再活一次</button></div>
-  <p class="theo-copied" role="status" aria-live="polite"></p></div>
   ${srcLine(THEO_SRC)}</div></details>`;
 }
 // 矩陣互動：點格子或兩組選擇器，顯示這個組合的說明；方向鍵可以在格子間移動
@@ -3350,23 +3374,8 @@ function theoShow(root) {
   const C = THEO_COLS.find(x => x[0] === col), R = THEO_ROWS.find(x => x[0] === row), [k, txt] = THEO_CELL[`${col}-${row}`];
   res.innerHTML = `<div class="theo-res" style="--ca:${C[2]};--cb:${R[2]}"><p class="theo-res-h"><span class="theo-swatch" aria-hidden="true"></span><b>你正在探索：${C[1]} × ${R[1]}</b><span class="theo-kind k-${k}">${THEO_KIND[k]}</span></p><p>${txt}</p></div>`;
 }
-// 複製討論問題：先用 Clipboard API，不行就用隱藏文字框，再不行就把文字顯示出來讓人自己選取
-async function theoCopy(box) {
-  const msg = box.querySelector('.theo-copied');
-  const done = ok => { msg.textContent = ok ? '已複製，可以分享給朋友討論！' : ''; if (ok) setTimeout(() => { if (msg.textContent.startsWith('已複製')) msg.textContent = ''; }, 3000); };
-  try { if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(THEO_SHARE); return done(true); } } catch (e) {}
-  try {
-    const ta = document.createElement('textarea'); ta.value = THEO_SHARE; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
-    document.body.appendChild(ta); ta.select(); const ok = document.execCommand && document.execCommand('copy'); ta.remove();
-    if (ok) return done(true);
-  } catch (e) {}
-  msg.innerHTML = '這個瀏覽器沒辦法自動複製，請長按或選取下面的文字：<textarea class="theo-manual" readonly rows="7"></textarea>';
-  const t = msg.querySelector('textarea'); t.value = THEO_SHARE; t.focus(); t.select();
-}
 document.addEventListener('click', e => {
   if (!e.target.closest) return;
-  const tb = e.target.closest('.theo-copy, .theo-again');
-  if (tb) { if (tb.classList.contains('theo-copy')) theoCopy(tb.closest('.theo-end')); else if ($('againBtn')) $('againBtn').click(); return; }
   const root = e.target.closest('.theo-matrix'); if (!root) return;
   const cell = e.target.closest('.theo-cell'), c = e.target.closest('[data-theo-col]'), r = e.target.closest('[data-theo-row]');
   if (cell) { const [a, b] = cell.dataset.theo.split('-'); theoSel.col = a; theoSel.row = b; root.querySelectorAll('.theo-cell').forEach(x => x.tabIndex = x === cell ? 0 : -1); }
@@ -3771,7 +3780,11 @@ function lifeSpec(martyred) {
   yrs.forEach((k, i) => { const s = segs[segs.length - 1]; if (s && s.key === k) s.f1 = (i + 1) / n; else segs.push({ key: k, f0: i / n, f1: (i + 1) / n }); });
   const badMin = new Set(Object.values(MIN_EVENTS).flatMap(v => v[1]));
   const pers = [...new Set(highlights.filter(h => h.cls === 'persecution' || badMin.has(h.text)).map(h => h.age))].sort((a, b) => a - b).slice(0, 5);
-  return { segs, end: Math.max(1, n - 1), sex: me.sex, cid: me.country.id, region: regionColor(me.country)[1], pers, quiet: !!martyred, seed: fnv([me.name, me.country.id, me.sex, yrs.join(','), pers.join(',')].join('#')) };
+  const accents = [
+    ...highlights.filter(h => h.cls === 'growth').map(h => ({ age: h.age, kind: 'growth' })),
+    ...cfNodes.filter(h => Number.isFinite(h.age)).map(h => ({ age: h.age, kind: 'choice' })),
+  ].filter(h => Number.isFinite(h.age) && h.age >= 0).sort((a, b) => a.age - b.age).slice(0, 9);
+  return { segs, end: Math.max(1, n - 1), sex: me.sex, cid: me.country.id, region: regionColor(me.country)[1], pers, accents, encounters: Math.min(5, castSeen.size), quiet: !!martyred, seed: fnv([me.name, me.country.id, me.sex, yrs.join(','), pers.join(','), accents.map(a => a.age + a.kind).join(',')].join('#')) };
 }
 function riverArt(W, H, spec, o = {}) {
   const mk = () => { const c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext && c.getContext('2d'); return x ? [c, x] : null; };
@@ -3812,12 +3825,30 @@ function riverArt(W, H, spec, o = {}) {
     for (const sd of [-1, 1]) for (let i = 0; i < N; i += 2) { const t = i / N, e = u => { const [cx, cy] = path(u), [dx, dy] = normal(u), w = width(u) * (0.42 + 0.08 * nW(u * 17 + (sd > 0 ? 40 : 0))); return [cx + dx * sd * w, cy + dy * sd * w]; }; const lab = colorAt(t)[0][0]; ctx.strokeStyle = labRgba([lab[0] - 0.14, lab[1], lab[2]], 0.22 * k); ctx.beginPath(); ctx.moveTo(...e(t)); ctx.lineTo(...e((i + 2) / N)); ctx.stroke(); }
   });
   blur(river, S * 0.009); granulate(river, mulberry(seed + 11), 0.32, 0.05);
-  // 性別：河岸邊的局部光暈和一條半透明細線
-  const g = tame(SEX_HUE[spec.sex][1], 0.07, 0.6, 0.78), gender = layer(ctx => {
-    for (let i = 0; i < 3; i++) { const t = 0.15 + R() * 0.7, [cx, cy] = path(t), [dx, dy] = normal(t), sd = R() < 0.5 ? -1 : 1, w = width(t), px = cx + dx * sd * w * 0.75, py = cy + dy * sd * w * 0.75, r = S * (0.05 + R() * 0.04); const gr = ctx.createRadialGradient(px, py, 0, px, py, r); gr.addColorStop(0, labRgba(g, 0.32 * k)); gr.addColorStop(1, labRgba(g, 0)); ctx.fillStyle = gr; ctx.fillRect(px - r, py - r, r * 2, r * 2); }
-    const t0 = 0.08 + R() * 0.2; ctx.strokeStyle = labRgba(g, 0.45 * k); ctx.lineWidth = Math.max(1, S * 0.002); curve(ctx, t0, Math.min(0.95, t0 + 0.45), (R() < 0.5 ? -1 : 1) * (0.62 + R() * 0.1));
+  // 性別色維持配方中的 15%，但成為沿河可辨認的水彩河岸，而非只有三個幾乎看不見的光點。
+  const g = tame(SEX_HUE[spec.sex][1], 0.105, 0.59, 0.79), gender = layer(ctx => {
+    for (let i = 0; i < 10; i++) {
+      const t = 0.05 + R() * 0.9, [cx, cy] = path(t), [dx, dy] = normal(t), sd = i % 2 ? -1 : 1, w = width(t), px = cx + dx * sd * w * (0.66 + R() * 0.22), py = cy + dy * sd * w * (0.66 + R() * 0.22), r = S * (0.075 + R() * 0.065);
+      const gr = ctx.createRadialGradient(px, py, 0, px, py, r); gr.addColorStop(0, labRgba(g, 0.34 * k)); gr.addColorStop(0.48, labRgba(g, 0.16 * k)); gr.addColorStop(1, labRgba(g, 0)); ctx.fillStyle = gr; ctx.fillRect(px - r, py - r, r * 2, r * 2);
+    }
+    ctx.lineCap = 'round';
+    for (const sd of [-1, 1]) {
+      ctx.strokeStyle = labRgba(g, 0.32 * k); ctx.lineWidth = Math.max(3, S * 0.014); curve(ctx, 0.04, 0.96, sd * 0.63);
+      ctx.strokeStyle = labRgba(g, 0.54 * k); ctx.lineWidth = Math.max(1.5, S * 0.0035); curve(ctx, 0.08, 0.92, sd * 0.72);
+    }
   });
-  blur(gender, 0.8);
+  blur(gender, S * 0.003);
+  // 人生經歷為水彩點綴：成長＝青綠，重要選擇＝灰紫；遇見的人＝暖珊瑚。
+  // 事件只以實際記錄作標記，不參與原有 25/15/60 色譜比例，也不暗示好壞評分。
+  const experiences = layer(ctx => {
+    const mark = (t, color, side, strength = 1) => {
+      const [cx, cy] = path(t), [dx, dy] = normal(t), w = width(t), px = cx + dx * side * w * 0.53, py = cy + dy * side * w * 0.53, r = S * (0.026 + R() * 0.019), lab = tame(color, 0.105, 0.55, 0.76);
+      const gr = ctx.createRadialGradient(px, py, 0, px, py, r); gr.addColorStop(0, labRgba(lab, 0.5 * strength)); gr.addColorStop(0.45, labRgba(lab, 0.24 * strength)); gr.addColorStop(1, labRgba(lab, 0)); ctx.fillStyle = gr; ctx.fillRect(px - r, py - r, 2 * r, 2 * r);
+    };
+    for (const a of spec.accents || []) mark(Math.max(0.03, Math.min(0.97, a.age / spec.end)), a.kind === 'growth' ? '#62A997' : '#A38AC7', R() < 0.5 ? -1 : 1);
+    for (let j = 0; j < (spec.encounters || 0); j++) mark(0.14 + 0.72 * (j + 0.5) / Math.max(1, spec.encounters), '#C98978', j % 2 ? -1 : 1, 0.75);
+  });
+  blur(experiences, S * 0.002);
   // 河面的淺色流線，和受傷、受壓的年紀留下的深色細流（色相不變，只是變沉）
   const lines = layer(ctx => {
     ctx.lineCap = 'round';
@@ -3827,7 +3858,7 @@ function riverArt(W, H, spec, o = {}) {
   blur(lines, 1);
   // 合成：暖白紙，河流和性別用色彩增值疊上去，再疊流線、紙紋和邊框
   x.fillStyle = '#f7f3ea'; x.fillRect(0, 0, W, H);
-  for (const L of [river, gender]) { x.globalCompositeOperation = 'multiply'; x.drawImage(L, 0, 0); }
+  for (const L of [river, gender, experiences]) { x.globalCompositeOperation = 'multiply'; x.drawImage(L, 0, 0); }
   x.globalCompositeOperation = 'source-over'; x.drawImage(lines, 0, 0);
   const pp = paperCanvas(W, H, mulberry(fnv('paper'))); if (pp) drawPaper(x, pp, W, H, 0.5, false);
   if (!o.noFrame) drawFrame(x, W, H, spec, o.frame);
@@ -5284,7 +5315,8 @@ function recapSlides(end, martyred) {
   if (words.length > 0) nums.push([words.length, '個問題，你在人生的停頓裡回答過']);
   S.push({ k: 'nums', eyebrow: '這一生的數字', nums: nums.slice(0, 4), quiet: o === 'martyred' });
   const rc = lifeRecipe(martyred);
-  S.push({ k: 'color', eyebrow: '這一生的顏色', swatches: rc.comps.map(c => [c.color, c.label, Math.round(c.w * 100)]), strip: rc.strip, lines: ['邊框是你出生的地方，河流是你在每個信仰裡度過的年數，岸邊的光暈是性別。', ...(lifeSpec(martyred).pers.length ? ['河裡那幾道比較深的細流，是這一生受過的傷和壓力。'] : [])] });
+  const colorsInLife = lifeSpec(martyred);
+  S.push({ k: 'color', eyebrow: '這一生的顏色', swatches: rc.comps.map(c => [c.color, c.label, Math.round(c.w * 100)]), strip: rc.strip, lines: ['邊框代表出生地，河流隨信仰歷程變色；河岸持續出現的綠色或藍色，代表這一生的性別。', ...((colorsInLife.accents.length || colorsInLife.encounters) ? ['水彩裡的青綠、灰紫與暖珊瑚，是成長、重要選擇和與人的相遇留下的點綴。'] : []), ...(colorsInLife.pers.length ? ['河裡比較深的細流，記錄這一生受過的傷和壓力。'] : [])] });
   const [tt, ts] = lifeTitle(end, martyred);
   const got = collectTitle(tt);
   S.push({ k: 'title', eyebrow: '你這一生的稱號', big: tt, lines: [ts, ...(got ? [`你已經收集了 ${got} / ${TITLE_TOTAL()} 個稱號`] : [])] });
@@ -5364,7 +5396,7 @@ function finish(martyred) {
     <div class="epitaph" id="epitaph"></div>
     </section>
     <section class="band b2 recap">
-    <p class="eyebrow">CHAPTER 02 · 人生足跡</p>
+    <p class="eyebrow">這一生的紀錄</p>
     <h2>這一生的足跡</h2>
     <div class="v3-vitals">
       <div><strong class="num">${end}</strong><span>活了幾歲</span></div>
@@ -5379,7 +5411,7 @@ function finish(martyred) {
     </section>
     <section class="band b3" id="share">
     <div class="share">
-      <p class="eyebrow">CHAPTER 03 · 分享這一生</p>
+      <p class="eyebrow">分享這一生</p>
       <h2>把這一生帶走</h2>
       <p class="v3-description">把這段意想不到的人生分享給朋友，看看他們又會活出什麼故事。</p>
       <p class="hint" id="shareStatus">正在畫你的分享卡…</p>
@@ -5393,7 +5425,7 @@ function finish(martyred) {
     </div>
     </section>
     <section class="band b2 explore">
-    <p class="eyebrow">CHAPTER 04 · 回頭看看</p>
+    <p class="eyebrow">人生故事與背景</p>
     <h2>回頭看看這一生</h2>
     <details class="xdr"><summary>展開這一生的完整紀錄</summary><ol class="log v3-full-log" id="fullLifeLog"></ol></details>
     ${hl.length ? `<details class="xdr"><summary>這一生的重要時刻</summary><div class="events"><ol id="hlList">${hl.map(() => '<li><span class="a"></span><span class="t"></span></li>').join('')}</ol>${highlights.length > 6 ? `<p class="fine">還有 ${highlights.length - 6} 件事，記在上方的人生紀錄裡。</p>` : ''}</div></details>` : ''}
@@ -5402,8 +5434,6 @@ function finish(martyred) {
     ${neoPanel()}
     ${mvPanel()}
     ${explainPanel()}
-    ${cfPanel()}
-    ${hellPanel(lifeOutcome(martyred) === 'never')}
     <details class="xdr"><summary>53 國福音接觸機會模擬排行</summary>
     <div class="diff">
       <p class="lead">在 53 國的模擬裡，${c.name}是第 <b>${difficultyRank(c)}</b> 難接觸到福音的國家</p>
@@ -5423,14 +5453,14 @@ function finish(martyred) {
     </div>
     </details>
     </section>
-    <section class="band b2 v3-reflection">
-      <p class="eyebrow">CHAPTER 05 · 留下一個問題</p>
-      <h2>如果換成你呢？</h2>
-      <p class="v3-question" id="endQ"></p>
-      <div class="theo-guide"><p class="q">那些一生都沒機會接觸福音的人，最後會怎樣？基督教內部其實有不同的回答。</p><button type="button" id="toTheo">看看不同的神學觀點 <span aria-hidden="true">↓</span></button></div>
+    <section class="band b2 theo-access">
+      <p class="eyebrow">延伸思考</p>
+      <h2>那些一生都沒機會接觸福音的人，最後會怎樣？</h2>
+      <p class="theo-access-lede">基督教內部其實有不同的回答。</p>
+      ${hellPanel(false)}
     </section>
     <section class="band b4 endfoot">
-    <p class="eyebrow">CHAPTER 06 · 下一段人生</p>
+    <p class="eyebrow">接下來</p>
     <div class="controls"><button class="primary" id="againBtn">再活一次</button><button id="memBtn">看你活過的那些人生</button><button id="homeBtn">回首頁</button></div>
     <div class="show">
       <p>聽聽${SHOW_NAME}，一起聊聊教會裡不太好說、卻很值得聊的信仰問題。玩完之後有什麼想說的，也歡迎分享給我們。</p>
@@ -5449,7 +5479,6 @@ function finish(martyred) {
   $('fullLifeLog').innerHTML = $('log').innerHTML;
   [...$('summary').children].forEach((div, i) => { div.querySelector('dt').textContent = rows[i][0]; div.querySelector('dd').textContent = rows[i][1]; div.className = i === 4 ? 'key' : i >= 5 ? 'extra' : 'who'; });
   if (hl.length) [...$('hlList').children].forEach((li, i) => { li.className = hl[i].cls; li.querySelector('.a').textContent = `${hl[i].age} 歲`; li.querySelector('.t').textContent = localize(hl[i].text); });
-  $('endQ').textContent = endQuestion(martyred);
   E.querySelector('.diff .challenge p').textContent = c.challenge;
   if (E.querySelector('.diff .px p')) E.querySelector('.diff .px p').textContent = paradoxText(c);
   E.querySelectorAll('.other').forEach((el, i) => {
@@ -5485,7 +5514,6 @@ function finish(martyred) {
   $('birth').hidden = true; // 完整結果頁自成一章，詳細年表保留於可展開區
   E.hidden = false;
   $('againBtn').onclick = () => start();
-  $('toTheo').onclick = goTheo;
   theoHintOnce(document.querySelector('#end .theo-matrix'));
   $('memBtn').onclick = () => { showHome(); $('memorial').scrollIntoView({ behavior: SMOOTH, block: 'start' }); };
   $('homeBtn').onclick = $('homeTop').onclick = () => { showHome(); window.scrollTo({ top: 0, behavior: SMOOTH }); };
