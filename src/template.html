@@ -886,6 +886,25 @@ body.rc-open { overflow: hidden; }
 .liferecap .rc-skip.ink-w, .liferecap .rc-skip.ink-b { background: none !important; }
 @media (prefers-reduced-motion: reduce) { .liferecap .rc-card, .liferecap .rc-card * { transition: none; } }
 
+/* V3.9 回顧導覽：單條時間線、頁碼、安靜的文字按鈕，水彩留給內容。 */
+.liferecap { --rc-green: #48665B; --rc-soft: #F9F6EF; --rc-line: #D7DED4; }
+.liferecap .rc-top { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 11px 16px; padding: 7px 8px 10px; background: rgba(249,246,239,.9); border-radius: 12px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); flex: none; }
+.liferecap .rc-top-meta { display: flex; align-items: baseline; gap: 10px; color: #536359; font-size: 13px; line-height: 1.4; }
+.liferecap .rc-top-title { font-weight: 700; letter-spacing: .06em; }
+.liferecap .rc-count { font-variant-numeric: tabular-nums; color: #65746A; }
+.liferecap .rc-progress { grid-column: 1 / -1; order: 3; height: 4px; background: var(--rc-line); border-radius: 999px; overflow: hidden; }
+.liferecap .rc-progress-fill { width: 0; height: 100%; background: #7C9A7D; border-radius: inherit; transition: width .3s ease; }
+.liferecap .rc-skip { position: static !important; justify-self: end; min-height: 36px; padding: 6px 9px; border-radius: 7px; color: #65746A; background: transparent; font-size: 13px; font-weight: 500; }
+.liferecap .rc-nav { justify-content: space-between; gap: 12px; flex: none; padding: 11px 7px max(5px, env(safe-area-inset-bottom, 0px)); background: rgba(249,246,239,.92); border-radius: 12px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+.liferecap .rc-nav button, .liferecap.ink-light .rc-nav button { min-height: 48px; border-radius: 10px; font-size: 15px; font-weight: 700; letter-spacing: .02em; text-shadow: none !important; }
+.liferecap .rc-nav .rc-prev, .liferecap.ink-light .rc-nav .rc-prev { width: auto; min-width: 90px; padding: 10px 18px !important; border: 1px solid #CCD5CA; color: #476055; background: rgba(255,255,255,.78); }
+.liferecap .rc-nav .rc-next, .liferecap.ink-light .rc-nav .rc-next { min-width: 130px; padding: 10px 22px; border: 1px solid #48665B; background: #48665B; color: #fff; }
+.liferecap .rc-nav button:disabled { opacity: .35; }
+.liferecap .rc-nav .rc-next:hover { background: #385348; }
+.liferecap .rc-nav .rc-prev:hover:not(:disabled) { background: #EDF2EA; }
+.liferecap .rc-nav button:focus-visible, .liferecap .rc-skip:focus-visible { outline: 3px solid #E9A04F; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .liferecap .rc-progress-fill { transition: none; } }
+
 /* ═══ 手機版閱讀體驗：統一覆蓋舊版零散斷點，保留原有視覺與模擬邏輯 ═══ */
 @media (max-width: 640px) {
   html { scroll-padding-top: 16px; }
@@ -1073,6 +1092,9 @@ body.rc-open { overflow: hidden; }
   .rc-sw i { width: 18px; height: 18px; }
   .rc-nav { gap: 8px; flex: none; }
   .rc-nav button { padding: 8px 13px; }
+  .liferecap .rc-top { padding: 7px 8px 10px; }
+  .liferecap .rc-nav .rc-prev, .liferecap.ink-light .rc-nav .rc-prev { min-width: 82px; padding-inline: 12px !important; }
+  .liferecap .rc-nav .rc-next, .liferecap.ink-light .rc-nav .rc-next { min-width: 116px; padding-inline: 16px; }
   .rc-end { gap: 8px; }
   .rc-end button { flex: 1 1 auto; }
   .site-foot { padding-bottom: max(28px, env(safe-area-inset-bottom, 0px)); }
@@ -1501,7 +1523,7 @@ body.rc-open { overflow: hidden; }
 <footer class="site-foot band b4">
   <nav class="foot-links" aria-label="《教會小本本》相關連結">
     <a href="https://portaly.cc/gbookchurch" target="_blank" rel="noopener">收聽《教會小本本》</a>
-    <a href="https://store.line.me/stickershop/product/31241357/zh-Hant" target="_blank" rel="noopener noreferrer">下載貼圖</a>
+    <a href="https://store.line.me/stickershop/product/31241357/zh-Hant" target="_blank" rel="noopener noreferrer">教會小本本貼圖</a>
     <a href="https://gbookchurch.github.io/christian-spectrum/" target="_blank" rel="noopener">基督徒的光譜</a>
   </nav>
   <div class="in">
@@ -3933,7 +3955,8 @@ function recapRiver(box, spec, quiet) {
     if (!cv.isConnected) return;
     const b = cv.getBoundingClientRect(); if (!b.width || !b.height) return;
     const sx = W / b.width, sy = H / b.height; let all; try { all = x.getImageData(0, 0, W, H).data; } catch (e) { return; }
-    box.querySelectorAll('.rc-card > *:not(.rc-end), .rc-card li, .rc-end button, .rc-nav button, .rc-skip, .rc-hint').forEach(el => {
+    // 導覽列使用獨立的淺色底與固定深色文字；只有故事內容依水彩背景自動換色。
+    box.querySelectorAll('.rc-card > *:not(.rc-end), .rc-card li, .rc-end button').forEach(el => {
       if (el.matches('.rc-list, .rc-chips, .rc-nums, .rc-sw')) return;
       const r = el.getBoundingClientRect(); if (!r.width || !r.height) return;
       const X0 = Math.max(0, Math.floor((r.left - b.left) * sx)), Y0 = Math.max(0, Math.floor((r.top - b.top) * sy)), X1 = Math.min(W, Math.ceil((r.right - b.left) * sx)), Y1 = Math.min(H, Math.ceil((r.bottom - b.top) * sy));
@@ -5342,9 +5365,6 @@ function recapSlides(end, martyred) {
   if (arcUsed.size > 0) nums.push([arcUsed.size, '段，讓你停下來做決定的故事']);
   if (words.length > 0) nums.push([words.length, '個問題，你在人生的停頓裡回答過']);
   S.push({ k: 'nums', eyebrow: '這一生的數字', nums: nums.slice(0, 4), quiet: o === 'martyred' });
-  const rc = lifeRecipe(martyred);
-  const colorsInLife = lifeSpec(martyred);
-  S.push({ k: 'color', eyebrow: '這一生的顏色', swatches: rc.comps.map(c => [c.color, c.label, Math.round(c.w * 100)]), strip: rc.strip, lines: ['邊框代表出生地，河流隨信仰歷程變色；河岸持續出現的綠色或藍色，代表這一生的性別。', ...((colorsInLife.accents.length || colorsInLife.encounters) ? ['水彩裡的青綠、灰紫與暖珊瑚，是成長、重要選擇和與人的相遇留下的點綴。'] : []), ...(colorsInLife.pers.length ? ['河裡比較深的細流，記錄這一生受過的傷和壓力。'] : [])] });
   const [tt, ts] = lifeTitle(end, martyred);
   const got = collectTitle(tt);
   S.push({ k: 'title', eyebrow: '你這一生的稱號', big: tt, lines: [ts, ...(got ? [`你已經收集了 ${got} / ${TITLE_TOTAL()} 個稱號`] : [])] });
@@ -5358,21 +5378,22 @@ function showRecap(end, martyred) {
   const quiet = o === 'martyred' || SMOOTH === 'auto' || typeof requestAnimationFrame !== 'function';
   const box = document.createElement('div');
   box.id = 'lifeRecap'; box.className = `liferecap rc-${o}`; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', '這一生的回顧');
-  box.innerHTML = `<div class="rc-bars">${slides.map(() => '<i><b></b></i>').join('')}</div><button class="rc-skip" type="button">跳過</button><div class="rc-stage"></div><div class="rc-nav"><button class="rc-prev" type="button" aria-label="上一張">‹</button><span class="rc-hint">點一下繼續</span><button class="rc-next" type="button">下一張 ›</button></div>`;
+  box.innerHTML = `<div class="rc-top"><div class="rc-top-meta"><span class="rc-top-title">人生回顧</span><span class="rc-count" aria-live="polite"></span></div><button class="rc-skip" type="button">略過回顧</button><div class="rc-progress" role="progressbar" aria-label="人生回顧進度" aria-valuemin="0" aria-valuemax="${slides.length}" aria-valuenow="1"><div class="rc-progress-fill"></div></div></div><div class="rc-stage"></div><div class="rc-nav"><button class="rc-prev" type="button">上一頁</button><button class="rc-next" type="button">下一頁</button></div>`;
   document.body.appendChild(box); document.body.classList.add('rc-open');
   try { recapRiver(box, lifeSpec(martyred), quiet); } catch (e) {}
-  const stage = box.querySelector('.rc-stage'), bars = [...box.querySelectorAll('.rc-bars i')];
+  const stage = box.querySelector('.rc-stage'), progress = box.querySelector('.rc-progress');
   let i = 0;
   const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
   const close = () => { box.remove(); document.body.classList.remove('rc-open'); document.removeEventListener('keydown', key); $('end').scrollIntoView({ behavior: 'auto', block: 'start' }); };
   const render = () => {
     const s = slides[i];
-    bars.forEach((b, j) => b.classList.toggle('on', j <= i));
+    box.querySelector('.rc-count').textContent = `${i + 1} / ${slides.length}`;
+    progress.setAttribute('aria-valuenow', i + 1);
+    box.querySelector('.rc-progress-fill').style.width = `${(i + 1) / slides.length * 100}%`;
     stage.innerHTML = `<section class="rc-card rc-${s.k}${quiet ? '' : ' rc-anim'}"><p class="rc-eyebrow">${esc(s.eyebrow)}</p>${s.big ? `<h2 class="rc-big">${esc(s.big)}</h2>` : ''}${s.quote ? `<blockquote class="rc-quote">${esc(s.quote)}</blockquote>` : ''}${s.list ? `<ol class="rc-list">${s.list.map(([a, t]) => `<li><span class="num">${esc(a)}</span><span>${esc(t)}</span></li>`).join('')}</ol>` : ''}${s.swatches ? `<div class="rc-strip" style="background:${stripCss(s.strip)}" aria-hidden="true"></div><ul class="rc-sw">${s.swatches.map(([c, l, p]) => `<li><i style="background:${c}"></i><span>${esc(l)}</span><b class="num">${p}%</b></li>`).join('')}</ul>` : ''}${s.chips ? `<ul class="rc-chips">${s.chips.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}${s.nums ? `<ul class="rc-nums">${s.nums.map(([n, t]) => `<li><b class="num" data-n="${n}">${quiet ? n : 0}</b><span>${esc(t)}</span></li>`).join('')}</ul>` : ''}${(s.lines || []).map(l => `<p class="rc-line">${esc(l)}</p>`).join('')}</section>`;
     if (box.evalInk) box.evalInk();
     box.querySelector('.rc-prev').disabled = i === 0;
-    box.querySelector('.rc-next').textContent = i === slides.length - 1 ? '看完整結局 ›' : '下一張 ›';
-    box.querySelector('.rc-hint').textContent = i === slides.length - 1 ? '點一下看完整結局' : '點一下繼續';
+    box.querySelector('.rc-next').textContent = i === slides.length - 1 ? '閱讀結果' : '下一頁';
     if (s.nums && !quiet) stage.querySelectorAll('[data-n]').forEach(el => { const n = +el.dataset.n, t0 = performance.now(); const step = t => { const p = Math.min(1, (t - t0) / 900); el.textContent = Math.round(n * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); });
     box.querySelector('.rc-next').focus({ preventScroll: true });
   };
@@ -5409,7 +5430,6 @@ function finish(martyred) {
     ['信仰選擇', faithAge !== null ? journeyText() + (martyred ? '，因信仰離世' : '') : firstAge === null ? '沒有機會選擇' : '聽過，沒有回應'],
   ];
   const hl = highlights.slice(0, 6);
-  const spectrum = lifeRecipe(martyred);
   const cards = others.map(o => {
     const r = o.first === null ? ['never', '一生沒有接觸到福音']
       : ['heard', `${o.first} 歲${o.channel ? `透過${o.channel}` : ''}接觸到福音${o.faith !== null ? `，${o.faith} 歲信主` : '，沒有回應'}${o.endState === 'left' ? '，後來放下信仰' : o.endState === 'dechurched' ? '，後來離開教會' : ''}${o.martyred ? '，因信仰離世' : ''}`];
@@ -5430,7 +5450,6 @@ function finish(martyred) {
       <div><strong class="num">${firstAge === null ? '—' : firstAge}</strong><span>${firstAge === null ? '一生未接觸福音' : '初聞福音的年齡'}</span></div>
       <div><strong class="num">${difficultyRank(c)}</strong><span>53 國中第幾難</span></div>
     </div>
-    <div class="v3-spectrum"><p class="v3-subhead">這一生的顏色</p><div class="v3-spectrum-strip" style="background:${stripCss(spectrum.strip)}" role="img" aria-label="這一生的信仰歷程色帶"></div><ul class="v3-spectrum-key">${spectrum.comps.map(s => `<li><i style="background:${s.color}"></i><span>${s.label}</span></li>`).join('')}</ul><p class="fine">色帶依時間呈現信仰變化；分享卡另外以出生背景生成自然紋理，讓相遇與重要事件留下色粉痕跡。</p></div>
     <details class="xdr v3-dossier"><summary>查看完整人生資料</summary>
       <dl class="summary" id="summary">${rows.map(() => '<div><dt></dt><dd></dd></div>').join('')}</dl>
       <p class="fine">母語聖經翻譯指的是你的母語有沒有聖經譯本，是成長環境的一部分，不代表你讀過。</p>
