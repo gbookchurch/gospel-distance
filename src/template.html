@@ -3526,11 +3526,11 @@ function drawQR(x, text, left, top, size, dark, light) {
 // ── 色彩系統：出生背景、性別、信仰歷程 ───────────────────────────
 // 宗教的顏色（家庭宗教、改信之後的傳統都用這一張表）
 const HUES = {
-  protestant: ['基督新教', '#C8A35D'], catholic: ['天主教', '#B97D61'], orthodox: ['東正教', '#A7B5C1'], oriental: ['東方正教', '#C4B7AA'], assyrian: ['亞述教會', '#C4B7AA'], lds: ['摩門教', '#D8C8A5'],
-  muslim: ['伊斯蘭', '#4E9F9B'], hindu: ['印度教', '#D58A49'], buddhist: ['佛教', '#A75461'], folk: ['道教與民間信仰', '#BE6353'],
-  jewish: ['猶太教', '#4B608C'], sikh: ['錫克教', '#D5A34E'], ethnic: ['傳統信仰', '#A8875F'], none: ['無宗教', '#AAA8A2']
+  protestant: ['基督新教', '#D3AA54'], catholic: ['天主教', '#C48760'], orthodox: ['東正教', '#A3B5C7'], oriental: ['東方正教', '#C7B5A3'], assyrian: ['亞述教會', '#C7B5A3'], lds: ['摩門教', '#DECA9F'],
+  muslim: ['伊斯蘭', '#459F95'], hindu: ['印度教', '#E39A4B'], buddhist: ['佛教', '#B45A68'], folk: ['道教與民間信仰', '#CB684E'],
+  jewish: ['猶太教', '#4B6696'], sikh: ['錫克教', '#E2AB4B'], ethnic: ['傳統信仰', '#AF8856'], none: ['無宗教', '#AAA9A2']
 };
-const SEX_HUE = { m: ['男生', '#719A7D'], f: ['女生', '#719FC1'] };
+const SEX_HUE = { m: ['男生', '#6D9D78'], f: ['女生', '#6C9FC5'] };
 // 出生的地區：按洲分色調，同一洲的國家再做小幅變化
 const REGIONS = { ea: ['東亞', '#606A70'], sea: ['東南亞', '#8C7F9A'], sa: ['南亞', '#C29A62'], mena: ['中東與北非', '#BEA584'], af: ['撒哈拉以南非洲', '#B47D65'], eu: ['歐洲', '#7291A6'], am: ['美洲', '#BE886E'], oc: ['大洋洲', '#65A0AF'] };
 const REGION_OF = {};
@@ -3767,6 +3767,8 @@ const labLch = ([L, a, b]) => [L, Math.hypot(a, b), Math.atan2(b, a)];
 const lchLab = ([L, C, h]) => [L, C * Math.cos(h), C * Math.sin(h)];
 const labRgba = (lab, a = 1) => { const h = labHex(lab); return `rgba(${parseInt(h.slice(1, 3), 16)},${parseInt(h.slice(3, 5), 16)},${parseInt(h.slice(5, 7), 16)},${a})`; };
 function tame(hex, cMax, lMin, lMax) { const [L, C, h] = labLch(hexLab(hex)); return lchLab([Math.min(lMax, Math.max(lMin, L)), Math.min(cMax, C), h]); }
+// 彩度小幅增加約一成，灰白保持中性；仍限制明度與彩度，避免水彩變成螢光色。
+function livelyPaint(hex, cMax = 0.15) { const [L, C, h] = labLch(hexLab(hex)); return lchLab([Math.min(0.8, Math.max(0.51, L + 0.012)), Math.min(cMax, C * 1.12), h]); }
 const hueGap = (p, q) => { const d = Math.abs(labLch(p)[2] - labLch(q)[2]); return Math.min(d, 2 * Math.PI - d) * 180 / Math.PI; };
 function mixLab(p, q, t) { const m = p.map((v, i) => v + (q[i] - v) * t), c0 = Math.hypot(p[1], p[2]) * (1 - t) + Math.hypot(q[1], q[2]) * t, c1 = Math.hypot(m[1], m[2]) || 1, k = Math.min(1.5, c0 / c1); return [m[0], m[1] * k, m[2] * k]; }
 function noise1(R, n = 64) { const v = Array.from({ length: n + 1 }, R); return x => { x = ((x % n) + n) % n; const i = Math.floor(x), f = x - i, s = f * f * (3 - 2 * f); return v[i] * (1 - s) + v[i + 1] * s; }; }
@@ -3790,7 +3792,7 @@ function riverArt(W, H, spec, o = {}) {
   const out = mk(); if (!out) return null;
   const [cv, x] = out, S = Math.min(W, H), seed = spec.seed, R = mulberry(seed), nW = noise1(mulberry(seed + 1)), nY = noise1(mulberry(seed + 2)), nL = noise1(mulberry(seed + 3));
   const short = spec.end < 30, k = short ? 0.8 : 1, y0 = o.y0 ?? 0.7, y1 = o.y1 ?? 0.56;
-  const segs = spec.segs.map(s => ({ ...s, lab: tame(HUES[s.key][1], 0.11, 0.56, 0.8) }));
+  const segs = spec.segs.map(s => ({ ...s, lab: livelyPaint(HUES[s.key][1], 0.145) }));
   const path = t => [W * (-0.06 + 1.12 * t), H * (y0 - (y0 - y1) * t + 0.09 * Math.sin(Math.PI * 2 * (t * 0.95 + nY(3.1) * 0.2)) * (o.amp ?? 1) + 0.03 * (nY(t * 6 + 10) - 0.5))];
   const width = t => S * (short ? 0.13 : 0.18) * (o.wide ?? 1) * (0.78 + 0.45 * nW(t * 5 + 3));
   const normal = t => { const [a, b] = path(Math.max(0, t - 0.002)), [c, d] = path(Math.min(1, t + 0.002)), dx = c - a, dy = d - b, l = Math.hypot(dx, dy) || 1; return [-dy / l, dx / l]; };
@@ -3815,10 +3817,10 @@ function riverArt(W, H, spec, o = {}) {
       const off = (R() - 0.5) * 0.25;
       for (let i = 0; i <= N; i++) {
         const t = i / N, [cx, cy] = path(t), w = width(t) * (0.8 + 0.25 * R()), [dx, dy] = normal(t), j = (nW(t * 13 + pass * 7) - 0.5) * w * 0.35 + off * w * 0.4;
-        for (const [lab, a] of colorAt(t)) { ctx.fillStyle = labRgba(lab, 0.035 * k * a); ctx.beginPath(); ctx.ellipse(cx + dx * j, cy + dy * j, w * 0.5, w * 0.36, Math.atan2(dy, dx) + Math.PI / 2, 0, Math.PI * 2); ctx.fill(); }
+        for (const [lab, a] of colorAt(t)) { ctx.fillStyle = labRgba(lab, 0.039 * k * a); ctx.beginPath(); ctx.ellipse(cx + dx * j, cy + dy * j, w * 0.5, w * 0.36, Math.atan2(dy, dx) + Math.PI / 2, 0, Math.PI * 2); ctx.fill(); }
       }
     }
-    for (let i = 0; i < 26; i++) { const t = R(), [cx, cy] = path(t), [dx, dy] = normal(t), sd = R() < 0.5 ? -1 : 1, w = width(t); blob(ctx, cx + dx * sd * w * 0.45, cy + dy * sd * w * 0.45, w * (0.25 + R() * 0.25), colorAt(t)[0][0], 0.03 * k, 18); }
+    for (let i = 0; i < 26; i++) { const t = R(), [cx, cy] = path(t), [dx, dy] = normal(t), sd = R() < 0.5 ? -1 : 1, w = width(t); blob(ctx, cx + dx * sd * w * 0.45, cy + dy * sd * w * 0.45, w * (0.25 + R() * 0.25), colorAt(t)[0][0], 0.034 * k, 18); }
     // 顏料在邊緣聚積
     ctx.lineWidth = Math.max(1, S * 0.0022);
     for (const sd of [-1, 1]) for (let i = 0; i < N; i += 2) { const t = i / N, e = u => { const [cx, cy] = path(u), [dx, dy] = normal(u), w = width(u) * (0.42 + 0.08 * nW(u * 17 + (sd > 0 ? 40 : 0))); return [cx + dx * sd * w, cy + dy * sd * w]; }; const lab = colorAt(t)[0][0]; ctx.strokeStyle = labRgba([lab[0] - 0.14, lab[1], lab[2]], 0.22 * k); ctx.beginPath(); ctx.moveTo(...e(t)); ctx.lineTo(...e((i + 2) / N)); ctx.stroke(); }
