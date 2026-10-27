@@ -799,7 +799,7 @@ body.rc-open { overflow: hidden; }
 .rc-bars i.on b { width: 100%; }
 .rc-skip { position: absolute; top: max(24px, calc(env(safe-area-inset-top) + 10px)); right: 14px; background: none; border: 0; color: rgba(255,255,255,.7); font: inherit; font-size: 14px; padding: 8px; cursor: pointer; }
 .rc-stage { position: relative; flex: 1; display: flex; align-items: center; justify-content: center; overflow-y: auto; cursor: pointer; user-select: none; -webkit-user-select: none; }
-.rc-card { width: 100%; max-width: 520px; display: grid; gap: 14px; padding: 24px 4px; }
+.rc-card { width: 100%; max-width: 520px; display: grid; gap: 14px; padding: 28px clamp(16px, 4vw, 28px); }
 .rc-anim > * { animation: rcIn .55s both; }
 .rc-anim > *:nth-child(2) { animation-delay: .12s; } .rc-anim > *:nth-child(3) { animation-delay: .24s; } .rc-anim > *:nth-child(4) { animation-delay: .36s; } .rc-anim > *:nth-child(n+5) { animation-delay: .48s; }
 @keyframes rcIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
@@ -1054,9 +1054,9 @@ body.rc-open { overflow: hidden; }
   .theo-share button { min-height: 44px; }
 
   /* 回顧投影片：小螢幕、短螢幕都可操作，不讓底部按鈕擠到畫面外 */
-  .liferecap { padding: max(12px, env(safe-area-inset-top, 0px)) 16px max(16px, env(safe-area-inset-bottom, 0px)); }
+  .liferecap { padding: max(12px, env(safe-area-inset-top, 0px)) max(14px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(14px, env(safe-area-inset-left, 0px)); }
   .rc-stage { min-height: 0; overscroll-behavior: contain; }
-  .rc-card { gap: 10px; padding: 14px 2px; }
+  .rc-card { gap: 10px; padding: 18px clamp(14px, 4.5vw, 24px); }
   .rc-big { font-size: clamp(36px, 10vw, 54px); }
   .rc-title .rc-big { font-size: clamp(30px, 8vw, 44px); padding-block: 12px; }
   .rc-line { font-size: 15.5px; line-height: 1.7; }
@@ -1090,7 +1090,7 @@ body.rc-open { overflow: hidden; }
   .rc-nums span { font-size: 14px; }
 }
 @media (max-width: 640px) and (max-height: 680px) {
-  .rc-card { gap: 8px; padding-block: 8px; }
+  .rc-card { gap: 8px; padding-block: 10px; }
   .rc-nums { gap: 7px; }
   .rc-nums b { font-size: clamp(31px, 9vw, 40px); }
   .rc-line { font-size: 14.5px; }
@@ -5259,14 +5259,15 @@ function showRecap(end, martyred) {
   const render = () => {
     const s = slides[i];
     bars.forEach((b, j) => b.classList.toggle('on', j <= i));
-    stage.innerHTML = `<section class="rc-card rc-${s.k}${quiet ? '' : ' rc-anim'}"><p class="rc-eyebrow">${esc(s.eyebrow)}</p>${s.big ? `<h2 class="rc-big">${esc(s.big)}</h2>` : ''}${s.quote ? `<blockquote class="rc-quote">${esc(s.quote)}</blockquote>` : ''}${s.list ? `<ol class="rc-list">${s.list.map(([a, t]) => `<li><span class="num">${esc(a)}</span><span>${esc(t)}</span></li>`).join('')}</ol>` : ''}${s.swatches ? `<div class="rc-strip" style="background:${stripCss(s.strip)}" aria-hidden="true"></div><ul class="rc-sw">${s.swatches.map(([c, l, p]) => `<li><i style="background:${c}"></i><span>${esc(l)}</span><b class="num">${p}%</b></li>`).join('')}</ul>` : ''}${s.chips ? `<ul class="rc-chips">${s.chips.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}${s.nums ? `<ul class="rc-nums">${s.nums.map(([n, t]) => `<li><b class="num" data-n="${n}">${quiet ? n : 0}</b><span>${esc(t)}</span></li>`).join('')}</ul>` : ''}${(s.lines || []).map(l => `<p class="rc-line">${esc(l)}</p>`).join('')}${i === slides.length - 1 ? '<div class="rc-end"><button class="rc-full btn" type="button">看完整結局</button><button class="rc-again" type="button">再活一次</button></div>' : ''}</section>`;
+    stage.innerHTML = `<section class="rc-card rc-${s.k}${quiet ? '' : ' rc-anim'}"><p class="rc-eyebrow">${esc(s.eyebrow)}</p>${s.big ? `<h2 class="rc-big">${esc(s.big)}</h2>` : ''}${s.quote ? `<blockquote class="rc-quote">${esc(s.quote)}</blockquote>` : ''}${s.list ? `<ol class="rc-list">${s.list.map(([a, t]) => `<li><span class="num">${esc(a)}</span><span>${esc(t)}</span></li>`).join('')}</ol>` : ''}${s.swatches ? `<div class="rc-strip" style="background:${stripCss(s.strip)}" aria-hidden="true"></div><ul class="rc-sw">${s.swatches.map(([c, l, p]) => `<li><i style="background:${c}"></i><span>${esc(l)}</span><b class="num">${p}%</b></li>`).join('')}</ul>` : ''}${s.chips ? `<ul class="rc-chips">${s.chips.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}${s.nums ? `<ul class="rc-nums">${s.nums.map(([n, t]) => `<li><b class="num" data-n="${n}">${quiet ? n : 0}</b><span>${esc(t)}</span></li>`).join('')}</ul>` : ''}${(s.lines || []).map(l => `<p class="rc-line">${esc(l)}</p>`).join('')}</section>`;
     if (box.evalInk) box.evalInk();
     box.querySelector('.rc-prev').disabled = i === 0;
-    box.querySelector('.rc-next').hidden = i === slides.length - 1; box.querySelector('.rc-hint').hidden = i === slides.length - 1;
+    box.querySelector('.rc-next').textContent = i === slides.length - 1 ? '看完整結局 ›' : '下一張 ›';
+    box.querySelector('.rc-hint').textContent = i === slides.length - 1 ? '點一下看完整結局' : '點一下繼續';
     if (s.nums && !quiet) stage.querySelectorAll('[data-n]').forEach(el => { const n = +el.dataset.n, t0 = performance.now(); const step = t => { const p = Math.min(1, (t - t0) / 900); el.textContent = Math.round(n * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); });
-    const f = stage.querySelector('.rc-full'); if (f) { f.onclick = close; f.focus({ preventScroll: true }); stage.querySelector('.rc-again').onclick = () => { close(); start(); }; } else box.querySelector('.rc-next').focus({ preventScroll: true });
+    box.querySelector('.rc-next').focus({ preventScroll: true });
   };
-  const go = dlt => { const n = i + dlt; if (n < 0 || n >= slides.length) return; i = n; render(); };
+  const go = dlt => { const n = i + dlt; if (n < 0) return; if (n >= slides.length) { close(); return; } i = n; render(); };
   box.querySelector('.rc-next').onclick = e => { e.stopPropagation(); go(1); };
   box.querySelector('.rc-prev').onclick = e => { e.stopPropagation(); go(-1); };
   box.querySelector('.rc-skip').onclick = e => { e.stopPropagation(); close(); };
