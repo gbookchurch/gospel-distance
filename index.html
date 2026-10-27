@@ -4102,7 +4102,9 @@ function lifeSpec(martyred) {
     ...highlights.filter(h => h.cls === 'growth').map(h => ({ age: h.age, kind: 'growth' })),
     ...cfNodes.filter(h => Number.isFinite(h.age)).map(h => ({ age: h.age, kind: 'choice' })),
   ].filter(h => Number.isFinite(h.age) && h.age >= 0).sort((a, b) => a.age - b.age).slice(0, 9);
-  return { segs, end: Math.max(1, n - 1), sex: me.sex, cid: me.country.id, region: regionColor(me.country)[1], pers, accents, encounters: Math.min(5, castSeen.size), quiet: !!martyred, seed: fnv([me.name, me.country.id, me.sex, yrs.join(','), pers.join(','), accents.map(a => a.age + a.kind).join(',')].join('#')) };
+  // 紋理是出生背景的一種藝術變奏，不替國家、族群或宗教賦予好壞評價。
+  const material = ['leaf', 'stone', 'canopy'][fnv(me.country.id + ':' + me.group.name) % 3];
+  return { segs, end: Math.max(1, n - 1), sex: me.sex, cid: me.country.id, region: regionColor(me.country)[1], material, pers, accents, encounters: Math.min(5, castSeen.size), quiet: !!martyred, seed: fnv([me.name, me.country.id, me.sex, yrs.join(','), pers.join(','), accents.map(a => a.age + a.kind).join(',')].join('#')) };
 }
 function riverArt(W, H, spec, o = {}) {
   const mk = () => { const c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext && c.getContext('2d'); return x ? [c, x] : null; };
@@ -4143,6 +4145,36 @@ function riverArt(W, H, spec, o = {}) {
     for (const sd of [-1, 1]) for (let i = 0; i < N; i += 2) { const t = i / N, e = u => { const [cx, cy] = path(u), [dx, dy] = normal(u), w = width(u) * (0.42 + 0.08 * nW(u * 17 + (sd > 0 ? 40 : 0))); return [cx + dx * sd * w, cy + dy * sd * w]; }; const lab = colorAt(t)[0][0]; ctx.strokeStyle = labRgba([lab[0] - 0.14, lab[1], lab[2]], 0.22 * k); ctx.beginPath(); ctx.moveTo(...e(t)); ctx.lineTo(...e((i + 2) / N)); ctx.stroke(); }
   });
   blur(river, S * 0.009); granulate(river, mulberry(seed + 11), 0.32, 0.05);
+  // 自然紋理：葉脈、礦物層、森林散景。沿著色帶裁切，讓材質真的長在水彩裡。
+  // 背景不同可有不同紋理，但始終維持一種主紋理，避免分享卡變雜。
+  const texture = layer(ctx => {
+    ctx.save();
+    ctx.beginPath();
+    for (let i = 0; i <= 120; i++) { const t = i / 120, [cx, cy] = path(t), [dx, dy] = normal(t), w = width(t) * 0.56; if (!i) ctx.moveTo(cx + dx * w, cy + dy * w); else ctx.lineTo(cx + dx * w, cy + dy * w); }
+    for (let i = 120; i >= 0; i--) { const t = i / 120, [cx, cy] = path(t), [dx, dy] = normal(t), w = width(t) * 0.56; ctx.lineTo(cx - dx * w, cy - dy * w); }
+    ctx.closePath(); ctx.clip(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    const material = spec.material || 'leaf';
+    if (material === 'leaf') {
+      for (let i = 0; i < 24; i++) {
+        const t = 0.04 + R() * 0.92, [cx, cy] = path(t), [nx, ny] = normal(t), w = width(t), len = w * (0.22 + R() * 0.34), sign = i % 2 ? 1 : -1;
+        ctx.strokeStyle = i % 4 ? 'rgba(74,110,82,.19)' : 'rgba(249,239,202,.43)'; ctx.lineWidth = Math.max(0.65, S * 0.00095);
+        ctx.beginPath(); ctx.moveTo(cx - nx * len * 0.2, cy - ny * len * 0.2); ctx.quadraticCurveTo(cx + nx * len * 0.5 + sign * w * 0.22, cy + ny * len * 0.5, cx + nx * len, cy + ny * len); ctx.stroke();
+        for (let j = 1; j <= 4; j++) { const a = j / 5, px = cx + nx * len * a, py = cy + ny * len * a, d = w * (0.06 + 0.04 * R()); ctx.beginPath(); ctx.moveTo(px, py); ctx.quadraticCurveTo(px + sign * d, py - d, px + sign * d * 1.3, py - d * 1.5); ctx.moveTo(px, py); ctx.quadraticCurveTo(px - sign * d, py + d, px - sign * d * 1.3, py + d * 1.5); ctx.stroke(); }
+      }
+    } else if (material === 'stone') {
+      for (let i = 0; i < 52; i++) {
+        const t = R(), [cx, cy] = path(t), [nx, ny] = normal(t), w = width(t), side = (R() - 0.5) * 0.8;
+        ctx.strokeStyle = i % 3 ? 'rgba(123,98,81,.19)' : 'rgba(255,246,223,.5)'; ctx.lineWidth = Math.max(0.7, S * (0.0009 + R() * 0.002));
+        ctx.beginPath(); ctx.moveTo(cx + nx * side * w - w * 0.24, cy + ny * side * w - w * 0.1); ctx.bezierCurveTo(cx + nx * side * w - w * 0.1, cy + ny * side * w + w * 0.12, cx + nx * side * w + w * 0.1, cy + ny * side * w - w * 0.12, cx + nx * side * w + w * 0.25, cy + ny * side * w); ctx.stroke();
+      }
+    } else {
+      for (let i = 0; i < 95; i++) {
+        const t = R(), [cx, cy] = path(t), [nx, ny] = normal(t), w = width(t), o = (R() - 0.5) * 0.95, rad = S * (0.004 + R() * 0.017);
+        ctx.fillStyle = i % 4 ? 'rgba(92,135,99,.12)' : 'rgba(255,247,192,.34)'; ctx.beginPath(); ctx.ellipse(cx + nx * w * o, cy + ny * w * o, rad * 0.6, rad, R() * Math.PI, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+    ctx.restore();
+  });
   // 性別色維持配方中的 15%，但成為沿河可辨認的水彩河岸，而非只有三個幾乎看不見的光點。
   const g = tame(SEX_HUE[spec.sex][1], 0.105, 0.59, 0.79), gender = layer(ctx => {
     for (let i = 0; i < 10; i++) {
@@ -4163,8 +4195,16 @@ function riverArt(W, H, spec, o = {}) {
       const [cx, cy] = path(t), [dx, dy] = normal(t), w = width(t), px = cx + dx * side * w * 0.53, py = cy + dy * side * w * 0.53, r = S * (0.026 + R() * 0.019), lab = tame(color, 0.105, 0.55, 0.76);
       const gr = ctx.createRadialGradient(px, py, 0, px, py, r); gr.addColorStop(0, labRgba(lab, 0.5 * strength)); gr.addColorStop(0.45, labRgba(lab, 0.24 * strength)); gr.addColorStop(1, labRgba(lab, 0)); ctx.fillStyle = gr; ctx.fillRect(px - r, py - r, 2 * r, 2 * r);
     };
-    for (const a of spec.accents || []) mark(Math.max(0.03, Math.min(0.97, a.age / spec.end)), a.kind === 'growth' ? '#62A997' : '#A38AC7', R() < 0.5 ? -1 : 1);
-    for (let j = 0; j < (spec.encounters || 0); j++) mark(0.14 + 0.72 * (j + 0.5) / Math.max(1, spec.encounters), '#C98978', j % 2 ? -1 : 1, 0.75);
+    // 品牌綠、暖黃、橘紅作事件層的主色，增加各人生之間的共通氣質。
+    for (const a of spec.accents || []) mark(Math.max(0.03, Math.min(0.97, a.age / spec.end)), a.kind === 'growth' ? '#7C9A7D' : '#EDC96E', R() < 0.5 ? -1 : 1);
+    for (let j = 0; j < (spec.encounters || 0); j++) mark(0.14 + 0.72 * (j + 0.5) / Math.max(1, spec.encounters), '#DC684C', j % 2 ? -1 : 1, 0.75);
+    // 重要相遇與抉擇在河岸留下乾性色粉顆粒，不代表價值評分。
+    for (const a of (spec.accents || []).slice(0, 8)) {
+      const t = Math.max(0.03, Math.min(0.97, a.age / spec.end)), [cx, cy] = path(t), [nx, ny] = normal(t), w = width(t);
+      ctx.fillStyle = a.kind === 'growth' ? '#7C9A7D' : '#E9A04F';
+      for (let j = 0; j < 38; j++) { const angle = R() * Math.PI * 2, distance = w * (0.25 + R() * 0.9), rad = S * (0.0007 + R() * 0.0023); ctx.globalAlpha = 0.1 + R() * 0.24; ctx.beginPath(); ctx.arc(cx + nx * distance * Math.cos(angle) + w * 0.13 * Math.sin(angle), cy + ny * distance * Math.cos(angle) + w * 0.13 * Math.sin(angle), rad, 0, Math.PI * 2); ctx.fill(); }
+    }
+    ctx.globalAlpha = 1;
   });
   blur(experiences, S * 0.002);
   // 河面的淺色流線，和受傷、受壓的年紀留下的深色細流（色相不變，只是變沉）
@@ -4176,7 +4216,7 @@ function riverArt(W, H, spec, o = {}) {
   blur(lines, 1);
   // 合成：暖白紙，河流和性別用色彩增值疊上去，再疊流線、紙紋和邊框
   x.fillStyle = '#f7f3ea'; x.fillRect(0, 0, W, H);
-  for (const L of [river, gender, experiences]) { x.globalCompositeOperation = 'multiply'; x.drawImage(L, 0, 0); }
+  for (const L of [river, texture, gender, experiences]) { x.globalCompositeOperation = 'multiply'; x.drawImage(L, 0, 0); }
   x.globalCompositeOperation = 'source-over'; x.drawImage(lines, 0, 0);
   const pp = paperCanvas(W, H, mulberry(fnv('paper'))); if (pp) drawPaper(x, pp, W, H, 0.5, false);
   if (!o.noFrame) drawFrame(x, W, H, spec, o.frame);
@@ -5720,7 +5760,7 @@ function finish(martyred) {
       <div><strong class="num">${firstAge === null ? '—' : firstAge}</strong><span>${firstAge === null ? '一生未接觸福音' : '初聞福音的年齡'}</span></div>
       <div><strong class="num">${difficultyRank(c)}</strong><span>53 國中第幾難</span></div>
     </div>
-    <div class="v3-spectrum"><p class="v3-subhead">這一生的顏色</p><div class="v3-spectrum-strip" style="background:${stripCss(spectrum.strip)}" role="img" aria-label="這一生的信仰歷程色帶"></div><ul class="v3-spectrum-key">${spectrum.comps.map(s => `<li><i style="background:${s.color}"></i><span>${s.label}</span></li>`).join('')}</ul><p class="fine">色譜綜合出生地、性別與一生的信仰歷程；色帶依時間順序呈現信仰變化。</p></div>
+    <div class="v3-spectrum"><p class="v3-subhead">這一生的顏色</p><div class="v3-spectrum-strip" style="background:${stripCss(spectrum.strip)}" role="img" aria-label="這一生的信仰歷程色帶"></div><ul class="v3-spectrum-key">${spectrum.comps.map(s => `<li><i style="background:${s.color}"></i><span>${s.label}</span></li>`).join('')}</ul><p class="fine">色帶依時間呈現信仰變化；分享卡另外以出生背景生成自然紋理，讓相遇與重要事件留下色粉痕跡。</p></div>
     <details class="xdr v3-dossier"><summary>查看完整人生資料</summary>
       <dl class="summary" id="summary">${rows.map(() => '<div><dt></dt><dd></dd></div>').join('')}</dl>
       <p class="fine">母語聖經翻譯指的是你的母語有沒有聖經譯本，是成長環境的一部分，不代表你讀過。</p>
