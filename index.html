@@ -541,6 +541,9 @@ main:has(> #lifefoot[hidden]):has(> #birth:not([hidden])):has(> #end[hidden]) + 
 .lifearea .log { position: relative; gap: 6px; }
 .lifearea .log li { grid-template-columns: 3em 1fr; gap: 12px; padding: 0; border: 0; align-items: start; }
 .lifearea .log .a { padding-top: 11px; }
+.lifearea .log .bgmore { margin-top: 6px; font-size: 14px; }
+.lifearea .log .bgmore summary { cursor: pointer; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; min-height: 32px; display: inline-flex; align-items: center; }
+.lifearea .log .bgmore p { margin: 6px 0 0; color: var(--muted); line-height: 1.75; }
 .lifearea .log .t { padding: 10px 14px; border-radius: 12px; background: var(--bg); border-left: 3px solid var(--line); color: var(--ink); font-size: 15.5px; line-height: 1.75; }
 .lifearea .log li.milestone .a { padding-top: 3px; }
 .lifearea .log li.milestone .t { background: none; border-left: 0; padding: 2px 0; color: var(--muted); font-size: 14px; }
@@ -725,7 +728,7 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
 .theo-head .theo-thumb { height: 74px; border-radius: 12px; }
 .theo-head h4 { margin: 0; font-size: 18px; line-height: 1.4; }
 .theo-kicker { display: inline-block; font-size: 12.5px; letter-spacing: .14em; color: var(--muted); }
-.theo-cards { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.theo-cards { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); align-items: start; }
 .theo-card { position: relative; display: grid; gap: 6px; align-content: start; padding: 14px 16px 12px; border-radius: 14px; background: color-mix(in srgb, var(--tc) 7%, var(--surface)); border: 1px solid color-mix(in srgb, var(--tc) 28%, var(--line)); overflow: hidden; }
 .theo-card::before { content: ''; position: absolute; inset: -40% -30% auto auto; width: 70%; height: 90%; background: radial-gradient(closest-side, color-mix(in srgb, var(--tc) 22%, transparent), transparent); pointer-events: none; }
 .theo-card > * { position: relative; }
@@ -734,6 +737,10 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
 .theo-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--tc); box-shadow: 0 0 0 3px color-mix(in srgb, var(--tc) 22%, transparent); flex: none; }
 .theo-tag { font-size: 12px; padding: 1px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); background: var(--surface); }
 .theo-card.attitude { border-style: dashed; }
+.theo-card:has(.theo-more[open]) { border-color: var(--tc); box-shadow: 0 0 0 1px var(--tc), 0 6px 18px color-mix(in srgb, var(--tc) 18%, transparent); }
+.theo-more .c, .theo-more[open] .o { display: none; } .theo-more[open] .c { display: inline; }
+.theo-more-in { display: grid; gap: 8px; margin-top: 6px; }
+.theo-more-in p { font-size: 14px; line-height: 1.8; color: var(--ink); padding: 10px 12px; border-radius: 10px; background: var(--surface); border-left: 3px solid var(--tc); }
 .theo-claim { font-weight: 700; color: var(--ink); line-height: 1.6; }
 .theo-sum { font-size: 14.5px; color: var(--muted); line-height: 1.75; }
 .theo-more { margin-top: 2px; }
@@ -741,7 +748,7 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
 .theo-more > summary::-webkit-details-marker { display: none; }
 .theo-more > summary::after { content: '＋'; margin-left: 6px; font-size: 12px; color: var(--muted); }
 .theo-more[open] > summary::after { content: '－'; }
-.theo-more p { font-size: 14px; line-height: 1.8; color: var(--ink); padding: 10px 12px; border-radius: 10px; background: var(--surface); border-left: 3px solid var(--tc); margin-top: 6px; }
+
 /* 矩陣 */
 .theo-matrix { display: grid; gap: 12px; padding: 16px; border-radius: 16px; background: #fbf8f1; border: 1px solid var(--line); }
 .theo-matrix h4 { margin: 0; font-size: 18px; }
@@ -759,10 +766,30 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
 .theo-grid { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); }
 .theo-cell { appearance: none; border: 0; margin: 0; background: transparent; border-radius: 14px; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding: 6px; font: inherit; transition: background-color .2s, box-shadow .2s; }
 .theo-cell span { font-size: 11.5px; line-height: 1.3; padding: 2px 7px; border-radius: 999px; background: rgba(255,255,255,.82); color: #3a3a36; }
-.theo-cell:hover { background: rgba(255,255,255,.28); }
+.theo-cell:hover { background: rgba(255,255,255,.26); box-shadow: inset 0 0 0 1.5px rgba(42,42,39,.38), 0 4px 14px rgba(42,42,39,.12); }
+.theo-cell.hint { animation: theoHint 1.6s ease-in-out 1; }
+@keyframes theoHint { 0%, 100% { background: transparent; box-shadow: none; } 45% { background: rgba(255,255,255,.42); box-shadow: inset 0 0 0 2px rgba(42,42,39,.45); } }
+.theo-kbd { display: block; font-size: 13px; }
+@media (hover: none) { .theo-kbd { display: none; } }
+.theo-step { font-size: 14px; color: var(--muted); }
+.theo-cell.k-conflict span { border: 1px solid rgba(150,60,40,.45); } .theo-cell.k-premise span, .theo-cell.k-hope span { border: 1px solid rgba(60,70,120,.35); }
+.theo-cell span { text-align: center; }
+#theoBox { scroll-margin-top: 20px; }
+#theoSum:focus-visible { outline: 2px solid #2a2a27; outline-offset: -3px; border-radius: 12px; }
+.theo-share { display: flex; flex-wrap: wrap; gap: 10px; }
+.theo-share button { font: inherit; font-size: 15px; min-height: 44px; padding: 10px 18px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+.theo-share .theo-copy { background: #2a2a27; color: #fff; border-color: #2a2a27; }
+.theo-copied { font-size: 14px; color: var(--ink); min-height: 1.5em; }
+.theo-manual { display: block; width: 100%; margin-top: 8px; font: inherit; font-size: 14px; padding: 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); }
+/* 人生終章：通往神學解說的小卡片 */
+.theo-guide { display: grid; gap: 6px; justify-items: start; margin-top: 10px; padding: 14px 18px; border-radius: 12px; background: linear-gradient(120deg, rgba(217,162,58,.12), rgba(141,114,176,.12) 55%, rgba(52,80,143,.1)); border: 1px solid var(--line); }
+.theo-guide .q { margin: 0; font-size: 16px; line-height: 1.7; font-weight: 600; }
+.theo-guide button { font: inherit; font-size: 15px; min-height: 44px; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; }
+@media (hover: hover) { .theo-guide button:hover, .theo-share button:hover { border-color: #2a2a27; } }
 .theo-cell:focus-visible { outline: 2px solid #2a2a27; outline-offset: -4px; }
 .theo-cell.on { box-shadow: inset 0 0 0 3px #2a2a27, inset 0 0 0 6px rgba(255,255,255,.7); background: rgba(255,255,255,.12); }
-.theo-matrix.has-sel .theo-cell:not(.on) { background: rgba(251,248,241,.35); }
+.theo-matrix.has-sel .theo-cell:not(.on) { background: rgba(251,248,241,.4); }
+.theo-matrix.has-sel .theo-cell:not(.on):hover { background: rgba(255,255,255,.26); }
 .theo-pickers { display: none; gap: 8px; }
 .theo-pickl { font-size: 13.5px; font-weight: 700; color: var(--muted); }
 .theo-pick { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -790,7 +817,7 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
   .theo-head .theo-thumb { height: 62px; }
   .theo-matrix { padding: 14px; }
 }
-@media (prefers-reduced-motion: reduce) { .theo-cell, .theo-more > summary { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .theo-cell, .theo-more > summary { transition: none; } .theo-cell.hint { animation: none; } }
 /* 人生回顧：全螢幕故事卡 */
 body.rc-open { overflow: hidden; }
 .liferecap { position: fixed; inset: 0; z-index: 1000; display: flex; flex-direction: column; background: #222b28; color: #f4f1ea; padding: max(14px, env(safe-area-inset-top)) 18px max(16px, env(safe-area-inset-bottom)); }
@@ -1075,7 +1102,7 @@ body.rc-open { overflow: hidden; }
           <li><b>中國的三自教會與家庭教會：</b>中國的基督徒會在三自教會（有登記）或家庭教會（沒有登記）聚會，依估計比例約四成和六成（2010 年估計，FDD 2025 整理）。家庭教會遇到突襲、聚會點被關閉、傳喚、拘留的機率是平均的 1.4 倍，三自教會是 0.4 倍，加權後全國平均不變。天主教分成官方認可的教會和地下教會。</li>
           <li><b>選擇前的場景：</b>第一次接觸福音和信仰十字路口時，選擇框裡會有一段比較完整的情境，只是文字，不影響任何機率和選項。</li>
           <li><b>生活片段：</b>人生紀錄裡的宗教日常、人生里程碑和「擦肩而過」是情境文字，依年齡和家裡的宗教隨機出現，不是統計資料，也不影響任何機率。擦肩而過不算接觸到福音。接觸福音時的選項描述、選完的後續、再次相遇的回想、代價提示，以及信徒言行帶來的爭議，也都是情境文字：代價提示依各國受迫害程度分數挑選，其他依情境隨機抽出，都不改變機率。</li>
-          <li><b>接觸福音的管道：</b>同學、營會、廣播、衛星電視等 20 種管道，依國家、族群和年齡加權抽出。</li>
+          <li><b>接觸福音的管道：</b>同學、營會、廣播、網路、衛星電視等 20 種管道，依國家、族群和年齡加權抽出；廣播和網路的比重另外參考各國的網路普及率（ITU，多數為 2024 年）。</li>
           <li><b>模擬排行：</b>每國用同一套規則跑 6,000 段人生（蒙地卡羅模擬），依「一生沒接觸到福音的比例」由高到低排名；比例相同時，接觸到的人中位年齡較大的排前面。</li>
         </ol>
       </div>
@@ -1520,8 +1547,13 @@ function baptText() {
   if (k === 'orthodox') return '你嬰兒時就領洗、領了傅油和聖體。這一年，你開始自己準備，固定去辦告解、領聖體。';
   return '你小時候受過洗。這一年，你在會眾面前行了堅信禮，自己承認了這份信仰。';
 }
+// 同一件事發生很多次：第一次照原文，之後換幾種說法，避免同一句一直重複（次數另外記在 stats.told）
+const SHARE_ALT = ['你又跟一個朋友聊起了你的信仰。', '同事問你週末都在做什麼，你跟他說了教會的事。', '你陪一個朋友聊到很晚，最後說起耶穌對你的意義。', '有人問你為什麼還在信，你試著用自己的話回答。', '你送了一本聖經給一個想認識信仰的朋友。'];
 function softText(ev) {
+  if (ev.id === 'share_faith') { stats.told = (stats.told || 0) + 1; if (stats.told > 1) { const used = stats.shareUsed || (stats.shareUsed = []), pool = SHARE_ALT.filter(s => !used.includes(s)); const s = (pool.length ? pool : SHARE_ALT)[Math.floor(Math.random() * (pool.length || SHARE_ALT.length))]; used.push(s); return s; } }
   if (ev.id === 'baptized') { const b = baptText(); if (b) return b; }
+  // 從小就在教會長大的人，不是「找到」教會，是在教會裡找到了自己的朋友
+  if (ev.id === 'found_church' && me.parentReligion === 'christian' && !me.emigrated) return age < 25 ? '你在教會的青年團契，交到了一群可以一起談信仰的朋友。' : '你在教會裡找到了一群可以一起談信仰的朋友。';
   if (ev.id === 'job_loss' && ministry && ['pastor', 'missionary'].includes(ministry.role)) return ministry.pk === 'nun' ? '你們修會辦的學校被迫關閉，你失去了服事的地方。' : '你服事的地方被迫關閉，你失去了生活的來源。';
   // 天主教允許教友以上香、鞠躬向祖先致敬（1939 年解除禁令；台灣的天主教會在春節舉行敬祖禮），不會變成信仰的掙扎
   if (ev.id === 'ancestor' && me.trad === 'catholic') { ancestorLocal = false; return '過年時，你跟著家人向祖先上香、鞠躬。天主教會允許教友這樣敬祖，堂區在春節也會舉行敬祖禮。'; }
@@ -1563,6 +1595,15 @@ const AFTER = {
   wait: { all: ['那天晚上，你把聽到的話又想了一遍。', '你決定下次遇到時，再多問一點。'], net: ['你上網查了一下，看了幾篇又關掉了。'], hard: ['你很想問問別人，可是不知道可以問誰。'] },
   decline: { all: ['你沒有再多想這件事，繼續過原本的生活。', '你禮貌地點點頭，沒有再多說什麼。', '後來有人再提起，你轉開了話題。'] },
 };
+// 基督徒家庭長大的人「讓信仰成為自己的」：天主教、東正教、嬰兒洗禮的新教傳統用各自的說法，不套用決志的框架（只換文字）
+function faithLine(x) {
+  if (x !== 'cfam') return '你決定跟隨耶穌。';
+  if (me.trad === 'catholic') return '你開始把信仰當成自己的選擇，想好好認識從小領洗時領受的信仰。';
+  if (me.trad === 'orthodox') return '從小在禮儀裡領受的信仰，你開始把它當成自己的信仰。';
+  if (me.trad === 'protestant' && INFANT_BAP.includes(me.denom)) return '小時候受洗時領受的信仰，這一次你決定自己接下來。';
+  return '從小聽的故事，這一次你決定讓它成為自己的信仰，跟隨耶穌。';
+}
+const faithHL = x => x !== 'cfam' ? '決定跟隨耶穌。' : me.trad === 'catholic' || me.trad === 'orthodox' ? '把從小的信仰當成自己的。' : '讓從小的信仰成為自己的。';
 function afterLine(c, x) {
   let pool;
   if (c === 'respond') pool = x === 'cfam' ? AFTER.respond.cfam : isHard(x) ? AFTER.respond.hard : AFTER.respond.free;
@@ -2167,7 +2208,7 @@ function ministryYear() {
   }
   if (Math.random() < 0.1) {
     const [good, bad] = MIN_EVENTS[minKey(role)], pGood = Math.min(0.85, Math.max(0.2, 0.55 + 0.12 * m.score));
-    const pick = Math.random() < pGood, pool = (pick ? good : bad).filter(x => !m.used.has(x) && !((me.celibate || me.childAt == null || me.childAt > age) && /孩子|配偶/.test(x)));
+    const pick = Math.random() < pGood, pool = (pick ? good : bad).filter(x => !m.used.has(x) && !(arcUsed.has('mission') && /第一次用當地的語言禱告/.test(x)) && !((me.celibate || me.childAt == null || me.childAt > age) && /孩子|配偶/.test(x)));
     if (pool.length) { const x = pool[Math.floor(Math.random() * pool.length)]; m.used.add(x); addLog(age, x, pick ? 'growth' : 'decision'); highlights.push({ age, text: x, cls: pick ? 'growth' : 'milestone' }); }
   }
   return false;
@@ -2488,7 +2529,7 @@ const ARCS = {
       ['鄰近國家的少數族群', '你去了鄰國的山區，那裡的人說一種你從沒聽過的語言。', () => missionDest('near')],
       ['遙遠、幾乎沒有基督徒的族群', '你飛了三天，又坐了兩天的車，才到那個村子。', () => missionDest('far')],
       ['用專業身分，進入不能公開傳教的國家', '你用醫生的身分申請到簽證，搬進一座陌生的城市。', () => missionDest('tent')]] },
-    lang: { t: 'log', delay: [1, 1], text: '頭兩年，你連買菜都要比手畫腳。第一次用當地的話禱告，大家笑了，也哭了。', next: 'dress' },
+    lang: { t: 'log', delay: [1, 1], text: () => ministry.used.has('你第一次用當地的語言禱告，大家都笑了，也都哭了。') ? '頭兩年，你連買菜都要比手畫腳，講道還要靠翻譯。' : '頭兩年，你連買菜都要比手畫腳。第一次用當地的話禱告，大家笑了，也哭了。', next: 'dress' },
     dress: { t: 'choice', delay: [1, 2], title: '像他們一樣', scene: '當地人說，你穿的、吃的都像外國人。同工建議你穿當地的衣服，住進村子裡。', note: () => me.trad === 'orthodox' ? '俄羅斯修士尼古拉 1861 年到日本函館，學日文、把聖經和禮儀譯成日文，建立日本正教會，1912 年在東京過世，1970 年被封為聖人。' : isCath() ? '耶穌會士利瑪竇 1582 年到澳門，後來改穿中國讀書人的衣服，用中文寫書介紹信仰，1610 年在北京過世。' : '戴德生在 1865 年創立中國內地會，他穿上中國人的衣服深入內地，當時被不少西方人取笑。', opts: [
       ['搬進村子，跟他們一樣生活', '你搬進村子，學著蹲在地上吃飯。', 'wait1'], ['住在城裡，每週進村子', '你在城裡租了房子，每週騎車進村子。', 'wait1'], ['先把語言學好再說', '你又花了一年，專心學語言。', 'wait1']] },
     wait1: { t: 'pick', delay: [2, 4], opts: [[0.55, 'first'], [0.45, 'nofirst']] },
@@ -2577,6 +2618,12 @@ const ARCS = {
 // 不另外提高觸發機率：和原本的故事線共用「一生最多兩條」的名額，舊故事線被抽中時，有一部分改由這裡的故事接手（見 arcYear）
 // alts：「如果當時選了另一條路呢？」用的預寫文字，和 opts 一一對應；explain：「這個議題在吵什麼？」的題目
 const freeLife = () => believerish() && !hardHere();
+// 救災的故事依國家換用詞：颱風或大水、附近的宗教場所、便當或餐盒
+function disasterWords() {
+  const c = me.country.id, top = topReligion(me.country)[0];
+  const [place, who] = c === 'TW' || c === 'CN' || c === 'VN' ? ['一間廟', '廟裡的志工'] : top === 'muslim' ? ['一間清真寺', '清真寺的志工'] : top === 'hindu' ? ['一間印度教的廟', '廟裡的志工'] : top === 'buddhist' ? ['一間佛寺', '佛寺的志工'] : ['社區的志工團體', '社區的志工'];
+  return { storm: ['TW', 'PH', 'JP', 'KR', 'CN', 'VN'].includes(c) ? '颱風' : '大水', place, who, box: c === 'TW' ? '便當' : '餐盒' };
+}
 const MV_LABEL = '靈感來自相關教會文化與公共討論，角色與情節為虛構。';
 const POOL_ARCS = {
   // ── 一、聖經權威：查經查到「女人要安靜」
@@ -2712,12 +2759,12 @@ const POOL_ARCS = {
     pray: { t: 'log', delay: [0, 1], text: '後來你才知道，{member}那陣子差點被房東趕出去。你決定下一次，要更早問一句「你需要什麼」。', cls: 'scene', next: 'end' },
   } },
   g_disaster: { pool: true, who: () => freeLife() && age >= 18 && age <= 75, p: 1, S: {
-    start: { t: 'log', text: () => `颱風把附近的村子淹了。${me.trad === 'catholic' ? '堂區' : '教會'}和附近的天主教堂、長老會、靈恩教會，還有一間廟，第一次坐在同一張桌子前，分配誰負責什麼。`, cls: 'scene', next: 'go' },
+    start: { t: 'log', text: () => { const w = disasterWords(); return `${w.storm}把附近的村子淹了。${me.trad === 'catholic' ? '堂區和附近幾間新教教會' : '教會和附近的天主教堂、其他宗派的教會'}，還有${w.place}，第一次坐在同一張桌子前，分配誰負責什麼。`; }, cls: 'scene', next: 'go' },
     go: { t: 'choice', title: '一起救災', explain: 'unity', scene: '有人說，平常各教會講的道理都不一樣，現在這樣合作，會不會模糊了信仰？也有人說，泥巴裡分不出誰是哪個宗派。', opts: [
-      ['一起排班清淤', '你跟著不同教會的人，一起在泥巴裡清了一個禮拜。', 'mud'], ['留在自己的教會負責煮飯', '你留在教會的廚房煮便當。', 'cook']],
-      alts: ['如果你一起清淤：你會認識很多平常不會遇到的人，也會聽到一些你不同意的說法。', '如果你負責煮飯：你看不到現場，但每天幾百個便當，是從你手上送出去的。'] },
-    mud: { t: 'log', delay: [0, 0], text: '你和一位天主教的修女、一個廟裡的志工搬了一整天的家具。晚上她們在路邊一起吃你們教會送來的便當。', cls: 'scene', end: '你記得那個在泥巴裡分不出宗派的禮拜。', next: 'end' },
-    cook: { t: 'log', delay: [0, 0], text: '一個禮拜煮了三千多個便當。最後一天，廟裡的志工送來一大鍋湯，說換他們請你們吃。', cls: 'scene', next: 'end' },
+      ['一起排班清淤', '你跟著不同教會的人，一起在泥巴裡清了一個禮拜。', 'mud'], ['留在自己的教會負責煮飯', () => `你留在教會的廚房煮${disasterWords().box}。`, 'cook']],
+      alts: ['如果你一起清淤：你會認識很多平常不會遇到的人，也會聽到一些你不同意的說法。', '如果你負責煮飯：你看不到現場，但每天送出去的幾百份飯，都經過你的手。'] },
+    mud: { t: 'log', delay: [0, 0], text: () => { const w = disasterWords(); return `你和一位${me.trad === 'catholic' ? '新教教會的姊妹' : '天主教的修女'}、一個${w.who}搬了一整天的家具。晚上她們在路邊一起吃你們教會送來的${w.box}。`; }, cls: 'scene', end: '你記得那個在泥巴裡分不出宗派的禮拜。', next: 'end' },
+    cook: { t: 'log', delay: [0, 0], text: () => { const w = disasterWords(); return `一個禮拜煮了三千多份${w.box}。最後一天，${w.who}送來一大鍋湯，說換他們請你們吃。`; }, cls: 'scene', next: 'end' },
   } },
   g_youth: { pool: true, who: () => freeLife() && age >= 30 && age <= 70, p: 1, S: {
     start: { t: 'choice', title: '他不想再來了', explain: 'leaving', scene: '{member}是你在青少年團契陪了好幾年的孩子。上大學以後，{memberTa}傳訊息給你：「我不想再去教會了。我不確定自己還信不信。」', opts: [
@@ -2975,7 +3022,7 @@ function arcStepChoice() {
     const o = opts[i];
     if (S.alts) cfNodes.push({ age, title: localize(fmt(S.title)), chose: localize(fmt(o[0])), alt: opts.map((x, j) => j === i ? null : [localize(fmt(x[0])), localize(fmt(S.alts[j]))]).filter(Boolean) });
     $('choiceSlot').innerHTML = '';
-    if (o[1]) addLog(age, fmt(o[1]), 'milestone');
+    if (o[1]) addLog(age, fmt(val(o[1])), 'milestone');
     const fx = val(o[3]); if (fx) arcFx(fx);
     const nx = val(o[2]);
     if (!nx || nx === 'end') arcFinish(); else arcGo(nx);
@@ -3267,43 +3314,43 @@ function neoPanel() {
   return `<details class="xdr"><summary>你在這一生遇過的神學：新正統神學</summary><div class="tradbg">${NEO_BG.map(p => `<p>${p}</p>`).join('')}${srcLine(NEO_SRC)}</div></details>`;
 }
 // ── 那些一生沒聽過福音的人呢？圖文版：插畫、資訊卡片、兩層交織的矩陣 ──
-// 卡片：[名稱, 色彩, 一句核心主張, 簡短解說, 標籤]；「了解更多」顯示 SAVE_VIEWS / FATE_VIEWS 的原文
+// 卡片：[名稱, 色彩, 一句核心主張, 35～60 字的摘要, 標籤, 補充]；「了解更多」顯示 SAVE_VIEWS / FATE_VIEWS 的原文，再接補充
 const THEO_C = { gold: '#d9a23a', violet: '#8d72b0', indigo: '#34508f', grey: '#9a9a96' };
 const THEO_SAVE = [
-  ['排他論', THEO_C.gold, '只有今生明確信基督的人會得救。', '得救需要在今生聽見福音、親自信靠基督。這是許多福音派的立場，也常是宣教最強的動力：如果沒聽見就沒有機會，傳福音就刻不容緩。'],
-  ['包容論', THEO_C.violet, '救恩只來自基督，但可能臨到沒聽過祂名字的人。', '救恩仍然只靠基督，這點和排他論一樣。不同的是，基督的救恩可能臨到從沒聽過祂名字、卻真誠尋求神的人。天主教的官方教導就留下這樣的空間。'],
-  ['普世盼望', THEO_C.indigo, '不敢說人人得救，但可以為所有人盼望。', '它不是「確定人人得救」的普救論，而是在不確定之中，仍為所有人盼望、禱告。巴特和巴爾塔薩都表達過這種盼望，也都不把它當成確定的結論。'],
-  ['還不確定', THEO_C.grey, '把答案交給神，照著相信的去愛人。', '這是一種保留判斷的態度，不是一套完整的教義。很多基督徒認為聖經沒有把這件事說得很清楚，選擇把答案交給神。', '一種態度'],
+  ['排他論', THEO_C.gold, '只有今生明確信基督的人會得救。', '得救需要在今生聽見福音、親自信靠基督。許多福音派持這個立場，也把它當成宣教的動力。', '', '對持這個立場的人來說，傳福音是刻不容緩的事。'],
+  ['包容論', THEO_C.violet, '救恩只來自基督，但可能臨到沒聽過祂名字的人。', '救恩仍然只靠基督。差別在於，基督的救恩可能臨到從沒聽過祂、卻真誠尋求神的人。', '', ''],
+  ['普世盼望', THEO_C.indigo, '不敢說人人得救，但可以為所有人盼望。', '在不確定之中，仍然為所有人盼望、禱告。它和「確定人人得救」的普救論是兩回事。', '盼望的態度', '嚴格說來，普世盼望是對最後結果的一種盼望態度，和排他論、包容論回答的不完全是同一層問題，放在一起是為了方便比較。'],
+  ['還不確定', THEO_C.grey, '把答案交給神，照著相信的去愛人。', '這是一種保留判斷的態度。很多基督徒覺得聖經沒有說得那麼清楚，選擇把答案交給神。', '一種態度', ''],
 ];
 const THEO_FATE = [
-  ['永刑', THEO_C.indigo, '沒有得救的人會永遠與神隔絕。', '天主教、東正教和多數新教在歷史上的主流看法：審判是真實的，失去神是永遠的。奧古斯丁的《上帝之城》對此有完整的論述。'],
-  ['條件不朽（滅絕論）', THEO_C.violet, '永生是神的賞賜，沒得救的人最後不再存在。', '人不是天生就不朽，永生是神賜給人的。沒有得救的人會在審判後被消滅，而不是永遠受苦。安息日會持這個立場，也有一部分福音派接受。'],
-  ['萬物復原（普救論）', THEO_C.gold, '最後所有人都會與神和好。', '地獄是暫時的煉淨，不是永遠的結局；最後所有人都會回到神那裡。從早期教父到當代都有人這樣主張，也一直伴隨很大的爭議。'],
-  ['還不確定', THEO_C.grey, '審判是真實的，但它的樣子不急著下定論。', '有些人相信審判是真實的，但認為聖經用的是圖像式的語言，所以對審判的樣子保持開放，不急著選邊。', '一種態度'],
+  ['永刑', THEO_C.indigo, '沒有得救的人會永遠與神隔絕。', '天主教、東正教和多數新教在歷史上的主流看法：審判是真實的，失去神是永遠的。', '', ''],
+  ['條件不朽（滅絕論）', THEO_C.violet, '永生是神的賞賜，沒得救的人最後不再存在。', '人不是天生不朽，永生是神賜的。沒有得救的人在審判後會被消滅，不會永遠受苦。', '', ''],
+  ['萬物復原（普救論）', THEO_C.gold, '最後所有人都會與神和好。', '最後所有人都會回到神那裡，地獄是暫時的煉淨。從早期教父到當代都有人這樣想，爭議也一直很大。', '', '萬物復原論有不同的版本：有人把地獄理解成煉淨的過程，有人強調神的愛最後會贏得每一個人，也有人說得更保留，只把它當成盼望。'],
+  ['還不確定', THEO_C.grey, '審判是真實的，但它的樣子不急著下定論。', '有些人認為聖經用的是圖像式的語言，所以對審判的樣子保持開放，不急著選邊。', '一種態度', ''],
 ];
-// 矩陣：橫軸是第一層，縱軸是第二層。kind：common 常見、tension 有明顯張力、premise 需要額外前提、rare 較少見
+// 矩陣：橫軸是第一層，縱軸是第二層。標籤只在有人物、傳統或文獻可以支持時才寫「有歷史代表」
 const THEO_COLS = [['ex', '排他論', THEO_C.gold], ['in', '包容論', THEO_C.violet], ['ho', '普世盼望', THEO_C.indigo]];
 const THEO_ROWS = [['et', '永刑', THEO_C.indigo], ['ci', '條件不朽', THEO_C.violet], ['ap', '萬物復原', THEO_C.gold]];
-const THEO_KIND = { common: '歷史上常見', tension: '有明顯張力', premise: '需要額外前提', rare: '較少見' };
+const THEO_KIND = { history: '有歷史代表', compat: '概念上可相容', rare: '較少討論', premise: '需要額外前提', conflict: '核心主張衝突', hope: '盼望與確信的差別' };
 const THEO_CELL = {
-  'ex-et': ['common', '歷史上最常見的組合：只有今生信基督的人得救，沒有得救的人永遠與神隔絕。奧古斯丁和許多傳統福音派都在這一格，宣教的急迫感也最強。'],
-  'ex-ci': ['common', '只有今生信基督的人得救，但沒有得救的人最後會被消滅，而不是永遠受苦。福音派裡接受條件不朽的人，有不少在第一層仍持排他論。'],
-  'ex-ap': ['tension', '這兩個立場有明顯張力：如果只有今生明確信基督的人才得救，就很難說所有人最後都會與神和好。要放在一起，需要再加上「死後仍有機會回應基督」這個前提，例如以筆名 Gregory MacDonald 出版《福音派普救論者》（2006）的派瑞（Robin Parry）。嚴格的排他論者多半不接受這個前提。'],
-  'in-et': ['common', '基督的救恩可能臨到沒聽過福音的人，但地獄仍是永遠的。天主教的官方教導大致在這一格：梵二《教會憲章》第 16 節為不認識福音的人留下得救的可能，同時仍教導地獄是永久的。'],
-  'in-ci': ['common', '救恩只來自基督，也可能臨到沒聽過祂名字的人；始終拒絕神的人最後會被消滅。加拿大福音派神學家平諾克（Clark Pinnock）就是例子：他在《神慈愛的寬廣》（1992）主張包容論，也為滅絕論辯護。'],
-  'in-ap': ['premise', '包容論只說沒聽過福音的人「可能」得救，萬物復原卻說所有人「最後一定」會得救。要走到這一格，需要再相信神的愛最終會勝過每一個人的拒絕。真的走到這裡的人，在第一層通常已經接近普救論，不只是包容論。'],
-  'ho-et': ['common', '地獄是真實的可能，但可以盼望它是空的。巴爾塔薩在《我們敢盼望「所有人得救」嗎？》（1988 年英譯本）就是這樣：他說確定是不可能的，盼望卻是正當的，也明確不把萬物復原當成教義。'],
-  'ho-ci': ['rare', '比較少見的組合：盼望所有人最後都回應神，但如果真的有人始終拒絕，結局是被消滅，而不是永遠受苦。這個組合在邏輯上說得通，但很少有神學家明確這樣主張。'],
-  'ho-ap': ['tension', '兩者方向一樣，差別在「盼望」和「確信」。普世盼望是為所有人盼望，但不敢說一定；萬物復原論則確信最後所有人都會與神和好，例如哈特的《所有人都將得救》（2019）。持普世盼望的人，可能把萬物復原當成禱告的內容，卻不把它當成教義。'],
+  'ex-et': ['history', '只有今生信基督的人得救，沒有得救的人永遠與神隔絕。許多傳統福音派在這一格，宣教的急迫感也最強。奧古斯丁對永刑的論述常被引用；不過，用現代的排他論、包容論去框古代教父的完整立場，要很小心。'],
+  'ex-ci': ['compat', '只有今生信基督的人得救，沒有得救的人最後會被消滅，不會永遠受苦。兩個主張放在一起沒有衝突；福音派裡接受條件不朽的人，有不少在第一層仍持排他論。'],
+  'ex-ap': ['conflict', '嚴格排他論若認為只有今生明確相信基督的人才能得救，就會與最終所有人都得救的萬物復原論產生核心衝突。除非額外引入死後悔改、得救機會等前提，否則兩者很難直接相容。以筆名 Gregory MacDonald 出版《福音派普救論者》（2006）的派瑞（Robin Parry），就是加上了「死後仍有機會」這個前提。'],
+  'in-et': ['history', '基督的救恩可能臨到沒聽過福音的人，地獄仍是永遠的。天主教的官方教導大致在這一格：梵二《教會憲章》第 16 節為不認識福音的人留下得救的可能，同時仍教導地獄是永久的。'],
+  'in-ci': ['history', '救恩只來自基督，也可能臨到沒聽過祂名字的人；始終拒絕神的人最後會被消滅。加拿大福音派神學家平諾克（Clark Pinnock）是例子：他在《神慈愛的寬廣》（1992）主張包容論，也為滅絕論辯護。'],
+  'in-ap': ['premise', '包容論認為，基督的救恩可能臨到未曾明確認識祂的人，但並不保證所有人最終得救。若進一步相信所有人最後都與神和好，就需要超出一般包容論的額外神學主張。'],
+  'ho-et': ['history', '地獄是真實的可能，但可以盼望它是空的。巴爾塔薩在《我們敢盼望「所有人得救」嗎？》（1988 年英譯本）就是這樣：他說確定是不可能的，盼望卻是正當的，也明確不把萬物復原當成教義。'],
+  'ho-ci': ['rare', '盼望所有人最後都回應神；萬一真的有人始終拒絕，結局是被消滅，不會永遠受苦。邏輯上說得通，但很少有神學家明確這樣主張。'],
+  'ho-ap': ['hope', '普世盼望允許基督徒盼望所有人得救，但不宣稱已經知道最後的結果。萬物復原論則主張，所有人終究會與神和好。兩者可能共享對普世救恩的期待，但在確定程度上有所不同。哈特的《所有人都將得救》（2019）就是確信的版本。'],
 };
 const THEO_SRC = [...HELL_SRC, ['Clark Pinnock', 'https://en.wikipedia.org/wiki/Clark_Pinnock'], ['The Evangelical Universalist', 'https://wipfandstock.com/the-evangelical-universalist.html'], ['Balthasar: Dare We Hope', 'https://www.catholicculture.org/culture/library/view.cfm?id=565'], ['Christianity Today 2000（斯托得）', 'https://www.christianitytoday.com/ct/2000/october23/undying-worm-unquenchable-fire.html']];
 // 「了解更多」用原本的文字；巴爾塔薩的書名年份用通行英譯本的 1988 年
 const theoMore = V => V.map(([, d]) => d.replace('（1986）', '（1988 年英譯本）'));
+const theoEsc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function theoCards(V, more) {
-  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  return `<div class="theo-cards">${V.map(([n, c, claim, sum, tag], i) => {
-    const m = !tag && more[i] && more[i] !== sum ? more[i] : '';
-    return `<article class="theo-card${tag ? ' attitude' : ''}" style="--tc:${c}"><header><span class="theo-dot" aria-hidden="true"></span><h5>${esc(n)}</h5>${tag ? `<span class="theo-tag">${esc(tag)}</span>` : ''}</header><p class="theo-claim">${esc(claim)}</p><p class="theo-sum">${esc(sum)}</p>${m ? `<details class="theo-more"><summary>了解更多</summary><p>${esc(m)}</p></details>` : ''}</article>`;
+  return `<div class="theo-cards">${V.map(([n, c, claim, sum, tag, extra], i) => {
+    const m = tag === '一種態度' ? '' : [more[i], extra].filter(Boolean).map(p => `<p>${theoEsc(p)}</p>`).join('');
+    return `<article class="theo-card${tag ? ' tagged' : ''}${tag === '一種態度' ? ' attitude' : ''}" style="--tc:${c}"><header><span class="theo-dot" aria-hidden="true"></span><h5>${theoEsc(n)}</h5>${tag ? `<span class="theo-tag">${theoEsc(tag)}</span>` : ''}</header><p class="theo-claim">${theoEsc(claim)}</p><p class="theo-sum">${theoEsc(sum)}</p>${m ? `<details class="theo-more"><summary><span class="o">了解更多</span><span class="c">收起</span></summary><div class="theo-more-in">${m}</div></details>` : ''}</article>`;
   }).join('')}</div>`;
 }
 function theoMatrix() {
@@ -3315,39 +3362,42 @@ function theoMatrix() {
   }));
   const cells = THEO_ROWS.map(([rk, rn], r) => THEO_COLS.map(([ck, cn], c) => {
     const k = THEO_CELL[`${ck}-${rk}`][0];
-    return `<button type="button" class="theo-cell k-${k}" data-theo="${ck}-${rk}" aria-pressed="false" tabindex="${r === 0 && c === 0 ? 0 : -1}" aria-label="${cn} 加上 ${rn}：${THEO_KIND[k]}">${k === 'common' ? '' : `<span>${THEO_KIND[k]}</span>`}</button>`;
+    return `<button type="button" class="theo-cell k-${k}" data-theo="${ck}-${rk}" aria-pressed="false" tabindex="${r === 0 && c === 0 ? 0 : -1}" aria-label="${cn} × ${rn}：${THEO_KIND[k]}"><span>${THEO_KIND[k]}</span></button>`;
   }).join('')).join('');
-  const pick = (L, axis) => `<p class="theo-pickl">${axis}</p><div class="theo-pick" role="group" aria-label="${axis}">${L.map(([k, n, c]) => `<button type="button" data-theo-${axis === '第一層：誰能得救？' ? 'col' : 'row'}="${k}" aria-pressed="false" style="--tc:${c}">${n}</button>`).join('')}</div>`;
+  const pick = (L, axis, key) => `<p class="theo-pickl" id="theoPick${key}">${axis}</p><div class="theo-pick" role="group" aria-labelledby="theoPick${key}">${L.map(([k, n, c]) => `<button type="button" data-theo-${key}="${k}" aria-pressed="false" style="--tc:${c}">${n}</button>`).join('')}</div>`;
   return `<section class="theo-matrix" aria-labelledby="theoMxT">
   <h4 id="theoMxT">兩層怎麼交織？</h4>
-  <p class="theo-intro">兩層可以組合，但不是每一種組合都同樣常見。點一個格子，看看這個組合在說什麼。</p>
+  <p class="theo-intro">點選任一色塊，探索兩種神學觀點如何交會。<span class="theo-kbd">也可以用 Tab 進入，方向鍵移動，Enter 選取。</span></p>
   <div class="theo-board">
     <div class="theo-colh" aria-hidden="true"><span></span>${THEO_COLS.map(([, n, c]) => `<span style="--tc:${c}">${n}</span>`).join('')}</div>
     <div class="theo-body">
       <div class="theo-rowh" aria-hidden="true">${THEO_ROWS.map(([, n, c]) => `<span style="--tc:${c}">${n}</span>`).join('')}</div>
       <div class="theo-gridwrap">
         <svg class="theo-art" viewBox="0 0 300 300" aria-hidden="true" focusable="false"><defs><filter id="theoWet" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="22" xChannelSelector="R" yChannelSelector="G" result="d"/><feGaussianBlur in="d" stdDeviation="2.2"/></filter></defs>${art}<g class="theo-lines" stroke="#3a3a36" stroke-opacity=".28" stroke-width=".8"><line x1="100" y1="8" x2="100" y2="292"/><line x1="200" y1="8" x2="200" y2="292"/><line x1="8" y1="100" x2="292" y2="100"/><line x1="8" y1="200" x2="292" y2="200"/></g></svg>
-        <div class="theo-grid" role="group" aria-label="第一層和第二層的九種組合">${cells}</div>
+        <div class="theo-grid" role="group" aria-label="第一層和第二層的九種組合，用方向鍵移動">${cells}</div>
       </div>
     </div>
   </div>
-  <div class="theo-pickers">${pick(THEO_COLS, '第一層：誰能得救？')}${pick(THEO_ROWS, '第二層：沒有得救的人最後會怎樣？')}</div>
-  <div class="theo-result" aria-live="polite"><p class="theo-hint">點一個格子，或在上面各選一個立場。</p></div>
-  <p class="theo-foot">這張圖是幫助理解不同神學問題的探索地圖，並不代表每一種組合都是歷史上獨立成立的神學立場。註：萬物復原論者在第一層通常趨近或等同於普救論。「還不確定」是一種態度，所以沒有放進矩陣。</p>
+  <div class="theo-pickers"><p class="theo-step">先選第一層，再選第二層。</p>${pick(THEO_COLS, '第一層：誰能得救？', 'col')}${pick(THEO_ROWS, '第二層：沒有得救的人最後會怎樣？', 'row')}</div>
+  <div class="theo-result" aria-live="polite"><p class="theo-hint">還沒有選擇組合。</p></div>
+  <p class="theo-foot">這張圖是幫助理解不同神學問題的探索地圖，並不代表每一種組合都是歷史上獨立成立的神學立場。註：萬物復原論者在第一層通常趨近或等同於普救論。「普世盼望」比較像一種盼望的態度，和排他論、包容論不完全在同一個層次；「還不確定」是一種態度，所以沒有放進矩陣。</p>
 </section>`;
 }
+const THEO_SHARE = '如果一個人一生都沒聽過福音，最後會怎樣？\n\n基督教內部其實有排他論、包容論、普世盼望，以及不同的審判觀點。\n\n如果是你最愛的人，一輩子都沒有相信耶穌，你會怎麼理解他的結局？\n\n來玩玩《福音距離》：\nhttps://gbookchurch.github.io/gospel-distance/';
 function hellPanel(open) {
   theoSel.col = theoSel.row = null;
   const SRC = { intro: 'img/theology-intro.webp', salvation: 'img/theology-salvation.webp', destiny: 'img/theology-destiny.webp' };
   const img = (k, alt, cls) => `<img class="${cls}" src="${SRC[k]}" alt="${alt}" loading="lazy" decoding="async" width="1200" height="${k === 'destiny' ? 675 : 800}">`;
-  return `<details class="xdr theo"${open ? ' open' : ''}><summary>那些一生沒聽過福音的人呢？</summary><div class="theo-wrap">
+  return `<details class="xdr theo" id="theoBox"${open ? ' open' : ''}><summary id="theoSum">那些一生沒聽過福音的人呢？</summary><div class="theo-wrap">
   <figure class="theo-hero">${img('intro', '水彩插畫：深藍、金黃和淡紫的顏料彼此交融', 'theo-img')}</figure>
   <div class="theo-lede"><p class="theo-q">「如果一個人從出生到死亡，都沒有機會認識耶穌，神會怎麼看待他？」</p><p>這個問題困擾過無數基督徒。歷代神學家提出了不同答案，而這些答案，也影響著我們如何理解宣教、救恩，以及神的公義與憐憫。</p></div>
   <p class="theo-note">這是這個遊戲最核心的問題，基督教內部有好幾種回答。以下只介紹，不下結論。這個問題其實有兩層：誰能得救，和沒有得救的人最後會怎樣。</p>
   <section class="theo-layer"><div class="theo-head">${img('salvation', '水彩插畫：三條不同的路在山野間延伸', 'theo-thumb')}<div><span class="theo-kicker">第一層</span><h4>誰能得救？</h4></div></div>${theoCards(THEO_SAVE, theoMore(SAVE_VIEWS))}</section>
   <section class="theo-layer"><div class="theo-head">${img('destiny', '水彩插畫：一個人站在山頂，望著遠方的日出和蜿蜒的道路', 'theo-thumb')}<div><span class="theo-kicker">第二層</span><h4>沒有得救的人最後會怎樣？</h4></div></div>${theoCards(THEO_FATE, theoMore(FATE_VIEWS))}</section>
   ${theoMatrix()}
-  <div class="theo-end"><p>不同的回答，會影響基督徒如何理解宣教，也會影響我們怎麼看待身邊還沒有信主的家人與朋友。</p><p class="theo-big">如果你最愛的人，一輩子都沒有相信耶穌，你會怎麼理解他的結局？</p></div>
+  <div class="theo-end"><p>不同的回答，會影響基督徒如何理解宣教，也會影響我們怎麼看待身邊還沒有信主的家人與朋友。</p><p class="theo-big">如果你最愛的人，一輩子都沒有相信耶穌，你會怎麼理解他的結局？</p>
+  <div class="theo-share"><button type="button" class="theo-copy">複製討論問題</button><button type="button" class="theo-again">再活一次</button></div>
+  <p class="theo-copied" role="status" aria-live="polite"></p></div>
   ${srcLine(THEO_SRC)}</div></details>`;
 }
 // 矩陣互動：點格子或兩組選擇器，顯示這個組合的說明；方向鍵可以在格子間移動
@@ -3358,12 +3408,28 @@ function theoShow(root) {
   root.querySelectorAll('[data-theo-col]').forEach(b => b.setAttribute('aria-pressed', b.dataset.theoCol === col));
   root.querySelectorAll('[data-theo-row]').forEach(b => b.setAttribute('aria-pressed', b.dataset.theoRow === row));
   root.classList.toggle('has-sel', !!(col && row));
-  if (!col || !row) { res.innerHTML = `<p class="theo-hint">${col || row ? '再選另一層的立場。' : '點一個格子，或在上面各選一個立場。'}</p>`; return; }
+  if (!col || !row) { res.innerHTML = `<p class="theo-hint">${col ? '再選第二層的立場。' : row ? '再選第一層的立場。' : '還沒有選擇組合。'}</p>`; return; }
   const C = THEO_COLS.find(x => x[0] === col), R = THEO_ROWS.find(x => x[0] === row), [k, txt] = THEO_CELL[`${col}-${row}`];
-  res.innerHTML = `<div class="theo-res" style="--ca:${C[2]};--cb:${R[2]}"><p class="theo-res-h"><span class="theo-swatch" aria-hidden="true"></span><b>${C[1]} × ${R[1]}</b><span class="theo-kind k-${k}">${THEO_KIND[k]}</span></p><p>${txt}</p></div>`;
+  res.innerHTML = `<div class="theo-res" style="--ca:${C[2]};--cb:${R[2]}"><p class="theo-res-h"><span class="theo-swatch" aria-hidden="true"></span><b>你正在探索：${C[1]} × ${R[1]}</b><span class="theo-kind k-${k}">${THEO_KIND[k]}</span></p><p>${txt}</p></div>`;
+}
+// 複製討論問題：先用 Clipboard API，不行就用隱藏文字框，再不行就把文字顯示出來讓人自己選取
+async function theoCopy(box) {
+  const msg = box.querySelector('.theo-copied');
+  const done = ok => { msg.textContent = ok ? '已複製，可以分享給朋友討論！' : ''; if (ok) setTimeout(() => { if (msg.textContent.startsWith('已複製')) msg.textContent = ''; }, 3000); };
+  try { if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(THEO_SHARE); return done(true); } } catch (e) {}
+  try {
+    const ta = document.createElement('textarea'); ta.value = THEO_SHARE; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;';
+    document.body.appendChild(ta); ta.select(); const ok = document.execCommand && document.execCommand('copy'); ta.remove();
+    if (ok) return done(true);
+  } catch (e) {}
+  msg.innerHTML = '這個瀏覽器沒辦法自動複製，請長按或選取下面的文字：<textarea class="theo-manual" readonly rows="7"></textarea>';
+  const t = msg.querySelector('textarea'); t.value = THEO_SHARE; t.focus(); t.select();
 }
 document.addEventListener('click', e => {
-  const root = e.target.closest && e.target.closest('.theo-matrix'); if (!root) return;
+  if (!e.target.closest) return;
+  const tb = e.target.closest('.theo-copy, .theo-again');
+  if (tb) { if (tb.classList.contains('theo-copy')) theoCopy(tb.closest('.theo-end')); else if ($('againBtn')) $('againBtn').click(); return; }
+  const root = e.target.closest('.theo-matrix'); if (!root) return;
   const cell = e.target.closest('.theo-cell'), c = e.target.closest('[data-theo-col]'), r = e.target.closest('[data-theo-row]');
   if (cell) { const [a, b] = cell.dataset.theo.split('-'); theoSel.col = a; theoSel.row = b; root.querySelectorAll('.theo-cell').forEach(x => x.tabIndex = x === cell ? 0 : -1); }
   else if (c) theoSel.col = c.dataset.theoCol; else if (r) theoSel.row = r.dataset.theoRow; else return;
@@ -3372,10 +3438,28 @@ document.addEventListener('click', e => {
 document.addEventListener('keydown', e => {
   const cell = e.target.closest && e.target.closest('.theo-cell'); if (!cell) return;
   const all = [...cell.parentNode.querySelectorAll('.theo-cell')], i = all.indexOf(cell);
-  const d = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: 3, ArrowUp: -3 }[e.key]; if (d === undefined) return;
+  const d = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: 3, ArrowUp: -3, Home: -i, End: 8 - i }[e.key]; if (d === undefined) return;
   const j = i + d; if (j < 0 || j > 8 || (Math.abs(d) === 1 && Math.floor(j / 3) !== Math.floor(i / 3))) return;
   e.preventDefault(); all.forEach(x => x.tabIndex = -1); all[j].tabIndex = 0; all[j].focus();
 });
+// 矩陣第一次出現在畫面上時，讓左上角的格子輕輕亮一下，提示可以點；只播一次，減少動態效果時不播
+function theoHintOnce(root) {
+  if (!root || root.dataset.hinted || typeof IntersectionObserver !== 'function' || SMOOTH === 'auto') return;
+  const io = new IntersectionObserver(es => {
+    if (!es.some(x => x.isIntersecting)) return;
+    io.disconnect(); root.dataset.hinted = '1';
+    const c = root.querySelector('.theo-cell'); if (!c || root.classList.contains('has-sel')) return;
+    c.classList.add('hint'); setTimeout(() => c.classList.remove('hint'), 1800);
+  }, { threshold: 0.6 });
+  io.observe(root.querySelector('.theo-gridwrap') || root);
+}
+// 人生終章的引導卡：打開解說、捲過去、把焦點放在標題
+function goTheo() {
+  const d = $('theoBox'); if (!d) return;
+  d.open = true;
+  d.scrollIntoView({ behavior: SMOOTH, block: 'start' });
+  const s = $('theoSum'); if (s) s.focus({ preventScroll: true });
+}
 
 function lifeOutcome(martyred) {
   if (martyred) return 'martyred';
@@ -4094,6 +4178,9 @@ function crossChoose(c) {
 // ── 怎麼聽見福音：依國家、族群、年齡抽出具體的管道
 const EAST_ASIA = ['TW', 'KR', 'JP', 'CN', 'TH', 'VN', 'MM', 'ID', 'PH'];
 const CONFLICT = ['SY', 'SD', 'AF', 'YE', 'MM', 'SO', 'CD', 'ML', 'BF', 'NE', 'NG', 'IQ', 'MZ', 'CM'];
+// 網路普及率（使用網路的人口比例，ITU，多數為 2024 年；北韓沒有可靠數字，以 0 計）
+// 只用來決定「透過廣播還是網路聽見」，不影響會不會聽見福音
+const INTERNET = { TW: 96.7, KR: 97.9, US: 94.7, BR: 84.5, PH: 67.3, JP: 85.5, ID: 72.8, CD: 19.7, MX: 83.1, ET: 21.4, EG: 74.6, CN: 91.6, BD: 53.4, MA: 91.2, IN: 70, PK: 57.3, NG: 41.2, IR: 85.3, YE: 17.5, KP: 0, TZ: 31.2, UG: 8.95, SD: 18.6, KE: 35, AF: 16.1, AO: 40.7, MZ: 20.5, VN: 84.2, RU: 95.6, IQ: 81.5, ZA: 78.4, NE: 39.5, TR: 89.8, MG: 18.7, CI: 41.4, ML: 36.8, CM: 46.3, TD: 12.6, GH: 72.2, UZ: 89.5, MM: 45.4, SO: 27.9, DZ: 77.4, BF: 28.3, ZM: 17.1, MW: 19, DE: 93.5, CO: 79.3, GB: 95.5, FR: 88.7, SY: 49.2, SA: 100, TH: 90.9 };
 const CHANNELS = [
   { id: 'classmate', short: '同學', text: '班上一個同學邀你去教會的青少年聚會，你在那裡聽見了耶穌的故事。', w: x => x.age >= 10 && x.age <= 22 ? 3 * x.open * (x.c + 0.15) : 0 },
   { id: 'friend', short: '朋友', text: '一個好朋友跟你分享，為什麼他相信耶穌。', w: x => x.age >= 15 ? 2 * x.open * (x.c + 0.15) : 0 },
@@ -4105,9 +4192,10 @@ const CHANNELS = [
   { id: 'school', short: '教會學校', text: '你讀的是教會辦的學校，在早會裡聽見了福音。', w: x => x.age >= 6 && x.age <= 18 && x.c > 0.05 ? x.open : 0 },
   { id: 'hospital', short: '醫院', text: '你生病住院，醫院的院牧來到床邊為你禱告，跟你說起耶穌。', w: x => 0.5 * x.open },
   { id: 'film', short: '耶穌電影', text: '一群人來村子裡放映耶穌的電影，用你的母語講述祂的一生。', w: x => (x.bibleFull ? 0.3 : 1.5) * (0.4 + 0.6 * x.open) },
-  { id: 'radio', short: '廣播', text: '深夜轉著收音機時，你聽見有人用你的語言介紹耶穌。', w: x => 2 * (1 - x.open) + 0.3 },
+  // 廣播：網路越普及越少人聽；這一生越往後的年代，也越少人聽
+  { id: 'radio', short: '廣播', text: '深夜轉著收音機時，你聽見有人用你的語言介紹耶穌。', w: x => (2 * (1 - x.open) + 0.3) * (0.2 + 0.8 * (1 - x.net)) * Math.max(0.6, 1 - 0.008 * x.age) },
   { id: 'satellite', short: '衛星電視', text: '你在家裡偷偷看衛星電視，轉到一個講耶穌的節目。', w: x => x.muslim ? 2 * (1 - x.open) + 0.2 : 0 },
-  { id: 'internet', short: '網路影片', text: '你在網路上滑到一段影片，有人在講耶穌是誰。', w: x => x.age >= 12 && x.age <= 55 && !x.noInternet ? 0.6 + 1.2 * (1 - x.open) : 0 },
+  { id: 'internet', short: '網路影片', text: '你在網路上滑到一段影片，有人在講耶穌是誰。', w: x => x.age >= 12 && x.age <= 70 && !x.noInternet ? (0.6 + 1.2 * (1 - x.open)) * (0.3 + 0.9 * x.net) * (x.cn ? 0.3 : 1) : 0 },
   { id: 'dream', short: '一個夢', text: '你夢見一個穿白衣的人，醒來後一直記得這個夢。後來有人跟你談起耶穌，你開始好奇祂是誰。', w: x => x.muslim ? 1.2 * (1 - x.c) : 0 },
   { id: 'bible', short: '地下聖經', text: '有人偷偷塞給你一本小小的聖經，叮嚀你不要讓任何人看見。', w: x => x.open < 0.4 ? 2 * (1 - x.open) : 0 },
   { id: 'relative', short: '信主的親戚', text: '你的一個親戚信了耶穌，被家族排擠，卻還是很平靜。你忍不住去問他為什麼。', w: x => x.age >= 12 ? (1 - x.c) * (x.muslim || x.open < 0.6 ? 1 : 0.4) : 0 },
@@ -4118,6 +4206,58 @@ const CHANNELS = [
   { id: 'rehab', short: '戒毒村', text: '你被家人送進一間基督教戒毒村，在那裡聽見了福音。', w: x => x.age >= 18 && x.age <= 55 ? 0.1 * x.open : 0 },
   { id: 'funeral', short: '一場喪禮', text: '你參加了一位基督徒朋友的喪禮，大家在悲傷裡仍然帶著盼望，讓你很好奇。', w: x => x.age >= 30 ? 0.6 * x.open : 0 },
 ];
+// ── 網路管道再細分成平台：總比重不變，只換成當地真的在用的平台和故事
+// 被封鎖的平台不出現：中國（只剩微信和翻牆）、伊朗（Facebook、X、YouTube、Telegram、Instagram 被封鎖，2024 年底解封 WhatsApp）、
+// 俄羅斯（2022 年封鎖 Facebook、Instagram）、緬甸（軍政府限制 Facebook、Instagram、X、WhatsApp，剩 Telegram、TikTok）；
+// 阿富汗（2022 年禁 TikTok）和印度（2020 年禁 TikTok）的短影片改成 Instagram Reels
+const MSG_APP = { TW: 'LINE', JP: 'LINE', TH: 'LINE', KR: 'KakaoTalk', VN: 'Zalo', RU: 'Telegram', UZ: 'Telegram', ET: 'Telegram', MM: 'Telegram', PH: 'Messenger', US: 'Messenger' };
+const PLAT_BLOCK = { IR: ['fb', 'x', 'short'], RU: ['fb', 'ig', 'x'], MM: ['fb', 'ig', 'x', 'yt'] };
+const PLATFORMS = [
+  { p: 'yt', short: 'YouTube', text: x => `${x.vpn ? '你開著 VPN 上 YouTube，搜尋' : '你在 YouTube 上搜尋'}一個困擾你很久的問題，跳出一段講道影片。`,
+    scene: '那陣子你睡不好，半夜在 YouTube 打了一句「人活著到底為了什麼」。跳出來的第一支影片，是一個人在講他怎麼從谷底走出來，最後提到了耶穌。你本來只想聽個開頭，結果整段看完了，還點開了他推薦的下一支。',
+    cb: '你又在 YouTube 上看到那個頻道的新影片，這次你訂閱了。', w: () => 1 },
+  { p: 'short', short: '短影片', text: x => `你在 ${['AF', 'IN'].includes(x.cid) ? 'Instagram Reels' : 'TikTok'} 上滑到一段一分鐘的見證，忍不住看了好幾遍。`,
+    scene: '你一支接一支地滑短影片，突然停在一段一分鐘的影片：一個跟你差不多年紀的人，講他怎麼在最糟的時候遇見耶穌。影片很短，你卻重播了好幾次，還點進他的帳號看了其他影片。',
+    cb: '演算法好像記得你，又推來一段講耶穌的短影片。', w: x => x.age < 30 ? 1.6 : x.age < 45 ? 0.9 : 0.4 },
+  { p: 'ig', short: 'Instagram', text: x => `${x.vpn ? '你開著 VPN 滑 Instagram，' : '你在 Instagram 上'}追蹤的一個人，常分享讀經筆記和生活。`,
+    scene: '你追蹤的一個人，平常分享穿搭和咖啡店，偶爾會貼一頁手寫的讀經筆記。有一天她寫到自己撐過的一段低潮，最後一句是「那時候是耶穌陪我」。你在那則貼文下面停了很久，傳了一則私訊給她。',
+    cb: '你又看到那個人在 Instagram 貼的讀經筆記。', w: x => x.age < 35 ? 1 : x.age < 50 ? 0.5 : 0.2 },
+  // Facebook 上假冒教會、假募款的詐騙很多，看到宗教內容常先起戒心，所以比重再打折
+  { p: 'fb', short: 'Facebook', text: () => '朋友在 Facebook 分享了一篇文章，你點了進去，後來還被加進一個讀書會社團。',
+    scene: '一個老朋友在 Facebook 分享了一篇文章，寫一個人怎麼陪伴生病的家人走完最後一段路。你在下面留言，他私訊你，問你要不要加入他們每週一次的線上讀書會。你猶豫了一下，按了加入。',
+    cb: '那個 Facebook 讀書會的通知又跳出來了。', w: x => (x.age < 30 ? 0.3 : x.age < 50 ? 0.8 : 1.1) * 0.6 },
+  { p: 'x', short: 'X', text: () => '你在 X 上看到一串關於信仰的討論，跟人吵了起來，卻也開始好奇。',
+    scene: '你在 X 上看到一串吵得很兇的討論，主題是「基督徒是不是都很偽善」。你本來是去吵架的，回了好幾則，卻有一個基督徒很平靜地回你，沒有生氣。你點進他的帳號，看了一個晚上。',
+    cb: '你又在 X 上看到那個人的貼文。', w: x => x.age >= 16 && x.age < 45 ? 0.3 : 0.1 },
+  { p: 'msg', short: x => `${x.app} 私訊`, text: x => `有人在 ${x.app} 私訊傳了一段話給你，說他最近在讀聖經，想跟你分享。`,
+    scene: x => `你很久沒聯絡的一個朋友，突然在 ${x.app} 傳了一段很長的訊息給你。他說他最近經歷了一些事，開始讀聖經，有一段話一直想跟你分享。你本來想已讀不回，最後還是回了他。`,
+    cb: x => `那個朋友又在 ${x.app} 傳了一段經文給你。`, w: x => (x.age < 25 ? 0.5 : x.age < 45 ? 0.9 : 1.3) * (1 + (1 - x.open)) },
+];
+// 中國：2022 年起沒有許可不能在網路上傳教，2025 年起禁止透過直播、短影片、微信群和朋友圈講道，只剩私下傳訊息和翻牆
+const PLATFORMS_CN = [
+  { p: 'wechat', short: '微信私訊', text: () => '朋友用微信私訊傳給你一段見證，幾天後那則訊息就被刪掉了。',
+    scene: '一個朋友用微信私訊傳了一段文字給你，是他自己寫的見證，講他怎麼在最低潮的時候遇見耶穌。他特別交代，不要轉到群組裡。幾天後你想再看一次，那則訊息已經被刪掉了。', cb: '那個朋友又私訊你，問你最近好不好，沒有多說什麼。', w: () => 1 },
+  { p: 'vpn', short: '翻牆看影片', text: () => '你翻牆看到一段海外的講道影片，看完把瀏覽紀錄清掉。',
+    scene: '你開了 VPN 翻牆，本來只是想看新聞，卻點進一段海外華人教會的講道影片。講道的人說，信仰不需要誰的批准。你一口氣看完，關掉之前，把瀏覽紀錄清掉了。', cb: '你又翻牆去看了那個講道頻道。', w: x => x.age < 60 ? 0.8 : 0.3 },
+];
+function pickPlatform(p, x) {
+  const cid = p.country.id, vpn = cid === 'IR', ctx = { ...x, cid, vpn, app: MSG_APP[cid] || (cid === 'CN' ? '微信' : 'WhatsApp') };
+  const L = cid === 'CN' ? PLATFORMS_CN : PLATFORMS.filter(q => !(PLAT_BLOCK[cid] || []).includes(q.p));
+  const q = pickWeighted(L, q => Math.max(0, q.w(ctx)));
+  return { id: 'internet', plat: q.p, short: val2(q.short, ctx), text: val2(q.text, ctx), scene: val2(q.scene, ctx), cb: val2(q.cb, ctx) };
+}
+const val2 = (v, c) => typeof v === 'function' ? v(c) : v;
+// Facebook 上的假募款：網路普及、Facebook 沒被封鎖的國家，35 歲以後一生最多一次，不影響任何機率
+let scamSeen = false;
+function scamScene() {
+  if (scamSeen || age < 35 || age > 80 || !me || ['CN', 'KP', 'IR', 'RU', 'MM'].includes(me.country.id) || (INTERNET[me.country.id] || 0) < 60 || Math.random() >= 0.005) return false;
+  scamSeen = true; stop(); lastCross = age;
+  const xn = believerish();
+  showMinBox('可疑的募款', xn ? '有個自稱牧師的帳號在 Facebook 私訊你，說教會在募款蓋孤兒院，還附上很感人的照片。你查了一下，那間教會根本不存在，照片是從別的地方偷來的。' : '有個帳號在 Facebook 上假冒慈善團體募款，說是幫助生病的孩子。你查了一下，照片是從別的地方偷來的。',
+    [['remind', '轉給家人提醒', '你把截圖傳到家族群組，提醒長輩小心。'], ['report', '檢舉、封鎖', '你檢舉了那個帳號，然後封鎖它。'], ['skip', '滑過去就好', '你沒有理它，繼續滑下去。']],
+    k => { $('choiceSlot').innerHTML = ''; addLog(age, { remind: '你把截圖傳到家族群組，提醒長輩看到這種募款要小心。隔天，阿姨說她差點就匯款了。', report: '你檢舉了那個帳號，然後封鎖它。幾天後，同一張照片又換了一個帳號出現。', skip: '你沒有理它，繼續滑下去。後來你才聽說，有朋友真的被騙了。' }[k], 'milestone'); ministryDone(); });
+  return true;
+}
 function pickChannel(p, a) {
   const c = Math.min(1, (p.group.christian_pct ?? p.country.christian_pct ?? 0) / 100);
   // 國家再怎麼管制，族群本身多半是基督徒時，福音其實就在身邊
@@ -4126,6 +4266,7 @@ function pickChannel(p, a) {
     age: a, c, open,
     muslim: p.group.primary_religion ? p.group.primary_religion === 'Islam' : (p.country.religion_pct.muslim ?? 0) > 50,
     noInternet: p.country.id === 'KP',
+    net: (INTERNET[p.country.id] ?? 50) / 100, cn: p.country.id === 'CN',
     eastAsia: EAST_ASIA.includes(p.country.id),
     conflict: CONFLICT.includes(p.country.id),
     bibleFull: ['full', 'nt'].includes(p.group.bible_status),
@@ -4134,6 +4275,7 @@ function pickChannel(p, a) {
   };
   const ch = pickWeighted(CHANNELS, ch => Math.max(0, ch.w(x)));
   if (ch.id === 'crusade') penteSeen = true;
+  if (ch.id === 'internet') return pickPlatform(p, x);
   if (ch.id === 'abroad' && p.country.id === 'KP') return { id: 'defect', short: '逃到中國', text: '你越過邊境逃到中國，被一群基督徒藏起來照顧，在那裡聽見了福音。被中國警察抓到的脫北者，會被遣返北韓。' };
   return ch;
 }
@@ -4233,13 +4375,21 @@ function fillBirthCard() {
 let stats = { persecution: 0, growth: 0 };
 let me, timer = null, paused = false, age = 0, phase = 'unheard', firstAge = null, faithAge = null, st = {}, hearCount = 0, others = [];
 
+// 在最新的一則紀錄後面加一個收起來的「了解背景」，國情補充放在這裡，不打斷人生的節奏
+function bgMore(text) {
+  const li = $('log').firstElementChild; if (!li || !text) return;
+  const d = document.createElement('details'); d.className = 'bgmore'; d.innerHTML = '<summary>了解背景</summary><p></p>';
+  d.querySelector('p').textContent = text; li.querySelector('.t').appendChild(d);
+}
+let helpOnce = false;
 function addLog(a, text, cls = '', help = false) {
   const li = document.createElement('li');
   if (cls && cls !== 'milestone' && cls !== 'scene') importantAt.add(a);
   if (cls) li.className = cls === 'scene' ? 'milestone scene' : cls;
   li.innerHTML = `<span class="a">${a} 歲</span><span class="t"></span>`;
   li.querySelector('.t').textContent = String(cls).includes('note') ? text : localize(text);
-  if (help) {
+  if (help && !helpOnce) {
+    helpOnce = true;
     const h = document.createElement('span'); h.className = 'help';
     h.innerHTML = `世界上確實有基督徒正經歷這樣的處境。<a href="${HELP_URL}" target="_blank" rel="noopener">了解他們的處境，或為他們代禱</a>`;
     li.querySelector('.t').appendChild(h);
@@ -4440,7 +4590,7 @@ const SITU = [
   { when: () => me.country.id === 'US' && phase !== 'unheard', items: [[15, 80, '你讀到一篇舊報導：一間教會的查經聚會發生槍擊，家屬在法庭上對兇手說，我們原諒你。', '2015 年 6 月，查爾斯頓的以馬內利非裔衛理公會教會發生槍擊，九人死亡。幾天後的法庭上，好幾位家屬對兇手說，他們原諒他。', 0.5],
     [15, 80, '你讀到艾美許人的故事，他們去了殺害自己孩子的人的喪禮。', '2006 年，賓州艾美許人的學校發生槍擊，五個女孩死亡。槍手的喪禮上，約三十位艾美許人到場，安慰他的遺孀。', 0.5]] },
   { when: () => phase === 'believer' && !hardHere(), items: [[20, 50, '你開始把從小學到的信仰一條一條拆開來想，有些放下了，有些反而更確定。'],
-    [20, 70, '你每個月資助一個在遠方的孩子，桌上貼著他寄來的畫。'], [20, 70, '你跟著教會去監獄探訪，有個受刑人說，他已經十年沒有人來看他了。'], [16, 70, '晚上，你們去車站附近發便當給街友，有人一邊吃一邊跟你說起他的家。'],
+    [20, 70, '你每個月資助一個在遠方的孩子，桌上貼著他寄來的畫。'], [20, 70, '你跟著教會去監獄探訪，有個受刑人說，他已經十年沒有人來看他了。'], [16, 70, '晚上，你們去車站附近發熱食給沒有地方住的人，有人一邊吃一邊跟你說起他的家。'],
     [25, 70, '教會接待了一個難民家庭，你幫他們的孩子找學校。'], [30, 75, '你在安寧病房當志工，陪一位老人走完最後一段路。']] },
   // 禮拜的樣子
   { when: () => isProt() && believerish() && !hardHere() && me.worship === 'high', items: [[6, 70, '聖灰日那天，牧師用灰在你額頭上畫了一個十字。'], [10, 80, '每個主日都有聖餐，你跪在欄杆前，伸出雙手。'], [8, 80, '你翻開禮文本，跟著大家一起念認罪文。'], [6, 60, '聖誕夜的崇拜點滿了蠟燭，大家輪流上台讀經。']] },
@@ -4472,7 +4622,7 @@ let situCount = 0;
 const FUN_CHURCH = [
   [6, 12, '主日學的點心被你偷吃了一半，老師假裝沒看到。'], [6, 12, '聖誕節演戲，你演第三隻羊，只有一句台詞「咩」，你還是忘詞了。'],
   [12, 18, '營會的晚會，輔導們扮成各種角色跳舞，全場笑到停不下來。'], [13, 20, '青少年團契玩「殺手遊戲」玩到十二點，隔天主日大家都在打瞌睡。'],
-  [15, 60, '詩班練到第三遍，司琴阿姨說：「再一次，最後一次。」那是第五個最後一次。'], [16, 70, '團契的便當訂了三十個，來了四十五個人。大家很有默契地把雞腿切成兩半。'],
+  [15, 60, '詩班練到第三遍，司琴阿姨說：「再一次，最後一次。」那是第五個最後一次。'], [16, 70, '團契的餐點訂了三十份，來了四十五個人。大家很有默契地把雞腿切成兩半。'],
   [18, 50, '教會退修會，你被分到跟最會打呼的那位叔叔同房，整晚數羊都沒用。'], [20, 70, '禱告會上你一緊張，把「奉主耶穌的名」講成「奉主耶穌的命」，旁邊的人都在憋笑。', 'p'],
   [20, 70, '有位阿姨每次見到你，都問你什麼時候結婚。等你結了婚，她開始問你什麼時候生小孩。'], [18, 60, '你負責放投影片，唱到一半，歌詞突然停在上一首，全場的人自動清唱了起來。', 'p'],
   [25, 80, '教會的冷氣壞了，牧師說今天的講道會短一點。結果那天講了一個半小時。'], [10, 70, '主日聚餐說好每家帶一道菜，結果桌上有七鍋炒米粉。', 'tw'],
@@ -4652,7 +4802,7 @@ function start(opt = {}) {
   stop(); music.play();
   $('birth').classList.remove('living');
   me = makePerson(opt && opt.tw ? { tw: true } : {}); assignTrad(me);
-  scenePlan = planScenes(me); paradoxShown = false; lastLife = null; ancestorLocal = false; cnSceneUsed = new Set(); cnSceneCount = 0; ministry = newMinistry(); arc = null; arcUsed = new Set(); castSeen = new Set(); funCount = 0; closeRecap(); crossN = 0; crossP = 0; mvSeen = new Set(); explainSeen = new Set(); cfNodes = []; notesShown = new Set(); arcEnds = []; helpShown = new Set(); sceneUsed = new Set(); importantAt = new Set(); nearCount = 0; otherSideShown = false;
+  scenePlan = planScenes(me); paradoxShown = false; helpOnce = false; scamSeen = false; lastLife = null; ancestorLocal = false; cnSceneUsed = new Set(); cnSceneCount = 0; ministry = newMinistry(); arc = null; arcUsed = new Set(); castSeen = new Set(); funCount = 0; closeRecap(); crossN = 0; crossP = 0; mvSeen = new Set(); explainSeen = new Set(); cfNodes = []; notesShown = new Set(); arcEnds = []; helpShown = new Set(); sceneUsed = new Set(); importantAt = new Set(); nearCount = 0; otherSideShown = false;
   others = Array.from({ length: 4 }, simulateNPC);
   channel = null; journey = []; highlights = []; feeling = null; lastCross = -99; stats = { persecution: 0, growth: 0 }; words = []; reflectUsed = new Set(); penteSeen = false; penteConv = 0; situCount = 0; tradNoteShown = false; neoSeen = false; pendingReflect = null; age = 0; phase = 'unheard'; firstAge = null; faithAge = null; st = {}; hearCount = 0; paused = false;
   $('log').innerHTML = ''; $('choiceSlot').innerHTML = ''; $('end').hidden = true;
@@ -4707,6 +4857,7 @@ function showAge(a) {
   $('lifeProg').style.width = `${Math.min(100, a)}%`;
 }
 function tick() {
+  if (scamScene()) return;
   showScene(age);
   age++;
   if (age > me.lifespan) return finish(false);
@@ -4732,7 +4883,7 @@ function tick() {
       if (cls === 'persecution') stats.persecution++; else if (cls === 'growth') stats.growth++;
       const txt = softText(ev);
       addLog(age, txt, cls, !!ev.help);
-      if (cls === 'persecution' && !paradoxShown && PARADOX[me.country.id] && me.country.wwl.rank) { paradoxShown = true; addLog(age, `小提醒：${me.country.name}有不少基督徒，也有公開的教會，但${PARADOX[me.country.id][1]}不是每個基督徒都會遇到，出生卡「基督教在${me.country.name}」有說明。`, 'milestone note'); }
+      if (cls === 'persecution' && !paradoxShown && PARADOX[me.country.id] && me.country.wwl.rank) { paradoxShown = true; addLog(age, `小提醒：這類事情在${me.country.name}集中在某些地區或群體，不是每個基督徒都會遇到。`, 'milestone note'); bgMore(PARADOX[me.country.id][0]); }
       if (cls !== 'milestone') highlights.push({ age, text: txt, cls });
       if (!trigger && CROSS_TRIGGERS[ev.id] && !(ev.id === 'ancestor' && isCath())) { trigger = CROSS_TRIGGERS[ev.id]; triggerId = ev.id; }
       // 被安排婚姻之後，原本排好的「遇到想共度一生的人」拿掉
@@ -4748,7 +4899,8 @@ function tick() {
       const k = cnClosed && me.cnChurch === 'house' ? 'closed' : me.cnChurch === 'tspm' && Math.random() < 0.03 ? 'invite' : me.cnChurch === 'house' && Math.random() < 0.03 ? 'register' : null;
       if (k) { if (PAUSES.includes(age)) pendingReflect = age; return cnChoice(k); }
     }
-    if (!trigger && phase === 'believer' && age === 19 && faithAge < 19 && Math.random() < 0.7) { trigger = '你離開家去讀書或工作，身邊沒有人會問你這週有沒有去教會。'; triggerId = 'leave_home'; }
+    // 已經離開家（逃離、出國、守獨身進修會、已經成家）的人，不會再有「第一次離家」
+    if (!trigger && phase === 'believer' && age === 19 && faithAge < 19 && !me.fled && !me.emigrated && !me.celibate && !(me.partnerAt != null && me.partnerAt <= age) && Math.random() < 0.7) { trigger = '在新的地方，你要不要自己找一間教會？'; triggerId = 'leave_home'; }
     // 沒去教會的人，偶爾會有人邀請你回來
     if (!trigger && phase === 'dechurched' && Math.random() < 0.06) { trigger = '一個老朋友約你，這週要不要一起回教會看看？'; triggerId = 'invite'; }
     // 十字路口一生最多三次，因為迫害而來的最多兩次、而且相隔至少八年，避免一再「重新決定要不要信」
@@ -4776,25 +4928,25 @@ function earlyHear() {
   if (PAUSES.includes(age)) reflect(age);
 }
 
-let sceneCh = null;
+let sceneCh = null, sceneTxt = null;
 function hear() {
-  stop(); hearCount++; sceneCh = null;
+  stop(); hearCount++; sceneCh = null; sceneTxt = null;
   const first = firstAge === null;
   if (first) firstAge = age;
   const firstChoice = hearCount === 1;
   const how = phase === 'left' ? '你又想起了耶穌。那些放下很久的事，好像又回到心裡。' : me.parentReligion === 'christian'
     ? (firstChoice ? (first ? '你跟著家人去教會，這一次你開始認真想：耶穌跟我有什麼關係？' : '從小在教會聽的那些故事，這一次你開始認真想：這跟我有什麼關係？') : age < 12 ? '爸媽帶你去教會，你又一次聽見福音。' : '你自己走進教會，又一次聽見福音。')
-    : (() => { const ch = pickChannel(me, age); if (!channel) channel = { age, short: ch.short, id: ch.id }; if (first) { sceneCh = ch.id; if (ch.id === 'defect') me.emigrated = true; return ch.text; } if (firstChoice) return '小時候聽過的那個名字，這一次又出現了。' + ch.text; return (CALLBACK[channel && channel.id] || CALLBACK_DEFAULT) + ch.text; })();
+    : (() => { const ch = pickChannel(me, age); if (!channel) channel = { age, short: ch.short, id: ch.id, cb: ch.cb }; if (first) { sceneCh = ch.id; sceneTxt = ch.scene || null; if (ch.id === 'defect') me.emigrated = true; return ch.text; } if (firstChoice) return '小時候聽過的那個名字，這一次又出現了。' + ch.text; return ((channel && channel.cb) || CALLBACK[channel && channel.id] || CALLBACK_DEFAULT) + ch.text; })();
   addLog(age, how, 'gospel');
   if (first) highlights.push({ age, text: channel && channel.age === age ? `第一次接觸到福音，透過${channel.short}。` : '第一次接觸到福音。', cls: 'gospel' });
   setStatus();
   const box = document.createElement('div'); box.className = 'choice';
   const x = faithCtx(), cost = costLines(x), desc = CHOICE_DESC[x];
   // 完整場景：第一次接觸福音才有；基督徒家庭第一次做選擇時，只加一句處境
-  const scene = sceneCh ? CONTACT_SCENE[sceneCh] || '' : '';
+  const scene = sceneCh ? sceneTxt || CONTACT_SCENE[sceneCh] || '' : '';
   const bridge = scene && !NO_BRIDGE.includes(sceneCh) && lastLife && age - lastLife.age <= 3 ? BRIDGE[lastLife.text] || '' : '';
   const situ = scene || (x === 'cfam' && firstChoice) ? situationLine(x) : '';
-  box.innerHTML = `<h3>${age} 歲，${phase === 'left' ? '你又想起了耶穌' : '你聽見了福音'}</h3>${scene ? '<p class="scene"></p>' : ''}${situ ? '<p class="situ"></p>' : ''}${cost.length ? `<div class="cost"><p class="eyebrow">在你的處境裡，這個選擇可能意味著</p><ul>${cost.map(() => '<li></li>').join('')}</ul></div>` : ''}<p>你要怎麼回應？</p><div class="opts">${
+  box.innerHTML = `<h3>${age} 歲，${phase === 'left' ? '你又想起了耶穌' : x === 'cfam' ? '從小的信仰，是你的嗎？' : '你聽見了福音'}</h3>${scene ? '<p class="scene"></p>' : ''}${situ ? '<p class="situ"></p>' : ''}${cost.length ? `<div class="cost"><p class="eyebrow">在你的處境裡，這個選擇可能意味著</p><ul>${cost.map(() => '<li></li>').join('')}</ul></div>` : ''}<p>你要怎麼回應？</p><div class="opts">${
     Object.entries(CHOICES).map(([k, c]) => `<button data-c="${k}"><b>${c.label}</b><small>${desc[k]}</small></button>`).join('')}</div>`;
   box.querySelectorAll('.cost li').forEach((li, i) => li.textContent = cost[i]);
   if (scene) box.querySelector('.scene').textContent = (bridge ? bridge : '') + scene;
@@ -4819,7 +4971,7 @@ function choose(c) {
   $('choiceSlot').innerHTML = '';
   if (!cfNodes.some(n => n.gospel) && x !== 'left') cfNodes.unshift({ gospel: true, age, title: '第一次認真面對福音', chose: { respond: '決定跟隨耶穌', wait: '想再多了解一點', decline: '沒有選擇這份信仰' }[c], alt: gospelAlts(c, x) });
   if (c === 'respond' && phase === 'left') { phase = 'believer'; journey.push({ age, kind: 'return_faith' }); addLog(age, '你決定重新相信耶穌。', 'gospel'); highlights.push({ age, text: '重新回到了信仰。', cls: 'growth' }); }
-  else if (c === 'respond') { phase = 'believer'; faithAge = age; journey.push({ age, kind: 'faith' }); addLog(age, '你決定跟隨耶穌。', 'gospel'); highlights.push({ age, text: '決定跟隨耶穌。', cls: 'gospel' }); tradNote(age); }
+  else if (c === 'respond') { phase = 'believer'; faithAge = age; journey.push({ age, kind: 'faith' }); addLog(age, faithLine(x), 'gospel'); highlights.push({ age, text: faithHL(x), cls: 'gospel' }); tradNote(age); }
   else if (phase === 'left') { addLog(age, desc, 'milestone'); }
   else { phase = c; addLog(age, desc, 'milestone'); }
   if (x !== 'left') addLog(age, afterLine(c, x), 'milestone');
@@ -4925,7 +5077,7 @@ function titleCtx(end, martyred) {
     first: firstAge, faith: faithAge, hear: hearCount, top: ministry && ministry.top, pk: ministry && ministry.pk, trad: me.trad,
     pers: stats.persecution, fled: !!me.fled, hard: hardHere(), arcs: arcUsed, ends: arcEnds.map(x => x.s).join('｜'),
     secret: S && S.t === 'secret' ? arc.id : null, jr, retAge: ret.length ? ret[ret.length - 1].age : null,
-    leaveAge: lastJourneyAge('leave'), told: logT.filter(t => /^你把福音告訴了一個朋友/.test(t)).length, led: logT.filter(t => /^有一個人因為你而信了耶穌/.test(t)).length,
+    leaveAge: lastJourneyAge('leave'), told: stats.told || 0, led: logT.filter(t => /^有一個人因為你而信了耶穌/.test(t)).length,
     chose: cfNodes.map(n => n.chose).join('｜'), switched: logT.some(t => /^你換了教會/.test(t)),
   };
 }
@@ -5086,7 +5238,7 @@ function recapSlides(end, martyred) {
   if (ppl.length) S.push({ k: 'people', eyebrow: '走進你故事裡的人', chips: ppl, lines: ['有些人陪你走了一段，有些人讓你很難忘記。'] });
   const nums = [[end, '年，你活了這麼久']];
   if (stats.persecution > 0) nums.push([stats.persecution, '次，因為信仰而來的壓力']);
-  const told = count(/^你把福音告訴了一個朋友|^有一個人因為你而信了耶穌/); if (told > 0) nums.push([told, '次，你把福音告訴了別人']);
+  const told = (stats.told || 0) + count(/^有一個人因為你而信了耶穌/); if (told > 0) nums.push([told, '次，你把福音告訴了別人']);
   if (arcUsed.size > 0) nums.push([arcUsed.size, '段，讓你停下來做決定的故事']);
   if (words.length > 0) nums.push([words.length, '個問題，你在人生的停頓裡回答過']);
   S.push({ k: 'nums', eyebrow: '這一生的數字', nums: nums.slice(0, 4), quiet: o === 'martyred' });
@@ -5166,7 +5318,7 @@ function finish(martyred) {
     <p class="finale-place"></p>
     <div class="epitaph" id="epitaph"></div>
     <div class="ponder"><p class="eyebrow">想一想</p><p class="q" id="endQ"></p></div>
-    <div class="controls endcta"><a class="btn primary" href="#share" id="toShare">分享這段人生</a><button id="againTop">再活一次</button></div>
+    <div class="theo-guide"><p class="eyebrow">還有一個值得思考的問題</p><p class="q">「那些一輩子都沒機會認識耶穌的人，最後會怎樣？」</p><button type="button" id="toTheo">探索不同的神學回答 <span aria-hidden="true">↓</span></button></div>
     </section>
     <section class="band b2 recap">
     <p class="eyebrow">這一生的摘要</p>
@@ -5265,8 +5417,9 @@ function finish(martyred) {
     box.querySelector('.q').textContent = v;
   };
   E.hidden = false;
-  $('againBtn').onclick = $('againTop').onclick = () => start();
-  $('toShare').onclick = e => { e.preventDefault(); $('share').scrollIntoView({ behavior: SMOOTH, block: 'start' }); };
+  $('againBtn').onclick = () => start();
+  $('toTheo').onclick = goTheo;
+  theoHintOnce(document.querySelector('#end .theo-matrix'));
   $('memBtn').onclick = () => { showHome(); $('memorial').scrollIntoView({ behavior: SMOOTH, block: 'start' }); };
   $('homeBtn').onclick = $('homeTop').onclick = () => { showHome(); window.scrollTo({ top: 0, behavior: SMOOTH }); };
   E.scrollIntoView({ behavior: SMOOTH, block: 'start' });
