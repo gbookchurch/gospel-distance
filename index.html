@@ -3845,15 +3845,16 @@ function drawQR(x, text, left, top, size, dark, light) {
   } catch (e) { return false; }
 }
 // ── 色彩系統：出生背景、性別、信仰歷程 ───────────────────────────
-// 宗教的顏色（家庭宗教、改信之後的傳統都用這一張表）
+// 宗教色：用相對明亮、較高彩度的顏料表現信仰歷程；出生地則用較深的色域。
 const HUES = {
-  protestant: ['基督新教', '#D3AA54'], catholic: ['天主教', '#C48760'], orthodox: ['東正教', '#A3B5C7'], oriental: ['東方正教', '#C7B5A3'], assyrian: ['亞述教會', '#C7B5A3'], lds: ['摩門教', '#DECA9F'],
-  muslim: ['伊斯蘭', '#459F95'], hindu: ['印度教', '#E39A4B'], buddhist: ['佛教', '#B45A68'], folk: ['道教與民間信仰', '#CB684E'],
-  jewish: ['猶太教', '#4B6696'], sikh: ['錫克教', '#E2AB4B'], ethnic: ['傳統信仰', '#AF8856'], none: ['無宗教', '#AAA9A2']
+  protestant: ['基督新教', '#E5BA56'], catholic: ['天主教', '#D78652'], orthodox: ['東正教', '#B0C4D6'], oriental: ['東方正教', '#CFBEAE'], assyrian: ['亞述教會', '#CFBEAE'], lds: ['摩門教', '#E8D5AA'],
+  muslim: ['伊斯蘭', '#4CB6A4'], hindu: ['印度教', '#EE9B42'], buddhist: ['佛教', '#BF6279'], folk: ['道教與民間信仰', '#DC7054'],
+  jewish: ['猶太教', '#627FC0'], sikh: ['錫克教', '#EABD50'], ethnic: ['傳統信仰', '#BBA06D'], none: ['無宗教', '#C7C5BF']
 };
 const SEX_HUE = { m: ['男生', '#6D9D78'], f: ['女生', '#6C9FC5'] };
-// 出生的地區：按洲分色調，同一洲的國家再做小幅變化
-const REGIONS = { ea: ['東亞', '#606A70'], sea: ['東南亞', '#8C7F9A'], sa: ['南亞', '#C29A62'], mena: ['中東與北非', '#BEA584'], af: ['撒哈拉以南非洲', '#B47D65'], eu: ['歐洲', '#7291A6'], am: ['美洲', '#BE886E'], oc: ['大洋洲', '#65A0AF'] };
+// 出生地區：固定使用較深、較低彩度的色域，讓邊框和宗教絲帶有明確的明度分工。
+// 特別避免「撒哈拉以南非洲赤土色」與「天主教銅色」撞色：非洲改為深海藍。
+const REGIONS = { ea: ['東亞', '#485B6B'], sea: ['東南亞', '#665D83'], sa: ['南亞', '#476E73'], mena: ['中東與北非', '#68667E'], af: ['撒哈拉以南非洲', '#3E6C89'], eu: ['歐洲', '#526A86'], am: ['美洲', '#715C78'], oc: ['大洋洲', '#377E8C'] };
 const REGION_OF = {};
 for (const [k, ids] of Object.entries({ ea: 'TW KR JP CN KP', sea: 'PH ID VN MM TH', sa: 'IN PK BD', mena: 'EG MA IR YE IQ TR SY SA DZ SD UZ AF', eu: 'RU DE GB FR', am: 'US BR MX CO', af: 'CD ET NG TZ UG KE AO MZ ZA NE MG CI ML CM TD GH SO BF ZM MW' })) for (const id of ids.split(' ')) REGION_OF[id] = k;
 function hexHsl(h) {
@@ -3871,10 +3872,10 @@ function hslHex(h, s, l) {
   return '#' + [r, g, b].map(v => Math.round((v + m) * 255).toString(16).padStart(2, '0')).join('');
 }
 const strHash = s => [...String(s)].reduce((a, ch) => (a * 31 + ch.charCodeAt(0)) >>> 0, 7);
-// 同一洲同一色系；每個國家在 OKLCH 裡色相 ±8°、明度 ±0.03、彩度小幅變化（上限 0.09），依國家代碼固定
+// 同一洲同一色系；各國小幅變動但限制 OKLab 明度與彩度，維持「深色出生邊框」的辨識角色。
 function regionColor(c) {
   const r = REGIONS[REGION_OF[c.id] || 'af'], R = mulberry(strHash('country:' + c.id)), l = hexLab(r[1]), L = l[0], C = Math.hypot(l[1], l[2]), h = Math.atan2(l[2], l[1]);
-  const L2 = L + (R() - 0.5) * 0.06, C2 = Math.min(0.09, C * (0.9 + R() * 0.2)), h2 = h + (R() - 0.5) * 16 * Math.PI / 180;
+  const L2 = Math.min(0.57, Math.max(0.38, L + (R() - 0.5) * 0.035)), C2 = Math.min(0.085, C * (0.94 + R() * 0.12)), h2 = h + (R() - 0.5) * 8 * Math.PI / 180;
   return [r[0], labHex([L2, C2 * Math.cos(h2), C2 * Math.sin(h2)])];
 }
 // 這一年你在哪個信仰裡
@@ -4224,27 +4225,19 @@ function riverArt(W, H, spec, o = {}) {
   if (!o.noFrame) drawFrame(x, W, H, spec, o.frame);
   return cv;
 }
-// 出生地的邊框：最外緣 100% 濃度，往內漸漸變透明、邊緣模糊；內緣有一點手繪的不規則，顏色本身帶一點斜向的深淺漸層
+// 出生地邊框：四條筆直色帶，色相統一、明度有輕微變化；回顧與分享卡共用。
 function drawFrame(x, W, H, spec, f = 0.042) {
-  const S = Math.min(W, H), bw = S * f, nb = noise1(mulberry(spec.seed + 7)), st = Math.max(4, S / 120), N = 12, reach = bw * 1.45;
-  const c = document.createElement('canvas'); c.width = W; c.height = H; const y = c.getContext('2d');
-  const base = hexLab(spec.region), gr = y.createLinearGradient(0, 0, W, H);
-  gr.addColorStop(0, labHex([base[0] + 0.04, base[1], base[2]])); gr.addColorStop(1, labHex([base[0] - 0.04, base[1], base[2]]));
-  y.fillStyle = gr;
-  // 一圈一圈往內縮，每圈都從畫布外緣填到它的內緣；越外面疊越多層，所以外緣是實色，往內越來越淡
-  for (let i = 1; i <= N; i++) {
-    const inset = reach * i / N, amp = inset * 0.16, wob = d => (nb(d / (S / 9) + i * 0.13) - 0.5) * 2 * amp, pts = [];
-    for (let d = inset; d <= W - inset; d += st) pts.push([d, inset + wob(d)]);
-    for (let d = inset; d <= H - inset; d += st) pts.push([W - inset - wob(W + d), d]);
-    for (let d = W - inset; d >= inset; d -= st) pts.push([d, H - inset - wob(W + H + d)]);
-    for (let d = H - inset; d >= inset; d -= st) pts.push([inset + wob(2 * W + H + d), d]);
-    y.globalAlpha = 0.32; y.beginPath(); y.rect(0, 0, W, H); y.moveTo(pts[0][0], pts[0][1]); for (const p of pts) y.lineTo(p[0], p[1]); y.closePath(); y.fill('evenodd');
-  }
-  // 最外面一圈補成實色，確保邊緣是 100% 濃度
-  y.globalAlpha = 1; y.fillRect(0, 0, W, bw * 0.25); y.fillRect(0, H - bw * 0.25, W, bw * 0.25); y.fillRect(0, 0, bw * 0.25, H); y.fillRect(W - bw * 0.25, 0, bw * 0.25, H);
-  let out = c;
-  if ('filter' in y) { const b = document.createElement('canvas'); b.width = W; b.height = H; const z = b.getContext('2d'); z.filter = `blur(${Math.max(1, Math.round(bw * 0.12))}px)`; z.drawImage(c, 0, 0); z.filter = 'none'; z.globalAlpha = 1; z.fillStyle = gr; z.fillRect(0, 0, W, bw * 0.2); z.fillRect(0, H - bw * 0.2, W, bw * 0.2); z.fillRect(0, 0, bw * 0.2, H); z.fillRect(W - bw * 0.2, 0, bw * 0.2, H); out = b; }
-  x.save(); x.globalCompositeOperation = 'source-over'; x.drawImage(out, 0, 0); x.restore();
+  const bw = Math.max(4, Math.round(Math.min(W, H) * f)), lab = hexLab(spec.region), gr = x.createLinearGradient(0, 0, W, H);
+  gr.addColorStop(0, labHex([Math.min(1, lab[0] + 0.024), lab[1], lab[2]]));
+  gr.addColorStop(1, labHex([Math.max(0, lab[0] - 0.024), lab[1], lab[2]]));
+  x.save(); x.globalCompositeOperation = 'source-over'; x.fillStyle = gr;
+  x.fillRect(0, 0, W, bw); x.fillRect(0, H - bw, W, bw);
+  x.fillRect(0, bw, bw, H - 2 * bw); x.fillRect(W - bw, bw, bw, H - 2 * bw);
+  // 一道細緻的內緣分隔線，讓深色邊框和透明水彩更清楚分層。
+  const hair = Math.max(1, Math.round(bw * 0.085)); x.fillStyle = 'rgba(255,255,255,0.38)';
+  x.fillRect(bw - hair, bw, hair, H - 2 * bw); x.fillRect(W - bw, bw, hair, H - 2 * bw);
+  x.fillRect(bw, bw - hair, W - 2 * bw, hair); x.fillRect(bw, H - bw, W - 2 * bw, hair);
+  x.restore();
 }
 // 回顧故事卡的背景：先鋪紙和邊框，河流沿著時間從左邊慢慢流進來；減少動態效果時直接顯示
 function recapRiver(box, spec, quiet) {
