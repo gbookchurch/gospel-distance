@@ -1260,7 +1260,7 @@ body.rc-open { overflow: hidden; }
     <div class="howto">
       <h3>這個遊戲怎麼決定你的人生？</h3>
       <dl>
-        <div><dt>出生地</dt><dd>參考各國出生人口，隨機決定你出生在哪裡。</dd></div>
+        <div><dt>出生地</dt><dd>53 個國家等機率抽選，每國都有相同的出生機會。</dd></div>
         <div><dt>家庭背景</dt><dd>參考族群與宗教資料，模擬你的成長環境。</dd></div>
         <div><dt>福音接觸</dt><dd>依公開資料及模型假設，計算你可能接觸福音的機會。</dd></div>
         <div><dt>人生經歷</dt><dd>依事件規則產生不同情節，玩家也會在重要時刻做出選擇。</dd></div>
@@ -1367,7 +1367,7 @@ body.rc-open { overflow: hidden; }
       <summary>模擬怎麼進行</summary>
       <div class="mbody">
         <ol>
-          <li><b>出生國家：</b>依各國年出生數加權抽籤。分母是這 53 國的出生總數，大約佔全球出生數的 87%。</li>
+          <li><b>出生國家：</b>從 53 國等機率抽選，每個國家各有 1/53（約 1.89%）的機會。這是增加不同人生體驗的遊戲設計，並非真實世界的出生人口比例。</li>
           <li><b>族群：</b>在國家裡依族群人口加權抽籤。佔全國人口不到 0.1% 的族群合併成「其他小族群」。</li>
           <li><b>父母的宗教：</b>國家整體用 Pew 的宗教組成，再依族群的基督徒比例（Joshua Project）調整高低。基督徒家庭再依國家整體的宗派比例，分成天主教、基督新教或東正教；美國另外依教會自報的會員人數（約占人口 2%），分出摩門教（耶穌基督後期聖徒教會）家庭，這只影響畫面上的文字，不改變接觸福音的機率。不是基督徒的家庭信什麼宗教：族群有明確的主要宗教時（Joshua Project），八成五照族群的主要宗教，其餘照國家整體的比例，例如生在美國的華人家庭，多半是沒有宗教。華人、韓國人、日本人族群的家庭，只會抽到民間信仰、佛教或沒有宗教，這是缺少族群層級資料時的簡化。這也只影響畫面上的文字。</li>
           <li><b>壽命：</b>以該國該性別的平均餘命為中心，加上標準差 14 歲的隨機變化，限制在 1 到 102 歲之間。平均餘命不是每個人的實際壽命，這只是簡化的做法，不是逐年生命表。</li>
@@ -1375,7 +1375,7 @@ body.rc-open { overflow: hidden; }
           <li><b>回應：</b>8 歲以後接觸到福音時由玩家選擇。</li>
           <li><b>信主之後：</b>依受迫害程度六大面向分數和族群的基督徒比例，產生信仰壓力、成長、殉道等事件。族群本身多為基督徒時，沒有教會、被家人反對這類事件會少很多；族群過半是基督徒時，國家、教會和暴力層面的事件也會大幅減少，因為那些壓力多半落在改信的人和教會領袖身上。從小在基督徒家庭長大的人，不會遇到家人反對、法律上無法更改宗教身分這類只有改信者才會遇到的事；「法律上無法更改宗教身分」只會出現在從穆斯林家庭改信、而且法律上不承認離開伊斯蘭教的國家（例如埃及、伊朗、巴基斯坦、摩洛哥），印尼、土耳其、孟加拉、奈及利亞這些可以更改或不登記宗教的國家不會出現；Open Doors 的資料著重基督徒的處境，同一個地區的穆斯林也常是武裝團體的受害者；如果族群過半是基督徒，也不會被鄰居排擠。基督徒過半的國家到處都有公開的教會，不會出現「附近沒有可以公開聚會的教會」；從小在基督徒家庭長大的人，只有在信仰本身幾乎不被允許的國家（受迫害程度的私人生活或教會生活分數 15 以上，例如北韓、索馬利亞），才會需要偷偷聚會、把聖經藏起來。</li>
           <li><b>信仰的十字路口：</b>遇到懷疑、受傷、信仰壓力等事件時，玩家可以選擇留下、離開教會或放下信仰，之後也可能回來。</li>
-          <li><b>名字：</b>每段人生出生時，依國家、族群、性別和家裡的宗教，從常見名字裡抽一個，名字是虛構的，不對應任何真實人物。每段人生都照 53 國的真實出生比例抽。</li>
+          <li><b>名字：</b>每段人生出生時，依國家、族群、性別和家裡的宗教，從常見名字裡抽一個，名字是虛構的，不對應任何真實人物。</li>
           <li><b>教會裡的秘密與醜聞：</b>有些人生會遇到教會裡的掙扎和醜聞，例如服事者越界、婚外情、挪用奉獻、被政治力量影響、神學爭議被公審，以及藏起自己性傾向的痛苦。一生最多兩條，中間的選擇會影響後來的走向。這些是劇情設計，不是統計資料，也不影響接觸福音的機率。</li>
           <li><b>服事的路：</b>信主後一直留在教會的人，可能被邀請當同工、小組長，甚至全職當牧師或宣教士，每一步都可以拒絕。服事中的事有好有壞，服事時的抉擇會影響之後比較常遇到哪一種。這些都是情境文字，不影響接觸福音的機率；只有在受迫害名單上的國家，牧師和家庭聚會帶領人遇到傳喚、拘留、聚會被突襲的機率是 1.5 倍，因為帶領聚會的人通常更容易被盯上。</li>
           <li><b>基督徒多，不代表沒有迫害：</b>受迫害程度是全國的評分，壓力常常集中在特定地區（例如武裝團體活動的地方）或特定的人（例如從其他宗教改信的人）。所以像喀麥隆、墨西哥、俄羅斯、印度、印尼這些基督徒不少、也有公開教會的國家，仍然在名單上。這 24 國在出生卡「基督教在…」裡有個別說明，人生紀錄第一次遇到迫害時也會有一句小提醒。</li>
@@ -1398,7 +1398,7 @@ body.rc-open { overflow: hidden; }
           <li>Pew 和 Joshua Project 對基督徒比例的估計可能差很多，尤其是有地下教會的國家，例如中國、伊朗。</li>
           <li>Joshua Project 提醒，族群的基督徒與福音派比例多為推估值，不建議拿來計算絕對人數。本遊戲只把它們當作相對的機率依據。</li>
           <li>母語聖經狀態只採用 Joshua Project 的欄位，沒有另外與其他聖經翻譯資料比對。</li>
-          <li>「出生機率」與排行的分母都是這 53 國，不是全世界。</li>
+          <li>遊戲裡的出生國家機率是每國 1/53，並非各國真實出生人口比例；接觸福音難度排行也只涵蓋這 53 國，不代表全世界。</li>
         </ul>
       </div>
     </details>
@@ -4128,11 +4128,11 @@ function renderRanking() {
 const DENOMS = [['catholic', '天主教', 'k-cat'], ['protestant', '基督新教', 'k-pro'], ['orthodox', '東正教', 'k-ort'], ['other', '其他', 'k-oth']];
 function renderDenoms() {
   const list = DATA.countries.filter(c => c.christian_traditions).sort((a, b) => b.religion_pct.christian - a.religion_pct.christian);
-  // 依出生人數加權：在這 53 國出生、家裡是基督徒的人，各宗派大概佔多少
+  // 依遊戲的 53 國等機率抽選，再以每國基督徒比例加權看基督徒家庭的宗派分布。
   const tot = { catholic: 0, protestant: 0, orthodox: 0, other: 0 };
-  for (const c of list) for (const [k] of DENOMS) tot[k] += c.births_per_year * c.religion_pct.christian * c.christian_traditions[k];
+  for (const c of list) for (const [k] of DENOMS) tot[k] += c.religion_pct.christian * c.christian_traditions[k];
   const s = Object.values(tot).reduce((a, b) => a + b, 0);
-  $('denomSum').textContent = `依出生人數加權，在這 53 國出生的基督徒家庭裡，${DENOMS.map(([k, n]) => `${n}約 ${Math.round(tot[k] / s * 100)}%`).join('、')}。`;
+  $('denomSum').textContent = `以 53 國等機率出生、再考慮各國基督徒比例，在模擬的基督徒家庭裡，${DENOMS.map(([k, n]) => `${n}約 ${Math.round(tot[k] / s * 100)}%`).join('、')}。`;
   $('denomList').innerHTML = list.map(c => `<li class="${c.id === 'TW' ? 'tw' : ''}"><span class="n"></span><span class="v"></span><span class="denombar">${
     DENOMS.map(([k, , cls]) => `<i class="${cls}" style="width:${c.christian_traditions[k]}%"></i>`).join('')}</span><span class="d"></span></li>`).join('');
   [...$('denomList').children].forEach((li, i) => {
@@ -4423,15 +4423,12 @@ function fillBirthCard() {
   $('whoCountry').textContent = c.name;
   $('whoName').textContent = `家人叫你　${me.name}`;
   $('whoMeta').textContent = `${d.getFullYear()} 年 ${d.getMonth() + 1} 月・${c.continent}`;
-  const tags = [...(me.designated ? ['指定出生在台灣（真實比例約每 ' + twOdds().toLocaleString() + ' 個嬰兒一個）'] : []), me.sex === 'm' ? '男孩' : '女孩', g.name.startsWith('其他') ? '當地的少數族群' : g.name, `家庭宗教：${relName(me)}`];
+  const tags = [...(me.designated ? ['指定出生在台灣'] : []), me.sex === 'm' ? '男孩' : '女孩', g.name.startsWith('其他') ? '當地的少數族群' : g.name, `家庭宗教：${relName(me)}`];
   if (g.language_name) tags.push(`母語：${g.language_name}`);
   $('whoTags').innerHTML = tags.map(() => '<li></li>').join('');
   [...$('whoTags').children].forEach((li, i) => li.textContent = tags[i]);
   $('birthStory').textContent = `${d.getFullYear()} 年 ${d.getMonth() + 1} 月，你出生在${c.name}（${c.continent}），是個${me.sex === 'm' ? '男孩' : '女孩'}，家人叫你${me.name}。你的家人是${g.name.startsWith('其他') ? '當地的少數族群' : g.name}${g.language_name ? `，說${g.language_name}` : ''}，家裡${relPhrase(me)}。`;
-  // 在 53 國中的位置
-  const all = DATA.countries.reduce((s, x) => s + x.births_per_year, 0);
-  const share = c.births_per_year / all * 100;
-  $('birthOdds').innerHTML = `在這 53 國每年出生的嬰兒裡，有 <b>${share.toFixed(share < 1 ? 2 : 1)}%</b> 在${c.name}出生，一年大約 ${Math.round(c.births_per_year / 1e4).toLocaleString()} 萬人，每 <b>${Math.round(all / c.births_per_year).toLocaleString()}</b> 個嬰兒就有 1 個。`;
+  $('birthOdds').innerHTML = `這次模擬從 <b>${DATA.countries.length} 國等機率</b>抽選出生地，每國的機會都是 <b>1/${DATA.countries.length}（約 ${(100 / DATA.countries.length).toFixed(2)}%）</b>。你抽到了${c.name}；真實世界的出生人口比例則各國不同。`;
   // 當地宗教
   const [topK, topV] = topReligion(c);
   $('relTitle').textContent = `${c.name}的宗教與文化`;
@@ -5335,11 +5332,10 @@ function collectTitle(name) {
 }
 function recapSlides(end, martyred) {
   const c = me.country, g = me.group, o = lifeOutcome(martyred), d = new Date();
-  const all = DATA.countries.reduce((s, x) => s + x.births_per_year, 0), one = Math.round(all / c.births_per_year);
   const logT = [...document.querySelectorAll('#log li .t')].map(x => x.textContent);
   const count = re => logT.filter(t => re.test(t)).length;
   const S = [];
-  S.push({ k: 'birth', eyebrow: `${d.getFullYear()} 年 ${d.getMonth() + 1} 月`, big: c.name, lines: [`你出生了，家人叫你${me.name}。`, `${g.name.startsWith('其他') ? '當地的少數族群' : g.name}・家庭宗教：${relName(me)}`, `這 53 國每年出生的嬰兒裡，每 ${one.toLocaleString()} 個就有 1 個在${c.name}。`] });
+  S.push({ k: 'birth', eyebrow: `${d.getFullYear()} 年 ${d.getMonth() + 1} 月`, big: c.name, lines: [`你出生了，家人叫你${me.name}。`, `${g.name.startsWith('其他') ? '當地的少數族群' : g.name}・家庭宗教：${relName(me)}`, `這次從 53 國等機率抽選出生地，你來到了${c.name}。`] });
   if (firstAge === null) S.push({ k: 'far', eyebrow: '福音的距離', big: '很遠', lines: ['這一生，你沒有機會清楚認識福音。', '不是因為你不願意，而是它一直沒有走到你身邊。'] });
   else S.push({ k: 'gospel', eyebrow: '第一次聽見', big: `${firstAge} 歲`, lines: [channel && channel.age === firstAge ? `透過${channel.short}，你第一次接觸到福音。` : '你第一次接觸到福音。', faithAge !== null ? (faithAge === firstAge ? '同一年，你決定跟隨耶穌。' : `${faithAge} 歲，你決定跟隨耶穌。`) : '你想了很久，最後沒有選擇這份信仰。'] });
   const JL = { leave: '你放下了信仰', dechurch: '你離開了教會', return_faith: '你重新回到信仰', return_church: '你回到了教會' };

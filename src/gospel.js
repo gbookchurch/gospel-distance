@@ -73,9 +73,9 @@ function pickWeighted(items, weightFn, rand = Math.random) {
   return items[items.length - 1];
 }
 
-// 出生：國家依出生數、族群依人口、父母宗教依 Pew（族群若有基督徒比例則用族群的）
+// 出生：53 個國家等機率；選定國家後，族群依人口、父母宗教依 Pew 等資料。
 function birth(data, rand = Math.random) {
-  const country = pickWeighted(data.countries, c => c.births_per_year, rand);
+  const country = data.countries[Math.min(data.countries.length - 1, Math.floor(rand() * data.countries.length))];
   const group = pickWeighted(country.people_groups, g => g.population, rand);
   // 國家總量用 Pew（表面可見的比例），族群間的高低差用 Joshua Project 調整
   const rel = country.christian_pct ? (group.christian_pct ?? country.christian_pct) / country.christian_pct : 1;
