@@ -212,6 +212,12 @@ label { font-size: 14px; color: var(--muted); display: flex; gap: 8px; align-ite
 .memlist .said { grid-column: 1 / -1; font-size: 14px; color: var(--muted); }
 .memlist .cmp { grid-column: 1 / -1; justify-self: start; font-size: 14px; padding: 8px 14px; min-height: 40px; }
 .memlist .cmp[aria-pressed="true"] { background: var(--lamp-soft); border-color: var(--lamp); }
+/* 每段人生的色彩：左邊一枚水彩印記，整列帶一點淡淡的暈染 */
+.memlist li { grid-template-columns: 46px 1fr auto; padding: 14px 12px; background: var(--wash); border-radius: 12px; border-bottom: 0; margin-bottom: 8px; border: 1px solid color-mix(in srgb, var(--line) 70%, transparent); }
+.memlist { border-top: 0; }
+.memlist .seal { grid-row: 1 / span 4; width: 42px; height: 42px; border-radius: 50%; background: var(--seal), #fbfaf6; box-shadow: 0 0 0 3px color-mix(in srgb, var(--rim) 45%, transparent), inset 0 0 0 1px rgba(0,0,0,.06); filter: saturate(1.05); align-self: start; }
+.memlist .seal.dark { background: var(--seal), #1f2221; }
+.memlist .what, .memlist .said, .memlist .cmp { grid-column: 2 / -1; }
 .compare { border: 1px solid var(--lamp); border-radius: 10px; padding: 12px; display: grid; gap: 0; background: var(--surface); }
 .compare > div { display: grid; grid-template-columns: 7em 1fr 1fr; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
 .compare > div span, .compare > div b { min-width: 0; overflow-wrap: anywhere; }
@@ -392,6 +398,17 @@ button.go { font-size: 18px; padding: 14px 34px; border-radius: 6px; }
 .band.b4 { --ink: #f4f4f4; --muted: #cfdcd4; --lamp: #f5a04a; --lamp-soft: rgba(255, 255, 255, 0.1); color: var(--ink); }
 .band.b4 .cta { border-color: #f5a04a; }
 .band.method { border-top: 0; padding-top: 32px; }
+/* 資料來源與模擬方法：整塊收進抽屜 */
+.method #methodBox { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.method #methodBox > summary { list-style: none; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 12px; padding: 14px 18px; min-height: 56px; font-weight: 400; font-size: inherit; }
+.method #methodBox > summary::-webkit-details-marker { display: none; }
+.method #methodBox > summary h2 { margin: 0; }
+.method #methodBox > summary .mhint { grid-column: 1; font-size: 13.5px; color: var(--muted); }
+.method #methodBox > summary::after { content: ""; grid-column: 2; grid-row: 1 / span 2; width: 9px; height: 9px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: translateY(-3px) rotate(45deg); transition: transform .2s; }
+.method #methodBox[open] > summary::after { transform: translateY(2px) rotate(-135deg); }
+.method #methodBox[open] > summary .mhint { display: none; }
+.method .mwrap-in { display: grid; gap: 8px; padding: 0 18px 18px; }
+@media (max-width: 480px) { .method #methodBox > summary { padding: 14px 16px; } .method .mwrap-in { padding: 0 14px 14px; } }
 
 /* 結局 */
 .end { display: grid; gap: 0; }
@@ -686,6 +703,7 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
 .lifeprog { height: 4px; }
 .rc-wash { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
 .rc-paper { mix-blend-mode: multiply; opacity: .55; }
+.rc-dark .rc-paper { mix-blend-mode: overlay; opacity: .3; }
 .liferecap > *:not(.rc-wash) { position: relative; z-index: 1; }
 .rc-skip { position: absolute !important; }
 .rc-strip { height: 10px; border-radius: 5px; }
@@ -693,6 +711,86 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
 .rc-sw li { display: grid; grid-template-columns: 22px 1fr auto; align-items: center; gap: 12px; font-size: 17px; }
 .rc-sw i { width: 22px; height: 22px; border-radius: 50%; box-shadow: 0 0 0 2px rgba(255,255,255,.25); }
 .rc-sw b { font-weight: 500; color: rgba(255,255,255,.8); }
+/* 那些一生沒聽過福音的人呢？像一本有插畫的神學圖鑑 */
+.theo-wrap { display: grid; gap: 18px; font-size: 15.5px; line-height: 1.8; }
+.theo-wrap p { margin: 0; }
+.theo-hero { margin: 0; border-radius: 14px; overflow: hidden; aspect-ratio: 21 / 8; background: #f3eee4; }
+.theo-img, .theo-thumb { display: block; width: 100%; height: 100%; object-fit: cover; }
+.theo-lede { display: grid; gap: 8px; padding: 4px 2px; }
+.theo-q { font-family: var(--display, serif); font-size: clamp(18px, 4.6vw, 21px); line-height: 1.65; font-weight: 700; color: var(--ink); }
+.theo-lede p:not(.theo-q), .theo-note { color: var(--muted); }
+.theo-note { font-size: 14.5px; padding: 12px 14px; border-radius: 12px; background: linear-gradient(120deg, rgba(212,164,60,.10), rgba(139,127,168,.10) 55%, rgba(61,79,125,.08)); }
+.theo-layer { display: grid; gap: 12px; }
+.theo-head { display: grid; grid-template-columns: 112px 1fr; gap: 14px; align-items: center; }
+.theo-head .theo-thumb { height: 74px; border-radius: 12px; }
+.theo-head h4 { margin: 0; font-size: 18px; line-height: 1.4; }
+.theo-kicker { display: inline-block; font-size: 12.5px; letter-spacing: .14em; color: var(--muted); }
+.theo-cards { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.theo-card { position: relative; display: grid; gap: 6px; align-content: start; padding: 14px 16px 12px; border-radius: 14px; background: color-mix(in srgb, var(--tc) 7%, var(--surface)); border: 1px solid color-mix(in srgb, var(--tc) 28%, var(--line)); overflow: hidden; }
+.theo-card::before { content: ''; position: absolute; inset: -40% -30% auto auto; width: 70%; height: 90%; background: radial-gradient(closest-side, color-mix(in srgb, var(--tc) 22%, transparent), transparent); pointer-events: none; }
+.theo-card > * { position: relative; }
+.theo-card header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.theo-card h5 { margin: 0; font-size: 16.5px; }
+.theo-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--tc); box-shadow: 0 0 0 3px color-mix(in srgb, var(--tc) 22%, transparent); flex: none; }
+.theo-tag { font-size: 12px; padding: 1px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); background: var(--surface); }
+.theo-card.attitude { border-style: dashed; }
+.theo-claim { font-weight: 700; color: var(--ink); line-height: 1.6; }
+.theo-sum { font-size: 14.5px; color: var(--muted); line-height: 1.75; }
+.theo-more { margin-top: 2px; }
+.theo-more > summary { cursor: pointer; font-size: 14px; color: var(--ink); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--tc) 60%, transparent); text-underline-offset: 4px; width: fit-content; list-style: none; min-height: 32px; display: flex; align-items: center; }
+.theo-more > summary::-webkit-details-marker { display: none; }
+.theo-more > summary::after { content: '＋'; margin-left: 6px; font-size: 12px; color: var(--muted); }
+.theo-more[open] > summary::after { content: '－'; }
+.theo-more p { font-size: 14px; line-height: 1.8; color: var(--ink); padding: 10px 12px; border-radius: 10px; background: var(--surface); border-left: 3px solid var(--tc); margin-top: 6px; }
+/* 矩陣 */
+.theo-matrix { display: grid; gap: 12px; padding: 16px; border-radius: 16px; background: #fbf8f1; border: 1px solid var(--line); }
+.theo-matrix h4 { margin: 0; font-size: 18px; }
+.theo-intro { color: var(--muted); font-size: 14.5px; }
+.theo-board { display: grid; gap: 6px; max-width: 460px; width: 100%; justify-self: center; }
+.theo-colh { display: grid; grid-template-columns: 52px repeat(3, 1fr); text-align: center; font-size: 14px; font-weight: 700; }
+.theo-body { display: grid; grid-template-columns: 52px 1fr; }
+.theo-rowh { display: grid; grid-template-rows: repeat(3, 1fr); font-size: 14px; font-weight: 700; align-items: center; }
+.theo-colh span[style], .theo-rowh span { display: flex; align-items: center; gap: 5px; justify-content: center; }
+.theo-rowh span { justify-content: flex-start; writing-mode: horizontal-tb; line-height: 1.3; }
+.theo-colh span[style]::before, .theo-rowh span::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--tc); flex: none; }
+.theo-gridwrap { position: relative; aspect-ratio: 1; }
+.theo-art { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.theo-art circle { mix-blend-mode: multiply; }
+.theo-grid { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); }
+.theo-cell { appearance: none; border: 0; margin: 0; background: transparent; border-radius: 14px; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding: 6px; font: inherit; transition: background-color .2s, box-shadow .2s; }
+.theo-cell span { font-size: 11.5px; line-height: 1.3; padding: 2px 7px; border-radius: 999px; background: rgba(255,255,255,.82); color: #3a3a36; }
+.theo-cell:hover { background: rgba(255,255,255,.28); }
+.theo-cell:focus-visible { outline: 2px solid #2a2a27; outline-offset: -4px; }
+.theo-cell.on { box-shadow: inset 0 0 0 3px #2a2a27, inset 0 0 0 6px rgba(255,255,255,.7); background: rgba(255,255,255,.12); }
+.theo-matrix.has-sel .theo-cell:not(.on) { background: rgba(251,248,241,.35); }
+.theo-pickers { display: none; gap: 8px; }
+.theo-pickl { font-size: 13.5px; font-weight: 700; color: var(--muted); }
+.theo-pick { display: flex; flex-wrap: wrap; gap: 8px; }
+.theo-pick button { font: inherit; font-size: 14.5px; min-height: 44px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+.theo-pick button::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--tc); }
+.theo-pick button[aria-pressed="true"] { border-color: #2a2a27; box-shadow: inset 0 0 0 1px #2a2a27; font-weight: 700; background: color-mix(in srgb, var(--tc) 14%, var(--surface)); }
+.theo-result { min-height: 64px; }
+.theo-hint { color: var(--muted); font-size: 14px; text-align: center; padding: 10px; }
+.theo-res { display: grid; gap: 6px; padding: 14px 16px; border-radius: 14px; background: linear-gradient(120deg, color-mix(in srgb, var(--ca) 13%, #fff), color-mix(in srgb, var(--cb) 13%, #fff)); border: 1px solid var(--line); font-size: 15px; line-height: 1.8; }
+.theo-res-h { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.theo-swatch { width: 26px; height: 16px; border-radius: 8px; background: linear-gradient(90deg, var(--ca), var(--cb)); }
+.theo-kind { font-size: 12px; padding: 1px 9px; border-radius: 999px; background: #fff; border: 1px solid var(--line); color: #3a3a36; }
+.theo-kind.k-tension, .theo-cell.k-tension span { border: 1px solid rgba(150,60,40,.35); }
+.theo-foot { font-size: 13px; color: var(--muted); line-height: 1.7; }
+.theo-end { display: grid; gap: 12px; padding: 18px 16px; border-radius: 16px; background: linear-gradient(135deg, rgba(61,79,125,.08), rgba(212,164,60,.12)); }
+.theo-end p:first-child { color: var(--muted); }
+.theo-big { font-family: var(--display, serif); font-size: clamp(19px, 5vw, 23px); line-height: 1.6; font-weight: 700; color: var(--ink); }
+@media (max-width: 560px) {
+  .theo-board { display: none; }
+  .theo-cards { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; margin-inline: -16px; padding: 2px 16px 8px; scroll-padding-inline: 16px; scrollbar-width: thin; }
+  .theo-card { flex: 0 0 84%; scroll-snap-align: start; }
+  .theo-layer::after { content: '左右滑動看其他觀點'; font-size: 12.5px; color: var(--muted); text-align: center; }
+  .theo-pickers { display: grid; }
+  .theo-head { grid-template-columns: 88px 1fr; }
+  .theo-head .theo-thumb { height: 62px; }
+  .theo-matrix { padding: 14px; }
+}
+@media (prefers-reduced-motion: reduce) { .theo-cell, .theo-more > summary { transition: none; } }
 /* 人生回顧：全螢幕故事卡 */
 body.rc-open { overflow: hidden; }
 .liferecap { position: fixed; inset: 0; z-index: 1000; display: flex; flex-direction: column; background: #222b28; color: #f4f1ea; padding: max(14px, env(safe-area-inset-top)) 18px max(16px, env(safe-area-inset-bottom)); }
@@ -758,7 +856,38 @@ body.rc-open { overflow: hidden; }
 .liferecap .rc-sw i { box-shadow: 0 0 0 2px rgba(255,255,255,.8), 0 0 0 3px rgba(31,38,34,.15); }
 .liferecap .rc-sw b { color: #3d4641; }
 .liferecap button:focus-visible { outline: 2px solid #1f2622; }
-.liferecap .rc-card { text-shadow: 0 0 12px rgba(251,250,246,.9); }
+.liferecap .rc-card { text-shadow: 0 0 2px rgba(251,250,246,.9), 0 0 12px rgba(251,250,246,.95), 0 0 24px rgba(251,250,246,.6); }
+/* 深底：顏色整體偏亮的人生 */
+.liferecap.rc-dark { background: #181b1a; }
+/* 字的顏色依水彩實際的明暗自動判斷：亮的地方用深色字，暗的地方用白字，再加一圈反色的光暈 */
+.liferecap.ink-light { color: #f3f2ee; }
+.liferecap.ink-light .rc-card { text-shadow: 0 0 2px rgba(20,22,21,.85), 0 0 12px rgba(20,22,21,.9), 0 0 24px rgba(20,22,21,.6); }
+.liferecap.rc-dark .rc-bars i { background: rgba(255,255,255,.2); } .liferecap.rc-dark .rc-bars i b { background: #f3f2ee; }
+.liferecap.ink-light .rc-skip, .liferecap.ink-light .rc-eyebrow { color: #c9ccc7; }
+.liferecap.ink-light .rc-big, .liferecap.ink-light .rc-quote, .liferecap.ink-light .rc-list .num, .liferecap.ink-light .rc-nums b { color: #fff; }
+.liferecap.ink-light .rc-line, .liferecap.ink-light .rc-nums span, .liferecap.ink-light .rc-sw b { color: rgba(255,255,255,.86); }
+.liferecap.ink-light .rc-chips li { border-color: rgba(255,255,255,.35); background: rgba(24,27,26,.45); }
+.liferecap.ink-light .rc-nums li { border-bottom-color: rgba(255,255,255,.14); }
+.liferecap.ink-light .rc-title .rc-big { border-color: rgba(255,255,255,.35); }
+.liferecap.ink-light .rc-last .rc-quote::before, .liferecap.ink-light .rc-last .rc-quote::after { color: #b9bdb8; }
+.liferecap.ink-light .rc-nav button, .liferecap.ink-light .rc-end .rc-again { border-color: rgba(255,255,255,.35); color: #fff; background: rgba(24,27,26,.5); }
+.liferecap.ink-light .rc-end .rc-full { background: #f3f2ee; color: #181b1a; }
+.liferecap.ink-light .rc-hint { color: rgba(255,255,255,.6); }
+.liferecap.ink-light .rc-sw i { box-shadow: 0 0 0 2px rgba(24,27,26,.8), 0 0 0 3px rgba(255,255,255,.25); }
+.liferecap.ink-light button:focus-visible { outline-color: #fff; }
+.liferecap .rc-card, .liferecap .rc-card * { transition: color .6s ease, text-shadow .6s ease, border-color .6s ease; }
+.liferecap .ink-w, .liferecap .ink-w * { color: #fff !important; text-shadow: 0 0 2px rgba(18,20,19,.9), 0 0 10px rgba(18,20,19,.85), 0 0 22px rgba(18,20,19,.55) !important; }
+.liferecap .ink-b, .liferecap .ink-b * { color: #161a18 !important; text-shadow: 0 0 2px rgba(255,255,253,.95), 0 0 10px rgba(255,255,253,.9), 0 0 22px rgba(255,255,253,.6) !important; }
+.liferecap .rc-eyebrow.ink-w, .liferecap .rc-line.ink-w { color: rgba(255,255,255,.93) !important; }
+.liferecap .rc-chips li.ink-w, .liferecap .rc-title .rc-big.ink-w, .liferecap .rc-nums li.ink-w { border-color: rgba(255,255,255,.45) !important; }
+.liferecap .rc-chips li.ink-b, .liferecap .rc-title .rc-big.ink-b, .liferecap .rc-nums li.ink-b { border-color: rgba(22,26,24,.32) !important; }
+.liferecap .rc-chips li.ink-w { background: rgba(18,20,19,.35) !important; } .liferecap .rc-chips li.ink-b { background: rgba(255,255,253,.55) !important; }
+.liferecap button.ink-w { background: rgba(18,20,19,.55) !important; border-color: rgba(255,255,255,.5) !important; text-shadow: none !important; }
+.liferecap button.ink-b { background: rgba(255,255,253,.75) !important; border-color: rgba(22,26,24,.35) !important; text-shadow: none !important; }
+.liferecap .rc-end .rc-full.ink-w { background: #fff !important; color: #161a18 !important; }
+.liferecap .rc-end .rc-full.ink-b { background: #161a18 !important; color: #fff !important; }
+.liferecap .rc-skip.ink-w, .liferecap .rc-skip.ink-b { background: none !important; }
+@media (prefers-reduced-motion: reduce) { .liferecap .rc-card, .liferecap .rc-card * { transition: none; } }
 </style>
 
 </head>
@@ -819,7 +948,7 @@ body.rc-open { overflow: hidden; }
 
   <section class="method band b3" id="method">
     <p class="eyebrow">資料來源與模擬方法</p>
-    <h2>這些數字怎麼算出來的？</h2>
+    <details class="mwrap" id="methodBox"><summary><h2>這些數字怎麼算出來的？</h2><span class="mhint">需要的時候再點開</span></summary><div class="mwrap-in">
     <div class="howto">
       <h3>這個遊戲怎麼決定你的人生？</h3>
       <dl>
@@ -936,7 +1065,7 @@ body.rc-open { overflow: hidden; }
           <li><b>父母的宗教：</b>國家整體用 Pew 的宗教組成，再依族群的基督徒比例（Joshua Project）調整高低。基督徒家庭再依國家整體的宗派比例，分成天主教、基督新教或東正教；美國另外依教會自報的會員人數（約占人口 2%），分出摩門教（耶穌基督後期聖徒教會）家庭，這只影響畫面上的文字，不改變接觸福音的機率。不是基督徒的家庭信什麼宗教：族群有明確的主要宗教時（Joshua Project），八成五照族群的主要宗教，其餘照國家整體的比例，例如生在美國的華人家庭，多半是沒有宗教。華人、韓國人、日本人族群的家庭，只會抽到民間信仰、佛教或沒有宗教，這是缺少族群層級資料時的簡化。這也只影響畫面上的文字。</li>
           <li><b>壽命：</b>以該國該性別的平均餘命為中心，加上標準差 14 歲的隨機變化，限制在 1 到 102 歲之間。平均餘命不是每個人的實際壽命，這只是簡化的做法，不是逐年生命表。</li>
           <li><b>每年接觸福音的機會：</b>依族群的福音派與基督徒比例、母語聖經狀態、受迫害程度分數中「國家」和「教會」兩項，以及年齡，算出每年的機率。南亞多數族群沒有公開福音派比例，改用基督徒比例推估。</li>
-          <li><b>回應：</b>8 歲以後接觸到福音時由玩家選擇；同一秒出生的另外四個人由模型依機率選擇。</li>
+          <li><b>回應：</b>8 歲以後接觸到福音時由玩家選擇。</li>
           <li><b>信主之後：</b>依受迫害程度六大面向分數和族群的基督徒比例，產生信仰壓力、成長、殉道等事件。族群本身多為基督徒時，沒有教會、被家人反對這類事件會少很多；族群過半是基督徒時，國家、教會和暴力層面的事件也會大幅減少，因為那些壓力多半落在改信的人和教會領袖身上。從小在基督徒家庭長大的人，不會遇到家人反對、法律上無法更改宗教身分這類只有改信者才會遇到的事；「法律上無法更改宗教身分」只會出現在從穆斯林家庭改信、而且法律上不承認離開伊斯蘭教的國家（例如埃及、伊朗、巴基斯坦、摩洛哥），印尼、土耳其、孟加拉、奈及利亞這些可以更改或不登記宗教的國家不會出現；Open Doors 的資料著重基督徒的處境，同一個地區的穆斯林也常是武裝團體的受害者；如果族群過半是基督徒，也不會被鄰居排擠。基督徒過半的國家到處都有公開的教會，不會出現「附近沒有可以公開聚會的教會」；從小在基督徒家庭長大的人，只有在信仰本身幾乎不被允許的國家（受迫害程度的私人生活或教會生活分數 15 以上，例如北韓、索馬利亞），才會需要偷偷聚會、把聖經藏起來。</li>
           <li><b>信仰的十字路口：</b>遇到懷疑、受傷、信仰壓力等事件時，玩家可以選擇留下、離開教會或放下信仰，之後也可能回來。</li>
           <li><b>名字：</b>每段人生出生時，依國家、族群、性別和家裡的宗教，從常見名字裡抽一個，名字是虛構的，不對應任何真實人物。每段人生都照 53 國的真實出生比例抽。</li>
@@ -973,6 +1102,7 @@ body.rc-open { overflow: hidden; }
         <p>世界地圖來自 Natural Earth（公眾領域），經由 world-atlas 套件（ISC 授權）轉換。Joshua Project 資料為非商業引用，Pew Research Center 資料依其使用條款引用。感謝這些機構公開資料。</p>
       </div>
     </details>
+    </div></details>
   </section>
 
   <section class="show band b4" id="show">
@@ -1066,6 +1196,9 @@ body.rc-open { overflow: hidden; }
 <footer class="site-foot band b4">
   <a class="sticker" href="https://store.line.me/stickershop/product/31241357/zh-Hant" target="_blank" rel="noopener noreferrer" aria-label="前往 LINE STORE 查看《教會小本本》LINE 貼圖">
     <img src="line-sticker.webp" width="1400" height="588" alt="《教會小本本》LINE 貼圖上架中，教會裡不好說的就用貼圖說" loading="lazy" decoding="async">
+  </a>
+  <a class="sticker" href="https://gbookchurch.github.io/christian-spectrum/" target="_blank" rel="noopener" aria-label="前往《基督徒的光譜圖鑑：你是哪一種？》">
+    <img src="img/promo-spectrum.webp" width="1200" height="630" alt="基督徒的光譜圖鑑：你是哪一種？57 題，看看你在神學、救恩觀、恩賜、敬拜、教會治理和政治上的位置" loading="lazy" decoding="async">
   </a>
   <div class="in">
     <p><b>© 版權 &amp; 使用許可</b></p>
@@ -2986,6 +3119,28 @@ function lifeSummary(l) {
   if (l.firstAge === null) return `活了 ${l.lifespan} 歲，一生沒有接觸到福音`;
   return `活了 ${l.lifespan} 歲，${l.firstAge} 歲接觸到福音` + (l.channel ? `（透過${l.channel}）` : '') + (l.faithAge !== null ? `，${l.journey || l.faithAge + ' 歲信主'}` : '，沒有回應') + (l.martyred ? '，因信仰離世' : '');
 }
+// 存進紀錄的色彩：每個顏色和比例、底色、陰影程度
+function lifeHue(martyred) {
+  try { const r = lifeRecipe(martyred); return { c: r.comps.map(c => [c.color, Math.round(c.w * 100), c.rim ? 1 : 0]), g: r.ground, s: Math.round(r.shade.f * 10) / 10 }; } catch (e) { return null; }
+}
+// 舊紀錄沒有存色彩：用出生地、性別、家庭宗教推回來
+function guessHue(l) {
+  const c = DATA.countries.find(x => x.id === l.countryId || x.name === l.country);
+  const back = Object.fromEntries(Object.entries(RELIGION).map(([k, v]) => [v, k])); back['道教'] = 'other'; back['錫克教'] = 'other';
+  let k = back[l.parent] || 'none';
+  k = k === 'christian' ? 'protestant' : k === 'unaffiliated' ? 'none' : k === 'other' ? (l.parent === '錫克教' ? 'sikh' : c && ['TW', 'CN', 'VN', 'KR', 'JP', 'KP'].includes(c.id) ? 'folk' : 'ethnic') : HUES[k] ? k : 'none';
+  const comps = [[c ? regionColor(c)[1] : '#9aa3a8', 25, 0]];
+  if (l.faithAge != null && !['protestant', 'catholic', 'orthodox', 'lds'].includes(k) && l.lifespan) { const a = Math.round(60 * l.faithAge / l.lifespan); comps.push([HUES[k][1], a, 0], [HUES.protestant[1], 60 - a, 0]); } else comps.push([HUES[k][1], 60, 0]);
+  comps.push([SEX_HUE[l.sex === 'f' ? 'f' : 'm'][1], 15, 1]);
+  return { c: comps, g: 'light', s: 0 };
+}
+// 賽道上的每個人：一枚小小的水彩印記，加上淡淡的底色
+function hueCss(h) {
+  const main = h.c.filter(x => !x[2]), rim = h.c.find(x => x[2]), pos = ['28% 30%', '68% 42%', '42% 72%', '74% 74%', '22% 64%'];
+  const seal = main.map(([col, w], i) => `radial-gradient(circle at ${pos[i % pos.length]}, ${col} 0 ${Math.round(14 + w * 0.5)}%, transparent ${Math.round(40 + w * 0.6)}%)`).join(', ');
+  const wash = main.map(([col], i) => `radial-gradient(60% 120% at ${[8, 55, 92, 30][i % 4]}% ${i % 2 ? 100 : 0}%, color-mix(in srgb, ${col} 16%, transparent), transparent 70%)`).join(', ');
+  return `--seal:${seal};--wash:${wash};--rim:${rim ? rim[0] : '#ccc'};--stain:${h.s || 0}`;
+}
 function renderMemorial() {
   const lives = loadLives();
   $('memorial').hidden = lives.length === 0;
@@ -2995,7 +3150,7 @@ function renderMemorial() {
   const continents = new Set(lives.map(l => l.continent || (DATA.countries.find(c => c.name === l.country) || {}).continent).filter(Boolean));
   const never = lives.filter(l => l.firstAge === null).length;
   $('memStats').innerHTML = `你活過 <b>${lives.length}</b> 段人生，曾經出生在 <b>${countries.size}</b> 個國家、<b>${continents.size}</b> 個洲。其中 <b>${never}</b> 段人生，一直沒有機會接觸福音。`;
-  $('memList').innerHTML = lives.slice().reverse().map(() => '<li><span class="who"></span><span class="when"></span><span class="what"></span><span class="said"></span><button class="cmp" aria-pressed="false">比較</button></li>').join('');
+  $('memList').innerHTML = lives.slice().reverse().map(l => `<li style="${hueCss(l.hue || guessHue(l))}"><span class="seal${(l.hue || {}).g === 'dark' ? ' dark' : ''}" aria-hidden="true"></span><span class="who"></span><span class="when"></span><span class="what"></span><span class="said"></span><button class="cmp" aria-pressed="false">比較</button></li>`).join('');
   picked = picked.filter(i => i < lives.length);
   [...$('memList').children].forEach((li, i) => {
     const idx = lives.length - 1 - i, l = lives[idx];
@@ -3111,10 +3266,117 @@ function neoPanel() {
   if (!neoSeen) return '';
   return `<details class="xdr"><summary>你在這一生遇過的神學：新正統神學</summary><div class="tradbg">${NEO_BG.map(p => `<p>${p}</p>`).join('')}${srcLine(NEO_SRC)}</div></details>`;
 }
-function hellPanel(open) {
-  const dl = V => `<dl>${V.map(([x, d]) => `<div><dt>${x}</dt><dd>${d}</dd></div>`).join('')}</dl>`;
-  return `<details class="xdr"${open ? ' open' : ''}><summary>那些一生沒聽過福音的人呢？</summary><div class="tradbg"><p>這是這個遊戲最核心的問題，基督教內部有好幾種回答。以下只介紹，不下結論。</p><p>這個問題其實有兩層：誰能得救，和沒有得救的人最後會怎樣。兩層可以自由組合，例如有人持排他論，同時相信條件不朽；也有人持包容論，同時相信永刑。</p><h4>第一層：誰能得救？</h4>${dl(SAVE_VIEWS)}<h4>第二層：沒有得救的人最後會怎樣？</h4>${dl(FATE_VIEWS)}<p>不同傳統對這個問題的答案，會影響他們怎麼看宣教，也影響他們怎麼看沒有信主的家人。</p>${srcLine(HELL_SRC)}</div></details>`;
+// ── 那些一生沒聽過福音的人呢？圖文版：插畫、資訊卡片、兩層交織的矩陣 ──
+// 卡片：[名稱, 色彩, 一句核心主張, 簡短解說, 標籤]；「了解更多」顯示 SAVE_VIEWS / FATE_VIEWS 的原文
+const THEO_C = { gold: '#d9a23a', violet: '#8d72b0', indigo: '#34508f', grey: '#9a9a96' };
+const THEO_SAVE = [
+  ['排他論', THEO_C.gold, '只有今生明確信基督的人會得救。', '得救需要在今生聽見福音、親自信靠基督。這是許多福音派的立場，也常是宣教最強的動力：如果沒聽見就沒有機會，傳福音就刻不容緩。'],
+  ['包容論', THEO_C.violet, '救恩只來自基督，但可能臨到沒聽過祂名字的人。', '救恩仍然只靠基督，這點和排他論一樣。不同的是，基督的救恩可能臨到從沒聽過祂名字、卻真誠尋求神的人。天主教的官方教導就留下這樣的空間。'],
+  ['普世盼望', THEO_C.indigo, '不敢說人人得救，但可以為所有人盼望。', '它不是「確定人人得救」的普救論，而是在不確定之中，仍為所有人盼望、禱告。巴特和巴爾塔薩都表達過這種盼望，也都不把它當成確定的結論。'],
+  ['還不確定', THEO_C.grey, '把答案交給神，照著相信的去愛人。', '這是一種保留判斷的態度，不是一套完整的教義。很多基督徒認為聖經沒有把這件事說得很清楚，選擇把答案交給神。', '一種態度'],
+];
+const THEO_FATE = [
+  ['永刑', THEO_C.indigo, '沒有得救的人會永遠與神隔絕。', '天主教、東正教和多數新教在歷史上的主流看法：審判是真實的，失去神是永遠的。奧古斯丁的《上帝之城》對此有完整的論述。'],
+  ['條件不朽（滅絕論）', THEO_C.violet, '永生是神的賞賜，沒得救的人最後不再存在。', '人不是天生就不朽，永生是神賜給人的。沒有得救的人會在審判後被消滅，而不是永遠受苦。安息日會持這個立場，也有一部分福音派接受。'],
+  ['萬物復原（普救論）', THEO_C.gold, '最後所有人都會與神和好。', '地獄是暫時的煉淨，不是永遠的結局；最後所有人都會回到神那裡。從早期教父到當代都有人這樣主張，也一直伴隨很大的爭議。'],
+  ['還不確定', THEO_C.grey, '審判是真實的，但它的樣子不急著下定論。', '有些人相信審判是真實的，但認為聖經用的是圖像式的語言，所以對審判的樣子保持開放，不急著選邊。', '一種態度'],
+];
+// 矩陣：橫軸是第一層，縱軸是第二層。kind：common 常見、tension 有明顯張力、premise 需要額外前提、rare 較少見
+const THEO_COLS = [['ex', '排他論', THEO_C.gold], ['in', '包容論', THEO_C.violet], ['ho', '普世盼望', THEO_C.indigo]];
+const THEO_ROWS = [['et', '永刑', THEO_C.indigo], ['ci', '條件不朽', THEO_C.violet], ['ap', '萬物復原', THEO_C.gold]];
+const THEO_KIND = { common: '歷史上常見', tension: '有明顯張力', premise: '需要額外前提', rare: '較少見' };
+const THEO_CELL = {
+  'ex-et': ['common', '歷史上最常見的組合：只有今生信基督的人得救，沒有得救的人永遠與神隔絕。奧古斯丁和許多傳統福音派都在這一格，宣教的急迫感也最強。'],
+  'ex-ci': ['common', '只有今生信基督的人得救，但沒有得救的人最後會被消滅，而不是永遠受苦。福音派裡接受條件不朽的人，有不少在第一層仍持排他論。'],
+  'ex-ap': ['tension', '這兩個立場有明顯張力：如果只有今生明確信基督的人才得救，就很難說所有人最後都會與神和好。要放在一起，需要再加上「死後仍有機會回應基督」這個前提，例如以筆名 Gregory MacDonald 出版《福音派普救論者》（2006）的派瑞（Robin Parry）。嚴格的排他論者多半不接受這個前提。'],
+  'in-et': ['common', '基督的救恩可能臨到沒聽過福音的人，但地獄仍是永遠的。天主教的官方教導大致在這一格：梵二《教會憲章》第 16 節為不認識福音的人留下得救的可能，同時仍教導地獄是永久的。'],
+  'in-ci': ['common', '救恩只來自基督，也可能臨到沒聽過祂名字的人；始終拒絕神的人最後會被消滅。加拿大福音派神學家平諾克（Clark Pinnock）就是例子：他在《神慈愛的寬廣》（1992）主張包容論，也為滅絕論辯護。'],
+  'in-ap': ['premise', '包容論只說沒聽過福音的人「可能」得救，萬物復原卻說所有人「最後一定」會得救。要走到這一格，需要再相信神的愛最終會勝過每一個人的拒絕。真的走到這裡的人，在第一層通常已經接近普救論，不只是包容論。'],
+  'ho-et': ['common', '地獄是真實的可能，但可以盼望它是空的。巴爾塔薩在《我們敢盼望「所有人得救」嗎？》（1988 年英譯本）就是這樣：他說確定是不可能的，盼望卻是正當的，也明確不把萬物復原當成教義。'],
+  'ho-ci': ['rare', '比較少見的組合：盼望所有人最後都回應神，但如果真的有人始終拒絕，結局是被消滅，而不是永遠受苦。這個組合在邏輯上說得通，但很少有神學家明確這樣主張。'],
+  'ho-ap': ['tension', '兩者方向一樣，差別在「盼望」和「確信」。普世盼望是為所有人盼望，但不敢說一定；萬物復原論則確信最後所有人都會與神和好，例如哈特的《所有人都將得救》（2019）。持普世盼望的人，可能把萬物復原當成禱告的內容，卻不把它當成教義。'],
+};
+const THEO_SRC = [...HELL_SRC, ['Clark Pinnock', 'https://en.wikipedia.org/wiki/Clark_Pinnock'], ['The Evangelical Universalist', 'https://wipfandstock.com/the-evangelical-universalist.html'], ['Balthasar: Dare We Hope', 'https://www.catholicculture.org/culture/library/view.cfm?id=565'], ['Christianity Today 2000（斯托得）', 'https://www.christianitytoday.com/ct/2000/october23/undying-worm-unquenchable-fire.html']];
+// 「了解更多」用原本的文字；巴爾塔薩的書名年份用通行英譯本的 1988 年
+const theoMore = V => V.map(([, d]) => d.replace('（1986）', '（1988 年英譯本）'));
+function theoCards(V, more) {
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  return `<div class="theo-cards">${V.map(([n, c, claim, sum, tag], i) => {
+    const m = !tag && more[i] && more[i] !== sum ? more[i] : '';
+    return `<article class="theo-card${tag ? ' attitude' : ''}" style="--tc:${c}"><header><span class="theo-dot" aria-hidden="true"></span><h5>${esc(n)}</h5>${tag ? `<span class="theo-tag">${esc(tag)}</span>` : ''}</header><p class="theo-claim">${esc(claim)}</p><p class="theo-sum">${esc(sum)}</p>${m ? `<details class="theo-more"><summary>了解更多</summary><p>${esc(m)}</p></details>` : ''}</article>`;
+  }).join('')}</div>`;
 }
+function theoMatrix() {
+  const blob = (cx, cy, r, c, k) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${c}" opacity="${k}" filter="url(#theoWet)"/>`;
+  let art = '';
+  THEO_ROWS.forEach(([, , rc], r) => THEO_COLS.forEach(([, , cc], c) => {
+    const x = 50 + c * 100, y = 50 + r * 100;
+    art += blob(x - 9, y - 7, 50, cc, 0.46) + blob(x + 11, y + 9, 42, rc, 0.38) + `<circle cx="${x - 9}" cy="${y - 7}" r="47" fill="none" stroke="${cc}" stroke-width="3" opacity=".35" filter="url(#theoWet)"/><circle cx="${x + 11}" cy="${y + 9}" r="40" fill="none" stroke="${rc}" stroke-width="2.5" opacity=".3" filter="url(#theoWet)"/>` + blob(x + 1, y - 1, 16, '#fffdf7', 0.55);
+  }));
+  const cells = THEO_ROWS.map(([rk, rn], r) => THEO_COLS.map(([ck, cn], c) => {
+    const k = THEO_CELL[`${ck}-${rk}`][0];
+    return `<button type="button" class="theo-cell k-${k}" data-theo="${ck}-${rk}" aria-pressed="false" tabindex="${r === 0 && c === 0 ? 0 : -1}" aria-label="${cn} 加上 ${rn}：${THEO_KIND[k]}">${k === 'common' ? '' : `<span>${THEO_KIND[k]}</span>`}</button>`;
+  }).join('')).join('');
+  const pick = (L, axis) => `<p class="theo-pickl">${axis}</p><div class="theo-pick" role="group" aria-label="${axis}">${L.map(([k, n, c]) => `<button type="button" data-theo-${axis === '第一層：誰能得救？' ? 'col' : 'row'}="${k}" aria-pressed="false" style="--tc:${c}">${n}</button>`).join('')}</div>`;
+  return `<section class="theo-matrix" aria-labelledby="theoMxT">
+  <h4 id="theoMxT">兩層怎麼交織？</h4>
+  <p class="theo-intro">兩層可以組合，但不是每一種組合都同樣常見。點一個格子，看看這個組合在說什麼。</p>
+  <div class="theo-board">
+    <div class="theo-colh" aria-hidden="true"><span></span>${THEO_COLS.map(([, n, c]) => `<span style="--tc:${c}">${n}</span>`).join('')}</div>
+    <div class="theo-body">
+      <div class="theo-rowh" aria-hidden="true">${THEO_ROWS.map(([, n, c]) => `<span style="--tc:${c}">${n}</span>`).join('')}</div>
+      <div class="theo-gridwrap">
+        <svg class="theo-art" viewBox="0 0 300 300" aria-hidden="true" focusable="false"><defs><filter id="theoWet" x="-30%" y="-30%" width="160%" height="160%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="22" xChannelSelector="R" yChannelSelector="G" result="d"/><feGaussianBlur in="d" stdDeviation="2.2"/></filter></defs>${art}<g class="theo-lines" stroke="#3a3a36" stroke-opacity=".28" stroke-width=".8"><line x1="100" y1="8" x2="100" y2="292"/><line x1="200" y1="8" x2="200" y2="292"/><line x1="8" y1="100" x2="292" y2="100"/><line x1="8" y1="200" x2="292" y2="200"/></g></svg>
+        <div class="theo-grid" role="group" aria-label="第一層和第二層的九種組合">${cells}</div>
+      </div>
+    </div>
+  </div>
+  <div class="theo-pickers">${pick(THEO_COLS, '第一層：誰能得救？')}${pick(THEO_ROWS, '第二層：沒有得救的人最後會怎樣？')}</div>
+  <div class="theo-result" aria-live="polite"><p class="theo-hint">點一個格子，或在上面各選一個立場。</p></div>
+  <p class="theo-foot">這張圖是幫助理解不同神學問題的探索地圖，並不代表每一種組合都是歷史上獨立成立的神學立場。註：萬物復原論者在第一層通常趨近或等同於普救論。「還不確定」是一種態度，所以沒有放進矩陣。</p>
+</section>`;
+}
+function hellPanel(open) {
+  theoSel.col = theoSel.row = null;
+  const SRC = { intro: 'img/theology-intro.webp', salvation: 'img/theology-salvation.webp', destiny: 'img/theology-destiny.webp' };
+  const img = (k, alt, cls) => `<img class="${cls}" src="${SRC[k]}" alt="${alt}" loading="lazy" decoding="async" width="1200" height="${k === 'destiny' ? 675 : 800}">`;
+  return `<details class="xdr theo"${open ? ' open' : ''}><summary>那些一生沒聽過福音的人呢？</summary><div class="theo-wrap">
+  <figure class="theo-hero">${img('intro', '水彩插畫：深藍、金黃和淡紫的顏料彼此交融', 'theo-img')}</figure>
+  <div class="theo-lede"><p class="theo-q">「如果一個人從出生到死亡，都沒有機會認識耶穌，神會怎麼看待他？」</p><p>這個問題困擾過無數基督徒。歷代神學家提出了不同答案，而這些答案，也影響著我們如何理解宣教、救恩，以及神的公義與憐憫。</p></div>
+  <p class="theo-note">這是這個遊戲最核心的問題，基督教內部有好幾種回答。以下只介紹，不下結論。這個問題其實有兩層：誰能得救，和沒有得救的人最後會怎樣。</p>
+  <section class="theo-layer"><div class="theo-head">${img('salvation', '水彩插畫：三條不同的路在山野間延伸', 'theo-thumb')}<div><span class="theo-kicker">第一層</span><h4>誰能得救？</h4></div></div>${theoCards(THEO_SAVE, theoMore(SAVE_VIEWS))}</section>
+  <section class="theo-layer"><div class="theo-head">${img('destiny', '水彩插畫：一個人站在山頂，望著遠方的日出和蜿蜒的道路', 'theo-thumb')}<div><span class="theo-kicker">第二層</span><h4>沒有得救的人最後會怎樣？</h4></div></div>${theoCards(THEO_FATE, theoMore(FATE_VIEWS))}</section>
+  ${theoMatrix()}
+  <div class="theo-end"><p>不同的回答，會影響基督徒如何理解宣教，也會影響我們怎麼看待身邊還沒有信主的家人與朋友。</p><p class="theo-big">如果你最愛的人，一輩子都沒有相信耶穌，你會怎麼理解他的結局？</p></div>
+  ${srcLine(THEO_SRC)}</div></details>`;
+}
+// 矩陣互動：點格子或兩組選擇器，顯示這個組合的說明；方向鍵可以在格子間移動
+const theoSel = { col: null, row: null };
+function theoShow(root) {
+  const { col, row } = theoSel, res = root.querySelector('.theo-result');
+  root.querySelectorAll('.theo-cell').forEach(b => { const on = b.dataset.theo === `${col}-${row}`; b.setAttribute('aria-pressed', on); b.classList.toggle('on', on); });
+  root.querySelectorAll('[data-theo-col]').forEach(b => b.setAttribute('aria-pressed', b.dataset.theoCol === col));
+  root.querySelectorAll('[data-theo-row]').forEach(b => b.setAttribute('aria-pressed', b.dataset.theoRow === row));
+  root.classList.toggle('has-sel', !!(col && row));
+  if (!col || !row) { res.innerHTML = `<p class="theo-hint">${col || row ? '再選另一層的立場。' : '點一個格子，或在上面各選一個立場。'}</p>`; return; }
+  const C = THEO_COLS.find(x => x[0] === col), R = THEO_ROWS.find(x => x[0] === row), [k, txt] = THEO_CELL[`${col}-${row}`];
+  res.innerHTML = `<div class="theo-res" style="--ca:${C[2]};--cb:${R[2]}"><p class="theo-res-h"><span class="theo-swatch" aria-hidden="true"></span><b>${C[1]} × ${R[1]}</b><span class="theo-kind k-${k}">${THEO_KIND[k]}</span></p><p>${txt}</p></div>`;
+}
+document.addEventListener('click', e => {
+  const root = e.target.closest && e.target.closest('.theo-matrix'); if (!root) return;
+  const cell = e.target.closest('.theo-cell'), c = e.target.closest('[data-theo-col]'), r = e.target.closest('[data-theo-row]');
+  if (cell) { const [a, b] = cell.dataset.theo.split('-'); theoSel.col = a; theoSel.row = b; root.querySelectorAll('.theo-cell').forEach(x => x.tabIndex = x === cell ? 0 : -1); }
+  else if (c) theoSel.col = c.dataset.theoCol; else if (r) theoSel.row = r.dataset.theoRow; else return;
+  theoShow(root);
+});
+document.addEventListener('keydown', e => {
+  const cell = e.target.closest && e.target.closest('.theo-cell'); if (!cell) return;
+  const all = [...cell.parentNode.querySelectorAll('.theo-cell')], i = all.indexOf(cell);
+  const d = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: 3, ArrowUp: -3 }[e.key]; if (d === undefined) return;
+  const j = i + d; if (j < 0 || j > 8 || (Math.abs(d) === 1 && Math.floor(j / 3) !== Math.floor(i / 3))) return;
+  e.preventDefault(); all.forEach(x => x.tabIndex = -1); all[j].tabIndex = 0; all[j].focus();
+});
+
 function lifeOutcome(martyred) {
   if (martyred) return 'martyred';
   if (firstAge === null) return 'never';
@@ -3283,6 +3545,30 @@ function stripCss(ys) {
   return `linear-gradient(90deg, ${stops.join(', ')})`;
 }
 // 這一生的配方：出生背景 25%、性別 15%、信仰歷程 60%（依在每個信仰裡的年數）
+// OKLab：混色時用感知上比較平均的色彩空間，中間色才不會發灰
+function hexLab(h) {
+  const n = parseInt(h.slice(1), 16), f = v => { v /= 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+  const r = f(n >> 16), g = f(n >> 8 & 255), b = f(n & 255);
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b), m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b), s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+  return [0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s, 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s];
+}
+function labHex([L, A, B]) {
+  const l = (L + 0.3963377774 * A + 0.2158037573 * B) ** 3, m = (L - 0.1055613458 * A - 0.0638541728 * B) ** 3, s = (L - 0.0894841775 * A - 1.291485548 * B) ** 3;
+  const g = v => { v = Math.max(0, Math.min(1, v)); return Math.round(255 * (v <= 0.0031308 ? 12.92 * v : 1.055 * Math.pow(v, 1 / 2.4) - 0.055)); };
+  return '#' + [4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s, -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s, -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s].map(v => g(v).toString(16).padStart(2, '0')).join('');
+}
+// 兩色之間的中間色：在 OKLab 裡取中點，再把彩度補回來一點，避免變灰
+function mixHue(a, b, t = 0.5) {
+  const p = hexLab(a), q = hexLab(b), m = p.map((v, i) => v + (q[i] - v) * t);
+  const c0 = (Math.hypot(p[1], p[2]) * (1 - t) + Math.hypot(q[1], q[2]) * t), c1 = Math.hypot(m[1], m[2]) || 1, k = Math.min(1.6, c0 / c1);
+  return labHex([m[0] + 0.03, m[1] * k, m[2] * k]);
+}
+// 底色：這一生的顏色整體偏亮（金、銀、沙色、番紅花）時用深底，讓顏色發光；偏深的用白紙底
+const GROUND_L = 0.66;
+function groundOf(comps) {
+  const main = comps.filter(c => !c.rim), w = main.reduce((s, c) => s + c.w, 0) || 1;
+  return main.reduce((s, c) => s + hexLab(c.color)[0] * c.w, 0) / w >= GROUND_L ? 'dark' : 'light';
+}
 function lifeRecipe(martyred) {
   const yrs = colorYears.length ? colorYears : [famKey()], cnt = {}, order = [];
   for (const k of yrs) { if (!(k in cnt)) { cnt[k] = 0; order.push(k); } cnt[k]++; }
@@ -3300,7 +3586,10 @@ function lifeRecipe(martyred) {
   const ages = [...highlights.filter(h => h.cls === 'persecution' || badMin.has(h.text)).map(h => h.age), ...jn.filter(j => j.kind === 'leave' || j.kind === 'dechurch').map(j => j.age)].sort((a, b) => a - b);
   const neg = stats.persecution + 2 * jn.filter(j => j.kind === 'leave').length + jn.filter(j => j.kind === 'dechurch').length + highlights.filter(h => badMin.has(h.text)).length + 1.5 * negArcs;
   const shade = { f: Math.min(1, neg / 10), ages, end: yrs.length };
-  return { comps, strip: yrs, quiet: !!martyred, faint: yrs.length < 15, shade };
+  // 每個顏色往整體平均靠近一點點，整張畫比較和諧
+  const avg = comps.reduce((a, c) => { const l = hexLab(c.color); return a.map((v, i) => v + l[i] * c.w); }, [0, 0, 0]);
+  for (const c of comps) { const l = hexLab(c.color); c.paint = labHex(l.map((v, i) => v + (avg[i] - v) * 0.1)); }
+  return { comps, strip: yrs, quiet: !!martyred, faint: yrs.length < 15, shade, ground: groundOf(comps) };
 }
 // 水彩：多邊形反覆變形、一層一層薄薄地疊上去
 function mulberry(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
@@ -3353,16 +3642,16 @@ function paperCanvas(W, H, R) {
   for (let i = 0; i < p.width / 6; i++) { const sx = R() * p.width, sy = R() * p.height, a = R() * Math.PI, l = 6 + R() * 18; x.globalAlpha = 0.08 + R() * 0.1; x.beginPath(); x.moveTo(sx, sy); x.quadraticCurveTo(sx + Math.cos(a) * l / 2 + (R() - 0.5) * 4, sy + Math.sin(a) * l / 2 + (R() - 0.5) * 4, sx + Math.cos(a) * l, sy + Math.sin(a) * l); x.stroke(); }
   return p;
 }
-function drawPaper(x, paper, W, H, alpha) {
+function drawPaper(x, paper, W, H, alpha, dark) {
   if (!paper) return;
-  x.save(); x.globalCompositeOperation = 'multiply'; x.globalAlpha = alpha; x.drawImage(paper, 0, 0, W, H); x.restore();
+  x.save(); x.globalCompositeOperation = dark ? 'overlay' : 'multiply'; x.globalAlpha = alpha; x.drawImage(paper, 0, 0, W, H); x.restore();
 }
 // 每個顏色畫在自己的一層，回傳圖層和漂移參數；在 jsdom 或不支援畫布的環境回傳 null
 function washLayers(recipe, W, H, seed) {
   const R = mulberry(seed), S = Math.min(W, H), layers = [];
   const mk = () => { const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext && cv.getContext('2d'); return x ? [cv, x] : null; };
   if (!mk()) return null;
-  const k = recipe.faint ? 0.7 : 1, A = (recipe.quiet ? 0.026 : 0.036) * k;
+  const dark = recipe.ground === 'dark', k = (recipe.faint ? 0.7 : 1) * (dark ? 1.45 : 1), A = (recipe.quiet ? 0.026 : 0.036) * k;
   const along = f => [W * (0.12 + 0.76 * f), H * (0.1 + 0.8 * f)];
   // 沿著對角線排：左上是出生，往右下是人生的後來
   const main = recipe.comps.filter(c => !c.rim);
@@ -3370,12 +3659,20 @@ function washLayers(recipe, W, H, seed) {
   for (const c of main) {
     const [cv, x] = mk(), mid = t + c.w / 0.85 / 2; t += c.w / 0.85;
     const [px, py] = along(mid), n = Math.max(2, Math.round(c.w * 16)), rad = S * (0.16 + 0.22 * Math.sqrt(c.w));
-    for (let i = 0; i < n; i++) paintBlob(x, px + (R() - 0.5) * S * 0.45, py + (R() - 0.5) * S * 0.45, rad * (0.6 + R() * 0.5), c.color, R, 40, A);
+    for (let i = 0; i < n; i++) paintBlob(x, px + (R() - 0.5) * S * 0.45, py + (R() - 0.5) * S * 0.45, rad * (0.6 + R() * 0.5), c.paint || c.color, R, 40, A);
     layers.push({ cv: granulate(soften(cv, S, 0.02), R, 0.35, 0.05), ph: R() * 6.28, amp: S * 0.022 });
+  }
+  // 相鄰兩個顏色交界的地方，補上中間色，讓過渡像顏料自己暈開
+  t = 0;
+  for (let i = 0; i + 1 < main.length; i++) {
+    t += main[i].w / 0.85;
+    const [cv, x] = mk(), [px, py] = along(t), mix = mixHue(main[i].paint || main[i].color, main[i + 1].paint || main[i + 1].color), rad = S * (0.13 + 0.1 * Math.sqrt(Math.min(main[i].w, main[i + 1].w)));
+    for (let j = 0; j < 3; j++) paintBlob(x, px + (R() - 0.5) * S * 0.3, py + (R() - 0.5) * S * 0.3, rad * (0.7 + R() * 0.5), mix, R, 34, A * 0.9);
+    layers.push({ cv: granulate(soften(cv, S, 0.024), R, 0.3, 0.04), ph: R() * 6.28, amp: S * 0.018 });
   }
   for (const c of recipe.comps.filter(c => c.rim)) {
     const [cv, x] = mk();
-    for (let i = 0; i < 10; i++) { const side = i % 4, e = R(); const [px, py] = side === 0 ? [W * e, 0] : side === 1 ? [W, H * e] : side === 2 ? [W * e, H] : [0, H * e]; paintBlob(x, px, py, S * (0.14 + R() * 0.08), c.color, R, 26, A); }
+    for (let i = 0; i < 10; i++) { const side = i % 4, e = R(); const [px, py] = side === 0 ? [W * e, 0] : side === 1 ? [W, H * e] : side === 2 ? [W * e, H] : [0, H * e]; paintBlob(x, px, py, S * (0.14 + R() * 0.08), c.paint || c.color, R, 26, A); }
     layers.push({ cv: granulate(soften(cv, S, 0.02), R, 0.3, 0.05), ph: R() * 6.28, amp: S * 0.01 });
   }
   // 受傷、受壓的年日：在那個時間點留下像煙灰一樣的深色污痕，越多越重
@@ -3388,14 +3685,16 @@ function washLayers(recipe, W, H, seed) {
       const q = Math.min(0.999, Math.max(0, s)) * 2 * (W + H), ins = S * (0.01 + R() * 0.04);
       const [cx, cy] = q < W ? [q, ins] : q < W + H ? [W - ins, q - W] : q < 2 * W + H ? [W - (q - W - H), H - ins] : [ins, H - (q - 2 * W - H)];
       const r = S * (0.05 + 0.08 * f) * (0.7 + R() * 0.6);
-      paintBlob(x, cx, cy, r, '#2f2a26', R, 26, 0.018 + 0.03 * f, true);
+      const ink = dark ? '#8a8178' : '#2f2a26';
+      paintBlob(x, cx, cy, r, ink, R, 26, 0.018 + 0.03 * f, true);
       // 濺開的小點
-      x.fillStyle = '#2f2a26';
+      x.fillStyle = ink;
       for (let i = 0; i < 6 + f * 26; i++) { const a = R() * 6.28, dd = r * (0.9 + R() * 1.1), rr = S * (0.002 + R() * 0.006); x.globalAlpha = 0.12 + R() * 0.25 * f; x.beginPath(); x.arc(cx + Math.cos(a) * dd, cy + Math.sin(a) * dd, rr, 0, 6.28); x.fill(); }
       x.globalAlpha = 1;
     }
-    layers.push({ cv: granulate(soften(cv, S, 0.008), R, 0.55, 0.09), ph: R() * 6.28, amp: S * 0.008 });
+    layers.push({ cv: granulate(soften(cv, S, 0.008), R, 0.55, 0.09), ph: R() * 6.28, amp: S * 0.008, stain: true });
   }
+  layers.dark = dark;
   return layers;
 }
 // 邊緣再柔一點，像顏料在紙上暈開；不支援畫布濾鏡的瀏覽器就保持原樣
@@ -3409,9 +3708,10 @@ function soften(cv, S, b = 0.02) {
 }
 // 畫的時候放大一點點再漂移，邊緣不會露出空白
 function drawWash(x, layers, W, H, t, alpha) {
-  x.save(); x.globalAlpha = alpha; x.globalCompositeOperation = 'multiply';
+  x.save(); x.globalAlpha = alpha;
   const ow = W * 0.08, oh = H * 0.08;
-  for (const L of layers) { const a = t / 9000 + L.ph; x.drawImage(L.cv, -ow / 2 + Math.sin(a) * L.amp, -oh / 2 + Math.cos(a * 0.8) * L.amp, W + ow, H + oh); }
+  // 白紙用色彩增值（顏料疊色）；深底用濾色，顏色不會被底下的黑吃掉
+  for (const L of layers) { x.globalCompositeOperation = layers.dark ? (L.stain ? 'source-over' : 'screen') : 'multiply'; const a = t / 9000 + L.ph; x.drawImage(L.cv, -ow / 2 + Math.sin(a) * L.amp, -oh / 2 + Math.cos(a * 0.8) * L.amp, W + ow, H + oh); }
   x.restore();
 }
 const washSeed = () => strHash(me.name + me.country.id + colorYears.length);
@@ -3424,9 +3724,35 @@ function recapWash(box, recipe, quiet) {
   const layers = washLayers(recipe, W, H, washSeed()); if (!layers) return;
   const pp = paperCanvas(W, H, mulberry(washSeed() + 1));
   if (pp) { pp.className = 'rc-wash rc-paper'; pp.setAttribute('aria-hidden', 'true'); cv.after(pp); }
-  if (quiet) { drawWash(x, layers, W, H, 0, 0.6); return; }
+  const top = layers.dark ? 0.82 : 0.6;
+  // 取卡片後面那一塊水彩的平均亮度，跟紙色合成後，比較白字和深色字哪一個對比比較大
+  const bg = layers.dark ? [24, 27, 26] : [251, 250, 246], lin = v => { v /= 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+  // 每一段字各自判斷：取字後面那一塊的像素，算白字和深色字各自「最差那一成」的對比，選比較好的那個
+  const pctl = (arr, p) => { arr.sort((a, b) => a - b); return arr[Math.floor(arr.length * p)] || 0; };
+  box.evalInk = () => {
+    if (!cv.isConnected) return;
+    const b = cv.getBoundingClientRect(); if (!b.width || !b.height) return;
+    const sx = cv.width / b.width, sy = cv.height / b.height;
+    let all; try { all = x.getImageData(0, 0, W, H).data; } catch (e) { return; }
+    box.querySelectorAll('.rc-card > *:not(.rc-end), .rc-card li, .rc-end button, .rc-nav button, .rc-skip, .rc-hint').forEach(el => {
+      if (el.matches('.rc-list, .rc-chips, .rc-nums, .rc-sw')) return;
+      const r = el.getBoundingClientRect(); if (!r.width || !r.height) return;
+      const X0 = Math.max(0, Math.floor((r.left - b.left) * sx)), Y0 = Math.max(0, Math.floor((r.top - b.top) * sy)), X1 = Math.min(W, Math.ceil((r.right - b.left) * sx)), Y1 = Math.min(H, Math.ceil((r.bottom - b.top) * sy));
+      const step = Math.max(2, Math.round(Math.sqrt((X1 - X0) * (Y1 - Y0) / 900))), ws = [], ks = [];
+      for (let yy = Y0; yy < Y1; yy += step) for (let xx = X0; xx < X1; xx += step) {
+        const i = (yy * W + xx) * 4, a = all[i + 3] / 255;
+        const L = 0.2126 * lin(all[i] * a + bg[0] * (1 - a)) + 0.7152 * lin(all[i + 1] * a + bg[1] * (1 - a)) + 0.0722 * lin(all[i + 2] * a + bg[2] * (1 - a));
+        ws.push(1.05 / (L + 0.05)); ks.push((L + 0.05) / 0.064);
+      }
+      if (!ws.length) return;
+      const w = pctl(ws, 0.15) > pctl(ks, 0.15);
+      el.classList.toggle('ink-w', w); el.classList.toggle('ink-b', !w);
+    });
+  };
+  if (quiet) { drawWash(x, layers, W, H, 0, top); box.evalInk(); return; }
   const t0 = performance.now();
-  const loop = t => { if (!cv.isConnected) return; x.clearRect(0, 0, W, H); drawWash(x, layers, W, H, t - t0, Math.min(0.6, (t - t0) / 2500)); requestAnimationFrame(loop); };
+  let lastInk = 0;
+  const loop = t => { if (!cv.isConnected) return; x.clearRect(0, 0, W, H); drawWash(x, layers, W, H, t - t0, Math.min(top, (t - t0) / 2500)); if (t - lastInk > 1200) { lastInk = t; box.evalInk(); } requestAnimationFrame(loop); };
   requestAnimationFrame(loop);
 }
 
@@ -3436,25 +3762,28 @@ async function makeShareCard(end, martyred) {
   const W = 1080, H = 1350, P = 84;
   const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const x = cv.getContext('2d');
-  const C = { bg: '#fbfaf6', panel: 'rgba(255,255,255,0.72)', ink: '#1f2622', muted: '#56605a', line: 'rgba(31,38,34,0.22)', lamp: '#1f2622', sun: '#f6c845', grave: '#1f2622', hope: '#1f2622' };
+  const RCP = lifeRecipe(martyred), DK = RCP.ground === 'dark';
+  const C = DK ? { bg: '#181b1a', panel: 'rgba(24,27,26,0.55)', ink: '#f3f2ee', muted: '#bfc3be', line: 'rgba(255,255,255,0.26)', lamp: '#f3f2ee', sun: '#f6c845', grave: '#f3f2ee', hope: '#f3f2ee' }
+    : { bg: '#fbfaf6', panel: 'rgba(255,255,255,0.72)', ink: '#1f2622', muted: '#56605a', line: 'rgba(31,38,34,0.22)', lamp: '#1f2622', sun: '#f6c845', grave: '#1f2622', hope: '#1f2622' };
   const SERIF = '"Noto Serif TC", "Songti TC", serif', SANS = '"Noto Sans TC", "PingFang TC", sans-serif', MONO = '"IBM Plex Mono", "Noto Sans TC", monospace';
   const o = lifeOutcome(martyred), heard = firstAge !== null;
   x.fillStyle = C.bg; x.fillRect(0, 0, W, H);
   // 這一生的顏色：水彩暈染當底，再蓋一層暗色讓字清楚
   try {
-    const rcp = lifeRecipe(martyred), wl = washLayers(rcp, W, H, washSeed());
+    const rcp = RCP, wl = washLayers(rcp, W, H, washSeed());
     if (wl) {
-      drawWash(x, wl, W, H, 0, 0.85);
-      drawPaper(x, paperCanvas(W, H, mulberry(washSeed() + 1)), W, H, 0.55);
-      const veil = x.createLinearGradient(0, 0, 0, H); veil.addColorStop(0, 'rgba(251,250,246,0.5)'); veil.addColorStop(0.4, 'rgba(251,250,246,0.4)'); veil.addColorStop(1, 'rgba(251,250,246,0.55)');
+      drawWash(x, wl, W, H, 0, DK ? 1 : 0.85);
+      drawPaper(x, paperCanvas(W, H, mulberry(washSeed() + 1)), W, H, DK ? 0.3 : 0.55, DK);
+      const vc = DK ? '24,27,26' : '251,250,246', va = DK ? [0.42, 0.3, 0.5] : [0.5, 0.4, 0.55];
+      const veil = x.createLinearGradient(0, 0, 0, H); veil.addColorStop(0, `rgba(${vc},${va[0]})`); veil.addColorStop(0.4, `rgba(${vc},${va[1]})`); veil.addColorStop(1, `rgba(${vc},${va[2]})`);
       x.fillStyle = veil; x.fillRect(0, 0, W, H);
       const ys = rcp.strip, n = ys.length;
       ys.forEach((k, i) => { x.fillStyle = HUES[k][1]; x.fillRect(W * i / n, 0, Math.ceil(W / n) + 1, 14); });
     }
   } catch (e) {}
   const glow = x.createRadialGradient(W - 170, 230, 10, W - 170, 230, 420);
-  glow.addColorStop(0, heard ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.3)');
-  glow.addColorStop(1, 'rgba(251,250,246,0)');
+  glow.addColorStop(0, DK ? 'rgba(255,255,255,0.12)' : heard ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.3)');
+  glow.addColorStop(1, DK ? 'rgba(24,27,26,0)' : 'rgba(251,250,246,0)');
   x.fillStyle = glow; x.fillRect(0, 0, W, H);
   x.beginPath(); x.arc(W - 170, 230, heard ? 16 : 10, 0, Math.PI * 2);
   x.fillStyle = heard ? C.lamp : C.line; x.fill();
@@ -4578,7 +4907,7 @@ document.addEventListener('click', e => {
   const a = e.target.closest('.tomethod'); if (!a) return;
   e.preventDefault();
   if ($('intro').hidden) showHome();
-  $('mDefine').open = true; $('mHow').open = true;
+  $('methodBox').open = true; $('mDefine').open = true; $('mHow').open = true;
   $('method').scrollIntoView({ behavior: SMOOTH, block: 'start' });
 });
 resetClear(); renderMemorial(); renderRanking(); renderDenoms();
@@ -4775,7 +5104,7 @@ function showRecap(end, martyred) {
   const o = lifeOutcome(martyred), slides = recapSlides(end, martyred);
   const quiet = o === 'martyred' || SMOOTH === 'auto' || typeof requestAnimationFrame !== 'function';
   const box = document.createElement('div');
-  box.id = 'lifeRecap'; box.className = `liferecap rc-${o}`; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', '這一生的回顧');
+  box.id = 'lifeRecap'; box.className = `liferecap rc-${o}${lifeRecipe(martyred).ground === 'dark' ? ' rc-dark' : ''}`; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', '這一生的回顧');
   box.innerHTML = `<div class="rc-bars">${slides.map(() => '<i><b></b></i>').join('')}</div><button class="rc-skip" type="button">跳過</button><div class="rc-stage"></div><div class="rc-nav"><button class="rc-prev" type="button" aria-label="上一張">‹</button><span class="rc-hint">點一下繼續</span><button class="rc-next" type="button">下一張 ›</button></div>`;
   document.body.appendChild(box); document.body.classList.add('rc-open');
   try { recapWash(box, lifeRecipe(martyred), quiet); } catch (e) {}
@@ -4787,6 +5116,7 @@ function showRecap(end, martyred) {
     const s = slides[i];
     bars.forEach((b, j) => b.classList.toggle('on', j <= i));
     stage.innerHTML = `<section class="rc-card rc-${s.k}${quiet ? '' : ' rc-anim'}"><p class="rc-eyebrow">${esc(s.eyebrow)}</p>${s.big ? `<h2 class="rc-big">${esc(s.big)}</h2>` : ''}${s.quote ? `<blockquote class="rc-quote">${esc(s.quote)}</blockquote>` : ''}${s.list ? `<ol class="rc-list">${s.list.map(([a, t]) => `<li><span class="num">${esc(a)}</span><span>${esc(t)}</span></li>`).join('')}</ol>` : ''}${s.swatches ? `<div class="rc-strip" style="background:${stripCss(s.strip)}" aria-hidden="true"></div><ul class="rc-sw">${s.swatches.map(([c, l, p]) => `<li><i style="background:${c}"></i><span>${esc(l)}</span><b class="num">${p}%</b></li>`).join('')}</ul>` : ''}${s.chips ? `<ul class="rc-chips">${s.chips.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}${s.nums ? `<ul class="rc-nums">${s.nums.map(([n, t]) => `<li><b class="num" data-n="${n}">${quiet ? n : 0}</b><span>${esc(t)}</span></li>`).join('')}</ul>` : ''}${(s.lines || []).map(l => `<p class="rc-line">${esc(l)}</p>`).join('')}${i === slides.length - 1 ? '<div class="rc-end"><button class="rc-full btn" type="button">看完整結局</button><button class="rc-again" type="button">再活一次</button></div>' : ''}</section>`;
+    if (box.evalInk) box.evalInk();
     box.querySelector('.rc-prev').disabled = i === 0;
     box.querySelector('.rc-next').hidden = i === slides.length - 1; box.querySelector('.rc-hint').hidden = i === slides.length - 1;
     if (s.nums && !quiet) stage.querySelectorAll('[data-n]').forEach(el => { const n = +el.dataset.n, t0 = performance.now(); const step = t => { const p = Math.min(1, (t - t0) / 900); el.textContent = Math.round(n * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); });
@@ -4811,7 +5141,7 @@ function finish(martyred) {
   const end = Math.min(age, me.lifespan);
   const lives = loadLives();
   const d = new Date();
-  lives.push({ name: me.name, designated: me.designated || false, date: `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`, country: me.country.name, countryId: me.country.id, continent: me.country.continent, group: me.group.name, parent: relName(me), sex: me.sex, lifespan: end, firstAge, faithAge, martyred, journey: journeyText(), channel: firstChannel(), feeling: null, lastWord: '' });
+  lives.push({ name: me.name, designated: me.designated || false, date: `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`, country: me.country.name, countryId: me.country.id, continent: me.country.continent, group: me.group.name, parent: relName(me), sex: me.sex, lifespan: end, firstAge, faithAge, martyred, journey: journeyText(), channel: firstChannel(), feeling: null, lastWord: '', hue: lifeHue(martyred) });
   saveLives(lives);
   addLog(end, martyred ? (gentleOn() ? '你提早走完了這一生。' : '你的一生在這裡結束。') : '你走完了這一生。', 'milestone');
   const c = me.country, g = me.group;
@@ -4875,10 +5205,6 @@ function finish(martyred) {
       <div class="challenge"><span class="lbl">在${c.name}，接觸福音的挑戰是</span><p></p></div>
       ${paradoxText(c) ? '<div class="challenge note px"><span class="lbl">基督徒不少，為什麼還會受迫害？</span><p></p></div>' : ''}
     </div>
-    </details>
-    <details class="xdr"><summary>和你同一秒出生的另外四個人</summary>
-    <div class="others">${cards}</div>
-    <p class="note">如果你在台灣的基督徒家庭長大，「從小就接觸福音」其實是很少見的出生條件：在這 53 國的出生數裡，大約每 ${twOdds().toLocaleString()} 個嬰兒才有一個生在台灣。</p>
     </details>
     <details class="xdr"><summary>留給這個人的話</summary>
     ${words.length ? `<div><p class="eyebrow">你在這一生的回答</p></div><ul class="words">${words.map(() => `<li><span class="a"></span><span><q></q><span></span></span></li>`).join('')}</ul>` : ''}
