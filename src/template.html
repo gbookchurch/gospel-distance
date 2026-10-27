@@ -1095,6 +1095,86 @@ body.rc-open { overflow: hidden; }
   .rc-nums b { font-size: clamp(31px, 9vw, 40px); }
   .rc-line { font-size: 14.5px; }
 }
+
+/* ═══ V3：人生傳記式結果頁，統一章節節奏與文字層級 ═══ */
+.end { --v3-ink: #292a28; --v3-muted: #646860; --v3-gold: #936934; --v3-green: #60796d; }
+.end > .band { gap: 18px; padding-block: 34px; }
+.end .eyebrow { color: var(--v3-muted); font-family: var(--body); font-size: 12.5px; font-weight: 700; letter-spacing: .1em; }
+.end h2 { font-family: var(--body); font-size: clamp(21px, 5vw, 25px); line-height: 1.5; letter-spacing: -.015em; }
+.end .finale { gap: 16px !important; padding-top: 24px; }
+.end .finale-place { order: 0; font-size: 14px; color: var(--v3-muted); }
+.end .v3-person-title { font-family: var(--display); font-size: clamp(29px, 6.6vw, 40px); font-weight: 900; line-height: 1.38; overflow-wrap: anywhere; }
+.v3-lifespan { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; color: var(--v3-muted); font-size: 14px; }
+.v3-lifespan strong { font-size: clamp(30px, 6.6vw, 40px); color: var(--v3-ink); font-weight: 500; line-height: 1.2; }
+.end .finale .epitaph { padding-top: 15px; border-top: 1px solid var(--line); font-family: var(--body); font-size: 16px; line-height: 1.85; gap: 12px; }
+.end .finale .epitaph p:first-child { font-family: var(--body); font-size: 16px; font-weight: 400; line-height: 1.85; margin: 0; }
+.end .finale .epitaph p.key, .end .finale .epitaph p.key:first-child { font-family: var(--display); font-size: clamp(19px, 4.6vw, 23px); line-height: 1.65; color: var(--v3-gold); font-weight: 700; border-left: 3px solid #c1a16c; padding-left: 14px; }
+.end .recap { gap: 18px !important; }
+.v3-vitals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.v3-vitals > div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 12px; display: grid; align-content: start; gap: 4px; min-width: 0; }
+.v3-vitals strong { font-size: clamp(25px, 5vw, 34px); font-weight: 500; line-height: 1.25; color: var(--v3-ink); }
+.v3-vitals div:nth-child(2) strong { color: var(--v3-gold); }
+.v3-vitals span { color: var(--v3-muted); font-size: 12.5px; line-height: 1.55; }
+.v3-spectrum { display: grid; gap: 13px; padding: 17px; background: #f7f6f2; border: 1px solid #d8d6d1; border-radius: 14px; color: var(--v3-ink); }
+.v3-subhead { font-weight: 700; font-size: 16px; }
+.v3-spectrum-strip { width: 100%; height: 28px; border-radius: 12px; border: 1px solid rgba(0,0,0,.08); box-shadow: 0 6px 14px -12px rgba(0,0,0,.45); }
+.v3-spectrum-key { list-style: none; margin: 0; padding: 0; display: flex; gap: 8px 16px; flex-wrap: wrap; }
+.v3-spectrum-key li { display: inline-flex; align-items: center; gap: 7px; color: #505750; font-size: 13px; line-height: 1.55; }
+.v3-spectrum-key i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; flex: none; border: 1px solid rgba(0,0,0,.1); }
+.end .v3-dossier > :not(summary) { margin: 0 15px 15px; }
+.end .v3-dossier .summary { margin-block: 10px; }
+.end .v3-dossier .summary div { grid-column: auto; order: 0; margin: 0; border: 0; border-bottom: 1px solid var(--line); padding: 11px 5px; border-radius: 0; background: none; }
+.end .v3-dossier .summary div.key { background: none; border-left: 0; }
+.end .v3-dossier .summary div.key dd { font-family: var(--body); font-size: 15px; font-weight: 500; }
+.end #share .share { gap: 14px; }
+.end #share .share h2 { color: var(--v3-ink); }
+.v3-description { color: var(--v3-muted); font-size: 15.5px; line-height: 1.75; }
+.end #share .share img { justify-self: center; border-color: #c8c8c8; box-shadow: 0 8px 22px -16px rgba(0,0,0,.35); }
+.end #share .controls { gap: 9px; }
+.end #share .controls button, .end #share .controls .btn { min-height: 46px; }
+.end .explore { gap: 12px !important; }
+.end .explore h2 { margin-bottom: 2px; }
+.end .explore .xdr { border-radius: 12px; }
+.v3-full-log { padding: 10px 12px 5px; }
+.v3-full-log li { grid-template-columns: 3.1em minmax(0, 1fr); gap: 10px; }
+.v3-full-log .t { line-height: 1.75; overflow-wrap: anywhere; }
+.v3-reflection { gap: 15px !important; }
+.v3-question { font-family: var(--display); font-size: clamp(18px, 4vw, 21px); line-height: 1.8; font-weight: 700; color: var(--v3-ink); }
+.v3-reflection .theo-guide { margin-top: 5px; padding: 17px 18px; gap: 12px; }
+.v3-reflection .theo-guide .q { font-size: 15.5px; font-weight: 400; }
+.v3-reflection .theo-guide button { font-weight: 700; }
+.memlist li { grid-template-columns: 46px minmax(0, 1fr); gap: 3px 12px; }
+.memlist .seal { grid-row: 1 / span 4; }
+.memlist .who, .memlist .when, .memlist .what, .memlist .said { grid-column: 2; }
+.memlist li.newest { border-color: #a4ada5; box-shadow: inset 3px 0 0 #829a8b; }
+.memlist li.newest .who::before { content: '最近的一生 · '; font-size: 12px; font-weight: 500; color: #587363; }
+.end .endfoot > .eyebrow { color: #cfdcd4; }
+.end .endfoot .controls { gap: 10px; }
+.end .endfoot .controls .primary { min-height: 50px; }
+@media (max-width: 640px) {
+  .end > .band { gap: 15px; padding-block: 28px; }
+  .end .finale { gap: 13px !important; }
+  .end .v3-person-title { font-size: clamp(28px, 8vw, 36px); }
+  .end .finale .epitaph { font-size: 15.5px; }
+  .v3-vitals { gap: 7px; }
+  .v3-vitals > div { padding: 12px 9px; }
+  .v3-vitals strong { font-size: clamp(24px, 7vw, 30px); }
+  .v3-vitals span { font-size: 11.5px; }
+  .v3-spectrum { padding: 14px; }
+  .v3-spectrum-key { gap: 7px 12px; }
+  .end #share .controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
+  .end #share .controls > * { min-width: 0; justify-content: center; text-align: center; }
+  .end #share .controls .primary { grid-column: 1 / -1; }
+  .end .endfoot .controls .primary { width: 100%; }
+  .memlist li { grid-template-columns: 38px minmax(0, 1fr); gap: 3px 9px; }
+  .memlist .seal { width: 34px; height: 34px; }
+}
+@media (max-width: 370px) {
+  .v3-vitals { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .v3-vitals > div:last-child { grid-column: 1 / -1; }
+  .end #share .controls { grid-template-columns: minmax(0, 1fr); }
+  .end #share .controls .primary { grid-column: auto; }
+}
 </style>
 
 <main>
@@ -1142,10 +1222,9 @@ body.rc-open { overflow: hidden; }
 
   <section class="memorial band b2" id="memorial" hidden>
     <p class="eyebrow">賽道上的每個人</p>
-    <h2>你曾經活過的每一段人生</h2>
+    <h2>你活過的那些人生</h2>
     <p class="memstats" id="memStats"></p>
-    <p class="fine">點兩段人生的「比較」，可以把它們並排來看。</p>
-    <div class="compare" id="memCompare" hidden></div>
+    <p class="fine">每一枚水彩印記，都代表你曾經走過的一段人生。最新的一段會排在最前面。</p>
     <ul class="memlist" id="memList"></ul>
     <div class="confirm" id="memClear"><button id="clearBtn">清除紀錄</button></div>
     <p class="fine">紀錄只存在這個瀏覽器裡，不會上傳。清除瀏覽資料、換手機或用無痕模式時，紀錄不會保留。</p>
@@ -3050,7 +3129,6 @@ function reflect(a) {
 const MEM_KEY = 'gospel-distance-lives';
 function loadLives() { try { return JSON.parse(localStorage.getItem(MEM_KEY)) || []; } catch (e) { return []; } }
 function saveLives(list) { try { localStorage.setItem(MEM_KEY, JSON.stringify(list.slice(-200))); } catch (e) {} }
-let picked = [];
 function lifeSummary(l) {
   if (l.firstAge === null) return `活了 ${l.lifespan} 歲，一生沒有接觸到福音`;
   return `活了 ${l.lifespan} 歲，${l.firstAge} 歲接觸到福音` + (l.channel ? `（透過${l.channel}）` : '') + (l.faithAge !== null ? `，${l.journey || l.faithAge + ' 歲信主'}` : '，沒有回應') + (l.martyred ? '，因信仰離世' : '');
@@ -3086,10 +3164,10 @@ function renderMemorial() {
   const continents = new Set(lives.map(l => l.continent || (DATA.countries.find(c => c.name === l.country) || {}).continent).filter(Boolean));
   const never = lives.filter(l => l.firstAge === null).length;
   $('memStats').innerHTML = `你活過 <b>${lives.length}</b> 段人生，曾經出生在 <b>${countries.size}</b> 個國家、<b>${continents.size}</b> 個洲。其中 <b>${never}</b> 段人生，一直沒有機會接觸福音。`;
-  $('memList').innerHTML = lives.slice().reverse().map(l => `<li style="${hueCss(l.hue || guessHue(l))}"><span class="seal${(l.hue || {}).g === 'dark' ? ' dark' : ''}" aria-hidden="true"></span><span class="who"></span><span class="when"></span><span class="what"></span><span class="said"></span><button class="cmp" aria-pressed="false">比較</button></li>`).join('');
-  picked = picked.filter(i => i < lives.length);
+  $('memList').innerHTML = lives.slice().reverse().map(l => `<li style="${hueCss(l.hue || guessHue(l))}"><span class="seal${(l.hue || {}).g === 'dark' ? ' dark' : ''}" aria-hidden="true"></span><span class="who"></span><span class="when"></span><span class="what"></span><span class="said"></span></li>`).join('');
   [...$('memList').children].forEach((li, i) => {
     const idx = lives.length - 1 - i, l = lives[idx];
+    if (i === 0) li.classList.add('newest');
     li.querySelector('.who').textContent = `${l.name ? l.name + '・' : ''}${l.country}，${l.group}，${l.sex === 'm' ? '男' : '女'}${l.designated ? '（指定出生在台灣）' : ''}`;
     li.querySelector('.when').textContent = l.date;
     const w = li.querySelector('.what');
@@ -3098,36 +3176,7 @@ function renderMemorial() {
     const s = li.querySelector('.said');
     const said = [l.feeling ? `最有感觸：${l.feeling}` : '', l.lastWord ? `你對他說：${l.lastWord}` : ''].filter(Boolean).join('　');
     if (said) s.textContent = said; else s.remove();
-    const b = li.querySelector('.cmp');
-    b.setAttribute('aria-pressed', picked.includes(idx) ? 'true' : 'false');
-    b.onclick = () => {
-      picked = picked.includes(idx) ? picked.filter(x => x !== idx) : [...picked, idx].slice(-2);
-      renderMemorial();
-    };
   });
-  renderCompare(lives);
-}
-function renderCompare(lives) {
-  const box = $('memCompare');
-  if (picked.length < 2) { box.hidden = true; return; }
-  const [a, b] = picked.map(i => lives[i]);
-  const NA = '沒有記錄';
-  const f = [
-    ['出生國家', l => l.country],
-    ['族群', l => l.group],
-    ['出生家庭宗教', l => l.parent || NA],
-    ['第一次接觸福音', l => l.firstAge === null ? '一生沒有機會' : `${l.firstAge} 歲`],
-    ['曾有接觸福音的機會', l => l.firstAge === null ? '沒有' : '有'],
-    ['信仰的路', l => l.faithAge !== null ? (l.journey || `${l.faithAge} 歲信主`) + (l.martyred ? '，因信仰離世' : '') : l.firstAge === null ? '沒有機會選擇' : '聽過，沒有回應'],
-    ['生命長度', l => `${l.lifespan} 歲`],
-  ];
-  box.innerHTML = `<div class="ch"><span></span><b>人生 A</b><b>人生 B</b></div>` + f.map(() => '<div><span></span><span></span><span></span></div>').join('') + '<button id="cmpClose">收起比較</button>';
-  [...box.querySelectorAll('div')].slice(1).forEach((row, i) => {
-    const s = row.querySelectorAll('span');
-    s[0].textContent = f[i][0]; s[1].textContent = f[i][1](a); s[2].textContent = f[i][1](b);
-  });
-  box.hidden = false;
-  $('cmpClose').onclick = () => { picked = []; renderMemorial(); };
 }
 function resetClear() {
   $('memClear').innerHTML = '<button id="clearBtn">清除紀錄</button>';
@@ -5300,6 +5349,7 @@ function finish(martyred) {
     ['信仰選擇', faithAge !== null ? journeyText() + (martyred ? '，因信仰離世' : '') : firstAge === null ? '沒有機會選擇' : '聽過，沒有回應'],
   ];
   const hl = highlights.slice(0, 6);
+  const spectrum = lifeRecipe(martyred);
   const cards = others.map(o => {
     const r = o.first === null ? ['never', '一生沒有接觸到福音']
       : ['heard', `${o.first} 歲${o.channel ? `透過${o.channel}` : ''}接觸到福音${o.faith !== null ? `，${o.faith} 歲信主` : '，沒有回應'}${o.endState === 'left' ? '，後來放下信仰' : o.endState === 'dechurched' ? '，後來離開教會' : ''}${o.martyred ? '，因信仰離世' : ''}`];
@@ -5307,20 +5357,31 @@ function finish(martyred) {
   }).join('');
   $('end').innerHTML = `
     <section class="band b2 finale">
-    <div class="endtop"><p class="eyebrow">人生終章</p><button class="back" id="homeTop">← 回首頁</button></div>
+    <div class="endtop"><p class="eyebrow">THE END · 人生終章</p><button class="back" id="homeTop">← 回首頁</button></div>
     <p class="finale-place"></p>
+    <h2 class="v3-person-title" id="endPerson"></h2>
+    <p class="v3-lifespan"><strong class="num">${end}</strong><span>歲，這一生走到了終點</span></p>
     <div class="epitaph" id="epitaph"></div>
-    <div class="ponder"><p class="eyebrow">想一想</p><p class="q" id="endQ"></p></div>
-    <div class="theo-guide"><p class="eyebrow">還有一個值得思考的問題</p><p class="q">「那些一輩子都沒機會認識耶穌的人，最後會怎樣？」</p><button type="button" id="toTheo">探索不同的神學回答 <span aria-hidden="true">↓</span></button></div>
     </section>
     <section class="band b2 recap">
-    <p class="eyebrow">這一生的摘要</p>
-    <dl class="summary" id="summary">${rows.map(() => '<div><dt></dt><dd></dd></div>').join('')}</dl>
-    <p class="fine">母語聖經翻譯指的是你的母語有沒有聖經譯本，是成長環境的一部分，不代表你讀過。</p>
+    <p class="eyebrow">CHAPTER 02 · 人生足跡</p>
+    <h2>這一生的足跡</h2>
+    <div class="v3-vitals">
+      <div><strong class="num">${end}</strong><span>活了幾歲</span></div>
+      <div><strong class="num">${firstAge === null ? '—' : firstAge}</strong><span>${firstAge === null ? '一生未接觸福音' : '初聞福音的年齡'}</span></div>
+      <div><strong class="num">${difficultyRank(c)}</strong><span>53 國中第幾難</span></div>
+    </div>
+    <div class="v3-spectrum"><p class="v3-subhead">這一生的顏色</p><div class="v3-spectrum-strip" style="background:${stripCss(spectrum.strip)}" role="img" aria-label="這一生的信仰歷程色帶"></div><ul class="v3-spectrum-key">${spectrum.comps.map(s => `<li><i style="background:${s.color}"></i><span>${s.label}</span></li>`).join('')}</ul><p class="fine">色譜綜合出生地、性別與一生的信仰歷程；色帶依時間順序呈現信仰變化。</p></div>
+    <details class="xdr v3-dossier"><summary>查看完整人生資料</summary>
+      <dl class="summary" id="summary">${rows.map(() => '<div><dt></dt><dd></dd></div>').join('')}</dl>
+      <p class="fine">母語聖經翻譯指的是你的母語有沒有聖經譯本，是成長環境的一部分，不代表你讀過。</p>
+    </details>
     </section>
     <section class="band b3" id="share">
     <div class="share">
-      <p class="eyebrow">分享卡</p>
+      <p class="eyebrow">CHAPTER 03 · 分享這一生</p>
+      <h2>把這一生帶走</h2>
+      <p class="v3-description">把這段意想不到的人生分享給朋友，看看他們又會活出什麼故事。</p>
       <p class="hint" id="shareStatus">正在畫你的分享卡…</p>
       <img id="shareImg" alt="這一生的模擬結果分享卡" hidden>
       <div class="controls">
@@ -5332,7 +5393,9 @@ function finish(martyred) {
     </div>
     </section>
     <section class="band b2 explore">
-    <p class="eyebrow">探索這段人生</p>
+    <p class="eyebrow">CHAPTER 04 · 回頭看看</p>
+    <h2>回頭看看這一生</h2>
+    <details class="xdr"><summary>展開這一生的完整紀錄</summary><ol class="log v3-full-log" id="fullLifeLog"></ol></details>
     ${hl.length ? `<details class="xdr"><summary>這一生的重要時刻</summary><div class="events"><ol id="hlList">${hl.map(() => '<li><span class="a"></span><span class="t"></span></li>').join('')}</ol>${highlights.length > 6 ? `<p class="fine">還有 ${highlights.length - 6} 件事，記在上方的人生紀錄裡。</p>` : ''}</div></details>` : ''}
     ${churchLine()}
     ${tradPanel()}
@@ -5360,8 +5423,15 @@ function finish(martyred) {
     </div>
     </details>
     </section>
+    <section class="band b2 v3-reflection">
+      <p class="eyebrow">CHAPTER 05 · 留下一個問題</p>
+      <h2>如果換成你呢？</h2>
+      <p class="v3-question" id="endQ"></p>
+      <div class="theo-guide"><p class="q">那些一生都沒機會接觸福音的人，最後會怎樣？基督教內部其實有不同的回答。</p><button type="button" id="toTheo">看看不同的神學觀點 <span aria-hidden="true">↓</span></button></div>
+    </section>
     <section class="band b4 endfoot">
-    <div class="controls"><button class="primary" id="againBtn">再活一次</button><button id="homeBtn">回首頁</button><button id="memBtn">看賽道上的每個人</button></div>
+    <p class="eyebrow">CHAPTER 06 · 下一段人生</p>
+    <div class="controls"><button class="primary" id="againBtn">再活一次</button><button id="memBtn">看你活過的那些人生</button><button id="homeBtn">回首頁</button></div>
     <div class="show">
       <p>聽聽${SHOW_NAME}，一起聊聊教會裡不太好說、卻很值得聊的信仰問題。玩完之後有什麼想說的，也歡迎分享給我們。</p>
       <a class="cta" href="${SHOW_URL}" target="_blank" rel="noopener">收聽${SHOW_NAME}</a>
@@ -5369,11 +5439,14 @@ function finish(martyred) {
     <p class="fine">這段人生是依公開資料和模型規則產生的，其中部分機率是設計假設。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
     </section>`;
   const E = $('end');
+  $('endPerson').textContent = `${me.name}的一生`;
   E.querySelector('.finale-place').textContent = `${c.name}・${g.name}`;
-  $('epitaph').innerHTML = epitaph(end, martyred).map(() => '<p></p>').join('');
-  [...$('epitaph').children].forEach((p, i) => p.textContent = epitaph(end, martyred)[i]);
-  // 最重要的結局句：一生沒接觸到福音時是最後一句，其他結局是第二句
-  { const ps = $('epitaph').children, k = lifeOutcome(martyred) === 'never' ? ps.length - 1 : 1; if (ps[k] && k > 0) ps[k].classList.add('key'); }
+  const endingLines = epitaph(end, martyred).slice(1); // 壽命已經由傳記標題和重點數字呈現
+  $('epitaph').innerHTML = endingLines.map(() => '<p></p>').join('');
+  [...$('epitaph').children].forEach((p, i) => p.textContent = endingLines[i]);
+  // 最重要的結局句：未接觸福音時是最後一句，其他結局是第一句
+  { const ps = $('epitaph').children, k = lifeOutcome(martyred) === 'never' ? ps.length - 1 : 0; if (ps[k]) ps[k].classList.add('key'); }
+  $('fullLifeLog').innerHTML = $('log').innerHTML;
   [...$('summary').children].forEach((div, i) => { div.querySelector('dt').textContent = rows[i][0]; div.querySelector('dd').textContent = rows[i][1]; div.className = i === 4 ? 'key' : i >= 5 ? 'extra' : 'who'; });
   if (hl.length) [...$('hlList').children].forEach((li, i) => { li.className = hl[i].cls; li.querySelector('.a').textContent = `${hl[i].age} 歲`; li.querySelector('.t').textContent = localize(hl[i].text); });
   $('endQ').textContent = endQuestion(martyred);
@@ -5409,6 +5482,7 @@ function finish(martyred) {
     box.innerHTML = '<p class="eyebrow">你對這個人說</p><p class="q"></p>';
     box.querySelector('.q').textContent = v;
   };
+  $('birth').hidden = true; // 完整結果頁自成一章，詳細年表保留於可展開區
   E.hidden = false;
   $('againBtn').onclick = () => start();
   $('toTheo').onclick = goTheo;
