@@ -417,9 +417,10 @@ button.go { font-size: 18px; padding: 14px 34px; border-radius: 6px; }
 .lifefoot { display: grid; gap: 20px; padding-bottom: 36px; margin-top: 16px; }
 /* 頁尾：版權與使用許可，接在最後一塊墨綠底色下面 */
 .site-foot { max-width: 680px; margin: -1px auto 0; padding-block: 0 48px; font-size: 13px; line-height: 1.8; }
-.site-foot .sticker { display: block; margin-bottom: 28px; border-radius: 12px; overflow: hidden; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); transition: transform .2s; }
-.site-foot .sticker img { display: block; width: 100%; height: auto; }
-@media (hover: hover) { .site-foot .sticker:hover { transform: translateY(-2px); } }
+.site-foot .foot-links { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+.site-foot.band.b4 .foot-links a { display: inline-flex; justify-content: center; align-items: center; min-height: 46px; padding: 10px 16px; border: 1px solid var(--lamp); border-radius: 6px; background: var(--lamp-soft); color: var(--ink); font-size: 14px; font-weight: 700; line-height: 1.4; text-decoration: none; text-align: center; transition: border-color .2s, background-color .2s; }
+.site-foot.band.b4 .foot-links a:hover, .site-foot.band.b4 .foot-links a:focus-visible { border-color: var(--ink); background: rgba(255, 255, 255, 0.18); }
+@media (max-width: 640px) { .site-foot .foot-links { display: grid; grid-template-columns: minmax(0, 1fr); } .site-foot .foot-links a { width: 100%; } }
 /* 背景音樂開關：固定在右上角 */
 .musicbtn { position: fixed; top: max(12px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right)); z-index: 50; width: 44px; height: 44px; padding: 0; border-radius: 50%; display: grid; place-items: center; background: rgba(248, 248, 248, 0.92); border: 1px solid var(--line); color: var(--ink); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); }
 .musicbtn .off { display: none; }
@@ -1278,7 +1279,6 @@ body.rc-open { overflow: hidden; }
   </section>
 
   <section class="memorial band b2" id="memorial" hidden>
-    <p class="eyebrow">賽道上的每個人</p>
     <h2>你活過的那些人生</h2>
     <p class="memstats" id="memStats"></p>
     <p class="fine">每一枚水彩印記，都代表你曾經走過的一段人生。最新的一段會排在最前面。</p>
@@ -1448,7 +1448,6 @@ body.rc-open { overflow: hidden; }
   <section class="show band b4" id="show">
     <p class="eyebrow">關於這個企劃</p>
     <p>我們在節目裡常聊信仰怎麼在真實生活裡長出來。這個模擬想讓你換一個位置想：如果你不是生在台灣，你會在幾歲聽見福音？玩完之後，歡迎來節目跟我們分享你活過的那一生。</p>
-    <a class="cta" href="https://portaly.cc/gbookchurch" target="_blank" rel="noopener">收聽《教會小本本》</a>
   </section>
   </div>
 
@@ -1522,7 +1521,6 @@ body.rc-open { overflow: hidden; }
     <div class="show">
       <p class="brand"><span class="dot" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>《教會小本本》</b>Podcast 特別企劃</span></p>
       <p>聽聽《教會小本本》，一起聊聊教會裡不太好說、卻很值得聊的信仰問題。玩完之後有什麼想說的，也歡迎分享給我們。</p>
-      <a class="cta" href="https://portaly.cc/gbookchurch" target="_blank" rel="noopener">收聽《教會小本本》</a>
     </div>
     <p class="fine">這段人生是依公開資料和模型規則產生的，其中部分機率是設計假設。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
   </section>
@@ -1534,12 +1532,11 @@ body.rc-open { overflow: hidden; }
   <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path class="on" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path class="off" d="M15.5 9.5l5 5M20.5 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
 </button>
 <footer class="site-foot band b4">
-  <a class="sticker" href="https://store.line.me/stickershop/product/31241357/zh-Hant" target="_blank" rel="noopener noreferrer" aria-label="前往 LINE STORE 查看《教會小本本》LINE 貼圖">
-    <img src="line-sticker.webp" width="1400" height="588" alt="《教會小本本》LINE 貼圖上架中，教會裡不好說的就用貼圖說" loading="lazy" decoding="async">
-  </a>
-  <a class="sticker" href="https://gbookchurch.github.io/christian-spectrum/" target="_blank" rel="noopener" aria-label="前往《基督徒的光譜圖鑑：你是哪一種？》">
-    <img src="img/promo-spectrum.webp" width="1200" height="630" alt="基督徒的光譜圖鑑：你是哪一種？57 題，看看你在神學、救恩觀、恩賜、敬拜、教會治理和政治上的位置" loading="lazy" decoding="async">
-  </a>
+  <nav class="foot-links" aria-label="《教會小本本》相關連結">
+    <a href="https://portaly.cc/gbookchurch" target="_blank" rel="noopener">收聽《教會小本本》</a>
+    <a href="https://store.line.me/stickershop/product/31241357/zh-Hant" target="_blank" rel="noopener noreferrer">下載貼圖</a>
+    <a href="https://gbookchurch.github.io/christian-spectrum/" target="_blank" rel="noopener">基督徒的光譜</a>
+  </nav>
   <div class="in">
     <p><b>© 版權 &amp; 使用許可</b></p>
     <p>本網站採 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh_TW" target="_blank" rel="noopener license">CC BY-NC-SA 4.0</a> 許可</p>
@@ -5710,14 +5707,13 @@ function finish(martyred) {
   }).join('');
   $('end').innerHTML = `
     <section class="band b2 finale">
-    <div class="endtop"><p class="eyebrow">THE END · 人生終章</p><button class="back" id="homeTop">← 回首頁</button></div>
+    <div class="endtop"><button class="back" id="homeTop">← 回首頁</button></div>
     <p class="finale-place"></p>
     <h2 class="v3-person-title" id="endPerson"></h2>
     <p class="v3-lifespan"><strong class="num">${end}</strong><span>歲，這一生走到了終點</span></p>
     <div class="epitaph" id="epitaph"></div>
     </section>
     <section class="band b2 recap">
-    <p class="eyebrow">這一生的紀錄</p>
     <h2>這一生的足跡</h2>
     <div class="v3-vitals">
       <div><strong class="num">${end}</strong><span>活了幾歲</span></div>
@@ -5732,7 +5728,6 @@ function finish(martyred) {
     </section>
     <section class="band b3" id="share">
     <div class="share">
-      <p class="eyebrow">分享這一生</p>
       <h2>把這一生帶走</h2>
       <p class="v3-description">把這段意想不到的人生分享給朋友，看看他們又會活出什麼故事。</p>
       <p class="hint" id="shareStatus">正在畫你的分享卡…</p>
@@ -5746,7 +5741,6 @@ function finish(martyred) {
     </div>
     </section>
     <section class="band b2 explore">
-    <p class="eyebrow">人生故事與背景</p>
     <h2>回頭看看這一生</h2>
     <details class="xdr"><summary>展開這一生的完整紀錄</summary><ol class="log v3-full-log" id="fullLifeLog"></ol></details>
     ${hl.length ? `<details class="xdr"><summary>這一生的重要時刻</summary><div class="events"><ol id="hlList">${hl.map(() => '<li><span class="a"></span><span class="t"></span></li>').join('')}</ol>${highlights.length > 6 ? `<p class="fine">還有 ${highlights.length - 6} 件事，記在上方的人生紀錄裡。</p>` : ''}</div></details>` : ''}
@@ -5775,17 +5769,14 @@ function finish(martyred) {
     </details>
     </section>
     <section class="band b2 theo-access">
-      <p class="eyebrow">延伸思考</p>
       <h2>那些一生都沒機會接觸福音的人，最後會怎樣？</h2>
       <p class="theo-access-lede">基督教內部其實有不同的回答。</p>
       ${hellPanel(false)}
     </section>
     <section class="band b4 endfoot">
-    <p class="eyebrow">接下來</p>
     <div class="controls"><button class="primary" id="againBtn">再活一次</button><button id="memBtn">看你活過的那些人生</button><button id="homeBtn">回首頁</button></div>
     <div class="show">
       <p>聽聽${SHOW_NAME}，一起聊聊教會裡不太好說、卻很值得聊的信仰問題。玩完之後有什麼想說的，也歡迎分享給我們。</p>
-      <a class="cta" href="${SHOW_URL}" target="_blank" rel="noopener">收聽${SHOW_NAME}</a>
     </div>
     <p class="fine">這段人生是依公開資料和模型規則產生的，其中部分機率是設計假設。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
     </section>`;
