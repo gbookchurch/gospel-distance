@@ -184,7 +184,7 @@ label { font-size: 14px; color: var(--muted); display: flex; gap: 8px; align-ite
 /* 每段人生的色彩：左邊一枚水彩印記，整列帶一點淡淡的暈染 */
 .memlist li { grid-template-columns: 46px 1fr auto; padding: 14px 12px; background: var(--wash); border-radius: 12px; border-bottom: 0; margin-bottom: 8px; border: 1px solid color-mix(in srgb, var(--line) 70%, transparent); }
 .memlist { border-top: 0; }
-.memlist .seal { grid-row: 1 / span 4; width: 42px; height: 42px; border-radius: 50%; background: var(--seal), #fbfaf6; box-shadow: 0 0 0 3px color-mix(in srgb, var(--rim) 45%, transparent), inset 0 0 0 1px rgba(0,0,0,.06); filter: saturate(1.05); align-self: start; }
+.memlist .seal { grid-row: 1 / span 4; width: 42px; height: 42px; border-radius: 50%; background: var(--seal), #f7f3ea; box-shadow: inset 0 0 0 4px var(--rim), 0 0 0 1px rgba(0,0,0,.08); align-self: start; }
 .memlist .seal.dark { background: var(--seal), #1f2221; }
 .memlist .what, .memlist .said, .memlist .cmp { grid-column: 2 / -1; }
 .compare { border: 1px solid var(--lamp); border-radius: 10px; padding: 12px; display: grid; gap: 0; background: var(--surface); }
@@ -1202,7 +1202,6 @@ body.rc-open { overflow: hidden; }
   </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 <script>
 const DATA = /*DATA*/;
 const WORLD = /*MAP*/;
@@ -1210,7 +1209,7 @@ const WORLD = /*MAP*/;
 /*EVENTS*/
 
 const RELIGION = { christian: '基督徒', catholic: '天主教', protestant: '基督新教', orthodox: '東正教', lds: '摩門教', muslim: '穆斯林', unaffiliated: '無宗教', buddhist: '佛教', hindu: '印度教', jewish: '猶太教', other: '民間信仰或其他宗教' };
-const BIBLE = { full: '有完整聖經', nt: '有新約聖經', portions: '只有部分經卷', started: '翻譯剛開始', none: '還沒有聖經', null: '不明' };
+const BIBLE = { full: '有完整聖經', nt: '有新約聖經', portions: '只有部分經卷', started: '翻譯剛開始', none: '還沒有聖經', null: '資料不足' };
 const HELP_URL = 'https://www.opendoors.org/persecution/countries';
 const GENTLE_KEY = 'gospel-distance-gentle';
 // 系統設定「減少動態效果」時，捲動直接跳過去
@@ -2862,10 +2861,10 @@ function guessHue(l) {
 }
 // 賽道上的每個人：一枚小小的水彩印記，加上淡淡的底色
 function hueCss(h) {
-  const main = h.c.filter(x => !x[2]), rim = h.c.find(x => x[2]), pos = ['28% 30%', '68% 42%', '42% 72%', '74% 74%', '22% 64%'];
-  const seal = main.map(([col, w], i) => `radial-gradient(circle at ${pos[i % pos.length]}, ${col} 0 ${Math.round(14 + w * 0.5)}%, transparent ${Math.round(40 + w * 0.6)}%)`).join(', ');
-  const wash = main.map(([col], i) => `radial-gradient(60% 120% at ${[8, 55, 92, 30][i % 4]}% ${i % 2 ? 100 : 0}%, color-mix(in srgb, ${col} 16%, transparent), transparent 70%)`).join(', ');
-  return `--seal:${seal};--wash:${wash};--rim:${rim ? rim[0] : '#ccc'};--stain:${h.s || 0}`;
+  const [reg, ...rest] = h.c, faiths = rest.filter(x => !x[2]), sex = rest.find(x => x[2]), pos = ['28% 34%', '68% 46%', '44% 70%', '74% 74%', '22% 62%'];
+  const seal = [...(sex ? [`radial-gradient(circle at 78% 22%, ${sex[0]} 0 10%, transparent 30%)`] : []), ...faiths.map(([col, w], i) => `radial-gradient(circle at ${pos[i % pos.length]}, ${col} 0 ${Math.round(16 + w * 0.5)}%, transparent ${Math.round(42 + w * 0.6)}%)`)].join(', ');
+  const wash = faiths.map(([col], i) => `radial-gradient(60% 120% at ${[8, 55, 92, 30][i % 4]}% ${i % 2 ? 100 : 0}%, color-mix(in srgb, ${col} 16%, transparent), transparent 70%)`).join(', ');
+  return `--seal:${seal};--wash:${wash};--rim:${reg ? reg[0] : '#ccc'}`;
 }
 function renderMemorial() {
   const lives = loadLives();
@@ -3208,6 +3207,23 @@ function cardLine(end, martyred) {
   return firstAge === faithAge ? `我在 ${faithAge} 歲接觸到福音，也決定跟隨耶穌。` : `我在 ${firstAge} 歲接觸到福音，${faithAge} 歲決定跟隨耶穌。`;
 }
 function headline(end, martyred) { return cardLine(end, martyred); }
+// 接觸福音的難度：直接用 53 國排行的名次（countries.json 的 difficulty.rank，第 1 名是最難接觸到福音的國家），排行榜、結果頁和分享卡共用
+const difficultyRank = c => c.difficulty.rank;
+// 分享卡上的母語聖經譯本：資料缺的時候寫「資料不足」，不當成沒有聖經
+const CARD_BIBLE = { full: '完整聖經', nt: '新約聖經', portions: '部分經卷', started: '翻譯中', none: '還沒有', null: '資料不足' };
+// 分享卡的第三、四層：第一次聽見福音，和這一生的信仰選擇；第一次聽見和決定跟隨分開寫
+function cardStory(end, martyred) {
+  if (firstAge === null) return ['一生沒有機會聽見福音。', martyred ? '我在這段人生裡提早走完了一生。' : '福音一直沒有走到我身邊。'];
+  const l3 = `${firstAge} 歲，第一次聽見福音。`;
+  if (faithAge === null) return [l3, `我聽過，但${end - firstAge > 3 ? '直到最後' : '後來'}都沒有選擇這份信仰。`];
+  const fam = me.parentReligion === 'christian' && faithAge < 18;
+  const choose = faithAge === firstAge ? (fam ? '那一年，我開始把信仰當成自己的。' : '那一年，我決定跟隨耶穌。') : fam ? `${faithAge} 歲，我開始把信仰當成自己的。` : `${faithAge} 歲，我決定跟隨耶穌。`;
+  const W2 = { leave: '放下了信仰', return_faith: '又重新相信', dechurch: '離開了教會', return_church: '回到教會' };
+  const after = journey.filter(j => j.age >= faithAge && W2[j.kind]).slice(0, 3).map(j => `${j.age} 歲${W2[j.kind]}`);
+  let l4 = choose + (after.length ? `後來，${after.join('，')}。` : '');
+  if (martyred) l4 += '最後因為信仰，提早走完了一生。';
+  return [l3, l4];
+}
 function shareText(end, martyred) {
   const turn = cardTurn(end);
   return `我在另一段人生裡，叫${me.name}。\n${cardLine(end, martyred)}\n我生在${me.country.name}${me.designated ? '（這一輪指定出生在台灣）' : ''}，${me.group.name}，活了 ${end} 歲。${turn ? `\n這一生的轉折：${turn}` : ''}${feeling ? `\n這一生最有感觸的是：${feeling}。` : ''}\n如果換成你，你會出生在哪裡？來玩${SHOW_NAME}的「福音距離」：https://${SITE_URL}/`;
@@ -3244,13 +3260,13 @@ function drawQR(x, text, left, top, size, dark, light) {
 // ── 色彩系統：出生背景、性別、信仰歷程 ───────────────────────────
 // 宗教的顏色（家庭宗教、改信之後的傳統都用這一張表）
 const HUES = {
-  protestant: ['基督新教', '#c9a227'], catholic: ['天主教', '#a8673a'], orthodox: ['東正教', '#a9b1ba'], oriental: ['東方正教', '#bfae9c'], lds: ['摩門教', '#e2d29b'],
-  muslim: ['伊斯蘭', '#2a9d8f'], hindu: ['印度教', '#f08a1c'], buddhist: ['佛教', '#8f2d3f'], folk: ['道教與民間信仰', '#d8432f'],
-  jewish: ['猶太教', '#2e3f7f'], sikh: ['錫克教', '#e7a81a'], ethnic: ['傳統信仰', '#9c6a3e'], none: ['無宗教', '#9ba4aa']
+  protestant: ['基督新教', '#C8A35D'], catholic: ['天主教', '#B97D61'], orthodox: ['東正教', '#A7B5C1'], oriental: ['東方正教', '#C4B7AA'], assyrian: ['亞述教會', '#C4B7AA'], lds: ['摩門教', '#D8C8A5'],
+  muslim: ['伊斯蘭', '#4E9F9B'], hindu: ['印度教', '#D58A49'], buddhist: ['佛教', '#A75461'], folk: ['道教與民間信仰', '#BE6353'],
+  jewish: ['猶太教', '#4B608C'], sikh: ['錫克教', '#D5A34E'], ethnic: ['傳統信仰', '#A8875F'], none: ['無宗教', '#AAA8A2']
 };
-const SEX_HUE = { m: ['男生', '#3e9b5f'], f: ['女生', '#3d7fc4'] };
+const SEX_HUE = { m: ['男生', '#719A7D'], f: ['女生', '#719FC1'] };
 // 出生的地區：按洲分色調，同一洲的國家再做小幅變化
-const REGIONS = { ea: ['東亞', '#46505e'], sea: ['東南亞', '#9b6fa8'], sa: ['南亞', '#e0a93a'], mena: ['中東與北非', '#d4b88f'], af: ['撒哈拉以南非洲', '#b5552f'], eu: ['歐洲', '#4f7d8c'], am: ['美洲', '#c4714c'] };
+const REGIONS = { ea: ['東亞', '#606A70'], sea: ['東南亞', '#8C7F9A'], sa: ['南亞', '#C29A62'], mena: ['中東與北非', '#BEA584'], af: ['撒哈拉以南非洲', '#B47D65'], eu: ['歐洲', '#7291A6'], am: ['美洲', '#BE886E'], oc: ['大洋洲', '#65A0AF'] };
 const REGION_OF = {};
 for (const [k, ids] of Object.entries({ ea: 'TW KR JP CN KP', sea: 'PH ID VN MM TH', sa: 'IN PK BD', mena: 'EG MA IR YE IQ TR SY SA DZ SD UZ AF', eu: 'RU DE GB FR', am: 'US BR MX CO', af: 'CD ET NG TZ UG KE AO MZ ZA NE MG CI ML CM TD GH SO BF ZM MW' })) for (const id of ids.split(' ')) REGION_OF[id] = k;
 function hexHsl(h) {
@@ -3268,12 +3284,14 @@ function hslHex(h, s, l) {
   return '#' + [r, g, b].map(v => Math.round((v + m) * 255).toString(16).padStart(2, '0')).join('');
 }
 const strHash = s => [...String(s)].reduce((a, ch) => (a * 31 + ch.charCodeAt(0)) >>> 0, 7);
+// 同一洲同一色系；每個國家在 OKLCH 裡色相 ±8°、明度 ±0.03、彩度小幅變化（上限 0.09），依國家代碼固定
 function regionColor(c) {
-  const r = REGIONS[REGION_OF[c.id] || 'af'], [h, s, l] = hexHsl(r[1]), k = strHash(c.id);
-  return [r[0], hslHex(h + (k % 17) - 8, s, l + ((k >> 5) % 11 - 5) / 100)];
+  const r = REGIONS[REGION_OF[c.id] || 'af'], R = mulberry(strHash('country:' + c.id)), l = hexLab(r[1]), L = l[0], C = Math.hypot(l[1], l[2]), h = Math.atan2(l[2], l[1]);
+  const L2 = L + (R() - 0.5) * 0.06, C2 = Math.min(0.09, C * (0.9 + R() * 0.2)), h2 = h + (R() - 0.5) * 16 * Math.PI / 180;
+  return [r[0], labHex([L2, C2 * Math.cos(h2), C2 * Math.sin(h2)])];
 }
 // 這一年你在哪個信仰裡
-function christKey() { return me.trad === 'orthodox' ? (tradKey() === 'eastern' ? 'orthodox' : 'oriental') : HUES[me.trad] ? me.trad : 'protestant'; }
+function christKey() { if (me.trad === 'orthodox') { const k = tradKey(); return k === 'eastern' ? 'orthodox' : k === 'assyrian' ? 'assyrian' : 'oriental'; } return HUES[me.trad] ? me.trad : 'protestant'; }
 function famKey() {
   const l = me.parentLabel;
   if (me.parentReligion === 'christian') return christKey();
@@ -3335,8 +3353,7 @@ function groundOf(comps) {
 function lifeRecipe(martyred) {
   const yrs = colorYears.length ? colorYears : [famKey()], cnt = {}, order = [];
   for (const k of yrs) { if (!(k in cnt)) { cnt[k] = 0; order.push(k); } cnt[k]++; }
-  const f = Math.min(stats.persecution, 8) / 8;
-  const adj = hex => { const [h, s, l] = hexHsl(hex); return hslHex(h, s * (1 - 0.3 * f), l * (1 - 0.1 * f)); };
+  const adj = hex => hex; // 逼迫不再讓整張畫變灰，改成河裡的深色細流（見 riverArt）
   const [rl, rc] = regionColor(me.country);
   const comps = [{ k: 'region', label: `出生在${rl}`, color: adj(rc), w: 0.25 }];
   for (const k of order) comps.push({ k, label: hueLabel(k), color: adj(HUES[k][1]), w: 0.6 * cnt[k] / yrs.length, rel: true });
@@ -3352,7 +3369,7 @@ function lifeRecipe(martyred) {
   // 每個顏色往整體平均靠近一點點，整張畫比較和諧
   const avg = comps.reduce((a, c) => { const l = hexLab(c.color); return a.map((v, i) => v + l[i] * c.w); }, [0, 0, 0]);
   for (const c of comps) { const l = hexLab(c.color); c.paint = labHex(l.map((v, i) => v + (avg[i] - v) * 0.1)); }
-  return { comps, strip: yrs, quiet: !!martyred, faint: yrs.length < 15, shade, ground: groundOf(comps) };
+  return { comps, strip: yrs, quiet: !!martyred, faint: yrs.length < 15, shade, ground: 'light' };
 }
 // 水彩：多邊形反覆變形、一層一層薄薄地疊上去
 function mulberry(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
@@ -3478,47 +3495,150 @@ function drawWash(x, layers, W, H, t, alpha) {
   x.restore();
 }
 const washSeed = () => strHash(me.name + me.country.id + colorYears.length);
-// 回顧故事卡的背景：慢慢流動的水彩
-function recapWash(box, recipe, quiet) {
+// ── 流動水彩：信仰歷程是一條依時間變色的河，出生地是邊框，性別是河岸的光暈和細線
+// 同一份人生資料永遠畫出同一張圖：所有亂數都來自這一生的資料做成的種子
+const labLch = ([L, a, b]) => [L, Math.hypot(a, b), Math.atan2(b, a)];
+const lchLab = ([L, C, h]) => [L, C * Math.cos(h), C * Math.sin(h)];
+const labRgba = (lab, a = 1) => { const h = labHex(lab); return `rgba(${parseInt(h.slice(1, 3), 16)},${parseInt(h.slice(3, 5), 16)},${parseInt(h.slice(5, 7), 16)},${a})`; };
+function tame(hex, cMax, lMin, lMax) { const [L, C, h] = labLch(hexLab(hex)); return lchLab([Math.min(lMax, Math.max(lMin, L)), Math.min(cMax, C), h]); }
+const hueGap = (p, q) => { const d = Math.abs(labLch(p)[2] - labLch(q)[2]); return Math.min(d, 2 * Math.PI - d) * 180 / Math.PI; };
+function mixLab(p, q, t) { const m = p.map((v, i) => v + (q[i] - v) * t), c0 = Math.hypot(p[1], p[2]) * (1 - t) + Math.hypot(q[1], q[2]) * t, c1 = Math.hypot(m[1], m[2]) || 1, k = Math.min(1.5, c0 / c1); return [m[0], m[1] * k, m[2] * k]; }
+function noise1(R, n = 64) { const v = Array.from({ length: n + 1 }, R); return x => { x = ((x % n) + n) % n; const i = Math.floor(x), f = x - i, s = f * f * (3 - 2 * f); return v[i] * (1 - s) + v[i + 1] * s; }; }
+const fnv = s => { let h = 2166136261; for (const ch of String(s)) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
+// 這一生的色譜資料：信仰時間軸（依每年記錄的狀態，連續相同的年份合成一段）、出生地、性別、逼迫和服事中受傷的年紀
+function lifeSpec(martyred) {
+  const yrs = colorYears.length ? colorYears : [famKey()], n = yrs.length, segs = [];
+  yrs.forEach((k, i) => { const s = segs[segs.length - 1]; if (s && s.key === k) s.f1 = (i + 1) / n; else segs.push({ key: k, f0: i / n, f1: (i + 1) / n }); });
+  const badMin = new Set(Object.values(MIN_EVENTS).flatMap(v => v[1]));
+  const pers = [...new Set(highlights.filter(h => h.cls === 'persecution' || badMin.has(h.text)).map(h => h.age))].sort((a, b) => a - b).slice(0, 5);
+  return { segs, end: Math.max(1, n - 1), sex: me.sex, cid: me.country.id, region: regionColor(me.country)[1], pers, quiet: !!martyred, seed: fnv([me.name, me.country.id, me.sex, yrs.join(','), pers.join(',')].join('#')) };
+}
+function riverArt(W, H, spec, o = {}) {
+  const mk = () => { const c = document.createElement('canvas'); c.width = W; c.height = H; const x = c.getContext && c.getContext('2d'); return x ? [c, x] : null; };
+  const out = mk(); if (!out) return null;
+  const [cv, x] = out, S = Math.min(W, H), seed = spec.seed, R = mulberry(seed), nW = noise1(mulberry(seed + 1)), nY = noise1(mulberry(seed + 2)), nL = noise1(mulberry(seed + 3));
+  const short = spec.end < 30, k = short ? 0.8 : 1, y0 = o.y0 ?? 0.7, y1 = o.y1 ?? 0.56;
+  const segs = spec.segs.map(s => ({ ...s, lab: tame(HUES[s.key][1], 0.11, 0.56, 0.8) }));
+  const path = t => [W * (-0.06 + 1.12 * t), H * (y0 - (y0 - y1) * t + 0.09 * Math.sin(Math.PI * 2 * (t * 0.95 + nY(3.1) * 0.2)) * (o.amp ?? 1) + 0.03 * (nY(t * 6 + 10) - 0.5))];
+  const width = t => S * (short ? 0.13 : 0.18) * (o.wide ?? 1) * (0.78 + 0.45 * nW(t * 5 + 3));
+  const normal = t => { const [a, b] = path(Math.max(0, t - 0.002)), [c, d] = path(Math.min(1, t + 0.002)), dx = c - a, dy = d - b, l = Math.hypot(dx, dy) || 1; return [-dy / l, dx / l]; };
+  // 某個時間點的顏色：轉換點兩側各有一小段過渡；色相差 100° 以內在 OKLab 混色，差太多就兩色各自半透明疊在一起
+  const shade = (lab, t) => [lab[0] + (nL(t * 7) - 0.5) * 0.07, lab[1], lab[2]];
+  const pair = (p, q, u, t) => { u = Math.max(0, Math.min(1, u)); return hueGap(p, q) <= 100 ? [[shade(mixLab(p, q, u), t), 1]] : [[shade(p, t), 1 - u], [shade(q, t), u]]; };
+  const tau = s => Math.min(0.04, (s.f1 - s.f0) / 4);
+  const colorAt = t => {
+    let i = segs.findIndex(s => t >= s.f0 && t <= s.f1); if (i < 0) i = segs.length - 1;
+    const s = segs[i];
+    if (i + 1 < segs.length && t > s.f1 - tau(s)) { const n = segs[i + 1]; return pair(s.lab, n.lab, (t - (s.f1 - tau(s))) / (tau(s) + tau(n)) * 0.5, t); }
+    if (i > 0 && t < s.f0 + tau(s)) { const p = segs[i - 1]; return pair(p.lab, s.lab, 0.5 + (t - s.f0) / (tau(s) + tau(p)) * 0.5, t); }
+    return [[shade(s.lab, t), 1]];
+  };
+  const layer = draw => { const m = mk(); draw(m[1]); return m[0]; };
+  const blob = (ctx, cx, cy, r, lab, a, n) => { const base = deform(Array.from({ length: 10 }, (_, i) => { const q = i / 10 * Math.PI * 2, rr = r * (0.8 + R() * 0.4); return [cx + Math.cos(q) * rr, cy + Math.sin(q) * rr]; }), 3, 0.5, R); ctx.fillStyle = labRgba(lab, a); for (let l = 0; l < n; l++) { const p = deform(base, 2, 0.55, R); ctx.beginPath(); ctx.moveTo(p[0][0], p[0][1]); for (const q of p) ctx.lineTo(q[0], q[1]); ctx.closePath(); ctx.fill(); } };
+  const blur = (c, b) => { const ctx = c.getContext('2d'); if (!('filter' in ctx) || b <= 0) return; const [t, y] = mk(); y.filter = `blur(${b}px)`; y.drawImage(c, 0, 0); y.filter = 'none'; y.globalAlpha = 0.3; y.drawImage(c, 0, 0); ctx.clearRect(0, 0, W, H); ctx.drawImage(t, 0, 0); };
+  const curve = (ctx, t0, t1, off) => { ctx.beginPath(); let first = true; for (let t = t0; t <= t1; t += 0.004) { const [cx, cy] = path(t), [dx, dy] = normal(t), w = width(t), px = cx + dx * off * w, py = cy + dy * off * w; if (first) { ctx.moveTo(px, py); first = false; } else ctx.lineTo(px, py); } ctx.stroke(); };
+  // 河流本身
+  const N = 520, river = layer(ctx => {
+    for (let pass = 0; pass < 7; pass++) {
+      const off = (R() - 0.5) * 0.25;
+      for (let i = 0; i <= N; i++) {
+        const t = i / N, [cx, cy] = path(t), w = width(t) * (0.8 + 0.25 * R()), [dx, dy] = normal(t), j = (nW(t * 13 + pass * 7) - 0.5) * w * 0.35 + off * w * 0.4;
+        for (const [lab, a] of colorAt(t)) { ctx.fillStyle = labRgba(lab, 0.035 * k * a); ctx.beginPath(); ctx.ellipse(cx + dx * j, cy + dy * j, w * 0.5, w * 0.36, Math.atan2(dy, dx) + Math.PI / 2, 0, Math.PI * 2); ctx.fill(); }
+      }
+    }
+    for (let i = 0; i < 26; i++) { const t = R(), [cx, cy] = path(t), [dx, dy] = normal(t), sd = R() < 0.5 ? -1 : 1, w = width(t); blob(ctx, cx + dx * sd * w * 0.45, cy + dy * sd * w * 0.45, w * (0.25 + R() * 0.25), colorAt(t)[0][0], 0.03 * k, 18); }
+    // 顏料在邊緣聚積
+    ctx.lineWidth = Math.max(1, S * 0.0022);
+    for (const sd of [-1, 1]) for (let i = 0; i < N; i += 2) { const t = i / N, e = u => { const [cx, cy] = path(u), [dx, dy] = normal(u), w = width(u) * (0.42 + 0.08 * nW(u * 17 + (sd > 0 ? 40 : 0))); return [cx + dx * sd * w, cy + dy * sd * w]; }; const lab = colorAt(t)[0][0]; ctx.strokeStyle = labRgba([lab[0] - 0.14, lab[1], lab[2]], 0.22 * k); ctx.beginPath(); ctx.moveTo(...e(t)); ctx.lineTo(...e((i + 2) / N)); ctx.stroke(); }
+  });
+  blur(river, S * 0.009); granulate(river, mulberry(seed + 11), 0.32, 0.05);
+  // 性別：河岸邊的局部光暈和一條半透明細線
+  const g = tame(SEX_HUE[spec.sex][1], 0.07, 0.6, 0.78), gender = layer(ctx => {
+    for (let i = 0; i < 3; i++) { const t = 0.15 + R() * 0.7, [cx, cy] = path(t), [dx, dy] = normal(t), sd = R() < 0.5 ? -1 : 1, w = width(t), px = cx + dx * sd * w * 0.75, py = cy + dy * sd * w * 0.75, r = S * (0.05 + R() * 0.04); const gr = ctx.createRadialGradient(px, py, 0, px, py, r); gr.addColorStop(0, labRgba(g, 0.32 * k)); gr.addColorStop(1, labRgba(g, 0)); ctx.fillStyle = gr; ctx.fillRect(px - r, py - r, r * 2, r * 2); }
+    const t0 = 0.08 + R() * 0.2; ctx.strokeStyle = labRgba(g, 0.45 * k); ctx.lineWidth = Math.max(1, S * 0.002); curve(ctx, t0, Math.min(0.95, t0 + 0.45), (R() < 0.5 ? -1 : 1) * (0.62 + R() * 0.1));
+  });
+  blur(gender, 0.8);
+  // 河面的淺色流線，和受傷、受壓的年紀留下的深色細流（色相不變，只是變沉）
+  const lines = layer(ctx => {
+    ctx.lineCap = 'round';
+    for (let s = 0; s < 3; s++) { const t0 = R() * 0.3; ctx.strokeStyle = 'rgba(255,253,246,0.78)'; ctx.lineWidth = S * (0.0019 + R() * 0.0022); curve(ctx, t0, Math.min(1, t0 + 0.35 + R() * 0.35), (R() - 0.5) * 0.5); }
+    for (const age of spec.pers) { const tc = age / spec.end, lab = colorAt(Math.min(1, tc))[0][0]; for (let s = 0; s < 2; s++) { ctx.strokeStyle = labRgba([lab[0] - 0.24, lab[1] * 0.8, lab[2]], 0.35); ctx.lineWidth = S * (0.002 + R() * 0.0014); curve(ctx, Math.max(0, tc - 0.04), Math.min(1, tc + 0.05), (R() - 0.5) * 0.5); } }
+  });
+  blur(lines, 1);
+  // 合成：暖白紙，河流和性別用色彩增值疊上去，再疊流線、紙紋和邊框
+  x.fillStyle = '#f7f3ea'; x.fillRect(0, 0, W, H);
+  for (const L of [river, gender]) { x.globalCompositeOperation = 'multiply'; x.drawImage(L, 0, 0); }
+  x.globalCompositeOperation = 'source-over'; x.drawImage(lines, 0, 0);
+  const pp = paperCanvas(W, H, mulberry(fnv('paper'))); if (pp) drawPaper(x, pp, W, H, 0.5, false);
+  if (!o.noFrame) drawFrame(x, W, H, spec, o.frame);
+  return cv;
+}
+// 出生地的邊框：最外緣 100% 濃度，往內漸漸變透明、邊緣模糊；內緣有一點手繪的不規則，顏色本身帶一點斜向的深淺漸層
+function drawFrame(x, W, H, spec, f = 0.042) {
+  const S = Math.min(W, H), bw = S * f, nb = noise1(mulberry(spec.seed + 7)), st = Math.max(4, S / 120), N = 12, reach = bw * 1.45;
+  const c = document.createElement('canvas'); c.width = W; c.height = H; const y = c.getContext('2d');
+  const base = hexLab(spec.region), gr = y.createLinearGradient(0, 0, W, H);
+  gr.addColorStop(0, labHex([base[0] + 0.04, base[1], base[2]])); gr.addColorStop(1, labHex([base[0] - 0.04, base[1], base[2]]));
+  y.fillStyle = gr;
+  // 一圈一圈往內縮，每圈都從畫布外緣填到它的內緣；越外面疊越多層，所以外緣是實色，往內越來越淡
+  for (let i = 1; i <= N; i++) {
+    const inset = reach * i / N, amp = inset * 0.16, wob = d => (nb(d / (S / 9) + i * 0.13) - 0.5) * 2 * amp, pts = [];
+    for (let d = inset; d <= W - inset; d += st) pts.push([d, inset + wob(d)]);
+    for (let d = inset; d <= H - inset; d += st) pts.push([W - inset - wob(W + d), d]);
+    for (let d = W - inset; d >= inset; d -= st) pts.push([d, H - inset - wob(W + H + d)]);
+    for (let d = H - inset; d >= inset; d -= st) pts.push([inset + wob(2 * W + H + d), d]);
+    y.globalAlpha = 0.32; y.beginPath(); y.rect(0, 0, W, H); y.moveTo(pts[0][0], pts[0][1]); for (const p of pts) y.lineTo(p[0], p[1]); y.closePath(); y.fill('evenodd');
+  }
+  // 最外面一圈補成實色，確保邊緣是 100% 濃度
+  y.globalAlpha = 1; y.fillRect(0, 0, W, bw * 0.25); y.fillRect(0, H - bw * 0.25, W, bw * 0.25); y.fillRect(0, 0, bw * 0.25, H); y.fillRect(W - bw * 0.25, 0, bw * 0.25, H);
+  let out = c;
+  if ('filter' in y) { const b = document.createElement('canvas'); b.width = W; b.height = H; const z = b.getContext('2d'); z.filter = `blur(${Math.max(1, Math.round(bw * 0.12))}px)`; z.drawImage(c, 0, 0); z.filter = 'none'; z.globalAlpha = 1; z.fillStyle = gr; z.fillRect(0, 0, W, bw * 0.2); z.fillRect(0, H - bw * 0.2, W, bw * 0.2); z.fillRect(0, 0, bw * 0.2, H); z.fillRect(W - bw * 0.2, 0, bw * 0.2, H); out = b; }
+  x.save(); x.globalCompositeOperation = 'source-over'; x.drawImage(out, 0, 0); x.restore();
+}
+// 回顧故事卡的背景：先鋪紙和邊框，河流沿著時間從左邊慢慢流進來；減少動態效果時直接顯示
+function recapRiver(box, spec, quiet) {
   const cv = document.createElement('canvas'); cv.className = 'rc-wash'; cv.setAttribute('aria-hidden', 'true');
   const x = cv.getContext && cv.getContext('2d'); if (!x) return;
   const dpr = Math.min(window.devicePixelRatio || 1, 1.5), W = Math.round(innerWidth * dpr), H = Math.round(innerHeight * dpr);
   cv.width = W; cv.height = H; box.prepend(cv);
-  const layers = washLayers(recipe, W, H, washSeed()); if (!layers) return;
-  const pp = paperCanvas(W, H, mulberry(washSeed() + 1));
-  if (pp) { pp.className = 'rc-wash rc-paper'; pp.setAttribute('aria-hidden', 'true'); cv.after(pp); }
-  const top = layers.dark ? 0.82 : 0.6;
-  // 取卡片後面那一塊水彩的平均亮度，跟紙色合成後，比較白字和深色字哪一個對比比較大
-  const bg = layers.dark ? [24, 27, 26] : [251, 250, 246], lin = v => { v /= 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
-  // 每一段字各自判斷：取字後面那一塊的像素，算白字和深色字各自「最差那一成」的對比，選比較好的那個
+  const ro = { y0: 0.82, y1: 0.66, frame: 0.028, wide: 0.9 }, art = riverArt(W, H, spec, { ...ro, noFrame: true }); if (!art) return;
+  const frame = () => drawFrame(x, W, H, spec, ro.frame);
+  const lin = v => { v /= 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
   const pctl = (arr, p) => { arr.sort((a, b) => a - b); return arr[Math.floor(arr.length * p)] || 0; };
+  // 每一段字各自判斷：看字後面那一塊的像素，比較白字和深色字「最差那一成」的對比，選比較好的
   box.evalInk = () => {
     if (!cv.isConnected) return;
     const b = cv.getBoundingClientRect(); if (!b.width || !b.height) return;
-    const sx = cv.width / b.width, sy = cv.height / b.height;
-    let all; try { all = x.getImageData(0, 0, W, H).data; } catch (e) { return; }
+    const sx = W / b.width, sy = H / b.height; let all; try { all = x.getImageData(0, 0, W, H).data; } catch (e) { return; }
     box.querySelectorAll('.rc-card > *:not(.rc-end), .rc-card li, .rc-end button, .rc-nav button, .rc-skip, .rc-hint').forEach(el => {
       if (el.matches('.rc-list, .rc-chips, .rc-nums, .rc-sw')) return;
       const r = el.getBoundingClientRect(); if (!r.width || !r.height) return;
       const X0 = Math.max(0, Math.floor((r.left - b.left) * sx)), Y0 = Math.max(0, Math.floor((r.top - b.top) * sy)), X1 = Math.min(W, Math.ceil((r.right - b.left) * sx)), Y1 = Math.min(H, Math.ceil((r.bottom - b.top) * sy));
       const step = Math.max(2, Math.round(Math.sqrt((X1 - X0) * (Y1 - Y0) / 900))), ws = [], ks = [];
-      for (let yy = Y0; yy < Y1; yy += step) for (let xx = X0; xx < X1; xx += step) {
-        const i = (yy * W + xx) * 4, a = all[i + 3] / 255;
-        const L = 0.2126 * lin(all[i] * a + bg[0] * (1 - a)) + 0.7152 * lin(all[i + 1] * a + bg[1] * (1 - a)) + 0.0722 * lin(all[i + 2] * a + bg[2] * (1 - a));
-        ws.push(1.05 / (L + 0.05)); ks.push((L + 0.05) / 0.064);
-      }
+      for (let yy = Y0; yy < Y1; yy += step) for (let xx = X0; xx < X1; xx += step) { const i = (yy * W + xx) * 4, L = 0.2126 * lin(all[i]) + 0.7152 * lin(all[i + 1]) + 0.0722 * lin(all[i + 2]); ws.push(1.05 / (L + 0.05)); ks.push((L + 0.05) / 0.064); }
       if (!ws.length) return;
-      const w = pctl(ws, 0.15) > pctl(ks, 0.15);
-      el.classList.toggle('ink-w', w); el.classList.toggle('ink-b', !w);
+      const w = pctl(ws, 0.15) > pctl(ks, 0.15); el.classList.toggle('ink-w', w); el.classList.toggle('ink-b', !w);
     });
   };
-  if (quiet) { drawWash(x, layers, W, H, 0, top); box.evalInk(); return; }
-  const t0 = performance.now();
-  let lastInk = 0;
-  const loop = t => { if (!cv.isConnected) return; x.clearRect(0, 0, W, H); drawWash(x, layers, W, H, t - t0, Math.min(top, (t - t0) / 2500)); if (t - lastInk > 1200) { lastInk = t; box.evalInk(); } requestAnimationFrame(loop); };
+  if (quiet) { x.drawImage(art, 0, 0); frame(); box.evalInk(); return; }
+  // 先鋪紙和邊框，河流用一道柔和的前緣往右展開
+  x.fillStyle = '#f7f3ea'; x.fillRect(0, 0, W, H); frame();
+  const t0 = performance.now(), dur = 2600;
+  const loop = t => {
+    if (!cv.isConnected) return;
+    const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3), edge = W * 0.12, xr = -edge + (W + edge * 2) * e;
+    x.globalCompositeOperation = 'source-over'; x.fillStyle = '#f7f3ea'; x.fillRect(0, 0, W, H);
+    x.save(); x.beginPath(); x.rect(0, 0, Math.max(0, xr - edge), H); x.clip(); x.drawImage(art, 0, 0); x.restore();
+    // 前緣淡入
+    for (let i = 0; i < 8; i++) { const a = xr - edge + edge * i / 8; x.save(); x.globalAlpha = 1 - i / 8; x.beginPath(); x.rect(a, 0, edge / 8 + 1, H); x.clip(); x.drawImage(art, 0, 0); x.restore(); }
+    frame();
+    if (p < 1) requestAnimationFrame(loop); else { x.drawImage(art, 0, 0); frame(); box.evalInk(); }
+  };
   requestAnimationFrame(loop);
 }
 
+// 測試用：可以覆寫分享卡的轉折文字（正式流程不會用到）
+let cardTurnOverride = null;
 let cardBlob = null;
 async function makeShareCard(end, martyred) {
   try { await document.fonts.load('900 80px "Noto Serif TC"'); await document.fonts.load('700 40px "Noto Serif TC"'); await document.fonts.load('500 30px "Noto Sans TC"'); await document.fonts.load('500 30px "IBM Plex Mono"'); } catch (e) {}
@@ -3531,127 +3651,109 @@ async function makeShareCard(end, martyred) {
   const SERIF = '"Noto Serif TC", "Songti TC", serif', SANS = '"Noto Sans TC", "PingFang TC", sans-serif', MONO = '"IBM Plex Mono", "Noto Sans TC", monospace';
   const o = lifeOutcome(martyred), heard = firstAge !== null;
   x.fillStyle = C.bg; x.fillRect(0, 0, W, H);
-  // 這一生的顏色：水彩暈染當底，再蓋一層暗色讓字清楚
-  try {
-    const rcp = RCP, wl = washLayers(rcp, W, H, washSeed());
-    if (wl) {
-      drawWash(x, wl, W, H, 0, DK ? 1 : 0.85);
-      drawPaper(x, paperCanvas(W, H, mulberry(washSeed() + 1)), W, H, DK ? 0.3 : 0.55, DK);
-      const vc = DK ? '24,27,26' : '251,250,246', va = DK ? [0.42, 0.3, 0.5] : [0.5, 0.4, 0.55];
-      const veil = x.createLinearGradient(0, 0, 0, H); veil.addColorStop(0, `rgba(${vc},${va[0]})`); veil.addColorStop(0.4, `rgba(${vc},${va[1]})`); veil.addColorStop(1, `rgba(${vc},${va[2]})`);
-      x.fillStyle = veil; x.fillRect(0, 0, W, H);
-      const ys = rcp.strip, n = ys.length;
-      ys.forEach((k, i) => { x.fillStyle = HUES[k][1]; x.fillRect(W * i / n, 0, Math.ceil(W / n) + 1, 14); });
-    }
-  } catch (e) {}
-  const glow = x.createRadialGradient(W - 170, 230, 10, W - 170, 230, 420);
-  glow.addColorStop(0, DK ? 'rgba(255,255,255,0.12)' : heard ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.3)');
-  glow.addColorStop(1, DK ? 'rgba(24,27,26,0)' : 'rgba(251,250,246,0)');
-  x.fillStyle = glow; x.fillRect(0, 0, W, H);
-  x.beginPath(); x.arc(W - 170, 230, heard ? 16 : 10, 0, Math.PI * 2);
-  x.fillStyle = heard ? C.lamp : C.line; x.fill();
+  // 這一生的色譜：流動水彩的河流、出生地的邊框；河流放在數據格子後面，文字區保持乾淨
+  try { const art = riverArt(W, H, lifeSpec(martyred), { y0: 0.59, y1: 0.48, frame: 0.022 }); if (art) x.drawImage(art, 0, 0); } catch (e) {}
+  // 原本右上角的光暈拿掉，避免蓋到出生地的邊框
   x.textBaseline = 'alphabetic';
 
-  // 品牌四色點 + 名稱
-  ['#e4512f', '#f08a24', '#f2b81c', '#3e9b5f'].forEach((col, i) => { x.beginPath(); x.arc(P + 8 + i * 22, P + 10, 8, 0, Math.PI * 2); x.fillStyle = col; x.fill(); });
-  x.fillStyle = C.muted; x.font = `500 28px ${SANS}`;
-  x.fillText(`${SHOW_NAME} 福音距離`, P + 104, P + 20);
-  // 人生模擬結果標籤
+  // 第一排：左上是標籤，右上是品牌（四色點 + 名稱），兩者垂直置中對齊
+  const rowY = P + 10;
   x.font = `500 24px ${SANS}`;
-  const tag = '人生模擬結果', tw = x.measureText(tag).width + 36;
-  x.strokeStyle = C.lamp; x.lineWidth = 2; x.beginPath(); x.roundRect ? x.roundRect(P, 140, tw, 44, 22) : x.rect(P, 140, tw, 44); x.stroke();
-  x.fillStyle = C.lamp; x.fillText(tag, P + 18, 171);
+  const tag = '認識耶穌的機會模擬', tw = x.measureText(tag).width + 36;
+  x.strokeStyle = C.lamp; x.lineWidth = 2; x.beginPath(); x.roundRect ? x.roundRect(P, rowY - 22, tw, 44, 22) : x.rect(P, rowY - 22, tw, 44); x.stroke();
+  x.fillStyle = C.lamp; x.fillText(tag, P + 18, rowY + 9);
+  x.font = `500 26px ${SANS}`;
+  const brand = `${SHOW_NAME} 福音距離`, bwid = x.measureText(brand).width, bx = W - P - bwid;
+  x.fillStyle = C.muted; x.fillText(brand, bx, rowY + 9);
+  ['#e4512f', '#f08a24', '#f2b81c', '#3e9b5f'].forEach((col, i) => { x.beginPath(); x.arc(bx - 20 - (3 - i) * 22, rowY, 8, 0, Math.PI * 2); x.fillStyle = col; x.fill(); });
+  const fit = (txt, weight, size, min, family, maxW = W - P * 2) => { let s = size; do { x.font = `${weight} ${s}px ${family}`; s -= 2; } while (x.measureText(txt).width > maxW && s > min); return s + 2; };
 
-  // 我在另一段人生裡，叫…
+  // 第一層：人物（小）
+  let y = 196;
   const nm = `我在另一段人生裡，叫${me.name}`;
-  let ns = 36;
-  do { x.font = `700 ${ns}px ${SERIF}`; ns -= 2; } while (x.measureText(nm).width > W - P * 2 - 150 && ns > 22);
-  x.fillStyle = C.ink; x.fillText(nm, P, 240);
-  // 生在
+  fit(nm, 700, 34, 22, SERIF); x.fillStyle = C.ink; x.fillText(nm, P, y);
+  // 第二層：出生國家（最大）
   const title = `生在${me.country.name}`;
-  let fs = 84;
-  do { x.font = `900 ${fs}px ${SERIF}`; fs -= 4; } while (x.measureText(title).width > W - P * 2 - 150 && fs > 50);
-  x.fillText(title, P, 336);
-  // 人生結語
-  x.fillStyle = o === 'never' ? C.grave : C.lamp; // 選擇不用紅色暗示對錯，只有「沒有機會」用紅
-  const hl = cardLine(end, martyred);
-  let hs = 46;
-  // 優先縮字塞成一行，真的太長才換兩行
-  do { x.font = `700 ${hs}px ${SERIF}`; hs -= 2; } while (wrapText(x, hl, W - P * 2).length > 1 && hs > 34);
-  let y = 410;
-  for (const l of wrapText(x, hl, W - P * 2).slice(0, 2)) { x.fillText(l, P, y); y += hs + 20; }
-  // 族群・壽命
-  x.fillStyle = C.muted; x.font = `400 28px ${SANS}`;
-  x.fillText(wrapText(x, `${me.group.name}・${me.sex === 'm' ? '男' : '女'}・活了 ${end} 歲${me.designated ? '・指定出生在台灣' : ''}`, W - P * 2)[0], P, Math.min(y + 10, 528));
+  const ts = fit(title, 900, 84, 50, SERIF); y += ts + 18; x.fillText(title, P, y);
+  // 第三層：第一次聽見福音（次要大標題）；第四層：人生選擇（敘事），都依這一生的實際紀錄
+  const [l3, l4] = cardStory(end, martyred);
+  y += 78; fit(l3, 700, 46, 32, SERIF); x.fillStyle = C.ink; x.fillText(l3, P, y);
+  y += 56; x.fillStyle = C.ink; x.font = `500 30px ${SERIF}`;
+  for (const l of wrapText(x, l4, W - P * 2).slice(0, 2)) { x.fillText(l, P, y); y += 42; }
+  // 族群和性別：小字
+  x.fillStyle = C.muted; x.font = `400 24px ${SANS}`;
+  x.fillText(wrapText(x, `${me.group.name}・${me.sex === 'm' ? '男' : '女'}${me.designated ? '・指定出生在台灣' : ''}`, W - P * 2)[0], P, y + 4);
 
   // 四格數據
-  const g = me.group, c = me.country;
+  const g = me.group, c = me.country, rk = difficultyRank(c);
   const cells = [
     ['第一次接觸福音', firstAge === null ? '一生沒有機會' : `${firstAge} 歲`],
     ['生命長度', `${end} 歲`],
-    ['母語聖經譯本', BIBLE[g.bible_status ?? 'null']],
-    ['53 國接觸機會模擬排行', `第 ${c.difficulty.rank} 名`],
+    ['母語聖經譯本', CARD_BIBLE[g.bible_status ?? 'null']],
+    ['接觸福音的難度', `第 ${rk} 難`, '／53 國'],
   ];
-  const cw = (W - P * 2 - 24) / 2, ch = 104, top = 562;
-  cells.forEach(([k, v], i) => {
+  const cw = (W - P * 2 - 24) / 2, ch = 104, top = Math.max(548, y + 32);
+  cells.forEach(([k, v, sub], i) => {
     const cx = P + (i % 2) * (cw + 24), cy = top + Math.floor(i / 2) * (ch + 16);
     x.fillStyle = C.panel; x.beginPath(); x.roundRect ? x.roundRect(cx, cy, cw, ch, 14) : x.rect(cx, cy, cw, ch); x.fill();
-    x.fillStyle = C.muted; x.font = `500 24px ${SANS}`; x.fillText(wrapText(x, k, cw - 56)[0], cx + 28, cy + 40);
+    x.fillStyle = C.muted; x.font = `500 24px ${SANS}`; x.fillText(k, cx + 28, cy + 40);
     x.fillStyle = C.ink; x.font = `500 38px ${/^[0-9]/.test(v) ? MONO : SANS}`;
-    x.fillText(wrapText(x, v, cw - 56)[0], cx + 28, cy + 86);
+    x.fillText(v, cx + 28, cy + 86);
+    if (sub) { const vw = x.measureText(v).width; x.fillStyle = C.muted; x.font = `500 24px ${SANS}`; x.fillText(sub, cx + 28 + vw + 8, cy + 86); }
   });
 
-  // 這一生的背景：都是這個人自己的資料
-  let oy = top + 2 * (ch + 16) + 34;
-  x.fillStyle = C.muted; x.font = `500 24px ${SANS}`;
-  x.fillText('這一生的背景', P, oy); oy += 20;
+  // 這一生的背景：人生背景在左（優先），環境統計在右（次要）；不用框線，只鋪一層淡淡的紙色
+  let oy = top + 2 * (ch + 16) + 14;
   const how = firstAge === null ? '沒有機會' : firstChannel() || (me.parentReligion === 'christian' ? '家裡' : '小時候聽人說');
-  const bg = [
-    ['出生家庭', relName(me)],
-    ['全國基督新教', protPct(me.country)],
-    ['怎麼接觸到', how],
-    ['族群的基督徒', g.christian_pct != null ? pct(g.christian_pct) : '不明'],
+  const groups = [
+    ['人生背景', [['出生家庭', relName(me)], ...(firstAge === null ? [] : [['第一次接觸途徑', how]])], true],
+    ['環境統計', [['全國基督新教人口', protPct(c)], ...(g.christian_pct != null ? [['族群基督徒比例', pct(g.christian_pct)]] : [])], false],
   ];
-  const ow = (W - P * 2 - 3 * 16) / 4;
-  bg.forEach(([k, v], i) => {
-    const ox = P + i * (ow + 16);
-    x.strokeStyle = C.line; x.lineWidth = 2; x.beginPath(); x.roundRect ? x.roundRect(ox, oy, ow, 112, 12) : x.rect(ox, oy, ow, 112); x.stroke();
-    x.fillStyle = C.muted; x.font = `400 21px ${SANS}`;
-    x.fillText(k, ox + 20, oy + 38);
-    x.fillStyle = C.ink;
-    let vs = 30;
-    do { x.font = `700 ${vs}px ${/^[0-9]/.test(v) ? MONO : SANS}`; vs -= 2; } while (x.measureText(v).width > ow - 36 && vs > 18);
-    x.fillText(v, ox + 20, oy + 86);
+  const bh = 168, colW = (W - P * 2 - 48) / 2;
+  x.fillStyle = 'rgba(251,250,246,0.68)'; x.beginPath(); x.roundRect ? x.roundRect(P - 4, oy, W - P * 2 + 8, bh, 14) : x.rect(P - 4, oy, W - P * 2 + 8, bh); x.fill();
+  groups.forEach(([head, rows, main], gi) => {
+    const gx = P + 20 + gi * (colW + 48);
+    x.fillStyle = C.muted; x.font = `700 20px ${SANS}`; x.fillText(head, gx, oy + 38);
+    rows.forEach(([k, v], ri) => {
+      const ry = oy + 82 + ri * 52;
+      x.fillStyle = C.muted; x.font = `400 21px ${SANS}`; x.fillText(k, gx, ry);
+      const kw = Math.max(x.measureText(k).width + 14, main ? 168 : 196);
+      x.fillStyle = C.ink; fit(v, main ? 700 : 600, main ? 30 : 27, 18, /^[0-9不]/.test(v) && !main ? MONO + ', ' + SANS : SANS, colW - kw - 12); x.fillText(v, gx + kw, ry);
+    });
   });
-  // 這一生的轉折：故事線或服事的結局，改成第三人稱
-  const turn = cardTurn(end);
+  if (groups.length === 2) { x.fillStyle = C.line; x.fillRect(P + 20 + colW + 24, oy + 22, 1.5, bh - 44); }
+
+  // 這一生的轉折：故事線或服事的結局，改成第三人稱；淡淡的底色加一條細線，一到三行
+  const turn = cardTurnOverride ?? cardTurn(end);
+  let footTop = 1120;
   if (turn) {
-    let ty = oy + 112 + 44;
-    x.fillStyle = C.muted; x.font = `500 22px ${SANS}`; x.fillText('這一生的轉折', P, ty); ty += 38;
-    x.fillStyle = C.ink; x.font = `500 27px ${SANS}`;
-    const tl = wrapText(x, turn, W - P * 2);
-    if (tl.length > 2) tl[1] = tl[1].slice(0, -1) + '…';
-    for (const l of tl.slice(0, 2)) { x.fillText(l, P, ty); ty += 36; }
+    let ty = oy + bh + 16;
+    x.font = `500 27px ${SANS}`;
+    let fsz = 27, tl = wrapText(x, turn, W - P * 2 - 40);
+    while (tl.length > 3 && fsz > 22) { fsz -= 1; x.font = `500 ${fsz}px ${SANS}`; tl = wrapText(x, turn, W - P * 2 - 40); }
+    const lh = Math.round(fsz * 1.45), boxH = 52 + tl.length * lh + 8;
+    x.fillStyle = 'rgba(251,250,246,0.6)'; x.beginPath(); x.roundRect ? x.roundRect(P - 4, ty, W - P * 2 + 8, boxH, 14) : x.rect(P - 4, ty, W - P * 2 + 8, boxH); x.fill();
+    x.fillStyle = C.line; x.fillRect(P + 20, ty + 52, 56, 2);
+    x.fillStyle = C.muted; x.font = `700 20px ${SANS}`; x.fillText('這一生的轉折', P + 20, ty + 38);
+    x.fillStyle = C.ink; x.font = `500 ${fsz}px ${SANS}`;
+    let yy = ty + 52 + lh; for (const l of tl) { x.fillText(l, P + 20, yy); yy += lh; }
+    footTop = Math.max(footTop, ty + boxH + 14);
   }
 
-  // 頁尾：邀請 + 網址 + QR
-  x.fillStyle = C.line; x.fillRect(P, 1110, W - P * 2, 2);
-  const qrSize = 168, qrX = W - P - qrSize, qrY = 1140;
-  const hasQR = drawQR(x, `https://${SITE_URL}/`, qrX, qrY, qrSize, '#1f2622', '#ffffff');
-  const textW = hasQR ? W - P * 2 - qrSize - 30 : W - P * 2;
-  x.fillStyle = C.ink; x.font = `700 38px ${SERIF}`;
-  let fy = 1195;
-  for (const l of wrapText(x, '如果換成你，你會出生在哪裡？', textW).slice(0, 2)) { x.fillText(l, P, fy); fy += 50; }
-  x.fillStyle = C.lamp; x.font = `500 26px ${SANS}`;
-  x.fillText(SITE_URL, P, Math.max(fy + 6, 1262));
-  x.fillStyle = C.muted; x.font = `400 20px ${SANS}`;
-  x.fillText('模擬人生，非真實經歷；依公開資料建立，名字是虛構的', P, 1300);
+  // 頁尾：思考問題和小字說明（不放網址和 QR Code）
+  const fy0 = Math.min(Math.max(footTop, 1120), 1185);
+  x.fillStyle = C.line; x.fillRect(P, fy0, W - P * 2, 2);
+  x.fillStyle = C.ink; x.font = `700 40px ${SERIF}`;
+  let fy = fy0 + Math.max(68, 80 - (fy0 - 1120));
+  for (const l of wrapText(x, '如果換成你，你會出生在哪裡？', W - P * 2).slice(0, 2)) { x.fillText(l, P, fy); fy += 52; }
+  x.fillStyle = C.muted; x.font = `400 21px ${SANS}`;
+  x.fillText('模擬人生，非真實經歷；依公開資料建立，名字是虛構的', P, Math.min(fy - 4, 1298));
 
   try {
     const url = cv.toDataURL('image/png');
     $('shareImg').src = url; $('shareImg').hidden = false;
     $('dlLink').href = url; $('dlLink').hidden = false;
-    $('shareStatus').remove();
+    if ($('shareStatus')) $('shareStatus').remove();
     cv.toBlob(b => {
       cardBlob = b;
       try {
@@ -3659,7 +3761,7 @@ async function makeShareCard(end, martyred) {
         if (navigator.canShare && navigator.canShare({ files: [f] })) $('shareBtn').hidden = false;
       } catch (e) {}
     }, 'image/png');
-  } catch (e) { $('shareStatus').textContent = '這個瀏覽器沒辦法產生圖片，可以改用複製分享文字。'; }
+  } catch (e) { if ($('shareStatus')) $('shareStatus').textContent = '這個瀏覽器沒辦法產生圖片，可以改用複製分享文字。'; }
 }
 
 const SHOW_NAME = '《教會小本本》';
@@ -3685,7 +3787,7 @@ function drawStrip() {
 }
 function renderRanking() {
   const list = byRank();
-  $('rankList').innerHTML = list.map(c => `<li class="${c.id === 'TW' ? 'tw' : ''}"><span class="r">${c.difficulty.rank}</span><span class="n"></span><span class="v">${c.difficulty.never_pct}%・${c.difficulty.median_age ?? '-'} 歲</span><span class="c"></span></li>`).join('');
+  $('rankList').innerHTML = list.map(c => `<li class="${c.id === 'TW' ? 'tw' : ''}"><span class="r">${difficultyRank(c)}</span><span class="n"></span><span class="v">${c.difficulty.never_pct}%・${c.difficulty.median_age ?? '-'} 歲</span><span class="c"></span></li>`).join('');
   [...$('rankList').children].forEach((li, i) => {
     li.querySelector('.n').textContent = list[i].name;
     li.querySelector('.c').textContent = list[i].challenge;
@@ -4922,7 +5024,7 @@ function recapSlides(end, martyred) {
   if (words.length > 0) nums.push([words.length, '個問題，你在人生的停頓裡回答過']);
   S.push({ k: 'nums', eyebrow: '這一生的數字', nums: nums.slice(0, 4), quiet: o === 'martyred' });
   const rc = lifeRecipe(martyred);
-  S.push({ k: 'color', eyebrow: '這一生的顏色', swatches: rc.comps.map(c => [c.color, c.label, Math.round(c.w * 100)]), strip: rc.strip, lines: ['出生的地方、性別，加上你在每個信仰裡度過的年數，調出了這一生的顏色。', ...(rc.shade.f >= 0.15 ? [rc.shade.f >= 0.6 ? '畫上那些很深的污痕，是這一生受過的傷和壓力。' : '畫上幾處深色的痕跡，是這一生受過的傷和壓力。'] : [])] });
+  S.push({ k: 'color', eyebrow: '這一生的顏色', swatches: rc.comps.map(c => [c.color, c.label, Math.round(c.w * 100)]), strip: rc.strip, lines: ['邊框是你出生的地方，河流是你在每個信仰裡度過的年數，岸邊的光暈是性別。', ...(lifeSpec(martyred).pers.length ? ['河裡那幾道比較深的細流，是這一生受過的傷和壓力。'] : [])] });
   const [tt, ts] = lifeTitle(end, martyred);
   const got = collectTitle(tt);
   S.push({ k: 'title', eyebrow: '你這一生的稱號', big: tt, lines: [ts, ...(got ? [`你已經收集了 ${got} / ${TITLE_TOTAL()} 個稱號`] : [])] });
@@ -4935,10 +5037,10 @@ function showRecap(end, martyred) {
   const o = lifeOutcome(martyred), slides = recapSlides(end, martyred);
   const quiet = o === 'martyred' || SMOOTH === 'auto' || typeof requestAnimationFrame !== 'function';
   const box = document.createElement('div');
-  box.id = 'lifeRecap'; box.className = `liferecap rc-${o}${lifeRecipe(martyred).ground === 'dark' ? ' rc-dark' : ''}`; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', '這一生的回顧');
+  box.id = 'lifeRecap'; box.className = `liferecap rc-${o}`; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', '這一生的回顧');
   box.innerHTML = `<div class="rc-bars">${slides.map(() => '<i><b></b></i>').join('')}</div><button class="rc-skip" type="button">跳過</button><div class="rc-stage"></div><div class="rc-nav"><button class="rc-prev" type="button" aria-label="上一張">‹</button><span class="rc-hint">點一下繼續</span><button class="rc-next" type="button">下一張 ›</button></div>`;
   document.body.appendChild(box); document.body.classList.add('rc-open');
-  try { recapWash(box, lifeRecipe(martyred), quiet); } catch (e) {}
+  try { recapRiver(box, lifeSpec(martyred), quiet); } catch (e) {}
   const stage = box.querySelector('.rc-stage'), bars = [...box.querySelectorAll('.rc-bars i')];
   let i = 0;
   const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
@@ -5029,7 +5131,7 @@ function finish(martyred) {
     ${hellPanel(lifeOutcome(martyred) === 'never')}
     <details class="xdr"><summary>53 國福音接觸機會模擬排行</summary>
     <div class="diff">
-      <p class="lead">在 53 國福音接觸機會模擬裡，${c.name}排第 <b>${c.difficulty.rank}</b> 名</p>
+      <p class="lead">在 53 國的模擬裡，${c.name}是第 <b>${difficultyRank(c)}</b> 難接觸到福音的國家</p>
       <div class="strip" id="strip" role="img" aria-label="53 國一生沒接觸到福音的模擬比例，由少到多"></div>
       <div class="strip-axis"><span>接觸機會最少</span><span>最多</span></div>
       <p class="fine">${diffCompare()} 排名是模型模擬結果，不是實際統計。<a href="#method" class="tomethod">看模擬方法</a></p>
