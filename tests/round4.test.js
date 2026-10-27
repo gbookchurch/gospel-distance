@@ -204,6 +204,9 @@ setup({ trad: 'catholic', a: 30 }); ok('天主教的退修會叫避靜', E("loca
 ok('稱號總數 151 個（60＋穆斯林 40＋印度教 15＋佛教 22＋道教與民間信仰 14），全部不重複', E('TITLE_TOTAL()') === 151 && new Set([...E('TITLES.map(t=>t[0])'), ...E('MUSLIM_TITLES.map(t=>t[0])'), ...E('HINDU_TITLES.map(t=>t[0])'), ...E('BUDDHIST_TITLES.map(t=>t[0])'), ...E('FOLK_TITLES.map(t=>t[0])')]).size === 151);
 ok('色彩系統：每個家庭宗教和改信後的傳統都有顏色，配方加起來是 100%', (() => { for (let n = 0; n < 40; n++) { E('start();stop();'); for (let y = 0; y < 30; y++) E('tick();stop();'); const r = E('lifeRecipe(false)'); const sum = r.comps.reduce((a, c) => a + c.w, 0); if (Math.abs(sum - 1) > 1e-6 || r.comps.some(c => !/^#[0-9a-f]{6}$/.test(c.color))) return false; } return true; })());
 ok('色彩系統：53 國都分到地區色', E('DATA.countries.every(c => REGION_OF[c.id])'));
+ok('神學解說：九格矩陣、八張觀點卡、三張插畫都 lazy loading', (() => { const h = E('hellPanel(false)'); return (h.match(/class="theo-cell/g) || []).length === 9 && (h.match(/class="theo-card[ "]/g) || []).length === 8 && (h.match(/loading="lazy"/g) || []).length === 3; })());
+ok('神學解說：有張力和需要前提的格子都有標示，巴爾塔薩用 1988 年', E('THEO_CELL["ex-ap"][0]') === 'tension' && E('THEO_CELL["ho-ap"][0]') === 'tension' && E('THEO_CELL["in-ap"][0]') === 'premise' && /1988 年英譯本/.test(E('hellPanel(false)')) && !/（1986）/.test(E('hellPanel(false)')));
+ok('色彩系統：中間色與底色判斷', /^#[0-9a-f]{6}$/.test(E('mixHue("#c9a227","#2a9d8f")')) && ['dark','light'].includes(E('lifeRecipe(false).ground')));
 const mt = (cc, re) => E(`(me.country=DATA.countries.find(c=>c.id==='${cc}'),me.group=me.country.people_groups.find(g=>${re}.test(g.name)),muslimTitle())`);
 setup({ c: 'CN', a: 40 });
 ok('中國：回族和維吾爾族拿到不同的地方稱號', mt('CN', '/回族/') === '在黃土高原的清真寺旁長大的人' && mt('CN', '/維吾爾/') === '在天山腳下長大的人');
