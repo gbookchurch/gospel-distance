@@ -25,7 +25,7 @@ for(let i=0;i<N;i++){w.eval('start();stop();__cx=[];');let g=0;
  // 3 失去工作：退休年紀以後、或全職服事中
  for(const a of at(/^你因為信仰失去了工作/)){if(a>65)add('退休年紀以後還失業',`${tag} ${a}歲`);}
  // 4 全職神職、修女之後的家庭事件
- const vow=at(/成為修女|晉鐸成為神父|發願成為修女/)[0];
+ const vow=L.filter(x=>/成為修女|晉鐸成為神父|發願成為修女/.test(x[1])&&!/結了婚/.test(x[1])).map(x=>x[0])[0];
  if(vow!=null){for(const x of L.filter(x=>x[0]>vow&&/趕出家門|安排你嫁給|你遇到了想共度一生|第一個孩子出生|抱到孫子|監護權/.test(x[1])))add('守獨身之後出現家庭、婚姻事件',`${tag} ${vow}歲發願，${x[0]}歲：${x[1].slice(0,14)}`);}
  // 5 被趕出家門的年紀
  for(const a of at(/^你被趕出家門/)){if(a>55)add('老年才被趕出家門',`${tag} ${a}歲`);}
