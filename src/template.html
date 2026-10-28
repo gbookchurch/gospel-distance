@@ -1287,6 +1287,22 @@ body.rc-open { overflow: hidden; }
 .site-foot.band.b4 .foot-links a { min-height: 42px; padding: 9px 12px; border-radius: 8px; border-color: rgba(236,217,182,.48); background: rgba(255,255,255,.045); color: #E9EEE8; font-size: 13.5px; font-weight: 500; }
 .site-foot.band.b4 .foot-links a:first-child { grid-column: 1 / -1; background: rgba(233,160,79,.13); border-color: #E9A04F; color: #F5D2A6; font-weight: 700; font-size: 14.5px; }
 .site-foot .in { padding-top: 21px; border-top: 1px solid rgba(218,231,219,.2); }
+/* 頁尾的色彩彩蛋：平時收成一行，展開後才顯示完整色卡。 */
+.site-foot .palette-easter { margin-top: 26px; border-top: 1px solid rgba(218,231,219,.24); padding-top: 10px; }
+.site-foot .palette-easter > summary { cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 2px; list-style: none; font-size: 13px; color: #DDBF91; font-weight: 600; }
+.site-foot .palette-easter > summary::-webkit-details-marker { display: none; }
+.site-foot .palette-easter > summary::after { content: '＋'; font-size: 18px; font-weight: 400; line-height: 1; }
+.site-foot .palette-easter[open] > summary::after { content: '－'; }
+.site-foot .palette-easter > summary:focus-visible { outline: 2px solid #E9A04F; outline-offset: 3px; }
+.palette-easter-content { padding: 12px 2px 8px; display: grid; gap: 21px; }
+.palette-easter-content > p { font-size: 12.5px; line-height: 1.75; color: #CBD7CE; }
+.palette-easter-group { display: grid; gap: 10px; }
+.palette-easter-group h3 { font-family: var(--body); font-size: 13px; font-weight: 700; color: #F0D4AA; }
+.palette-easter-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px 15px; list-style: none; margin: 0; padding: 0; }
+.palette-easter-list li { display: grid; grid-template-columns: 14px minmax(0,1fr); align-items: start; gap: 8px; border-top: 1px solid rgba(220,233,220,.12); padding-top: 9px; min-width: 0; }
+.palette-easter-swatch { display: block; width: 13px; height: 13px; margin-top: 4px; border-radius: 3px; border: 1px solid rgba(255,255,255,.3); }
+.palette-easter-copy { display: grid; gap: 1px; color: #D2DDD4; font-size: 12px; line-height: 1.6; }
+.palette-easter-copy b { color: #F3F6F1; font-size: 12.5px; font-weight: 700; }
 /* V3.13：全程置頂的節目識別，以及 53 國同尺度的七星難度。 */
 .site-brand-banner { position: fixed; inset: 0 0 auto; z-index: 1005; min-height: 42px; padding: calc(8px + env(safe-area-inset-top,0px)) 48px 7px; display: flex; align-items: center; justify-content: center; background: rgba(250,248,243,.95); border-bottom: 1px solid rgba(109,121,108,.18); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); pointer-events: none; }
 .site-brand-banner .brand { gap: 9px; font-size: 12px; justify-content: center; text-align: center; white-space: nowrap; color: #59665D; letter-spacing: .01em; }
@@ -1332,6 +1348,7 @@ body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
   .end #share .controls .primary { grid-column: auto; }
   .end .endfoot .end-actions .controls { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .site-foot .foot-links { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .palette-easter-list { grid-template-columns: minmax(0,1fr); gap: 6px; }
   body { padding-top: calc(70px + env(safe-area-inset-top,0px)); }
   .site-brand-banner { min-height: 40px; padding: calc(7px + env(safe-area-inset-top,0px)) 42px 6px; }
   .site-brand-banner .brand { font-size: 11px; gap: 6px; }
@@ -1655,6 +1672,10 @@ body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
     <p>可自由分享、改編，但需署名、非商業、相同方式共享</p>
     <p>背景音樂：《教會小本本》原創演奏</p>
   </div>
+  <details class="palette-easter" id="paletteEaster">
+    <summary>🎨 色彩彩蛋｜這些顏色藏著什麼故事？</summary>
+    <div class="palette-easter-content" id="paletteEasterContent"></div>
+  </details>
 </footer>
 
 <script>
@@ -3705,6 +3726,38 @@ const SEX_HUE = { m: ['男生', '#6D9D78'], f: ['女生', '#6C9FC5'] };
 // 特別避免「撒哈拉以南非洲赤土色」與「天主教銅色」撞色：非洲改為深海藍。
 const REGIONS = { ea: ['東亞', '#485B6B'], sea: ['東南亞', '#665D83'], sa: ['南亞', '#476E73'], mena: ['中東與北非', '#68667E'], af: ['撒哈拉以南非洲', '#3E6C89'], eu: ['歐洲', '#526A86'], am: ['美洲', '#715C78'], oc: ['大洋洲', '#377E8C'] };
 const REGION_OF = {};
+// 彩蛋只在第一次展開時建立完整色卡，平常不佔用頁尾閱讀空間。
+function initPaletteEaster() {
+  const drawer = document.getElementById('paletteEaster'), root = document.getElementById('paletteEasterContent');
+  if (!drawer || !root) return;
+  const regionNotes = {
+    ea: '東亞的深灰藍邊框，用較沉穩的石色和宗教色帶區隔。',
+    sea: '東南亞的灰紫色，作為辨認出生區域的藝術標記。',
+    sa: '南亞的深青石色，保持與番紅花橘的明度差異。',
+    mena: '中東與北非的藍灰色，與清真寺色系和暖色信仰色區隔。',
+    af: '撒哈拉以南非洲的深海藍，特別避開與天主教銅橘色相似的赤土色。',
+    eu: '歐洲的石青藍，呈現偏冷、沉穩的出生背景。',
+    am: '美洲的煙紫石色，避免與各信仰的鮮豔色帶混淆。',
+    oc: '大洋洲的深海青，以海洋色相作為區域意象。',
+  };
+  const colorGroups = [
+    ['信仰與宗教', Object.entries(HUES).map(([k, [name, hex]]) => [name, hex, HUE_MEANINGS[k]])],
+    ['出生地區', Object.entries(REGIONS).map(([k, [name, hex]]) => [name, hex, regionNotes[k]])],
+    ['性別', [['男性', SEX_HUE.m[1], '以柔和綠色細線作為辨識符號。'], ['女性', SEX_HUE.f[1], '以柔和藍色細線作為辨識符號。']]],
+    ['人生事件', [
+      ['成長', '#7C9A7D', '鼠尾草綠色粉，標記成長時刻。'],
+      ['重要選擇', '#E9A04F', '橙黃色粉，標記人生轉折與決定。'],
+      ['人與人的相遇', '#DC684C', '橘紅色粉，留下相遇的痕跡。'],
+      ['信仰壓力與傷害', '#5D6060', '在原本色帶上加深細流，這個灰色只是示意色。'],
+    ]],
+  ];
+  const item = ([name, hex, note]) => `<li><i class="palette-easter-swatch" style="background:${hex}" aria-hidden="true"></i><span class="palette-easter-copy"><b>${name}</b><span>${note}</span></span></li>`;
+  drawer.addEventListener('toggle', () => {
+    if (!drawer.open || root.childElementCount) return;
+    root.innerHTML = `<p>這些顏色是《福音距離》的視覺設計語言，取材自文化、材質與自然意象，並非各宗教的官方代表色，也不代表信仰的優劣。每次人生實際出現哪些顏色，會依出生地、信仰時間軸及經歷而改變。</p>${colorGroups.map(([heading, colors]) => `<section class="palette-easter-group"><h3>${heading}</h3><ul class="palette-easter-list">${colors.map(item).join('')}</ul></section>`).join('')}`;
+  });
+}
+initPaletteEaster();
 for (const [k, ids] of Object.entries({ ea: 'TW KR JP CN KP', sea: 'PH ID VN MM TH', sa: 'IN PK BD', mena: 'EG MA IR YE IQ TR SY SA DZ SD UZ AF', eu: 'RU DE GB FR', am: 'US BR MX CO', af: 'CD ET NG TZ UG KE AO MZ ZA NE MG CI ML CM TD GH SO BF ZM MW' })) for (const id of ids.split(' ')) REGION_OF[id] = k;
 function hexHsl(h) {
   const n = parseInt(h.slice(1), 16), r = (n >> 16) / 255, g = (n >> 8 & 255) / 255, b = (n & 255) / 255;
