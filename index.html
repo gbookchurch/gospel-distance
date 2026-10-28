@@ -212,6 +212,34 @@ label { font-size: 14px; color: var(--muted); display: flex; gap: 8px; align-ite
 .memlist .said { grid-column: 1 / -1; font-size: 14px; color: var(--muted); }
 .memlist .cmp { grid-column: 1 / -1; justify-self: start; font-size: 14px; padding: 8px 14px; min-height: 40px; }
 .memlist .cmp[aria-pressed="true"] { background: var(--lamp-soft); border-color: var(--lamp); }
+/* 人生收藏館：收藏總覽、地域進度與稱號圖鑑 */
+.collection-home { display: grid; gap: 15px; padding: 18px; border: 1px solid #E1E5DC; border-radius: 12px; background: linear-gradient(145deg,#FBFAF6,#F2F5EE); }
+.collection-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.collection-head strong { font-family: var(--mono); font-size: clamp(25px,5vw,35px); color: #395647; font-weight: 600; line-height: 1.2; }
+.collection-head strong small { font-size: 14px; font-weight: 400; color: #77837A; }
+.collection-head span { font-size: 12.5px; color: #67766C; text-align: right; }
+.collection-track, .collection-mini-track { display: block; height: 7px; border-radius: 99px; overflow: hidden; background: #DFE5DA; }
+.collection-track i, .collection-mini-track i { display: block; height: 100%; background: linear-gradient(90deg,#DC684C,#E9A04F,#EDC96E,#7C9A7D); border-radius: inherit; }
+.collection-regions { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
+.collection-region { display: grid; gap: 6px; padding: 10px 12px; border: 1px solid #E5E8E0; border-radius: 9px; background: rgba(255,255,255,.65); }
+.collection-region .top { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; font-size: 13px; }
+.collection-region .top b { font-weight: 650; }
+.collection-region .top span { font-family: var(--mono); color: #68796D; font-size: 12px; }
+.collection-region small { font-size: 11.5px; color: #6C7970; }
+.collection-mini-track { height: 5px; }
+.title-dex { border: 1px solid #E1E5DC; border-radius: 10px; background: #FAFAF7; }
+.title-dex > summary { cursor: pointer; padding: 14px 16px; font-size: 14px; font-weight: 700; color: #435B4B; }
+.title-dex-body { display: grid; gap: 12px; padding: 0 14px 15px; }
+.title-dex-filter { display: flex; flex-wrap: wrap; gap: 7px; }
+.title-dex-filter button { padding: 5px 12px; min-height: 36px; font-size: 12px; border-radius: 99px; }
+.title-dex-filter button[aria-pressed="true"] { background: #E4EADF; border-color: #8DA48F; color: #31523E; font-weight: 700; }
+.title-dex-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; max-height: 380px; overflow: auto; }
+.title-dex-list li { padding: 8px 11px; border-radius: 7px; background: #fff; display: flex; justify-content: space-between; gap: 10px; font-size: 13px; }
+.title-dex-list li.locked { color: #979D94; background: #F2F3EF; }
+.title-dex-list li small { color: #849185; font-size: 11.5px; white-space: nowrap; }
+.memlist .life-title { grid-column: 2 / -1; color: #815C3F; font-weight: 700; font-size: 13.5px; }
+.memlist .life-title small { margin-left: 7px; font-size: 11.5px; font-weight: 500; color: #7C9A7D; }
+@media(max-width:380px) { .collection-regions { grid-template-columns: minmax(0,1fr); } }
 /* 每段人生的色彩：左邊一枚水彩印記，整列帶一點淡淡的暈染 */
 .memlist li { grid-template-columns: 46px 1fr auto; padding: 14px 12px; background: var(--wash); border-radius: 12px; border-bottom: 0; margin-bottom: 8px; border: 1px solid color-mix(in srgb, var(--line) 70%, transparent); }
 .memlist { border-top: 0; }
@@ -1440,10 +1468,13 @@ body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
 
   <section class="memorial band b2" id="memorial" hidden>
     <h2>你活過的那些人生</h2>
+    <div class="collection-home" id="collectionHome" aria-label="人生稱號收藏進度"></div>
+    <details class="title-dex" id="titleDex"><summary id="titleDexSummary">查看人生稱號圖鑑</summary><div class="title-dex-body"><div class="title-dex-filter" id="titleDexFilter"></div><ul class="title-dex-list" id="titleDexList"></ul></div></details>
     <p class="memstats" id="memStats"></p>
     <p class="fine">每一枚水彩印記，都代表你曾經走過的一段人生。最新的一段會排在最前面。</p>
     <ul class="memlist" id="memList"></ul>
     <div class="confirm" id="memClear"><button id="clearBtn">清除紀錄</button></div>
+    <div class="confirm" id="titleClear"><button id="titleClearBtn">重置稱號收藏</button></div>
     <p class="fine">紀錄只存在這個瀏覽器裡，不會上傳。清除瀏覽資料、換手機或用無痕模式時，紀錄不會保留。</p>
   </section>
 
@@ -3681,19 +3712,28 @@ function hueCss(h) {
 }
 function renderMemorial() {
   const lives = loadLives();
-  $('memorial').hidden = lives.length === 0;
-  if (!lives.length) return;
+  const unlocked = unlockedTitles();
+  $('memorial').hidden = lives.length === 0 && unlocked.size === 0;
+  if ($('memorial').hidden) return;
   // 探索紀錄：只算去過哪裡，不把信仰選擇當成分數
   const countries = new Set(lives.map(l => l.countryId || l.country));
   const continents = new Set(lives.map(l => l.continent || (DATA.countries.find(c => c.name === l.country) || {}).continent).filter(Boolean));
   const never = lives.filter(l => l.firstAge === null).length;
   $('memStats').innerHTML = `你活過 <b>${lives.length}</b> 段人生，曾經出生在 <b>${countries.size}</b> 個國家、<b>${continents.size}</b> 個洲。其中 <b>${never}</b> 段人生，一直沒有機會接觸福音。`;
-  $('memList').innerHTML = lives.slice().reverse().map(l => `<li style="${hueCss(l.hue || guessHue(l))}"><span class="seal${(l.hue || {}).g === 'dark' ? ' dark' : ''}" aria-hidden="true"></span><span class="who"></span><span class="when"></span><span class="what"></span><span class="said"></span></li>`).join('');
+  renderCollectionHome(unlocked, countries);
+  renderTitleDex(unlocked);
+  $('memList').innerHTML = lives.slice().reverse().map(l => `<li style="${hueCss(l.hue || guessHue(l))}"><span class="seal${(l.hue || {}).g === 'dark' ? ' dark' : ''}" aria-hidden="true"></span><span class="who"></span><span class="when"></span><span class="life-title"></span><span class="what"></span><span class="said"></span></li>`).join('');
   [...$('memList').children].forEach((li, i) => {
     const idx = lives.length - 1 - i, l = lives[idx];
     if (i === 0) li.classList.add('newest');
     li.querySelector('.who').textContent = `${l.name ? l.name + '・' : ''}${l.country}，${l.group}，${l.sex === 'm' ? '男' : '女'}${l.designated ? '（指定出生在台灣）' : ''}`;
     li.querySelector('.when').textContent = l.date;
+    const title = li.querySelector('.life-title');
+    const currentTitle = titleCatalog().find(t => t.id === (l.titleId || titleIdFor(l.title)));
+    if (currentTitle || l.title) {
+      title.textContent = `✦ ${currentTitle ? currentTitle.name : l.title}`;
+      if (l.titleNew) { const s = document.createElement('small'); s.textContent = '首次解鎖'; title.append(s); }
+    } else title.textContent = '舊紀錄・當時尚未儲存稱號';
     const w = li.querySelector('.what');
     w.className = 'what ' + (l.firstAge === null ? 'never' : 'heard');
     w.textContent = lifeSummary(l);
@@ -5747,7 +5787,7 @@ document.addEventListener('click', e => {
   $('methodBox').open = true; $('mDefine').open = true; $('mHow').open = true;
   $('method').scrollIntoView({ behavior: SMOOTH, block: 'start' });
 });
-resetClear(); renderMemorial(); renderRanking(); renderDenoms();
+resetClear(); queueMicrotask(renderMemorial); renderRanking(); renderDenoms();
 
 // ── 人生回顧：跑完一生後，用一張一張全螢幕的卡片回顧，最後再看完整結局
 // 配角名字：故事線裡出現過的人，回顧時列出來
@@ -5892,10 +5932,90 @@ const FOLK_TITLES = [
   ['在中元普渡的供桌旁長大的人', 'TW'], ['在土地公廟旁長大的人', 'TW'], ['在王船祭的海邊長大的人', 'TW'], ['拜過七娘媽、做過十六歲的人', 'TW'],
   ['在義民廟的鼓聲裡長大的人', 'TW', /客家/], ['在伯公樹下長大的人', 'TW', /客家/],
   ['在祠堂的香火裡長大的人', 'CN'], ['在清明的祖墳前長大的人', 'CN'], ['在祖先神桌前長大的人', 'VN'], ['在御嶽的森林旁長大的人', 'JP', /沖繩/]];
-const TITLE_TOTAL = () => TITLES.length + MUSLIM_TITLES.length + HINDU_TITLES.length + BUDDHIST_TITLES.length + FOLK_TITLES.length;
+// 新稱號只加在此陣列：必須給永不重複、永不改動的 id，以及名稱、分類和觸發條件。
+// 範例：{ id:'special-new-001', name:'...', description:'...', regions:['亞洲'], when:x=>x.fled }
+// 原始 151 個稱號的順序視為固定資料庫，不要在原陣列插入、刪除或換序；改名可直接在原位置修改。
+const EXTRA_TITLES = [];
+const TITLE_TOTAL = () => titleCatalog().length;
 const TITLE_KEY = 'gospel-distance-titles';
+const TITLE_KEY_V2 = 'gospel-distance-title-collection-v2';
+const REGIONAL_TITLE_LISTS = [MUSLIM_TITLES, HINDU_TITLES, BUDDHIST_TITLES, FOLK_TITLES];
+function titleCatalog() {
+  const catalog = TITLES.map((t,i) => ({ id:`base-${String(i+1).padStart(3,'0')}`, name:t[0], description:t[1], regions:['全球'] }));
+  for (const list of REGIONAL_TITLE_LISTS) for (const t of list) {
+    const ids = t[1].split('|');
+    const regions = [...new Set(ids.map(id => (DATA.countries.find(c => c.id === id) || {}).continent).filter(Boolean))];
+    catalog.push({ id:`base-${String(catalog.length+1).padStart(3,'0')}`, name:t[0], description:'', regions:regions.length ? regions : ['其他'], countries:ids });
+  }
+  for (const t of EXTRA_TITLES) catalog.push({ id:t.id, name:t.name, description:t.description || '', regions:t.regions || ['全球'], countries:t.countries || [] });
+  return catalog;
+}
+// 第二版收藏以永久 ID 儲存。相容舊版只存名稱的 localStorage，讀取時自動轉換。
+// 原始 151 個名稱的舊紀錄只會轉換一次；改名時若需支援更久遠的舊資料，在此補別名對應。
+const LEGACY_TITLE_ALIASES = {};
+function titleIdFor(value) {
+  const t = titleCatalog().find(x => x.id === value || x.name === value);
+  return t ? t.id : LEGACY_TITLE_ALIASES[value] || null;
+}
+function unlockedTitles() {
+  const ids = new Set();
+  try {
+    const obj = JSON.parse(localStorage.getItem(TITLE_KEY_V2) || 'null');
+    if (obj && obj.version === 2 && Array.isArray(obj.ids)) for (const v of obj.ids) if (typeof v === 'string') ids.add(v);
+  } catch (e) {}
+  try {
+    const old = JSON.parse(localStorage.getItem(TITLE_KEY) || '[]');
+    if (Array.isArray(old)) for (const name of old) { const id = titleIdFor(name); if (id) ids.add(id); }
+  } catch (e) {}
+  return ids;
+}
+function saveUnlockedTitles(ids) {
+  try { localStorage.setItem(TITLE_KEY_V2, JSON.stringify({ version:2, ids:[...ids] })); return true; }
+  catch (e) { return false; }
+}
+function renderCollectionHome(unlocked, countries) {
+  const catalog = titleCatalog(), total = catalog.length;
+  const earned = catalog.filter(t => unlocked.has(t.id)).length;
+  const pct = n => Math.max(0, Math.min(100, n));
+  const regionSet = [...new Set(DATA.countries.map(c => c.continent))];
+  const regionCards = regionSet.map(region => {
+    const subset = catalog.filter(t => t.regions.includes(region));
+    const done = subset.filter(t => unlocked.has(t.id)).length;
+    const allCountries = DATA.countries.filter(c => c.continent === region);
+    const visited = allCountries.filter(c => countries.has(c.id) || countries.has(c.name)).length;
+    return `<div class="collection-region"><div class="top"><b>${region}</b><span>${done} / ${subset.length}</span></div><span class="collection-mini-track"><i style="width:${subset.length ? pct(done / subset.length * 100) : 0}%"></i></span><small>${subset.length ? `地區稱號還差 ${subset.length - done} 個` : '本洲暫無專屬稱號'}・走訪 ${visited}/${allCountries.length} 國</small></div>`;
+  }).join('');
+  const common = catalog.filter(t => t.regions.includes('全球'));
+  const commonDone = common.filter(t => unlocked.has(t.id)).length;
+  $('collectionHome').innerHTML = `<div class="collection-head"><strong>${earned}<small> / ${total} 個稱號</small></strong><span>已完成 ${Math.round(earned / total * 100)}%</span></div><span class="collection-track"><i style="width:${pct(earned / total * 100)}%"></i></span><div class="collection-regions"><div class="collection-region"><div class="top"><b>全球通用</b><span>${commonDone} / ${common.length}</span></div><span class="collection-mini-track"><i style="width:${pct(commonDone / common.length * 100)}%"></i></span><small>各地都可能遇見的人生</small></div>${regionCards}</div><p class="fine">稱號累積會保留；各洲已走訪國家依目前保存的人生紀錄計算。地域分類代表稱號的適用背景，不是人生價值的高低。</p>`;
+}
+let titleDexMode = 'all';
+function renderTitleDex(unlocked) {
+  $('titleDexSummary').textContent = `查看 ${TITLE_TOTAL()} 個人生稱號圖鑑`;
+  const modes = [['all','全部'],['unlocked','已解鎖'],['locked','未解鎖']];
+  $('titleDexFilter').innerHTML = modes.map(([id,label]) => `<button type="button" data-mode="${id}" aria-pressed="${titleDexMode === id}">${label}</button>`).join('');
+  $('titleDexFilter').querySelectorAll('button').forEach(btn => btn.onclick = () => { titleDexMode = btn.dataset.mode; renderTitleDex(unlockedTitles()); });
+  const list = titleCatalog().filter(t => titleDexMode === 'all' || (titleDexMode === 'unlocked') === unlocked.has(t.id));
+  $('titleDexList').innerHTML = list.map(t => `<li class="${unlocked.has(t.id) ? '' : 'locked'}"><span></span><small></small></li>`).join('');
+  [...$('titleDexList').children].forEach((el,i) => {
+    const t = list[i], yes = unlocked.has(t.id);
+    el.querySelector('span').textContent = yes ? `✦ ${t.name}` : '🔒 尚未解鎖的稱號';
+    el.querySelector('small').textContent = t.regions.join('、');
+  });
+}
+function resetTitleClear() {
+  $('titleClear').innerHTML = '<button id="titleClearBtn" type="button">重置稱號收藏</button>';
+  $('titleClearBtn').onclick = () => {
+    $('titleClear').innerHTML = '<span>確定要重置所有已解鎖稱號嗎？這個操作無法復原，人生紀錄會保留。</span><button id="titleClearYes" type="button">確認重置</button><button id="titleClearNo" type="button">取消</button>';
+    $('titleClearYes').onclick = () => { try { localStorage.removeItem(TITLE_KEY); localStorage.removeItem(TITLE_KEY_V2); } catch (e) {} resetTitleClear(); renderMemorial(); };
+    $('titleClearNo').onclick = resetTitleClear;
+  };
+}
+resetTitleClear();
 function lifeTitle(end, martyred) {
   const x = titleCtx(end, martyred);
+  const extra = EXTRA_TITLES.find(t => { try { return typeof t.when === 'function' && t.when(x); } catch(e) { return false; } });
+  if (extra) return [extra.name, extra.description || ''];
   const t = TITLES.find(([, , f]) => { try { return f(x); } catch (e) { return false; } }) || TITLES[TITLES.length - 1];
   if (t[0] === '聽著喚拜聲長大的人') { const m = placeTitle(MUSLIM_TITLES); if (m) return [m, t[1]]; }
   if (t[0] === '在油燈和花香裡長大的人') { const m = placeTitle(HINDU_TITLES); if (m) return [m, t[1]]; }
@@ -5905,7 +6025,9 @@ function lifeTitle(end, martyred) {
 }
 // 收集過的稱號（只存在這台裝置的瀏覽器）
 function collectTitle(name) {
-  try { const s = new Set(JSON.parse(localStorage.getItem(TITLE_KEY) || '[]')); s.add(name); localStorage.setItem(TITLE_KEY, JSON.stringify([...s])); return s.size; } catch (e) { return null; }
+  const id = titleIdFor(name); if (!id) return null;
+  const ids = unlockedTitles(); ids.add(id);
+  return saveUnlockedTitles(ids) ? titleCatalog().filter(t => ids.has(t.id)).length : null;
 }
 function recapSlides(end, martyred) {
   const c = me.country, g = me.group, o = lifeOutcome(martyred), d = new Date();
@@ -5999,8 +6121,15 @@ function finish(martyred) {
   const lives = loadLives();
   const d = new Date();
   lives.push({ name: me.name, designated: me.designated || false, date: `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`, country: me.country.name, countryId: me.country.id, continent: me.country.continent, group: me.group.name, parent: relName(me), sex: me.sex, lifespan: end, firstAge, faithAge, martyred, journey: journeyText(), channel: firstChannel(), feeling: null, lastWord: '', hue: lifeHue(martyred) });
-  saveLives(lives);
   addLog(end, martyred ? (gentleOn() ? '你提早走完了這一生。' : '你的一生在這裡結束。') : '你走完了這一生。', 'milestone');
+  const earnedTitle = lifeTitle(end, martyred)[0];
+  const earnedTitleId = titleIdFor(earnedTitle);
+  const titleNew = !unlockedTitles().has(earnedTitleId);
+  lives[lives.length - 1].titleId = earnedTitleId;
+  lives[lives.length - 1].title = earnedTitle;
+  lives[lives.length - 1].titleNew = titleNew;
+  collectTitle(earnedTitle);
+  saveLives(lives);
   const c = me.country, g = me.group;
   const rows = [
     ['出生地', `${c.name}（${c.continent}）`],
