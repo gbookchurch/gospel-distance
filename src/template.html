@@ -1308,6 +1308,10 @@ body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
 .rc-color-key .rc-color-copy strong { font-size: 15px; color: #27382D; font-weight: 700; }
 .rc-colors { gap: 12px; }
 .rc-colors .rc-big { font-size: clamp(25px,6vw,39px); line-height: 1.3; }
+.rc-color-note { font-size: 12.5px; line-height: 1.7; color: #55645B; }
+.rc-palette-more { border-top: 1px solid rgba(96,104,97,.25); padding-top: 8px; }
+.rc-palette-more > summary { cursor: pointer; display: list-item; padding: 9px 0; color: #435A49; font-size: 13.5px; font-weight: 700; }
+.rc-palette-more > .rc-color-key { padding-top: 12px; }
 @media (max-width: 640px) {
   .end .theo-access { gap: 11px; padding-block: 28px 32px; }
   .end .theo-access h2 { font-size: clamp(20px, 5.5vw, 24px); }
@@ -3679,6 +3683,23 @@ const HUES = {
   muslim: ['伊斯蘭', '#4CB6A4'], hindu: ['印度教', '#EE9B42'], buddhist: ['佛教', '#BF6279'], folk: ['道教與民間信仰', '#DC7054'],
   jewish: ['猶太教', '#627FC0'], sikh: ['錫克教', '#EABD50'], ethnic: ['傳統信仰', '#BBA06D'], none: ['無宗教', '#C7C5BF']
 };
+// 這些是視覺設計採用的文化線索，並非各宗教的官方代表色。
+const HUE_MEANINGS = {
+  protestant: '暖金黃取自光與閱讀聖經的意象，呼應這個故事裡的福音與盼望。',
+  catholic: '銅橘色借用古老教堂的銅器與歲月光澤，呈現歷史悠久的禮儀傳統。',
+  orthodox: '銀藍色取自聖像畫與金屬聖器的冷光，讓東正教與暖色系區分。',
+  oriental: '暖霧銀呼應古老東方教會的石刻與禮儀質感，和銀藍色略有差異。',
+  assyrian: '暖霧銀呼應古老東方教會的石刻與禮儀質感，和銀藍色略有差異。',
+  lds: '淡金米白用較柔和的明度，和基督新教的暖金黃分開辨識。',
+  muslim: '綠松石取自部分清真寺常見的青綠磁磚與幾何裝飾。',
+  hindu: '番紅花橘聯想到印度教文化裡常見的節慶、服飾與奉獻色彩。',
+  buddhist: '絳紅取自部分佛教傳統的僧袍色彩；不同地區的僧袍顏色也各有差異。',
+  folk: '朱紅讓人想到東亞廟宇的朱漆與祭典，作為民間信仰的視覺線索。',
+  jewish: '靛藍借用猶太禮儀織物常見的藍色意象，並與其他色系區隔。',
+  sikh: '琥珀黃取自錫克教文化中常見的橙黃色頭巾與旗幟。',
+  ethnic: '土金色借用土地、植物與天然材質的聯想，提醒各地傳統信仰有不同面貌。',
+  none: '霧灰是中性背景色，不暗示缺乏信仰就比較空虛或黯淡。',
+};
 const SEX_HUE = { m: ['男生', '#6D9D78'], f: ['女生', '#6C9FC5'] };
 // 出生地區：固定使用較深、較低彩度的色域，讓邊框和宗教絲帶有明確的明度分工。
 // 特別避免「撒哈拉以南非洲赤土色」與「天主教銅色」撞色：非洲改為深海藍。
@@ -5505,14 +5526,17 @@ function recapSlides(end, martyred) {
   S.push({ k: 'nums', eyebrow: '這一生的數字', nums: nums.slice(0, 4), quiet: o === 'martyred' });
   const recipe = lifeRecipe(martyred), spec = lifeSpec(martyred);
   const region = recipe.comps.find(x => x.k === 'region'), gender = recipe.comps.find(x => x.k === 'sex');
-  const faith = recipe.comps.filter(x => x.rel).sort((a, b) => b.w - a.w)[0];
+  const faithColors = recipe.comps.filter(x => x.rel).sort((a, b) => b.w - a.w);
   const material = { leaf: '葉脈', stone: '石紋', canopy: '森林紋理' }[spec.material];
   S.push({ k: 'colors', eyebrow: '讀懂人生的色彩', big: '每一道顏色，都有故事', legend: [
     [region.color, '外框・出生背景', `取自${region.label.replace(/^出生在/, '')}的區域色，並帶有${material}。`],
-    [faith.color, '流動水彩・信仰歷程', '顏色會隨著成長、接觸信仰與生命轉折而改變，色帶長短反映經歷的時間。'],
+    ...faithColors.map(x => [HUES[x.k][1], `水彩・${HUES[x.k][0]}`, `${HUE_MEANINGS[x.k]}這段人生約有 ${Math.round(x.w / 0.6 * 100)}% 的年份屬於這個信仰背景。`]),
     [gender.color, '細緻色線・性別', `這一生的${me.sex === 'm' ? '男性' : '女性'}色彩，沿著水彩河流延伸。`],
-    ['#E9A04F', '色粉與深色細流・人生事件', '相遇、成長和選擇留下色粉；經歷信仰壓力時，河流會出現較深的細線。'],
-  ] });
+    ['#7C9A7D', '鼠尾草綠色粉・成長', '人生中的成長事件會留下綠色色粉。'],
+    ['#E9A04F', '橙黃色粉・重要選擇', '遇到需要決定方向的時刻，河岸會留下暖橙色色粉。'],
+    ['#DC684C', '橘紅色粉・人與人的相遇', '曾經走進故事的人，會在河流旁留下淡淡的橘紅色。'],
+    ['#5D6060', '深色細流・信仰壓力', '若曾經歷信仰壓力或傷害，河流會在相關年紀留下深色細線。'],
+  ], colorNote: '河流依年份流動：家庭信仰、後來的選擇、離開或回到信仰，都會改變當時的色帶。這些顏色是設計上的文化聯想，並非宗教官方指定色。', allColors: Object.entries(HUES).map(([k, [name, hex]]) => [hex, name, HUE_MEANINGS[k]]) });
   const [tt, ts] = lifeTitle(end, martyred);
   const got = collectTitle(tt);
   S.push({ k: 'title', eyebrow: '你這一生的稱號', big: tt, lines: [ts], collection: got ? `你已經收集了 ${got}/${TITLE_TOTAL()} 個稱號` : '' });
@@ -5540,7 +5564,7 @@ function showRecap(end, martyred) {
     box.querySelector('.rc-count').textContent = `${i + 1} / ${slides.length}`;
     progress.setAttribute('aria-valuenow', i + 1);
     box.querySelector('.rc-progress-fill').style.width = `${(i + 1) / slides.length * 100}%`;
-    stage.innerHTML = `<section class="rc-card rc-${s.k}${quiet ? '' : ' rc-anim'}"><p class="rc-eyebrow">${esc(s.eyebrow)}</p>${s.big ? `<h2 class="rc-big">${esc(s.big)}</h2>` : ''}${s.quote ? `<blockquote class="rc-quote">${esc(s.quote)}</blockquote>` : ''}${s.list ? `<ol class="rc-list">${s.list.map(([a, t]) => `<li><span class="num">${esc(a)}</span><span>${esc(t)}</span></li>`).join('')}</ol>` : ''}${s.legend ? `<ul class="rc-color-key">${s.legend.map(([c, label, note]) => `<li><i class="rc-color-dot" style="background:${c}"></i><span class="rc-color-copy"><strong>${esc(label)}</strong><span>${esc(note)}</span></span></li>`).join('')}</ul>` : ''}${s.swatches ? `<div class="rc-strip" style="background:${stripCss(s.strip)}" aria-hidden="true"></div><ul class="rc-sw">${s.swatches.map(([c, l, p]) => `<li><i style="background:${c}"></i><span>${esc(l)}</span><b class="num">${p}%</b></li>`).join('')}</ul>` : ''}${s.chips ? `<ul class="rc-chips">${s.chips.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}${s.nums ? `<ul class="rc-nums">${s.nums.map(([n, t]) => `<li><b class="num" data-n="${n}">${quiet ? n : 0}</b><span>${esc(t)}</span></li>`).join('')}</ul>` : ''}${(s.lines || []).map(l => `<p class="rc-line">${esc(l)}</p>`).join('')}</section>`;
+    stage.innerHTML = `<section class="rc-card rc-${s.k}${quiet ? '' : ' rc-anim'}"><p class="rc-eyebrow">${esc(s.eyebrow)}</p>${s.big ? `<h2 class="rc-big">${esc(s.big)}</h2>` : ''}${s.quote ? `<blockquote class="rc-quote">${esc(s.quote)}</blockquote>` : ''}${s.list ? `<ol class="rc-list">${s.list.map(([a, t]) => `<li><span class="num">${esc(a)}</span><span>${esc(t)}</span></li>`).join('')}</ol>` : ''}${s.legend ? `<ul class="rc-color-key">${s.legend.map(([c, label, note]) => `<li><i class="rc-color-dot" style="background:${c}"></i><span class="rc-color-copy"><strong>${esc(label)}</strong><span>${esc(note)}</span></span></li>`).join('')}</ul>` : ''}${s.colorNote ? `<p class="rc-color-note">${esc(s.colorNote)}</p>` : ''}${s.allColors ? `<details class="rc-palette-more"><summary>查看其他信仰的配色與選色理由</summary><ul class="rc-color-key">${s.allColors.map(([c, label, note]) => `<li><i class="rc-color-dot" style="background:${c}"></i><span class="rc-color-copy"><strong>${esc(label)}</strong><span>${esc(note)}</span></span></li>`).join('')}</ul></details>` : ''}${s.swatches ? `<div class="rc-strip" style="background:${stripCss(s.strip)}" aria-hidden="true"></div><ul class="rc-sw">${s.swatches.map(([c, l, p]) => `<li><i style="background:${c}"></i><span>${esc(l)}</span><b class="num">${p}%</b></li>`).join('')}</ul>` : ''}${s.chips ? `<ul class="rc-chips">${s.chips.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}${s.nums ? `<ul class="rc-nums">${s.nums.map(([n, t]) => `<li><b class="num" data-n="${n}">${quiet ? n : 0}</b><span>${esc(t)}</span></li>`).join('')}</ul>` : ''}${(s.lines || []).map(l => `<p class="rc-line">${esc(l)}</p>`).join('')}</section>`;
     if (box.evalInk) box.evalInk();
     box.querySelector('.rc-prev').disabled = i === 0;
     const collection = box.querySelector('.rc-collection');
@@ -5558,10 +5582,10 @@ function showRecap(end, martyred) {
   box.querySelector('.rc-prev').onclick = e => { e.stopPropagation(); go(-1); };
   box.querySelector('.rc-skip').onclick = e => { e.stopPropagation(); close(); };
   // 點畫面左邊三分之一回上一張，其他地方下一張；左右滑也可以
-  let sx = null;
-  stage.addEventListener('pointerdown', e => { sx = e.clientX; });
-  stage.addEventListener('pointerup', e => { if (e.target.closest('button')) return; const dx = sx === null ? 0 : e.clientX - sx; sx = null; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1); else go(e.clientX < innerWidth / 3 ? -1 : 1); });
-  const key = e => { if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); } else if (e.key === 'ArrowLeft') go(-1); else if (e.key === 'Escape') close(); };
+  let sx = null, sy = null;
+  stage.addEventListener('pointerdown', e => { sx = e.clientX; sy = e.clientY; });
+  stage.addEventListener('pointerup', e => { if (e.target.closest('button,summary,details,a,input,select,textarea')) return; const dx = sx === null ? 0 : e.clientX - sx, dy = sy === null ? 0 : e.clientY - sy; sx = sy = null; if (Math.abs(dy) > 18 && Math.abs(dy) > Math.abs(dx)) return; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1); else go(e.clientX < innerWidth / 3 ? -1 : 1); });
+  const key = e => { if (e.key === 'Escape') { close(); return; } if (e.target.closest('summary,details,button,a,input,select,textarea')) return; if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); } else if (e.key === 'ArrowLeft') go(-1); };
   document.addEventListener('keydown', key);
   render();
 }
