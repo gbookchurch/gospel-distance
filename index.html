@@ -993,13 +993,15 @@ body.rc-open { overflow: hidden; }
 
   /* 首屏：標題與主按鈕優先，次要控制換到下一行 */
   .intro { gap: 18px; padding-inline: 12px; }
-  .intro h1 { font-size: clamp(29px, 8vw, 38px); line-height: 1.37; letter-spacing: -.025em; }
-  .intro .lede { font-size: 15.5px; line-height: 1.7; gap: 4px; }
+  .intro h1 { font-size: clamp(26px, 7.3vw, 34px); line-height: 1.45; letter-spacing: -.025em; text-align: center; text-wrap: balance; }
+  .intro h1 em { display: block; }
+  .intro .lede { font-size: 15.5px; line-height: 1.8; gap: 4px; text-align: center; text-wrap: balance; justify-items: center; }
+  .intro .lede p { max-width: 24em; }
   .intro::before { top: 20px; bottom: 0; background-position: right -45vw top 105px; opacity: .24; }
   .brand { font-size: 12.5px; gap: 7px; line-height: 1.5; }
   .brand .dot i { width: 7px; height: 7px; }
   .controls.start { display: flex; justify-content: center; align-items: center; gap: 10px; }
-  .controls.start .go { width: min(100%, 245px); min-width: 0; min-height: 54px; padding: 11px 28px; }
+  .controls.start .go { width: min(100%, 310px); min-width: 0; min-height: 54px; padding: 11px 28px; }
   .intro > .toggle { justify-self: center; justify-content: center; text-align: left; max-width: 310px; }
   .toggle { align-items: center; gap: 10px; line-height: 1.55; font-size: 13.5px; min-height: 44px; }
   .toggle input { flex: none; margin-top: 2px; }
@@ -1169,7 +1171,7 @@ body.rc-open { overflow: hidden; }
   .site-foot { padding-bottom: max(28px, env(safe-area-inset-bottom, 0px)); }
 }
 @media (max-width: 380px) {
-  .intro h1 { font-size: 29px; }
+  .intro h1 { font-size: clamp(25px, 7.3vw, 28px); }
   .controls.start { grid-template-columns: 1fr; }
   .controls.start label { justify-content: center; }
   .ticker { gap: 9px; }
@@ -1404,7 +1406,7 @@ body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
 <body>
 <main>
   <section class="intro" id="intro">
-    <h1>你會在幾歲，第一次<em>聽見耶穌的名字</em>？</h1>
+    <h1>你會在幾歲，第一次<em>聽見耶穌的名字？</em></h1>
     <div class="lede">
       <p>如果人生能重新開始，你會出生在哪個國家？你有沒有機會認識耶穌？</p>
     </div>
