@@ -1946,6 +1946,10 @@ function bibleAvailable(group) {
 }
 
 function fits(ev, person, age) {
+  // 洗禮是進入信仰初期的里程碑，避免信主數十年後才隨機抽到「你受洗了」。
+  // 若玩家一直獨自信主、沒有聚會群體，這段期間也不會出現受洗事件。
+  if (ev.id === 'baptized' && Number.isFinite(person.faithAge) && age - person.faithAge > 8) return false;
+  if (ev.id === 'baptized' && person.country.id === 'CN' && person.cnChurch === 'alone') return false;
   if (ev.sex && ev.sex !== person.sex) return false;
   if (ev.minAge != null && age < ev.minAge) return false;
   if (ev.maxAge != null && age > ev.maxAge) return false;
@@ -2005,6 +2009,7 @@ function believerYear(person, age, state, rand = Math.random) {
   // 教會受限的程度：國家的教會生活壓力，但在基督徒為主的族群裡，教會本來就在身邊
   const churchOpen = 1 - 0.8 * scoreRatio(c, 'church') * (1 - christianShare(person));
   for (const ev of GROWTH_EVENTS) {
+    if (!fits(ev, person, age)) continue;
     if (ev.once && state.done[ev.id]) continue;
     if (ev.needsBible && !bibleAvailable(person.group)) continue;
     const p = ev.prob * Math.pow(churchOpen, ev.openPower ?? 1);
@@ -2419,6 +2424,8 @@ const LOCAL = {
 };
 function localize(t) {
   if (typeof t !== 'string' || !me) return t;
+  // 中國場景裡，日常敘事使用當地較自然的「公安／公安機關」。其他國家保留「警察／警方」。
+  if (me.country.id === 'CN' && !me.emigrated) t = t.replace(/警方/g, '公安機關').replace(/警察/g, '公安');
   let rules = me.trad === 'protestant' ? (me.style === 'fellow' ? LOCAL.fellow : null) : LOCAL[me.trad];
   if (me.trad === 'protestant' && me.worship !== 'praise') rules = [...LOCAL.hymnish, ...(rules || [])];
   if (!rules) return t;
@@ -2625,8 +2632,12 @@ MIN_DILEMMAS.deacon = [['牧師的薪水', '執事會在討論要不要幫牧師
 MIN_DILEMMAS.elder = [['聘牧師', '老牧師要退休了，長老會要決定請誰來接。', [['請年輕有活力的傳道', '年輕人回來了，有些長輩卻覺得聽不懂講道。', 0], ['請資深穩重的牧師', '教會很穩定，但年輕人慢慢少了。', 0], ['花一年和會友一起尋求', '過程很慢，但大家都覺得這是一起做的決定。', 1]]]];
 function setRole(role) {
   if (role && phase === 'believer' && !(st.done && st.done.baptized)) {
-    st.done = st.done || {}; st.done.baptized = true; stats.growth++;
-    const b = baptText() || '你受洗了。'; addLog(age, b, 'growth'); highlights.push({ age, text: b, cls: 'growth' });
+    st.done = st.done || {}; st.done.baptized = true;
+    // 進入職分通常已有受洗／入會背景；信主多年後不再補生一則當年才受洗的事件。
+    if (faithAge === null || age - faithAge <= 8) {
+      stats.growth++;
+      const b = baptText() || '你受洗了。'; addLog(age, b, 'growth'); highlights.push({ age, text: b, cls: 'growth' });
+    }
   }
   ministry.role = role; ministry.since = age;
   if (ministry.firstServe === null && role) ministry.firstServe = age;
@@ -4963,7 +4974,7 @@ function pickChannel(p, a) {
   const ch = pickWeighted(CHANNELS, ch => Math.max(0, ch.w(x)));
   if (ch.id === 'crusade') penteSeen = true;
   if (ch.id === 'internet') return pickPlatform(p, x);
-  if (ch.id === 'abroad' && p.country.id === 'KP') return { id: 'defect', short: '逃到中國', text: '你越過邊境逃到中國，被一群基督徒藏起來照顧，在那裡聽見了福音。被中國警察抓到的脫北者，會被遣返北韓。' };
+  if (ch.id === 'abroad' && p.country.id === 'KP') return { id: 'defect', short: '逃到中國', text: '你越過邊境逃到中國，被一群基督徒藏起來照顧，在那裡聽見了福音。被中國公安抓到的脫北者，會被遣返北韓。' };
   return ch;
 }
 
@@ -5655,7 +5666,7 @@ function choose(c) {
   $('choiceSlot').innerHTML = '';
   if (!cfNodes.some(n => n.gospel) && x !== 'left') cfNodes.unshift({ gospel: true, age, title: '第一次認真面對福音', chose: { respond: '決定跟隨耶穌', wait: '想再多了解一點', decline: '沒有選擇這份信仰' }[c], alt: gospelAlts(c, x) });
   if (c === 'respond' && phase === 'left') { phase = 'believer'; journey.push({ age, kind: 'return_faith' }); addLog(age, '你決定重新相信耶穌。', 'gospel'); highlights.push({ age, text: '重新回到了信仰。', cls: 'growth' }); }
-  else if (c === 'respond') { phase = 'believer'; faithAge = age; journey.push({ age, kind: 'faith' }); addLog(age, faithLine(x), 'gospel'); highlights.push({ age, text: faithHL(x), cls: 'gospel' }); tradNote(age); }
+  else if (c === 'respond') { phase = 'believer'; faithAge = age; me.faithAge = age; journey.push({ age, kind: 'faith' }); addLog(age, faithLine(x), 'gospel'); highlights.push({ age, text: faithHL(x), cls: 'gospel' }); tradNote(age); }
   else if (phase === 'left') { addLog(age, desc, 'milestone'); }
   else { phase = c; addLog(age, desc, 'milestone'); }
   if (x !== 'left') addLog(age, afterLine(c, x), 'milestone');
