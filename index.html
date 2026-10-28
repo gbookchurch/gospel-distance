@@ -1283,10 +1283,31 @@ body.rc-open { overflow: hidden; }
 .theo-access #theoSum::after { border-color: #557568; }
 .theo-access #theoBox[open] { background: var(--surface); }
 .theo-access #theoBox[open] #theoSum { border-bottom: 1px solid var(--line); }
+/* V3.11：手機時間軸一列控制；回顧外框與內容間距一致。 */
+.lifearea .agebar .controls { display: inline-flex; align-items: center; justify-content: flex-end; gap: 6px; white-space: nowrap; }
+.lifearea .agebar .controls #pauseBtn { min-width: 0; min-height: 38px; padding: 7px 9px; font-size: 12.5px; }
+.lifearea .agebar .controls #speed2 { min-width: 64px; min-height: 38px; padding: 7px 25px 7px 9px; font-size: 12.5px; background-position: right 8px center; }
+.liferecap { border-radius: 0 !important; overflow: hidden; clip-path: inset(0); }
+.liferecap .rc-nav { display: grid; grid-template-columns: 44px minmax(0,1fr) auto; align-items: center; }
+.liferecap .rc-collection { text-align: center; font-size: clamp(11px, 2.9vw, 13px); line-height: 1.5; color: #5E6963; font-weight: 500; text-shadow: 0 1px 4px rgba(255,255,255,.8); }
+.liferecap .rc-collection[hidden] { display: block; visibility: hidden; }
+.end .explore > .churchline { margin: 0 12px; padding: 12px 14px; border: 1px solid #E8D9C9; border-left: 3px solid #D99A70; border-radius: 8px; background: linear-gradient(110deg, #FFF6ED, #FBF8F2); color: #6C594A; display: grid; gap: 5px; font-size: 13.5px; line-height: 1.75; }
+.end .explore > .churchline strong { font-size: 13px; font-weight: 700; color: #AA6C44; letter-spacing: .02em; }
+.end .explore > .churchline span { color: #635950; }
+.theo-head.theo-head-gradient, .theo-head.theo-head-gradient.destiny { border-left: 0; border-radius: 8px; background: linear-gradient(105deg, rgba(233,160,79,.24) 0%, rgba(220,104,76,.15) 35%, rgba(170,122,178,.22) 100%); }
+.theo-head-gradient .theo-kicker, .theo-head-gradient.destiny .theo-kicker { color: #906B80; }
 @media (max-width: 640px) {
   .end .theo-access { gap: 11px; padding-block: 28px 32px; }
   .end .theo-access h2 { font-size: clamp(20px, 5.5vw, 24px); }
   .theo-access #theoSum { padding: 13px 16px; }
+  .lifearea .agebar { grid-template-columns: auto minmax(0,1fr) auto; gap: 5px 9px; padding-right: 16px; }
+  .lifearea .agebar .controls { grid-column: 3; grid-row: 1 / span 2; justify-self: end; gap: 5px; }
+  .lifearea .agebar .controls #pauseBtn { padding: 6px 8px; min-height: 36px; }
+  .lifearea .agebar .controls #speed2 { min-width: 58px; min-height: 36px; padding: 6px 23px 6px 7px; }
+  .lifearea .agebar .agemeta { grid-column: 2; grid-row: 1 / span 2; }
+  .lifearea .agebar .age { grid-column: 1; grid-row: 1 / span 2; font-size: 33px; }
+  .lifearea .agebar .lifeprog { grid-column: 1 / -1; grid-row: 3; margin-top: 5px; }
+  .end .explore > .churchline { margin-inline: 8px; padding: 11px 12px; }
 }
 </style>
 
@@ -3616,7 +3637,7 @@ const SOTER_ZH = { calvin: '偏加爾文', arminian: '偏亞米念', luther: '�
 const WORSHIP_ZH = { high: '禮儀式的禮拜', hymn: '傳統聖詩', praise: '敬拜讚美' };
 function churchLine() {
   if (!isProt() || !me.denom || hardHere() || !(faithAge !== null || me.parentReligion === 'christian')) return '';
-  return `<p class="fine churchline">這一生的教會：宗派是${me.sbc ? '美南浸信會' : DENOM_ZH[me.denom]}；神學上${SOTER_ZH[me.soter] || '沒有特別強調哪一派'}；教會文化是${WORSHIP_ZH[me.worship] || '敬拜讚美'}、${me.style === 'cell' ? '小組' : '團契'}。同一個宗派裡，每間教會都不太一樣。</p>`;
+  return `<p class="fine churchline"><strong>這一生的教會</strong><span>宗派是${me.sbc ? '美南浸信會' : DENOM_ZH[me.denom]}；神學上${SOTER_ZH[me.soter] || '沒有特別強調哪一派'}；教會文化是${WORSHIP_ZH[me.worship] || '敬拜讚美'}、${me.style === 'cell' ? '小組' : '團契'}。同一個宗派裡，每間教會都不太一樣。</span></p>`;
 }
 const MV_INFO = {
   ihop: { name: 'IHOPKC（國際禱告殿，美國堪薩斯城）', rows: [
@@ -3727,7 +3748,6 @@ function theoMatrix() {
 function hellPanel(open) {
   theoSel.col = theoSel.row = null;
   return `<details class="xdr theo" id="theoBox"${open ? ' open' : ''}><summary id="theoSum">看看不同神學觀點</summary><div class="theo-wrap">
-  <div class="theo-gradient" aria-hidden="true"></div>
   <div class="theo-lede"><p class="theo-q">「如果一個人從出生到死亡，都沒有機會認識耶穌，神會怎麼看待他？」</p><p>這個問題困擾過無數基督徒。歷代神學家提出了不同答案，而這些答案，也影響著我們如何理解宣教、救恩，以及神的公義與憐憫。</p></div>
   <p class="theo-note">這是這個遊戲最核心的問題，基督教內部有好幾種回答。以下只介紹，不下結論。這個問題其實有兩層：誰能得救，和沒有得救的人最後會怎樣。</p>
   <section class="theo-layer"><div class="theo-head theo-head-gradient"><span class="theo-kicker">第一層</span><h4>誰能得救？</h4></div>${theoCards(THEO_SAVE, theoMore(SAVE_VIEWS))}</section>
@@ -4307,7 +4327,7 @@ function recapRiver(box, spec, quiet) {
   const x = cv.getContext && cv.getContext('2d'); if (!x) return;
   const dpr = Math.min(window.devicePixelRatio || 1, 1.5), W = Math.round(innerWidth * dpr), H = Math.round(innerHeight * dpr);
   cv.width = W; cv.height = H; box.prepend(cv);
-  const ro = { y0: 0.82, y1: 0.66, frame: 0.028, wide: 0.9 }, art = riverArt(W, H, spec, { ...ro, noFrame: true }); if (!art) return;
+  const ro = { y0: 0.82, y1: 0.66, frame: 0.019, wide: 0.9 }, art = riverArt(W, H, spec, { ...ro, noFrame: true }); if (!art) return;
   const frame = () => drawFrame(x, W, H, spec, ro.frame);
   const lin = v => { v /= 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
   const pctl = (arr, p) => { arr.sort((a, b) => a - b); return arr[Math.floor(arr.length * p)] || 0; };
@@ -5728,7 +5748,7 @@ function recapSlides(end, martyred) {
   S.push({ k: 'nums', eyebrow: '這一生的數字', nums: nums.slice(0, 4), quiet: o === 'martyred' });
   const [tt, ts] = lifeTitle(end, martyred);
   const got = collectTitle(tt);
-  S.push({ k: 'title', eyebrow: '你這一生的稱號', big: tt, lines: [ts, ...(got ? [`你已經收集了 ${got} / ${TITLE_TOTAL()} 個稱號`] : [])] });
+  S.push({ k: 'title', eyebrow: '你這一生的稱號', big: tt, lines: [ts], collection: got ? `你已經收集了 ${got}/${TITLE_TOTAL()} 個稱號` : '' });
   S.push({ k: 'last', eyebrow: '最後', quote: cardLine(end, martyred), lines: ['這一段人生是依真實統計產生的模擬，不是任何一個真實人物的紀錄。'] });
   return S;
 }
@@ -5741,7 +5761,7 @@ function showRecap(end, martyred) {
   box.id = 'lifeRecap'; box.className = `liferecap rc-${o}`; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', '這一生的回顧');
   const leftArrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 5-7 7 7 7"/></svg>';
   const rightArrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10 5 7 7-7 7"/></svg>';
-  box.innerHTML = `<div class="rc-top"><div class="rc-top-meta"><span class="rc-top-title">人生回顧</span><span class="rc-count" aria-live="polite"></span></div><button class="rc-skip" type="button">略過</button><div class="rc-progress" role="progressbar" aria-label="人生回顧進度" aria-valuemin="0" aria-valuemax="${slides.length}" aria-valuenow="1"><div class="rc-progress-fill"></div></div></div><div class="rc-stage"></div><div class="rc-nav"><button class="rc-prev" type="button" aria-label="上一頁">${leftArrow}</button><button class="rc-next" type="button" aria-label="下一頁">${rightArrow}</button></div>`;
+  box.innerHTML = `<div class="rc-top"><div class="rc-top-meta"><span class="rc-top-title">人生回顧</span><span class="rc-count" aria-live="polite"></span></div><button class="rc-skip" type="button">略過</button><div class="rc-progress" role="progressbar" aria-label="人生回顧進度" aria-valuemin="0" aria-valuemax="${slides.length}" aria-valuenow="1"><div class="rc-progress-fill"></div></div></div><div class="rc-stage"></div><div class="rc-nav"><button class="rc-prev" type="button" aria-label="上一頁">${leftArrow}</button><span class="rc-collection" aria-live="polite"></span><button class="rc-next" type="button" aria-label="下一頁">${rightArrow}</button></div>`;
   document.body.appendChild(box); document.body.classList.add('rc-open');
   try { recapRiver(box, lifeSpec(martyred), quiet); } catch (e) {}
   const stage = box.querySelector('.rc-stage'), progress = box.querySelector('.rc-progress');
@@ -5756,6 +5776,9 @@ function showRecap(end, martyred) {
     stage.innerHTML = `<section class="rc-card rc-${s.k}${quiet ? '' : ' rc-anim'}"><p class="rc-eyebrow">${esc(s.eyebrow)}</p>${s.big ? `<h2 class="rc-big">${esc(s.big)}</h2>` : ''}${s.quote ? `<blockquote class="rc-quote">${esc(s.quote)}</blockquote>` : ''}${s.list ? `<ol class="rc-list">${s.list.map(([a, t]) => `<li><span class="num">${esc(a)}</span><span>${esc(t)}</span></li>`).join('')}</ol>` : ''}${s.swatches ? `<div class="rc-strip" style="background:${stripCss(s.strip)}" aria-hidden="true"></div><ul class="rc-sw">${s.swatches.map(([c, l, p]) => `<li><i style="background:${c}"></i><span>${esc(l)}</span><b class="num">${p}%</b></li>`).join('')}</ul>` : ''}${s.chips ? `<ul class="rc-chips">${s.chips.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}${s.nums ? `<ul class="rc-nums">${s.nums.map(([n, t]) => `<li><b class="num" data-n="${n}">${quiet ? n : 0}</b><span>${esc(t)}</span></li>`).join('')}</ul>` : ''}${(s.lines || []).map(l => `<p class="rc-line">${esc(l)}</p>`).join('')}</section>`;
     if (box.evalInk) box.evalInk();
     box.querySelector('.rc-prev').disabled = i === 0;
+    const collection = box.querySelector('.rc-collection');
+    collection.textContent = s.collection || '';
+    collection.hidden = !s.collection;
     const next = box.querySelector('.rc-next'), last = i === slides.length - 1;
     next.classList.toggle('is-final', last);
     next.innerHTML = last ? '閱讀結果' : rightArrow;
