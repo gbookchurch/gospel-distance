@@ -342,7 +342,6 @@ body { overflow-x: clip; }
 
 /* 首頁動機 */
 .intro .lede { display: grid; gap: 6px; color: var(--ink); font-size: 17px; }
-.intro .lede p:last-child { color: var(--lamp); font-weight: 700; }
 .controls.start { gap: 16px; }
 button.go { font-size: 18px; padding: 14px 34px; border-radius: 6px; }
 @media (prefers-reduced-motion: no-preference) {
@@ -995,10 +994,8 @@ body.rc-open { overflow: hidden; }
   .intro::before { top: 20px; bottom: 0; background-position: right -45vw top 105px; opacity: .24; }
   .brand { font-size: 12.5px; gap: 7px; line-height: 1.5; }
   .brand .dot i { width: 7px; height: 7px; }
-  .controls.start { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: stretch; }
+  .controls.start { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; align-items: stretch; }
   .controls.start .go { width: 100%; min-width: 0; min-height: 54px; padding: 11px 20px; }
-  .controls.start label { gap: 7px; white-space: nowrap; }
-  .controls.start select { min-width: 72px; min-height: 48px; padding: 8px 31px 8px 12px; background-position: right 10px center; }
   .toggle { align-items: flex-start; gap: 10px; line-height: 1.55; font-size: 13.5px; min-height: 44px; }
   .toggle input { flex: none; margin-top: 2px; }
   .ticker { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-block: 14px; }
@@ -1404,24 +1401,15 @@ body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
     <h1>你會在幾歲，第一次<em>聽見耶穌的名字</em>？</h1>
     <div class="lede">
       <p>如果人生能重新開始，你會出生在哪個國家？你有沒有機會認識耶穌？</p>
-      <p>有些事情不是我們可以選擇的</p>
     </div>
     <div class="controls start">
       <button class="primary go" id="birthBtn">出生</button>
-      <label for="speed">速度
-        <select id="speed">
-          <option value="900">慢</option>
-          <option value="380" selected>中</option>
-          <option value="120">快</option>
-        </select>
-      </label>
     </div>
     <label class="toggle" for="gentle"><input type="checkbox" id="gentle"> 以較溫和的方式呈現信仰壓力與死亡事件</label>
     <div class="ticker" aria-live="off" aria-label="模擬計數器">
       <div><b class="num" id="bornCount">0</b><span>打開這頁之後，世界上出生的嬰兒</span></div>
       <div><b class="num" id="neverCount">0</b><span>可能一生沒有機會接觸福音的人</span></div>
     </div>
-    <p class="fine">遊戲裡會出現因信仰被針對、拘留，甚至失去生命的事件，不描寫畫面。人生經歷都是依模型產生的，不是真實人物的紀錄。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
   </section>
 
   <div class="more">
@@ -1611,6 +1599,7 @@ body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
   <section class="show band b4" id="show">
     <p class="eyebrow">關於這個企劃</p>
     <p>我們在節目裡常聊信仰怎麼在真實生活裡長出來。這個模擬想讓你換一個位置想：如果你不是生在台灣，你會在幾歲聽見福音？玩完之後，歡迎來節目跟我們分享你活過的那一生。</p>
+    <p class="fine">遊戲裡會出現因信仰被針對、拘留，甚至失去生命的事件，不描寫畫面。人生經歷都是依模型產生的，不是真實人物的紀錄。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
   </section>
   </div>
 
@@ -5532,7 +5521,7 @@ function beginLife() {
   run();
 }
 
-function run() { clearInterval(timer); timer = setInterval(tick, +$('speed').value); music.to(music.BASE, 1.5); }
+function run() { clearInterval(timer); timer = setInterval(tick, +$('speed2').value); music.to(music.BASE, 1.5); }
 function showHome() {
   stop(); music.fadeOut(1.5);
   for (const id of ['birth', 'agebar', 'end', 'lifefoot']) $(id).hidden = true;
@@ -5686,13 +5675,8 @@ $('pauseBtn').onclick = () => {
   setPaused(!paused);
   paused ? stop() : run();
 };
-// 兩個速度選單保持同步
-for (const id of ['speed', 'speed2']) {
-  $(id).onchange = () => {
-    const v = $(id).value; $('speed').value = v; $('speed2').value = v;
-    if (timer) run();
-  };
-}
+// 速度只在進行人生時調整；首頁保留單一「出生」主按鈕。
+$('speed2').onchange = () => { if (timer) run(); };
 // ── 背景音樂：按下「出生」才開始播，可以隨時關掉，選擇記在這個瀏覽器
 const music = (() => {
   const KEY = 'gospel-distance-music';
