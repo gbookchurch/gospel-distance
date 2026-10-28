@@ -1296,6 +1296,28 @@ body.rc-open { overflow: hidden; }
 .end .explore > .churchline span { color: #635950; }
 .theo-head.theo-head-gradient, .theo-head.theo-head-gradient.destiny { border-left: 0; border-radius: 8px; background: linear-gradient(105deg, rgba(233,160,79,.24) 0%, rgba(220,104,76,.15) 35%, rgba(170,122,178,.22) 100%); }
 .theo-head-gradient .theo-kicker, .theo-head-gradient.destiny .theo-kicker { color: #906B80; }
+/* V3.12：回顧導覽固定左右端，結果頁的動作與品牌入口分兩層。 */
+.liferecap .rc-nav { width: 100%; grid-template-columns: 44px minmax(0,1fr) minmax(44px,max-content); justify-content: stretch; }
+.liferecap .rc-nav .rc-prev { grid-column: 1; justify-self: start; }
+.liferecap .rc-nav .rc-collection { grid-column: 2; min-width: 0; }
+.liferecap .rc-nav .rc-next { grid-column: 3; justify-self: end; }
+.intro > .brand { justify-content: center; text-align: center; margin-inline: auto; }
+.brand .dot i:nth-child(1) { background: #DC684C; }
+.brand .dot i:nth-child(2) { background: #E9A04F; }
+.brand .dot i:nth-child(3) { background: #EDC96E; }
+.brand .dot i:nth-child(4) { background: #7C9A7D; }
+.end .theo-access h2 { text-wrap: balance; max-width: 26em; }
+.end .endfoot .end-actions { display: grid; gap: 12px; }
+.end .endfoot .end-actions-label { color: #BFCFC6; font-size: 12px; letter-spacing: .08em; font-weight: 700; }
+.end .endfoot .end-actions .controls { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+.end .endfoot .end-actions #againBtn { grid-column: 1 / -1; background: #E9A04F; color: #273D33; border-color: #E9A04F; border-radius: 8px; font-size: 17px; }
+.end .endfoot .end-actions #memBtn, .end .endfoot .end-actions #homeBtn { min-width: 0; min-height: 44px; padding: 9px 12px; border-radius: 8px; border: 1px solid rgba(228,238,230,.42); background: rgba(255,255,255,.07); color: #F2F5F1; font-size: 13.5px; font-weight: 500; }
+.end .endfoot .show { padding-top: 4px; }
+.end .endfoot .show p { font-size: 14px; line-height: 1.8; color: #D4DFD6; }
+.site-foot .foot-links { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; margin-bottom: 26px; }
+.site-foot.band.b4 .foot-links a { min-height: 42px; padding: 9px 12px; border-radius: 8px; border-color: rgba(236,217,182,.48); background: rgba(255,255,255,.045); color: #E9EEE8; font-size: 13.5px; font-weight: 500; }
+.site-foot.band.b4 .foot-links a:first-child { grid-column: 1 / -1; background: rgba(233,160,79,.13); border-color: #E9A04F; color: #F5D2A6; font-weight: 700; font-size: 14.5px; }
+.site-foot .in { padding-top: 21px; border-top: 1px solid rgba(218,231,219,.2); }
 @media (max-width: 640px) {
   .end .theo-access { gap: 11px; padding-block: 28px 32px; }
   .end .theo-access h2 { font-size: clamp(20px, 5.5vw, 24px); }
@@ -1308,6 +1330,14 @@ body.rc-open { overflow: hidden; }
   .lifearea .agebar .age { grid-column: 1; grid-row: 1 / span 2; font-size: 33px; }
   .lifearea .agebar .lifeprog { grid-column: 1 / -1; grid-row: 3; margin-top: 5px; }
   .end .explore > .churchline { margin-inline: 8px; padding: 11px 12px; }
+  .end .theo-access h2 { font-size: clamp(19px, 5vw, 22px); line-height: 1.6; text-wrap: balance; max-width: 19em; }
+  .end #share .controls #dlLink { display: none !important; }
+  .end #share .share .share-download-hint { display: none; }
+  .end #share .share .share-mobile-hint { display: block; }
+  .end #share .controls { grid-template-columns: minmax(0,1fr); }
+  .end #share .controls .primary { grid-column: auto; }
+  .end .endfoot .end-actions .controls { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .site-foot .foot-links { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
 </style>
 
@@ -5855,7 +5885,8 @@ function finish(martyred) {
         <a class="btn" id="dlLink" download="gospel-distance.png" hidden>下載圖片</a>
         <button id="copyBtn">複製分享文字</button>
       </div>
-      <p class="hint">如果下載沒有反應（例如在 LINE 或 Instagram 裡開啟），手機請長按圖片儲存，或改用瀏覽器開啟這個網頁。</p>
+      <p class="hint share-download-hint">如果下載沒有反應（例如在 LINE 或 Instagram 裡開啟），可以改用瀏覽器開啟網頁。</p>
+      <p class="hint share-mobile-hint" hidden>想儲存分享卡？長按上方圖片即可儲存；也可以使用「分享圖片」傳給朋友。</p>
     </div>
     </section>
     <section class="band b2 explore">
@@ -5892,7 +5923,7 @@ function finish(martyred) {
       ${hellPanel(false)}
     </section>
     <section class="band b4 endfoot">
-    <div class="controls"><button class="primary" id="againBtn">再活一次</button><button id="memBtn">看你活過的那些人生</button><button id="homeBtn">回首頁</button></div>
+    <div class="end-actions"><p class="end-actions-label">想再探索一段人生？</p><div class="controls"><button class="primary" id="againBtn">再活一次</button><button id="memBtn">看你活過的那些人生</button><button id="homeBtn">回首頁</button></div></div>
     <div class="show">
       <p>聽聽${SHOW_NAME}，一起聊聊教會裡不太好說、卻很值得聊的信仰問題。玩完之後有什麼想說的，也歡迎分享給我們。</p>
     </div>
