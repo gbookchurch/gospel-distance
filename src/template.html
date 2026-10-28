@@ -1287,6 +1287,18 @@ body.rc-open { overflow: hidden; }
 .site-foot.band.b4 .foot-links a { min-height: 42px; padding: 9px 12px; border-radius: 8px; border-color: rgba(236,217,182,.48); background: rgba(255,255,255,.045); color: #E9EEE8; font-size: 13.5px; font-weight: 500; }
 .site-foot.band.b4 .foot-links a:first-child { grid-column: 1 / -1; background: rgba(233,160,79,.13); border-color: #E9A04F; color: #F5D2A6; font-weight: 700; font-size: 14.5px; }
 .site-foot .in { padding-top: 21px; border-top: 1px solid rgba(218,231,219,.2); }
+/* V3.13：全程置頂的節目識別，以及 53 國同尺度的七星難度。 */
+.site-brand-banner { position: fixed; inset: 0 0 auto; z-index: 1005; min-height: 42px; padding: calc(8px + env(safe-area-inset-top,0px)) 48px 7px; display: flex; align-items: center; justify-content: center; background: rgba(250,248,243,.95); border-bottom: 1px solid rgba(109,121,108,.18); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); pointer-events: none; }
+.site-brand-banner .brand { gap: 9px; font-size: 12px; justify-content: center; text-align: center; white-space: nowrap; color: #59665D; letter-spacing: .01em; }
+.site-brand-banner .brand b { color: #34463B; }
+body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
+.lifearea .agebar { top: calc(42px + env(safe-area-inset-top,0px)); }
+.liferecap { padding-top: max(85px,calc(76px + env(safe-area-inset-top,0px))); }
+.v3-vitals .difficulty-vital { gap: 4px; }
+.difficulty-star-rating { display: grid; justify-content: start; align-content: center; gap: 0; min-width: 0; }
+.difficulty-star-rating .star-track { display: block; position: relative; color: #D8D7D2; font-family: Arial,sans-serif; font-size: clamp(15px,2.7vw,21px); font-weight: 400; letter-spacing: -2px; line-height: 1.35; white-space: nowrap; }
+.difficulty-star-rating .star-fill { position: absolute; inset: 0 auto 0 0; display: block; overflow: hidden; color: #D48D3F; white-space: nowrap; }
+.difficulty-star-rating .star-score { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: #8C6C43; font-weight: 600; line-height: 1.2; }
 @media (max-width: 640px) {
   .end .theo-access { gap: 11px; padding-block: 28px 32px; }
   .end .theo-access h2 { font-size: clamp(20px, 5.5vw, 24px); }
@@ -1307,12 +1319,20 @@ body.rc-open { overflow: hidden; }
   .end #share .controls .primary { grid-column: auto; }
   .end .endfoot .end-actions .controls { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .site-foot .foot-links { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  body { padding-top: calc(70px + env(safe-area-inset-top,0px)); }
+  .site-brand-banner { min-height: 40px; padding: calc(7px + env(safe-area-inset-top,0px)) 42px 6px; }
+  .site-brand-banner .brand { font-size: 11px; gap: 6px; }
+  .site-brand-banner .brand .dot i { width: 7px; height: 7px; }
+  .lifearea .agebar { top: calc(40px + env(safe-area-inset-top,0px)); }
+  .liferecap { padding-top: max(74px,calc(70px + env(safe-area-inset-top,0px))); }
+  .difficulty-star-rating .star-track { font-size: clamp(12px,3.5vw,16px); letter-spacing: -2px; }
+  .difficulty-star-rating .star-score { font-size: 11px; }
 }
 </style>
 
+<div class="site-brand-banner" aria-label="《教會小本本》Podcast 特別企劃"><span class="brand"><span class="dot" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>《教會小本本》</b> Podcast 特別企劃</span></span></div>
 <main>
   <section class="intro" id="intro">
-    <p class="brand"><span class="dot" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>《教會小本本》</b>Podcast 特別企劃</span></p>
     <h1>你會在幾歲，第一次<em>聽見耶穌的名字</em>？</h1>
     <div class="lede">
       <p>如果人生能重新開始，你會出生在哪個國家？你有沒有機會認識耶穌？</p>
@@ -1594,7 +1614,6 @@ body.rc-open { overflow: hidden; }
   <section class="band b4 endfoot lifefoot" id="lifefoot" hidden>
     <div class="controls"><button class="primary" id="lfAgain">再活一次</button><button id="lfHome">回首頁</button><button id="lfMem">看賽道上的每個人</button></div>
     <div class="show">
-      <p class="brand"><span class="dot" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>《教會小本本》</b>Podcast 特別企劃</span></p>
       <p>聽聽《教會小本本》，一起聊聊教會裡不太好說、卻很值得聊的信仰問題。玩完之後有什麼想說的，也歡迎分享給我們。</p>
     </div>
     <p class="fine">這段人生是依公開資料和模型規則產生的，其中部分機率是設計假設。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
@@ -3580,6 +3599,12 @@ function cardLine(end, martyred) {
 function headline(end, martyred) { return cardLine(end, martyred); }
 // 接觸福音的難度：直接用 53 國排行的名次（countries.json 的 difficulty.rank，第 1 名是最難接觸到福音的國家），排行榜、結果頁和分享卡共用
 const difficultyRank = c => c.difficulty.rank;
+// 53 國依既有模擬排行等距分成 14 個半星級距：第 1 難為 7 星，第 53 難為半星。
+const difficultyStars = c => 7 - Math.round((difficultyRank(c) - 1) * 13 / 52) / 2;
+function difficultyStarHtml(c) {
+  const value = difficultyStars(c), label = Number.isInteger(value) ? `${value} 星` : `${Math.floor(value)} 星半`;
+  return `<div class="difficulty-star-rating" role="img" aria-label="傳福音艱難度：${label}，滿分七星"><span class="star-track" aria-hidden="true">★★★★★★★<span class="star-fill" style="width:${value / 7 * 100}%">★★★★★★★</span></span><span class="star-score">${value.toFixed(1)} / 7</span></div>`;
+}
 // 分享卡上的母語聖經譯本：資料缺的時候寫「資料不足」，不當成沒有聖經
 const CARD_BIBLE = { full: '完整聖經', nt: '新約聖經', portions: '部分經卷', started: '翻譯中', none: '還沒有', null: '資料不足' };
 // 分享卡的第三、四層：第一次聽見福音，和這一生的信仰選擇；第一次聽見和決定跟隨分開寫
@@ -3616,15 +3641,19 @@ function wrapText(ctx, text, maxW) {
   if (cur) lines.push(cur);
   return lines;
 }
-// 在畫布上畫 QR Code；載入失敗就略過，不影響分享卡
+// 網址的 QR 圖樣預先編碼在檔案裡，分享卡離線產生也能掃描。
+const SHARE_URL = 'https://gbookchurch.github.io/gospel-distance/';
+const SHARE_QR_HEX = 'fe447d3fc11fe7106eb13febb7585135dbac5652ec16bd4107faaaaafe01660f00be6742be34a84c9bdcc4688ad2b563e9fa25835dc281dc4b1cbdf053cc2be57acc4e9453d8948a799bfc87d086dd38dc2ff0bc49fddd6cdb2b369c06b91d2b4e4dddaa1142f980790f457f82cb6ad052c2f1fbac324fd5d71c7266ebf842c904f53894fedc53910';
 function drawQR(x, text, left, top, size, dark, light) {
-  if (typeof qrcode !== 'function') return false;
   try {
-    const qr = qrcode(0, 'M'); qr.addData(text); qr.make();
-    const n = qr.getModuleCount(), pad = 2, cell = size / (n + pad * 2);
+    if (text !== SHARE_URL) return false;
+    const n = 33, pad = 3, cell = size / (n + pad * 2);
     x.fillStyle = light; x.fillRect(left, top, size, size);
     x.fillStyle = dark;
-    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (qr.isDark(r, c)) x.fillRect(left + (c + pad) * cell, top + (r + pad) * cell, Math.ceil(cell), Math.ceil(cell));
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) {
+      const i = r * n + c, bit = (parseInt(SHARE_QR_HEX[i >> 2], 16) >> (3 - (i & 3))) & 1;
+      if (bit) x.fillRect(left + (c + pad) * cell, top + (r + pad) * cell, Math.ceil(cell), Math.ceil(cell));
+    }
     return true;
   } catch (e) { return false; }
 }
@@ -4176,14 +4205,18 @@ async function makeShareCard(end, martyred) {
     footTop = Math.max(footTop, ty + boxH + 14);
   }
 
-  // 頁尾：思考問題和小字說明（不放網址和 QR Code）
+  // 頁尾：左側提問、右下 QR Code，掃碼回到遊戲首頁。
   const fy0 = Math.min(Math.max(footTop, 1120), 1185);
   x.fillStyle = C.line; x.fillRect(P, fy0, W - P * 2, 2);
   x.fillStyle = C.ink; x.font = `700 40px ${SERIF}`;
   let fy = fy0 + Math.max(68, 80 - (fy0 - 1120));
-  for (const l of wrapText(x, '如果換成你，你會出生在哪裡？', W - P * 2).slice(0, 2)) { x.fillText(l, P, fy); fy += 52; }
+  for (const l of wrapText(x, '如果換成你，你會出生在哪裡？', W - P * 2 - 152).slice(0, 2)) { x.fillText(l, P, fy); fy += 52; }
   x.fillStyle = C.muted; x.font = `400 21px ${SANS}`;
-  x.fillText('模擬人生，非真實經歷；依公開資料建立，名字是虛構的', P, Math.min(fy - 4, 1298));
+  const qrLeft = W - P - 134, qrTop = 1157;
+  drawQR(x, SHARE_URL, qrLeft, qrTop, 134, '#273B33', '#FFFFFF');
+  x.font = `500 15px ${SANS}`; x.fillStyle = C.muted; x.fillText('掃碼再玩', qrLeft + 34, qrTop + 154);
+  x.font = `400 19px ${SANS}`;
+  x.fillText('模擬人生，非真實經歷；依公開資料建立', P, Math.min(fy + 1, 1298));
 
   try {
     const url = cv.toDataURL('image/png');
@@ -5546,7 +5579,7 @@ function finish(martyred) {
     <div class="v3-vitals">
       <div><strong class="num">${end}</strong><span>活了幾歲</span></div>
       <div><strong class="num">${firstAge === null ? '—' : firstAge}</strong><span>${firstAge === null ? '一生未接觸福音' : '初聞福音的年齡'}</span></div>
-      <div><strong class="num">${difficultyRank(c)}</strong><span>53 國中第幾難</span></div>
+      <div class="difficulty-vital">${difficultyStarHtml(c)}<span>傳福音艱難度</span></div>
     </div>
     <details class="xdr v3-dossier"><summary>查看完整人生資料</summary>
       <dl class="summary" id="summary">${rows.map(() => '<div><dt></dt><dd></dd></div>').join('')}</dl>
