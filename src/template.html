@@ -342,6 +342,15 @@ button.go { font-size: 18px; padding: 14px 34px; border-radius: 6px; }
 .cf p { margin: 0; }
 .cfalt { opacity: .9; }
 .tradbg a { color: var(--lamp); }
+.end .tradbg { gap: 0; line-height: 1.88; }
+.end .tradbg .trad-lead { margin: 1px 0 12px; padding: 12px 15px; border-left: 3px solid #BD916D; background: rgba(226,207,180,.18); color: #35413B; font-size: 15.5px; font-weight: 650; line-height: 1.82; }
+.end .tradbg .trad-paragraph { padding: 13px 2px; border-bottom: 1px solid rgba(85,100,90,.13); color: #535B54; font-weight: 400; line-height: 1.87; }
+.end .tradbg .trad-paragraph::first-line { color: #343E37; font-weight: 600; }
+.end .tradbg > .fine { margin-top: 12px; font-size: 12.5px; color: #737B73; }
+.end .tradbg .source-drawer { margin-top: 10px; }
+.end .moment-drawer .moment-label { display: grid; gap: 3px; }
+.end .moment-drawer .moment-label b { font-weight: 650; }
+.end .moment-drawer .moment-label small { font-size: 12px; font-weight: 500; color: #C18A69; line-height: 1.5; }
 .howto { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 14px 16px; display: grid; gap: 10px; }
 .howto h3 { margin: 0; font-size: 17px; }
 .howto dl { margin: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
@@ -697,6 +706,11 @@ button.primary:active, a.btn.primary:active { transform: translateY(1px); filter
 .theo-head { display: grid; grid-template-columns: 112px 1fr; gap: 14px; align-items: center; }
 .theo-head .theo-thumb { height: 74px; border-radius: 12px; }
 .theo-head h4 { margin: 0; font-size: 18px; line-height: 1.4; }
+.theo-gradient { height: 30px; border-radius: 10px; background: linear-gradient(110deg, rgba(220,104,76,.24), rgba(233,160,79,.28) 42%, rgba(237,201,110,.3) 72%, rgba(124,154,125,.23)); border: 1px solid rgba(185,163,130,.18); }
+.theo-head.theo-head-gradient { grid-template-columns: 1fr; padding: 13px 16px 12px; gap: 5px; border-left: 4px solid #C89B77; border-radius: 9px; background: linear-gradient(100deg, rgba(233,160,79,.16), rgba(237,201,110,.09) 65%, transparent); }
+.theo-head.theo-head-gradient.destiny { border-left-color: #789C89; background: linear-gradient(100deg, rgba(124,154,125,.18), rgba(171,185,192,.09) 65%, transparent); }
+.theo-head-gradient .theo-kicker { color: #89745D; }
+.theo-head-gradient.destiny .theo-kicker { color: #607B6C; }
 .theo-kicker { display: inline-block; font-size: 12.5px; letter-spacing: .14em; color: var(--muted); }
 .theo-cards { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); align-items: start; }
 .theo-card { position: relative; display: grid; gap: 6px; align-content: start; padding: 14px 16px 12px; border-radius: 14px; background: color-mix(in srgb, var(--tc) 7%, var(--surface)); border: 1px solid color-mix(in srgb, var(--tc) 28%, var(--line)); overflow: hidden; }
@@ -905,6 +919,27 @@ body.rc-open { overflow: hidden; }
 .liferecap .rc-nav button:focus-visible, .liferecap .rc-skip:focus-visible { outline: 3px solid #E9A04F; outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .liferecap .rc-progress-fill { transition: none; } }
 
+/* V3.10：回顧控制浮在水彩紙上，完全取消導覽底板。外框直角，控制的內側圓角統一為 8px。 */
+.liferecap { padding: max(38px, calc(env(safe-area-inset-top, 0px) + 25px)) max(30px, calc(env(safe-area-inset-right, 0px) + 24px)) max(30px, calc(env(safe-area-inset-bottom, 0px) + 24px)) max(30px, calc(env(safe-area-inset-left, 0px) + 24px)); }
+.liferecap .rc-top { padding: 2px 0 0; gap: 15px 12px; background: transparent; border-radius: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.liferecap .rc-top-meta { font-size: 12px; color: #68716B; }
+.liferecap .rc-top-title { font-weight: 600; }
+.liferecap .rc-count { font-size: 12px; color: #7F8881; }
+.liferecap .rc-progress { height: 3px; margin-top: 4px; background: rgba(237,237,234,.86); border-radius: 999px; }
+.liferecap .rc-progress-fill { background: #A2A7A3; }
+.liferecap .rc-skip, .liferecap.ink-light .rc-skip { min-height: 34px; padding: 5px 11px; color: #68716B; background: rgba(255,255,255,.18); border: 1px solid rgba(95,106,98,.3); border-radius: 8px; font-size: 12px; font-weight: 500; line-height: 1.4; }
+.liferecap .rc-nav { padding: 5px 0 0; gap: 12px; background: transparent; border-radius: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.liferecap .rc-nav button, .liferecap.ink-light .rc-nav button { min-width: 44px; width: 44px; height: 42px; min-height: 42px; padding: 0 !important; display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 13px; font-weight: 600; box-shadow: none; letter-spacing: 0; }
+.liferecap .rc-nav button svg { display: block; width: 19px; height: 19px; }
+.liferecap .rc-nav .rc-prev, .liferecap.ink-light .rc-nav .rc-prev { min-width: 44px; width: 44px; padding: 0 !important; border: 1px solid rgba(85,101,89,.45); color: #3D5347; background: rgba(255,255,255,.24); }
+.liferecap .rc-nav .rc-next, .liferecap.ink-light .rc-nav .rc-next { min-width: 44px; width: 44px; padding: 0 !important; border: 1px solid rgba(85,101,89,.45); color: #3D5347; background: rgba(255,255,255,.24); }
+.liferecap .rc-nav .rc-next.is-final, .liferecap.ink-light .rc-nav .rc-next.is-final { width: auto; min-width: 90px; height: 40px; padding-inline: 14px !important; background: rgba(255,255,255,.34); color: #3D5347; }
+.liferecap .rc-nav .rc-next:hover, .liferecap .rc-nav .rc-prev:hover:not(:disabled) { background: rgba(234,239,232,.45); }
+.liferecap .rc-nav button:focus-visible, .liferecap .rc-skip:focus-visible { outline: 2px solid #A7B7A8; outline-offset: 2px; }
+@media (max-width: 640px) {
+  .liferecap { padding: max(36px, calc(env(safe-area-inset-top, 0px) + 24px)) max(27px, calc(env(safe-area-inset-right, 0px) + 23px)) max(29px, calc(env(safe-area-inset-bottom, 0px) + 23px)) max(27px, calc(env(safe-area-inset-left, 0px) + 23px)); }
+}
+
 /* ═══ 手機版閱讀體驗：統一覆蓋舊版零散斷點，保留原有視覺與模擬邏輯 ═══ */
 @media (max-width: 640px) {
   html { scroll-padding-top: 16px; }
@@ -1074,7 +1109,7 @@ body.rc-open { overflow: hidden; }
   .theo-share button { min-height: 44px; }
 
   /* 回顧投影片：小螢幕、短螢幕都可操作，不讓底部按鈕擠到畫面外 */
-  .liferecap { padding: max(12px, env(safe-area-inset-top, 0px)) max(14px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(14px, env(safe-area-inset-left, 0px)); }
+  .liferecap { padding: max(36px, calc(env(safe-area-inset-top, 0px) + 24px)) max(27px, calc(env(safe-area-inset-right, 0px) + 23px)) max(29px, calc(env(safe-area-inset-bottom, 0px) + 23px)) max(27px, calc(env(safe-area-inset-left, 0px) + 23px)); }
   .rc-stage { min-height: 0; overscroll-behavior: contain; }
   .rc-card { gap: 10px; padding: 18px clamp(14px, 4.5vw, 24px); }
   .rc-big { font-size: clamp(36px, 10vw, 54px); }
@@ -1092,9 +1127,9 @@ body.rc-open { overflow: hidden; }
   .rc-sw i { width: 18px; height: 18px; }
   .rc-nav { gap: 8px; flex: none; }
   .rc-nav button { padding: 8px 13px; }
-  .liferecap .rc-top { padding: 7px 8px 10px; }
-  .liferecap .rc-nav .rc-prev, .liferecap.ink-light .rc-nav .rc-prev { min-width: 82px; padding-inline: 12px !important; }
-  .liferecap .rc-nav .rc-next, .liferecap.ink-light .rc-nav .rc-next { min-width: 116px; padding-inline: 16px; }
+  .liferecap .rc-top { padding: 2px 0 0; }
+  .liferecap .rc-nav .rc-prev, .liferecap.ink-light .rc-nav .rc-prev { min-width: 44px; padding: 0 !important; }
+  .liferecap .rc-nav .rc-next, .liferecap.ink-light .rc-nav .rc-next { min-width: 44px; padding: 0 !important; }
   .rc-end { gap: 8px; }
   .rc-end button { flex: 1 1 auto; }
   .site-foot { padding-bottom: max(28px, env(safe-area-inset-bottom, 0px)); }
@@ -3253,7 +3288,7 @@ function tradPanel() {
   const k = tradKey(), T = TRAD_INFO[k];
   if (!T || !(faithAge !== null || me.parentReligion === 'christian')) return '';
   const src = k === 'catholic' ? [...T.src, ...CATH_SRC.all, ...(CATH_EU.includes(me.country.id) ? CATH_SRC.eu : []), ...(CATH_LA.includes(me.country.id) ? CATH_SRC.la : [])] : T.src;
-  return `<details class="xdr"><summary>這一生的信仰傳統：${T.name}</summary><div class="tradbg">${[...T.bg, ...tradExtra(k)].map(p => `<p>${p}</p>`).join('')}<p class="fine">這裡描述的是這個傳統對自己的理解，不代表其他傳統的看法。</p>${srcLine(src)}</div></details>`;
+  return `<details class="xdr"><summary>這一生的信仰傳統：${T.name}</summary><div class="tradbg">${[...T.bg, ...tradExtra(k)].map((p, i) => `<p class="${i ? 'trad-paragraph' : 'trad-lead'}">${p}</p>`).join('')}<p class="fine">這裡描述的是這個傳統對自己的理解，不代表其他傳統的看法。</p>${srcLine(src)}</div></details>`;
 }
 const DENOM_ZH = { presby: '長老會', anglican: '聖公會', lutheran: '信義宗', methodist: '循道衛理宗', baptist: '浸信會', pente: '五旬節／靈恩教會', indep: '獨立教會', sda: '基督復臨安息日會' };
 const SOTER_ZH = { calvin: '偏加爾文', arminian: '偏亞米念', luther: '路德宗', mixed: '沒有特別強調哪一派' };
@@ -3370,14 +3405,12 @@ function theoMatrix() {
 }
 function hellPanel(open) {
   theoSel.col = theoSel.row = null;
-  const SRC = { intro: '/*IMG:theology-intro*/', salvation: '/*IMG:theology-salvation*/', destiny: '/*IMG:theology-destiny*/' };
-  const img = (k, alt, cls) => `<img class="${cls}" src="${SRC[k]}" alt="${alt}" loading="lazy" decoding="async" width="1200" height="${k === 'destiny' ? 675 : 800}">`;
   return `<details class="xdr theo" id="theoBox"${open ? ' open' : ''}><summary id="theoSum">看看不同神學觀點</summary><div class="theo-wrap">
-  <figure class="theo-hero">${img('intro', '水彩插畫：深藍、金黃和淡紫的顏料彼此交融', 'theo-img')}</figure>
+  <div class="theo-gradient" aria-hidden="true"></div>
   <div class="theo-lede"><p class="theo-q">「如果一個人從出生到死亡，都沒有機會認識耶穌，神會怎麼看待他？」</p><p>這個問題困擾過無數基督徒。歷代神學家提出了不同答案，而這些答案，也影響著我們如何理解宣教、救恩，以及神的公義與憐憫。</p></div>
   <p class="theo-note">這是這個遊戲最核心的問題，基督教內部有好幾種回答。以下只介紹，不下結論。這個問題其實有兩層：誰能得救，和沒有得救的人最後會怎樣。</p>
-  <section class="theo-layer"><div class="theo-head">${img('salvation', '水彩插畫：三條不同的路在山野間延伸', 'theo-thumb')}<div><span class="theo-kicker">第一層</span><h4>誰能得救？</h4></div></div>${theoCards(THEO_SAVE, theoMore(SAVE_VIEWS))}</section>
-  <section class="theo-layer"><div class="theo-head">${img('destiny', '水彩插畫：一個人站在山頂，望著遠方的日出和蜿蜒的道路', 'theo-thumb')}<div><span class="theo-kicker">第二層</span><h4>沒有得救的人最後會怎樣？</h4></div></div>${theoCards(THEO_FATE, theoMore(FATE_VIEWS))}</section>
+  <section class="theo-layer"><div class="theo-head theo-head-gradient"><span class="theo-kicker">第一層</span><h4>誰能得救？</h4></div>${theoCards(THEO_SAVE, theoMore(SAVE_VIEWS))}</section>
+  <section class="theo-layer"><div class="theo-head theo-head-gradient destiny"><span class="theo-kicker">第二層</span><h4>沒有得救的人最後會怎樣？</h4></div>${theoCards(THEO_FATE, theoMore(FATE_VIEWS))}</section>
   ${theoMatrix()}
   ${srcLine(THEO_SRC)}</div></details>`;
 }
@@ -3926,18 +3959,25 @@ function riverArt(W, H, spec, o = {}) {
   if (!o.noFrame) drawFrame(x, W, H, spec, o.frame);
   return cv;
 }
-// 出生地邊框：四條筆直色帶，色相統一、明度有輕微變化；回顧與分享卡共用。
+// 出生地邊框：外側直角、內側微圓角；同一個漸層色域讓四邊連續，回顧與分享卡共用。
 function drawFrame(x, W, H, spec, f = 0.042) {
-  const bw = Math.max(4, Math.round(Math.min(W, H) * f)), lab = hexLab(spec.region), gr = x.createLinearGradient(0, 0, W, H);
-  gr.addColorStop(0, labHex([Math.min(1, lab[0] + 0.024), lab[1], lab[2]]));
-  gr.addColorStop(1, labHex([Math.max(0, lab[0] - 0.024), lab[1], lab[2]]));
+  const bw = Math.max(5, Math.round(Math.min(W, H) * f)), radius = Math.min(12, Math.max(8, bw * 0.58));
+  const lab = hexLab(spec.region), gr = x.createLinearGradient(0, 0, W, H);
+  gr.addColorStop(0, labHex([Math.min(1, lab[0] + 0.065), lab[1], lab[2]]));
+  gr.addColorStop(0.55, spec.region);
+  gr.addColorStop(1, labHex([Math.max(0, lab[0] - 0.05), lab[1], lab[2]]));
+  // 偶奇填色挖出內側圓角，保留畫布原有的水彩內容。
+  const rounded = inset => {
+    const left = inset, top = inset, right = W - inset, bottom = H - inset;
+    const r = Math.min(radius, (right - left) / 2, (bottom - top) / 2);
+    x.moveTo(left + r, top); x.lineTo(right - r, top); x.quadraticCurveTo(right, top, right, top + r);
+    x.lineTo(right, bottom - r); x.quadraticCurveTo(right, bottom, right - r, bottom);
+    x.lineTo(left + r, bottom); x.quadraticCurveTo(left, bottom, left, bottom - r);
+    x.lineTo(left, top + r); x.quadraticCurveTo(left, top, left + r, top); x.closePath();
+  };
   x.save(); x.globalCompositeOperation = 'source-over'; x.fillStyle = gr;
-  x.fillRect(0, 0, W, bw); x.fillRect(0, H - bw, W, bw);
-  x.fillRect(0, bw, bw, H - 2 * bw); x.fillRect(W - bw, bw, bw, H - 2 * bw);
-  // 一道細緻的內緣分隔線，讓深色邊框和透明水彩更清楚分層。
-  const hair = Math.max(1, Math.round(bw * 0.085)); x.fillStyle = 'rgba(255,255,255,0.38)';
-  x.fillRect(bw - hair, bw, hair, H - 2 * bw); x.fillRect(W - bw, bw, hair, H - 2 * bw);
-  x.fillRect(bw, bw - hair, W - 2 * bw, hair); x.fillRect(bw, H - bw, W - 2 * bw, hair);
+  x.beginPath(); x.rect(0, 0, W, H); rounded(bw); x.fill('evenodd');
+  x.beginPath(); rounded(bw); x.strokeStyle = 'rgba(255,255,255,.3)'; x.lineWidth = Math.max(1, bw * 0.08); x.stroke();
   x.restore();
 }
 // 回顧故事卡的背景：先鋪紙和邊框，河流沿著時間從左邊慢慢流進來；減少動態效果時直接顯示
@@ -5378,7 +5418,9 @@ function showRecap(end, martyred) {
   const quiet = o === 'martyred' || SMOOTH === 'auto' || typeof requestAnimationFrame !== 'function';
   const box = document.createElement('div');
   box.id = 'lifeRecap'; box.className = `liferecap rc-${o}`; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-label', '這一生的回顧');
-  box.innerHTML = `<div class="rc-top"><div class="rc-top-meta"><span class="rc-top-title">人生回顧</span><span class="rc-count" aria-live="polite"></span></div><button class="rc-skip" type="button">略過回顧</button><div class="rc-progress" role="progressbar" aria-label="人生回顧進度" aria-valuemin="0" aria-valuemax="${slides.length}" aria-valuenow="1"><div class="rc-progress-fill"></div></div></div><div class="rc-stage"></div><div class="rc-nav"><button class="rc-prev" type="button">上一頁</button><button class="rc-next" type="button">下一頁</button></div>`;
+  const leftArrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 5-7 7 7 7"/></svg>';
+  const rightArrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10 5 7 7-7 7"/></svg>';
+  box.innerHTML = `<div class="rc-top"><div class="rc-top-meta"><span class="rc-top-title">人生回顧</span><span class="rc-count" aria-live="polite"></span></div><button class="rc-skip" type="button">略過</button><div class="rc-progress" role="progressbar" aria-label="人生回顧進度" aria-valuemin="0" aria-valuemax="${slides.length}" aria-valuenow="1"><div class="rc-progress-fill"></div></div></div><div class="rc-stage"></div><div class="rc-nav"><button class="rc-prev" type="button" aria-label="上一頁">${leftArrow}</button><button class="rc-next" type="button" aria-label="下一頁">${rightArrow}</button></div>`;
   document.body.appendChild(box); document.body.classList.add('rc-open');
   try { recapRiver(box, lifeSpec(martyred), quiet); } catch (e) {}
   const stage = box.querySelector('.rc-stage'), progress = box.querySelector('.rc-progress');
@@ -5393,7 +5435,10 @@ function showRecap(end, martyred) {
     stage.innerHTML = `<section class="rc-card rc-${s.k}${quiet ? '' : ' rc-anim'}"><p class="rc-eyebrow">${esc(s.eyebrow)}</p>${s.big ? `<h2 class="rc-big">${esc(s.big)}</h2>` : ''}${s.quote ? `<blockquote class="rc-quote">${esc(s.quote)}</blockquote>` : ''}${s.list ? `<ol class="rc-list">${s.list.map(([a, t]) => `<li><span class="num">${esc(a)}</span><span>${esc(t)}</span></li>`).join('')}</ol>` : ''}${s.swatches ? `<div class="rc-strip" style="background:${stripCss(s.strip)}" aria-hidden="true"></div><ul class="rc-sw">${s.swatches.map(([c, l, p]) => `<li><i style="background:${c}"></i><span>${esc(l)}</span><b class="num">${p}%</b></li>`).join('')}</ul>` : ''}${s.chips ? `<ul class="rc-chips">${s.chips.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}${s.nums ? `<ul class="rc-nums">${s.nums.map(([n, t]) => `<li><b class="num" data-n="${n}">${quiet ? n : 0}</b><span>${esc(t)}</span></li>`).join('')}</ul>` : ''}${(s.lines || []).map(l => `<p class="rc-line">${esc(l)}</p>`).join('')}</section>`;
     if (box.evalInk) box.evalInk();
     box.querySelector('.rc-prev').disabled = i === 0;
-    box.querySelector('.rc-next').textContent = i === slides.length - 1 ? '閱讀結果' : '下一頁';
+    const next = box.querySelector('.rc-next'), last = i === slides.length - 1;
+    next.classList.toggle('is-final', last);
+    next.innerHTML = last ? '閱讀結果' : rightArrow;
+    next.setAttribute('aria-label', last ? '閱讀結果' : '下一頁');
     if (s.nums && !quiet) stage.querySelectorAll('[data-n]').forEach(el => { const n = +el.dataset.n, t0 = performance.now(); const step = t => { const p = Math.min(1, (t - t0) / 900); el.textContent = Math.round(n * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); });
     box.querySelector('.rc-next').focus({ preventScroll: true });
   };
@@ -5472,7 +5517,7 @@ function finish(martyred) {
     <section class="band b2 explore">
     <h2>回頭看看這一生</h2>
     <details class="xdr"><summary>展開這一生的完整紀錄</summary><ol class="log v3-full-log" id="fullLifeLog"></ol></details>
-    ${hl.length ? `<details class="xdr"><summary>這一生的重要時刻</summary><div class="events"><ol id="hlList">${hl.map(() => '<li><span class="a"></span><span class="t"></span></li>').join('')}</ol>${highlights.length > 6 ? `<p class="fine">還有 ${highlights.length - 6} 件事，記在上方的人生紀錄裡。</p>` : ''}</div></details>` : ''}
+    ${hl.length ? `<details class="xdr moment-drawer"><summary><span class="moment-label"><b>這一生的重要時刻</b><small>回顧幾個留在這段人生裡的片刻</small></span></summary><div class="events"><ol id="hlList">${hl.map(() => '<li><span class="a"></span><span class="t"></span></li>').join('')}</ol>${highlights.length > 6 ? `<p class="fine">還有 ${highlights.length - 6} 件事，記在上方的人生紀錄裡。</p>` : ''}</div></details>` : ''}
     ${churchLine()}
     ${tradPanel()}
     ${neoPanel()}
