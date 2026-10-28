@@ -345,7 +345,7 @@ body { overflow-x: clip; }
 .controls.start { gap: 16px; }
 button.go { font-size: 18px; padding: 14px 34px; border-radius: 6px; }
 /* 首頁主動作：讓出生按鈕和輔助設定有清楚的視覺階層。 */
-.intro .controls.start { justify-content: center; }
+.intro .controls.start { justify-content: flex-start; }
 .intro .controls.start .go { background: linear-gradient(115deg, #DC684C 0%, #E48549 54%, #E9A04F 100%); border-color: #D9784B; color: #fff; box-shadow: 0 5px 14px rgba(196,103,55,.17), inset 0 1px rgba(255,255,255,.3); }
 .intro .controls.start .go:hover { background: linear-gradient(115deg, #CC5E44, #E39348); box-shadow: 0 7px 18px rgba(196,103,55,.23); }
 @media (prefers-reduced-motion: no-preference) {
@@ -994,13 +994,14 @@ body.rc-open { overflow: hidden; }
   /* 首屏：標題與主按鈕優先，次要控制換到下一行 */
   .intro { gap: 18px; padding-inline: 12px; }
   .intro h1 { font-size: clamp(26px, 7.3vw, 34px); line-height: 1.45; letter-spacing: -.025em; text-align: center; text-wrap: balance; }
-  .intro h1 em { display: block; }
+  .intro h1 em { display: block; font-size: 1.06em; letter-spacing: .04em; }
   .intro .lede { font-size: 15.5px; line-height: 1.8; gap: 4px; text-align: center; text-wrap: balance; justify-items: center; }
   .intro .lede p { max-width: 24em; }
   .intro::before { top: 20px; bottom: 0; background-position: right -45vw top 105px; opacity: .24; }
   .brand { font-size: 12.5px; gap: 7px; line-height: 1.5; }
   .brand .dot i { width: 7px; height: 7px; }
   .controls.start { display: flex; justify-content: center; align-items: center; gap: 10px; }
+  .intro .controls.start { justify-content: center; }
   .controls.start .go { width: min(100%, 310px); min-width: 0; min-height: 54px; padding: 11px 28px; }
   .intro > .toggle { justify-self: center; justify-content: center; text-align: left; max-width: 310px; }
   .toggle { align-items: center; gap: 10px; line-height: 1.55; font-size: 13.5px; min-height: 44px; }
@@ -1312,11 +1313,11 @@ body.rc-open { overflow: hidden; }
 .brand .dot i:nth-child(3) { background: #EDC96E; }
 .brand .dot i:nth-child(4) { background: #7C9A7D; }
 .end .theo-access h2 { text-wrap: balance; max-width: 26em; }
-.end .endfoot .end-actions { display: grid; gap: 12px; }
+.end .endfoot .end-actions, .lifefoot .end-actions { display: grid; gap: 12px; }
 .end .endfoot .end-actions-label { color: #BFCFC6; font-size: 12px; letter-spacing: .08em; font-weight: 700; }
-.end .endfoot .end-actions .controls { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
-.end .endfoot .end-actions #againBtn { grid-column: 1 / -1; background: #E9A04F; color: #273D33; border-color: #E9A04F; border-radius: 8px; font-size: 17px; }
-.end .endfoot .end-actions #memBtn, .end .endfoot .end-actions #homeBtn { min-width: 0; min-height: 44px; padding: 9px 12px; border-radius: 8px; border: 1px solid rgba(228,238,230,.42); background: rgba(255,255,255,.07); color: #F2F5F1; font-size: 13.5px; font-weight: 500; }
+.end .endfoot .end-actions .controls, .lifefoot .end-actions .controls { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+.end .endfoot .end-actions #againBtn, .lifefoot .end-actions #lfAgain { grid-column: 1 / -1; background: #E9A04F; color: #273D33; border-color: #E9A04F; border-radius: 8px; font-size: 17px; }
+.end .endfoot .end-actions #memBtn, .end .endfoot .end-actions #homeBtn, .lifefoot .end-actions #lfMem, .lifefoot .end-actions #lfHome { min-width: 0; min-height: 44px; padding: 9px 12px; border-radius: 8px; border: 1px solid rgba(228,238,230,.42); background: rgba(255,255,255,.07); color: #F2F5F1; font-size: 13.5px; font-weight: 500; }
 .end .endfoot .show { padding-top: 4px; }
 .end .endfoot .show p { font-size: 14px; line-height: 1.8; color: #D4DFD6; }
 .site-foot .foot-links { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; margin-bottom: 26px; }
@@ -1677,10 +1678,7 @@ body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
 
 
   <section class="band b4 endfoot lifefoot" id="lifefoot" hidden>
-    <div class="controls"><button class="primary" id="lfAgain">再活一次</button><button id="lfHome">回首頁</button><button id="lfMem">看賽道上的每個人</button></div>
-    <div class="show">
-      <p>聽聽《教會小本本》，一起聊聊教會裡不太好說、卻很值得聊的信仰問題。玩完之後有什麼想說的，也歡迎分享給我們。</p>
-    </div>
+    <div class="end-actions"><div class="controls"><button class="primary" id="lfAgain">再活一次</button><button id="lfMem">看你活過的那些人生</button><button id="lfHome">回首頁</button></div></div>
     <p class="fine">這段人生是依公開資料和模型規則產生的，其中部分機率是設計假設。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
   </section>
 
@@ -6089,9 +6087,6 @@ function finish(martyred) {
     </section>
     <section class="band b4 endfoot">
     <div class="end-actions"><p class="end-actions-label">想再探索一段人生？</p><div class="controls"><button class="primary" id="againBtn">再活一次</button><button id="memBtn">看你活過的那些人生</button><button id="homeBtn">回首頁</button></div></div>
-    <div class="show">
-      <p>聽聽${SHOW_NAME}，一起聊聊教會裡不太好說、卻很值得聊的信仰問題。玩完之後有什麼想說的，也歡迎分享給我們。</p>
-    </div>
     <p class="fine">這段人生是依公開資料和模型規則產生的，其中部分機率是設計假設。<a href="#method" class="tomethod">這些數字怎麼算出來的？</a></p>
     </section>`;
   const E = $('end');
