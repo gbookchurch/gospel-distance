@@ -1327,8 +1327,7 @@ body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
 .liferecap { padding-top: max(85px,calc(76px + env(safe-area-inset-top,0px))); }
 .v3-vitals .difficulty-vital { gap: 4px; }
 .difficulty-star-rating { display: grid; justify-content: start; align-content: center; gap: 0; min-width: 0; }
-.difficulty-star-rating .star-track { display: block; position: relative; color: #D8D7D2; font-family: Arial,sans-serif; font-size: clamp(15px,2.7vw,21px); font-weight: 400; letter-spacing: -2px; line-height: 1.35; white-space: nowrap; }
-.difficulty-star-rating .star-fill { position: absolute; inset: 0 auto 0 0; display: block; overflow: hidden; color: #D48D3F; white-space: nowrap; }
+.difficulty-star-rating .difficulty-stars-svg { display: block; width: 147px; max-width: 100%; height: auto; overflow: visible; }
 .difficulty-star-rating .star-score { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: #8C6C43; font-weight: 600; line-height: 1.2; }
 @media (max-width: 640px) {
   .end .theo-access { gap: 11px; padding-block: 28px 32px; }
@@ -1356,7 +1355,7 @@ body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
   .site-brand-banner .brand .dot i { width: 7px; height: 7px; }
   .lifearea .agebar { top: calc(40px + env(safe-area-inset-top,0px)); }
   .liferecap { padding-top: max(74px,calc(70px + env(safe-area-inset-top,0px))); }
-  .difficulty-star-rating .star-track { font-size: clamp(12px,3.5vw,16px); letter-spacing: -2px; }
+  .difficulty-star-rating .difficulty-stars-svg { max-width: 100%; }
   .difficulty-star-rating .star-score { font-size: 11px; }
 }
 </style>
@@ -3924,7 +3923,8 @@ const difficultyRank = c => c.difficulty.rank;
 const difficultyStars = c => 7 - Math.round((difficultyRank(c) - 1) * 13 / 52) / 2;
 function difficultyStarHtml(c) {
   const value = difficultyStars(c), label = Number.isInteger(value) ? `${value} 星` : `${Math.floor(value)} 星半`;
-  return `<div class="difficulty-star-rating" role="img" aria-label="傳福音艱難度：${label}，滿分七星"><span class="star-track" aria-hidden="true">★★★★★★★<span class="star-fill" style="width:${value / 7 * 100}%">★★★★★★★</span></span><span class="star-score">${value.toFixed(1)} / 7</span></div>`;
+  const stars = Array.from({ length: 7 }, (_, i) => `<path transform="translate(${i * 21} 0)" d="M10 1.5 12.7 6.9 18.7 7.8 14.3 12.1 15.3 18 10 15.2 4.7 18 5.7 12.1 1.3 7.8 7.3 6.9Z"/>`).join('');
+  return `<div class="difficulty-star-rating" role="img" aria-label="傳福音艱難度：${label}，滿分七星"><svg class="difficulty-stars-svg" viewBox="0 0 147 21" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><defs><clipPath id="difficultyFillClip"><rect width="${value * 21}" height="21"/></clipPath></defs><g fill="#DDDCD5">${stars}</g><g fill="#D48D3F" clip-path="url(#difficultyFillClip)">${stars}</g></svg><span class="star-score">${value.toFixed(1)} / 7</span></div>`;
 }
 // 分享卡上的母語聖經譯本：資料缺的時候寫「資料不足」，不當成沒有聖經
 const CARD_BIBLE = { full: '完整聖經', nt: '新約聖經', portions: '部分經卷', started: '翻譯中', none: '還沒有', null: '資料不足' };
