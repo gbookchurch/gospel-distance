@@ -3957,14 +3957,34 @@ function cardLine(end, martyred) {
   return firstAge === faithAge ? `我在 ${faithAge} 歲接觸到福音，也決定跟隨耶穌。` : `我在 ${firstAge} 歲接觸到福音，${faithAge} 歲決定跟隨耶穌。`;
 }
 function headline(end, martyred) { return cardLine(end, martyred); }
-// 接觸福音的難度：直接用 53 國排行的名次（countries.json 的 difficulty.rank，第 1 名是最難接觸到福音的國家），排行榜、結果頁和分享卡共用
+// 接觸福音的難度：國家排行仍供比較資料使用；結果頁與分享卡統一換算為七星制。
 const difficultyRank = c => c.difficulty.rank;
 // 53 國依既有模擬排行等距分成 14 個半星級距：第 1 難為 7 星，第 53 難為半星。
 const difficultyStars = c => 7 - Math.round((difficultyRank(c) - 1) * 13 / 52) / 2;
 function difficultyStarHtml(c) {
   const value = difficultyStars(c), label = Number.isInteger(value) ? `${value} 星` : `${Math.floor(value)} 星半`;
   const stars = Array.from({ length: 7 }, (_, i) => `<path transform="translate(${i * 21} 0)" d="M10 1.5 12.7 6.9 18.7 7.8 14.3 12.1 15.3 18 10 15.2 4.7 18 5.7 12.1 1.3 7.8 7.3 6.9Z"/>`).join('');
-  return `<div class="difficulty-star-rating" role="img" aria-label="傳福音艱難度：${label}，滿分七星"><svg class="difficulty-stars-svg" viewBox="0 0 147 21" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><defs><clipPath id="difficultyFillClip"><rect width="${value * 21}" height="21"/></clipPath></defs><g fill="#DDDCD5">${stars}</g><g fill="#D48D3F" clip-path="url(#difficultyFillClip)">${stars}</g></svg><span class="star-score">${value.toFixed(1)} / 7</span></div>`;
+  return `<div class="difficulty-star-rating" role="img" aria-label="接觸福音的難度：${label}，滿分七星"><svg class="difficulty-stars-svg" viewBox="0 0 147 21" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><defs><clipPath id="difficultyFillClip"><rect width="${value * 21}" height="21"/></clipPath></defs><g fill="#DDDCD5">${stars}</g><g fill="#D48D3F" clip-path="url(#difficultyFillClip)">${stars}</g></svg><span class="star-score">${value.toFixed(1)} / 7</span></div>`;
+}
+// 分享卡以向量筆畫繪製七顆星與半星，避免不同手機字型造成星星錯位。
+function drawCanvasDifficultyStars(x, value, left, cy, dark = false) {
+  const starPath = (cx, y) => {
+    x.beginPath();
+    for (let j = 0; j < 10; j++) {
+      const a = -Math.PI / 2 + j * Math.PI / 5, r = j % 2 ? 7.4 : 16;
+      const px = cx + Math.cos(a) * r, py = y + Math.sin(a) * r;
+      if (!j) x.moveTo(px, py); else x.lineTo(px, py);
+    }
+    x.closePath();
+  };
+  for (let i = 0; i < 7; i++) {
+    const cx = left + 16 + i * 38, fraction = Math.max(0, Math.min(1, value - i));
+    starPath(cx, cy); x.fillStyle = dark ? '#676E69' : '#C8C8C2'; x.fill();
+    if (fraction > 0) {
+      x.save(); x.beginPath(); x.rect(cx - 16, cy - 17, 32 * fraction, 34); x.clip();
+      starPath(cx, cy); x.fillStyle = '#D48D3F'; x.fill(); x.restore();
+    }
+  }
 }
 // 分享卡上的母語聖經譯本：資料缺的時候寫「資料不足」，不當成沒有聖經
 const CARD_BIBLE = { full: '完整聖經', nt: '新約聖經', portions: '部分經卷', started: '翻譯中', none: '還沒有', null: '資料不足' };
@@ -4560,18 +4580,25 @@ async function makeShareCard(end, martyred) {
   x.fillText(wrapText(x, `${me.group.name}・${me.sex === 'm' ? '男' : '女'}${me.designated ? '・指定出生在台灣' : ''}`, W - P * 2)[0], P, y + 4);
 
   // 四格數據
-  const g = me.group, c = me.country, rk = difficultyRank(c);
+  const g = me.group, c = me.country;
   const cells = [
     ['第一次接觸福音', firstAge === null ? '一生沒有機會' : `${firstAge} 歲`],
     ['生命長度', `${end} 歲`],
     ['母語聖經譯本', CARD_BIBLE[g.bible_status ?? 'null']],
-    ['接觸福音的難度', `第 ${rk} 難`, '／53 國'],
+    ['接觸福音的難度', '', null, true],
   ];
   const cw = (W - P * 2 - 24) / 2, ch = 104, top = Math.max(548, y + 32);
-  cells.forEach(([k, v, sub], i) => {
+  cells.forEach(([k, v, sub, isStars], i) => {
     const cx = P + (i % 2) * (cw + 24), cy = top + Math.floor(i / 2) * (ch + 16);
     x.fillStyle = C.panel; x.beginPath(); x.roundRect ? x.roundRect(cx, cy, cw, ch, 14) : x.rect(cx, cy, cw, ch); x.fill();
     x.fillStyle = C.muted; x.font = `500 24px ${SANS}`; x.fillText(k, cx + 28, cy + 40);
+    if (isStars) {
+      const stars = difficultyStars(c);
+      drawCanvasDifficultyStars(x, stars, cx + 25, cy + 79, DK);
+      x.fillStyle = C.muted; x.font = `500 23px ${MONO}`;
+      x.fillText(`${stars.toFixed(1)} / 7`, cx + 305, cy + 86);
+      return;
+    }
     x.fillStyle = C.ink; x.font = `500 38px ${/^[0-9]/.test(v) ? MONO : SANS}`;
     x.fillText(v, cx + 28, cy + 86);
     if (sub) { const vw = x.measureText(v).width; x.fillStyle = C.muted; x.font = `500 24px ${SANS}`; x.fillText(sub, cx + 28 + vw + 8, cy + 86); }
@@ -6002,7 +6029,7 @@ function finish(martyred) {
     <div class="v3-vitals">
       <div><strong class="num">${end}</strong><span>活了幾歲</span></div>
       <div><strong class="num">${firstAge === null ? '—' : firstAge}</strong><span>${firstAge === null ? '一生未接觸福音' : '初聞福音的年齡'}</span></div>
-      <div class="difficulty-vital">${difficultyStarHtml(c)}<span>傳福音艱難度</span></div>
+      <div class="difficulty-vital">${difficultyStarHtml(c)}<span>接觸福音的難度</span></div>
     </div>
     <details class="xdr v3-dossier"><summary>查看完整人生資料</summary>
       <dl class="summary" id="summary">${rows.map(() => '<div><dt></dt><dd></dd></div>').join('')}</dl>
