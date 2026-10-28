@@ -1329,6 +1329,16 @@ body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
 .difficulty-star-rating { display: grid; justify-content: start; align-content: center; gap: 0; min-width: 0; }
 .difficulty-star-rating .difficulty-stars-svg { display: block; width: 147px; max-width: 100%; height: auto; overflow: visible; }
 .difficulty-star-rating .star-score { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 12px; color: #8C6C43; font-weight: 600; line-height: 1.2; }
+/* 星級與左右數字共用相同的標題列高度，讓下方說明文字水平對齊。 */
+.v3-vitals .difficulty-star-rating { min-height: calc(clamp(25px,5vw,34px) * 1.25); align-items: start; align-content: center; }
+.v3-vitals .difficulty-star-rating .star-score { display: none; }
+.rc-color-key { display: grid; gap: 13px; list-style: none; margin: 2px 0 0; padding: 0; }
+.rc-color-key li { display: grid; grid-template-columns: 15px minmax(0,1fr); gap: 10px; align-items: start; padding: 0 0 11px; border-bottom: 1px solid rgba(95,104,97,.23); }
+.rc-color-key .rc-color-dot { width: 13px; height: 13px; border: 1px solid rgba(24,27,26,.17); border-radius: 4px; margin-top: 6px; }
+.rc-color-key .rc-color-copy { display: grid; gap: 2px; font-size: 14px; line-height: 1.6; color: #4F5D54; }
+.rc-color-key .rc-color-copy strong { font-size: 15px; color: #27382D; font-weight: 700; }
+.rc-colors { gap: 12px; }
+.rc-colors .rc-big { font-size: clamp(25px,6vw,39px); line-height: 1.3; }
 @media (max-width: 640px) {
   .end .theo-access { gap: 11px; padding-block: 28px 32px; }
   .end .theo-access h2 { font-size: clamp(20px, 5.5vw, 24px); }
@@ -1357,6 +1367,11 @@ body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
   .liferecap { padding-top: max(74px,calc(70px + env(safe-area-inset-top,0px))); }
   .difficulty-star-rating .difficulty-stars-svg { max-width: 100%; }
   .difficulty-star-rating .star-score { font-size: 11px; }
+  .v3-vitals .difficulty-star-rating { min-height: calc(clamp(24px,7vw,30px) * 1.25); }
+  .rc-color-key { gap: 9px; }
+  .rc-color-key li { padding-bottom: 8px; }
+  .rc-color-key .rc-color-copy { font-size: 12.5px; line-height: 1.55; }
+  .rc-color-key .rc-color-copy strong { font-size: 13.5px; }
 }
 </style>
 
@@ -5809,6 +5824,16 @@ function recapSlides(end, martyred) {
   if (arcUsed.size > 0) nums.push([arcUsed.size, '段，讓你停下來做決定的故事']);
   if (words.length > 0) nums.push([words.length, '個問題，你在人生的停頓裡回答過']);
   S.push({ k: 'nums', eyebrow: '這一生的數字', nums: nums.slice(0, 4), quiet: o === 'martyred' });
+  const recipe = lifeRecipe(martyred), spec = lifeSpec(martyred);
+  const region = recipe.comps.find(x => x.k === 'region'), gender = recipe.comps.find(x => x.k === 'sex');
+  const faith = recipe.comps.filter(x => x.rel).sort((a, b) => b.w - a.w)[0];
+  const material = { leaf: '葉脈', stone: '石紋', canopy: '森林紋理' }[spec.material];
+  S.push({ k: 'colors', eyebrow: '讀懂人生的色彩', big: '每一道顏色，都有故事', legend: [
+    [region.color, '外框・出生背景', `取自${region.label.replace(/^出生在/, '')}的區域色，並帶有${material}。`],
+    [faith.color, '流動水彩・信仰歷程', '顏色會隨著成長、接觸信仰與生命轉折而改變，色帶長短反映經歷的時間。'],
+    [gender.color, '細緻色線・性別', `這一生的${me.sex === 'm' ? '男性' : '女性'}色彩，沿著水彩河流延伸。`],
+    ['#E9A04F', '色粉與深色細流・人生事件', '相遇、成長和選擇留下色粉；經歷信仰壓力時，河流會出現較深的細線。'],
+  ] });
   const [tt, ts] = lifeTitle(end, martyred);
   const got = collectTitle(tt);
   S.push({ k: 'title', eyebrow: '你這一生的稱號', big: tt, lines: [ts], collection: got ? `你已經收集了 ${got}/${TITLE_TOTAL()} 個稱號` : '' });
@@ -5836,7 +5861,7 @@ function showRecap(end, martyred) {
     box.querySelector('.rc-count').textContent = `${i + 1} / ${slides.length}`;
     progress.setAttribute('aria-valuenow', i + 1);
     box.querySelector('.rc-progress-fill').style.width = `${(i + 1) / slides.length * 100}%`;
-    stage.innerHTML = `<section class="rc-card rc-${s.k}${quiet ? '' : ' rc-anim'}"><p class="rc-eyebrow">${esc(s.eyebrow)}</p>${s.big ? `<h2 class="rc-big">${esc(s.big)}</h2>` : ''}${s.quote ? `<blockquote class="rc-quote">${esc(s.quote)}</blockquote>` : ''}${s.list ? `<ol class="rc-list">${s.list.map(([a, t]) => `<li><span class="num">${esc(a)}</span><span>${esc(t)}</span></li>`).join('')}</ol>` : ''}${s.swatches ? `<div class="rc-strip" style="background:${stripCss(s.strip)}" aria-hidden="true"></div><ul class="rc-sw">${s.swatches.map(([c, l, p]) => `<li><i style="background:${c}"></i><span>${esc(l)}</span><b class="num">${p}%</b></li>`).join('')}</ul>` : ''}${s.chips ? `<ul class="rc-chips">${s.chips.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}${s.nums ? `<ul class="rc-nums">${s.nums.map(([n, t]) => `<li><b class="num" data-n="${n}">${quiet ? n : 0}</b><span>${esc(t)}</span></li>`).join('')}</ul>` : ''}${(s.lines || []).map(l => `<p class="rc-line">${esc(l)}</p>`).join('')}</section>`;
+    stage.innerHTML = `<section class="rc-card rc-${s.k}${quiet ? '' : ' rc-anim'}"><p class="rc-eyebrow">${esc(s.eyebrow)}</p>${s.big ? `<h2 class="rc-big">${esc(s.big)}</h2>` : ''}${s.quote ? `<blockquote class="rc-quote">${esc(s.quote)}</blockquote>` : ''}${s.list ? `<ol class="rc-list">${s.list.map(([a, t]) => `<li><span class="num">${esc(a)}</span><span>${esc(t)}</span></li>`).join('')}</ol>` : ''}${s.legend ? `<ul class="rc-color-key">${s.legend.map(([c, label, note]) => `<li><i class="rc-color-dot" style="background:${c}"></i><span class="rc-color-copy"><strong>${esc(label)}</strong><span>${esc(note)}</span></span></li>`).join('')}</ul>` : ''}${s.swatches ? `<div class="rc-strip" style="background:${stripCss(s.strip)}" aria-hidden="true"></div><ul class="rc-sw">${s.swatches.map(([c, l, p]) => `<li><i style="background:${c}"></i><span>${esc(l)}</span><b class="num">${p}%</b></li>`).join('')}</ul>` : ''}${s.chips ? `<ul class="rc-chips">${s.chips.map(n => `<li>${esc(n)}</li>`).join('')}</ul>` : ''}${s.nums ? `<ul class="rc-nums">${s.nums.map(([n, t]) => `<li><b class="num" data-n="${n}">${quiet ? n : 0}</b><span>${esc(t)}</span></li>`).join('')}</ul>` : ''}${(s.lines || []).map(l => `<p class="rc-line">${esc(l)}</p>`).join('')}</section>`;
     if (box.evalInk) box.evalInk();
     box.querySelector('.rc-prev').disabled = i === 0;
     const collection = box.querySelector('.rc-collection');
