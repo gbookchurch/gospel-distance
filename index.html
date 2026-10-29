@@ -4296,9 +4296,33 @@ function cardStory(end, martyred) {
   const l4 = choose + ending;
   return [l3, l4];
 }
+// 分享文字只挑實際發生的選擇與事件；年齡、信仰轉折都沿用這一生的紀錄。
+function shareLifeMoments(end, limit = 3) {
+  const turnLabel = { leave: '我決定放下信仰。', dechurch: '我仍然相信，但暫時不再固定聚會。', return_faith: '我重新相信耶穌。', return_church: '我重新回到教會聚會。' };
+  const rows = [
+    ...journey.filter(j => turnLabel[j.kind]).map(j => ({ age: j.age, text: turnLabel[j.kind], score: 9 })),
+    ...cfNodes.filter(n => !n.gospel && n.title && n.chose).map(n => ({ age: n.age, text: `面對「${n.title}」，我選了「${n.chose}」。`, score: 7 })),
+    ...highlights.filter(h => ['growth', 'persecution', 'milestone', 'decision'].includes(h.cls) && !/第一次接觸|第一次聽見|開始把信仰當成自己/.test(h.text || '')).map(h => ({ age: h.age, text: String(h.text || '').replace(/你們/g, '我們').replace(/你的/g, '我的').replace(/你/g, '我'), score: h.cls === 'persecution' ? 8 : h.cls === 'growth' ? 5 : 3 })),
+  ].filter(r => Number.isFinite(r.age) && r.age >= 0 && r.age <= end && r.text.trim());
+  const seen = new Set(), picked = [];
+  rows.sort((a, b) => b.score - a.score || a.age - b.age);
+  for (const row of rows) {
+    const key = `${row.age}|${row.text.replace(/[，。！？\s]/g, '')}`;
+    if (seen.has(key) || picked.some(p => Math.abs(p.age - row.age) < 3)) continue;
+    seen.add(key); picked.push(row);
+    if (picked.length >= limit) break;
+  }
+  return picked.sort((a, b) => a.age - b.age).map(r => {
+    const t = r.text.trim().replace(/\s+/g, ' ');
+    return `${r.age} 歲：${[...t].length > 58 ? [...t].slice(0, 57).join('') + '…' : t}`;
+  });
+}
 function shareText(end, martyred) {
-  const turn = cardTurn(end);
-  return `我在另一段人生裡，叫${me.name}。\n${cardLine(end, martyred)}\n我生在${me.country.name}${me.designated ? '（這一輪指定出生在台灣）' : ''}，${v4GroupDisplay(me.country, me.group)}，活了 ${end} 歲。${turn ? `\n這一生的轉折：${turn}` : ''}${feeling ? `\n這一生最有感觸的是：${feeling}。` : ''}\n如果換成你，你會出生在哪裡？來玩${SHOW_NAME}的「福音距離」：https://${SITE_URL}/`;
+  const moments = shareLifeMoments(end);
+  const [title] = lifeTitle(end, martyred);
+  const first = firstAge === null ? '這一生沒有機會接觸福音。' : `${firstAge} 歲第一次接觸福音${faithAge === null ? '，最後沒有選擇這份信仰。' : `，${faithAge} 歲決定跟隨耶穌。`}`;
+  const turn = moments.length ? `\n\n📖 這一生的幾個轉彎：\n${moments.map(x => `・${x}`).join('\n')}` : '';
+  return `🎲 我在${SHOW_NAME}的「福音距離」，抽到另一段人生！\n\n👤 我叫${me.name}，出生在${me.country.name}${me.designated ? '（這輪指定台灣）' : ''}。\n族群：${v4GroupDisplay(me.country, me.group)}｜家庭宗教：${relName(me)}\n這一生，我活了 ${end} 歲。\n${first}${turn}\n\n🏷️ 我得到的稱號：「${title}」\n${cardLine(end, martyred)}${feeling ? `\n最讓我有感觸的是：${feeling}。` : ''}\n\n如果人生重新抽籤，你會出生在哪裡？\n來玩「福音距離」：https://${SITE_URL}/`;
 }
 
 function fallbackCopy(txt, done) {
