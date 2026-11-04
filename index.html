@@ -1483,6 +1483,58 @@ body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
 .liferecap .rc-top { position: relative; z-index: 2; }
 </style>
 
+
+<script>
+/* 《福音距離》GA4：同意後才載入，不傳送遊戲選擇或個人文字。 */
+(function () {
+  'use strict';
+  const ID = 'G-7P2KPXBQTN', KEY = 'gospel_distance_analytics_consent_v1';
+  let enabled = false;
+  const readChoice = () => { try { return localStorage.getItem(KEY); } catch(e) { return null; } };
+  const saveChoice = v => { try { localStorage.setItem(KEY,v); } catch(e) {} };
+  function loadAnalytics() {
+    if (enabled) return;
+    enabled = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+    window.gtag('js',new Date());
+    window.gtag('config',ID,{send_page_view:true});
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(ID);
+    document.head.appendChild(script);
+  }
+  window.gdTrack = function(name) {
+    if (!enabled || typeof window.gtag !== 'function') return;
+    if (!/^(birth_started|life_started|faith_choice_shown|life_completed|share_card_generated|replay_started)$/.test(name)) return;
+    window.gtag('event',name);
+  };
+  window.gdAnalyticsNewLife = function () { window.gdAnalyticsEvents = {}; };
+  window.gdTrackOnce = function(name) {
+    window.gdAnalyticsEvents = window.gdAnalyticsEvents || {};
+    if (window.gdAnalyticsEvents[name]) return;
+    window.gdAnalyticsEvents[name] = true;
+    window.gdTrack(name);
+  };
+  function render() {
+    const css = document.createElement('style');
+    css.textContent = `#gd-analytics-panel{position:fixed;bottom:max(12px,env(safe-area-inset-bottom,0px));left:12px;right:12px;max-width:520px;margin:auto;z-index:10000;background:#fbfaf6;color:#24352c;border:1px solid #9baa9f;box-shadow:0 8px 32px #0003;border-radius:12px;padding:16px;font:14px/1.6 system-ui,'Noto Sans TC',sans-serif}#gd-analytics-panel[hidden]{display:none!important}#gd-analytics-panel p{margin:0 0 12px}#gd-analytics-panel button{font:inherit;padding:8px 13px;border-radius:7px;min-height:42px;cursor:pointer}#gd-analytics-panel .gd-yes{background:#375447;color:#fff;border:1px solid #375447}#gd-analytics-panel .gd-no{background:#fff;color:#24352c;border:1px solid #9baa9f}#gd-analytics-settings{position:fixed;bottom:max(8px,env(safe-area-inset-bottom,0px));left:8px;z-index:9998;background:#fbfaf6;color:#536459;border:1px solid #cbd3cb;border-radius:9px;padding:4px 8px;font:11px/1.4 system-ui,sans-serif;opacity:.78}#gd-analytics-settings:focus-visible{opacity:1;outline:2px solid #375447}`;
+    document.head.appendChild(css);
+    const panel = document.createElement('section'); panel.id='gd-analytics-panel';panel.setAttribute('role','region');panel.setAttribute('aria-label','網站流量分析設定');panel.hidden=true;
+    const msg=document.createElement('p'); msg.textContent='我們想使用 Google Analytics 了解網站有多少訪客、多少人完成遊戲與分享。只記錄操作次數，不傳送你的信仰選擇、反思內容或人生紀錄。你可以拒絕，遊戲仍可正常使用。';
+    const actions=document.createElement('div');actions.style.cssText='display:flex;flex-wrap:wrap;gap:10px;';
+    const accept=document.createElement('button'); accept.className='gd-yes';accept.textContent='同意匿名流量分析';
+    const decline=document.createElement('button');decline.className='gd-no';decline.textContent='不同意';
+    actions.append(accept,decline);panel.append(msg,actions);document.body.appendChild(panel);
+    const settings=document.createElement('button');settings.id='gd-analytics-settings';settings.type='button';settings.textContent='流量分析設定';document.body.appendChild(settings);
+    function consent(value){saveChoice(value);panel.hidden=true;if(value==='yes')loadAnalytics();else if(enabled)location.reload();}
+    accept.onclick=()=>consent('yes');decline.onclick=()=>consent('no');
+    settings.onclick=()=>{panel.hidden=false;};
+    const choice=readChoice();if(choice==='yes')loadAnalytics();else if(choice!== 'no')panel.hidden=false;
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render,{once:true});else render();
+})();
+</script>
 </head>
 <body>
 <div class="site-brand-banner" aria-label="《教會小本本》Podcast 特別企劃"><span class="brand"><span class="dot" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span><b>《教會小本本》</b> Podcast 特別企劃</span></span><button class="musicbtn" id="musicBtn" type="button" aria-pressed="true" aria-label="背景音樂：開" title="背景音樂"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path class="on" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path class="off" d="M15.5 9.5l5 5M20.5 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button></div>
@@ -4982,6 +5034,7 @@ async function makeShareCard(end, martyred) {
   try {
     const url = cv.toDataURL('image/png');
     $('shareImg').src = url; $('shareImg').hidden = false;
+    gdTrackOnce('share_card_generated');
     $('dlLink').href = url; $('dlLink').hidden = false;
     if ($('shareStatus')) $('shareStatus').remove();
     cv.toBlob(b => {
@@ -5849,6 +5902,8 @@ function showScene(a) {
   }
 }
 function start(opt = {}) {
+  gdAnalyticsNewLife();
+  gdTrackOnce('birth_started');
   stop(); music.play();
   $('birth').classList.remove('living');
   me = makePerson(opt && opt.tw ? { tw: true } : {}); assignTrad(me);
@@ -5880,6 +5935,7 @@ function start(opt = {}) {
   $('birth').scrollIntoView({ behavior: SMOOTH, block: 'start' });
 }
 function beginLife() {
+  gdTrackOnce('life_started');
   $('birth').classList.add('living');
   document.querySelectorAll('#birth .drawer').forEach(d => d.open = false);
   $('liveBtn').hidden = true; $('agebar').hidden = false;
@@ -5979,6 +6035,7 @@ function earlyHear() {
 
 let sceneCh = null, sceneTxt = null;
 function hear() {
+  gdTrackOnce('faith_choice_shown');
   stop(); hearCount++; sceneCh = null; sceneTxt = null;
   const first = firstAge === null;
   if (first) firstAge = age;
@@ -6664,6 +6721,7 @@ function showRecap(end, martyred) {
 }
 
 function finish(martyred) {
+  gdTrackOnce('life_completed');
   $('lifefoot').hidden = true; $('agebar').hidden = true;
   stop(); music.fadeOut(martyred ? 2.5 : 5); $('choiceSlot').innerHTML = '';
   const end = Math.min(age, me.lifespan);
@@ -6820,7 +6878,7 @@ function finish(martyred) {
   };
   $('birth').hidden = true; // 完整結果頁自成一章，詳細年表保留於可展開區
   E.hidden = false;
-  $('againBtn').onclick = () => start();
+  $('againBtn').onclick = () => { gdTrack('replay_started'); start(); };
   theoHintOnce(document.querySelector('#end .theo-matrix'));
   $('memBtn').onclick = () => { showHome(); $('memorial').scrollIntoView({ behavior: SMOOTH, block: 'start' }); };
   $('homeBtn').onclick = $('homeTop').onclick = () => { showHome(); window.scrollTo({ top: 0, behavior: SMOOTH }); };
