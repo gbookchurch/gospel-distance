@@ -1485,28 +1485,47 @@ body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
 
 
 <script>
-/* 《福音距離》GA4：同意後才載入，不傳送遊戲選擇或個人文字。 */
+/* 《福音距離》GA4：Google Consent Mode v2 地區預設；不傳送宗教選擇、反思或人物資料。 */
 (function () {
   'use strict';
-  const ID = 'G-7P2KPXBQTN', KEY = 'gospel_distance_analytics_consent_v1';
-  let enabled = false;
-  const readChoice = () => { try { return localStorage.getItem(KEY); } catch(e) { return null; } };
-  const saveChoice = v => { try { localStorage.setItem(KEY,v); } catch(e) {} };
-  function loadAnalytics() {
-    if (enabled) return;
-    enabled = true;
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
-    window.gtag('js',new Date());
-    window.gtag('config',ID,{send_page_view:true});
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(ID);
-    document.head.appendChild(script);
+  const ID = 'G-7P2KPXBQTN';
+  const KEY = 'gospel_distance_analytics_consent_v1';
+  // Google 官方支援的地區同意預設。時區僅用來決定是否主動顯示提示，不能決定是否准許追蹤。
+  const RESTRICTED = ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH'];
+  const choice = (() => { try { return localStorage.getItem(KEY); } catch(e) { return null; } })();
+  function saveChoice(v) { try { localStorage.setItem(KEY,v); } catch(e) {} }
+  function europeanTimezone() {
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      return tz.startsWith('Europe/') || tz === 'Atlantic/Reykjavik' || tz === 'Atlantic/Canary' || tz === 'Atlantic/Faroe' || tz === 'Atlantic/Madeira';
+    } catch (e) { return false; }
   }
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+  // 不使用 Google Ads 功能。先給出全球預設，再以官方區域規則覆蓋敏感地區。
+  window.gtag('consent','default', {
+    analytics_storage: 'granted', ad_storage: 'denied',
+    ad_user_data: 'denied', ad_personalization: 'denied',
+    functionality_storage: 'granted', security_storage: 'granted'
+  });
+  window.gtag('consent','default', {
+    analytics_storage: 'denied', ad_storage: 'denied',
+    ad_user_data: 'denied', ad_personalization: 'denied',
+    region: RESTRICTED, wait_for_update: 500
+  });
+  window.gtag('set','ads_data_redaction',true);
+  if (choice === 'yes' || choice === 'no') {
+    window.gtag('consent','update', {analytics_storage: choice === 'yes' ? 'granted' : 'denied'});
+  }
+  window.gtag('js',new Date());
+  window.gtag('config',ID,{send_page_view:true});
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(ID);
+  document.head.appendChild(script);
   window.gdTrack = function(name) {
-    if (!enabled || typeof window.gtag !== 'function') return;
     if (!/^(birth_started|life_started|faith_choice_shown|life_completed|share_card_generated|replay_started)$/.test(name)) return;
+    if (choice === 'no' || window.gdAnalyticsChoice === 'no') return;
     window.gtag('event',name);
   };
   window.gdAnalyticsNewLife = function () { window.gdAnalyticsEvents = {}; };
@@ -1520,19 +1539,41 @@ body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
     const css = document.createElement('style');
     css.textContent = `#gd-analytics-panel{position:fixed;bottom:max(12px,env(safe-area-inset-bottom,0px));left:12px;right:12px;max-width:520px;margin:auto;z-index:10000;background:#fbfaf6;color:#24352c;border:1px solid #9baa9f;box-shadow:0 8px 32px #0003;border-radius:12px;padding:16px;font:14px/1.6 system-ui,'Noto Sans TC',sans-serif}#gd-analytics-panel[hidden]{display:none!important}#gd-analytics-panel p{margin:0 0 12px}#gd-analytics-panel button{font:inherit;padding:8px 13px;border-radius:7px;min-height:42px;cursor:pointer}#gd-analytics-panel .gd-yes{background:#375447;color:#fff;border:1px solid #375447}#gd-analytics-panel .gd-no{background:#fff;color:#24352c;border:1px solid #9baa9f}#gd-analytics-settings{position:fixed;bottom:max(8px,env(safe-area-inset-bottom,0px));left:8px;z-index:9998;background:#fbfaf6;color:#536459;border:1px solid #cbd3cb;border-radius:9px;padding:4px 8px;font:11px/1.4 system-ui,sans-serif;opacity:.78}#gd-analytics-settings:focus-visible{opacity:1;outline:2px solid #375447}`;
     document.head.appendChild(css);
-    const panel = document.createElement('section'); panel.id='gd-analytics-panel';panel.setAttribute('role','region');panel.setAttribute('aria-label','網站流量分析設定');panel.hidden=true;
-    const msg=document.createElement('p'); msg.textContent='我們想使用 Google Analytics 了解網站有多少訪客、多少人完成遊戲與分享。只記錄操作次數，不傳送你的信仰選擇、反思內容或人生紀錄。你可以拒絕，遊戲仍可正常使用。';
-    const actions=document.createElement('div');actions.style.cssText='display:flex;flex-wrap:wrap;gap:10px;';
-    const accept=document.createElement('button'); accept.className='gd-yes';accept.textContent='同意匿名流量分析';
-    const decline=document.createElement('button');decline.className='gd-no';decline.textContent='不同意';
-    actions.append(accept,decline);panel.append(msg,actions);document.body.appendChild(panel);
-    const settings=document.createElement('button');settings.id='gd-analytics-settings';settings.type='button';settings.textContent='流量分析設定';document.body.appendChild(settings);
-    function consent(value){saveChoice(value);panel.hidden=true;if(value==='yes')loadAnalytics();else if(enabled)location.reload();}
-    accept.onclick=()=>consent('yes');decline.onclick=()=>consent('no');
+    const panel = document.createElement('section');
+    panel.id='gd-analytics-panel'; panel.setAttribute('role','region');
+    panel.setAttribute('aria-label','網站流量分析設定'); panel.hidden=true;
+    const msg=document.createElement('p');
+    msg.textContent='本站使用 Google Analytics 了解網站瀏覽、遊戲完成及分享次數。Google 可能處理裝置與網路資訊；不傳送你在遊戲中的宗教選擇、反思文字或人生紀錄。你可以選擇同意或拒絕，隨時重新設定。';
+    const actions=document.createElement('div'); actions.style.cssText='display:flex;flex-wrap:wrap;gap:10px;';
+    const accept=document.createElement('button'); accept.className='gd-yes'; accept.textContent='同意流量分析';
+    const decline=document.createElement('button'); decline.className='gd-no'; decline.textContent='拒絕流量分析';
+    actions.append(accept,decline); panel.append(msg,actions); document.body.appendChild(panel);
+    const settings=document.createElement('button'); settings.id='gd-analytics-settings';
+    settings.type='button'; settings.textContent='流量分析設定';
+    document.body.appendChild(settings);
+    function consent(value) {
+      saveChoice(value);
+      window.gdAnalyticsChoice = value;
+      window.gtag('consent','update',{analytics_storage:value==='yes'?'granted':'denied'});
+      panel.hidden=true;
+      if (value==='no') {
+        // 撤回同意後移除本站可存取的 GA Cookie；不影響遊戲本機人生紀錄。
+        document.cookie.split(';').forEach(item => {
+          const name = item.split('=')[0].trim();
+          if (!/^_ga(?:_|$)/.test(name) && !/^_gid$/.test(name)) return;
+          document.cookie = name + '=; Max-Age=0; Path=/; SameSite=Lax';
+          document.cookie = name + '=; Max-Age=0; Path=/gospel-distance/; SameSite=Lax';
+        });
+        location.reload();
+      } else if (choice !== 'yes') location.reload();
+    }
+    accept.onclick=()=>consent('yes'); decline.onclick=()=>consent('no');
     settings.onclick=()=>{panel.hidden=false;};
-    const choice=readChoice();if(choice==='yes')loadAnalytics();else if(choice!== 'no')panel.hidden=false;
+    // 只以時區判斷是否主動顯示 UI；Google 官方地區規則才是實際同意權限的判斷。
+    // 若時區不反映所在地，受限制地區仍維持 denied，可從固定入口自行選擇。
+    if (choice !== 'yes' && choice !== 'no' && europeanTimezone()) panel.hidden=false;
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render,{once:true});else render();
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',render,{once:true}); else render();
 })();
 </script>
 </head>
@@ -1832,6 +1873,7 @@ body { padding-top: calc(88px + env(safe-area-inset-top,0px)); }
     <p>本網站採 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh_TW" target="_blank" rel="noopener license">CC BY-NC-SA 4.0</a> 許可</p>
     <p>可自由分享、改編，但需署名、非商業、相同方式共享</p>
     <p>背景音樂：《教會小本本》原創演奏</p>
+    <p class="fine">本站使用 Google Analytics 4 統計瀏覽與遊戲操作次數；不傳送你在遊戲中的選擇、反思文字或完整人生紀錄。可使用頁面左下角「流量分析設定」調整。Google 仍可能處理裝置及網路資訊，詳見 <a href="https://policies.google.com/privacy?hl=zh-TW" target="_blank" rel="noopener noreferrer">Google 隱私權政策</a>。</p>
   </div>
   <details class="palette-easter" id="paletteEaster">
     <summary>🎨 色彩彩蛋｜這些顏色藏著什麼故事？</summary>
